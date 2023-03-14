@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:my_academy/widgets/nav_drawer.dart';
 
-import 'exercise.dart';
+import 'models/exercise.dart';
 
 class ExerciseEditPage extends StatefulWidget {
   final Exercise exercise;
@@ -44,6 +45,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavDrawer(),
       appBar: AppBar(
         title: Text("Editar Exercício"),
       ),

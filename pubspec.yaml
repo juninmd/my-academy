@@ -64,6 +64,7 @@ flutter:
     - assets/images/bench_press.gif
     - assets/images/deadlift.gif
     - assets/images/squat.gif
+    - assets/images/cover.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
