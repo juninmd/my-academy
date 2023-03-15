@@ -12,10 +12,10 @@ class ExerciseGroupPage extends StatefulWidget {
 
 class _ExerciseGroupState extends State<ExerciseGroupPage> {
   List<ExerciseGroup> ExerciseGroups = [
-    ExerciseGroup(name: "Pernas", image: "assets/images/deadlift.gif"),
-    ExerciseGroup(name: "Peitos", image: "assets/images/deadlift.gif"),
-    ExerciseGroup(name: "Ombros", image: "assets/images/deadlift.gif"),
-    ExerciseGroup(name: "Costas", image: "assets/images/deadlift.gif"),
+    ExerciseGroup(name: "Pernas", image: "assets/images/leg_press.gif"),
+    ExerciseGroup(name: "Peitos", image: "assets/images/supino_halteres.gif"),
+    ExerciseGroup(name: "Ombros", image: "assets/images/elevacao_lateral.gif"),
+    ExerciseGroup(name: "Costas", image: "assets/images/tricepes_barra_polia_alta.gif"),
   ];
 
   Set<int> _completedExerciseGroups = {};

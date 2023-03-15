@@ -61,10 +61,27 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/bench_press.gif
-    - assets/images/deadlift.gif
-    - assets/images/squat.gif
     - assets/images/cover.jpg
+    - assets/images/crucifixo_reto.gif
+    - assets/images/supino_halteres.gif
+    - assets/images/crucifixo_inclinado_halteres.gif
+    - assets/images/tricepes_testa_barra_w.gif
+    - assets/images/desenvolvimento_halteres.gif
+    - assets/images/elevacao_frontal.gif
+    - assets/images/remada_alta.gif
+    - assets/images/elevacao_lateral.gif
+    - assets/images/rosca_biceps_barra_w.gif
+    - assets/images/rosca_concentrada.gif
+    - assets/images/rosca_martelo_alternada.gif
+    - assets/images/tricepes_barra_polia_alta.gif
+    - assets/images/tricepes_corda.gif
+    - assets/images/tricepes_frances_halter.gif
+    - assets/images/cadeira_extensora.gif
+    - assets/images/leg_press.gif
+    - assets/images/adutor_coxas.gif
+    - assets/images/hack_machine.gif
+    - assets/images/mesa_flexora.gif
+    - assets/images/cadeira_flexora.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

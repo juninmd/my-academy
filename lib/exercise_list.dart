@@ -12,21 +12,27 @@ class ExerciseListPage extends StatefulWidget {
 
 class _ExerciseListPageState extends State<ExerciseListPage> {
   List<Exercise> exercises = [
-    Exercise(name: "Crucifixo Reto", image: "assets/images/bench_press.gif", sets: 3, reps: 10, weight: 100),
-    Exercise(name: "Supino com halteres", image: "assets/images/squat.gif", sets: 3, reps: 8, weight: 120),
-    Exercise(name: "Crucifixo Inclinado Com Halteres", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Testa Barra W", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Desenvolvimento com halteres", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Elevação Frontal", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Remada Alta", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Elevação lateral", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Elevação Lateral Sentado Sem Apoio", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Rosca de bíceps com barra", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Rosca Concentrada", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Rosca de martelo alternada", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Barra", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Francês Halteres", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Testa Barra W", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Crucifixo Reto", image: "assets/images/crucifixo_reto.gif", sets: 3, reps: 10, weight: 100),
+    Exercise(name: "Supino com halteres", image: "assets/images/supino_halteres.gif", sets: 3, reps: 8, weight: 120),
+    Exercise(name: "Crucifixo Inclinado Com Halteres", image: "assets/images/crucifixo_inclinado_halteres.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Tríceps Testa Barra W", image: "assets/images/tricepes_testa_barra_w.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Desenvolvimento com halteres", image: "assets/images/desenvolvimento_halteres.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Elevação Frontal", image: "assets/images/elevacao_frontal.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Remada Alta", image: "assets/images/remada_alta.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Elevação lateral", image: "assets/images/elevacao_lateral.gif", sets: 3, reps: 6, weight: 140),
+   // Exercise(name: "Elevação Lateral Sentado Sem Apoio", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Rosca de bíceps com barra W", image: "assets/images/rosca_biceps_barra_w.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Rosca Concentrada", image: "assets/images/rosca_concentrada.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Rosca de martelo alternada", image: "assets/images/rosca_martelo_alternada.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Tríceps Barra (polia alta)", image: "assets/images/tricepes_barra_polia_alta.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Tríceps Corda", image: "assets/images/tricepes_corda.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Tríceps Francês Halteres", image: "assets/images/tricepes_frances_halter.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Cadeira Extensora", image: "assets/images/cadeira_extensora.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Leg Pres", image: "assets/images/leg_press.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Adutor de Coxas", image: "assets/images/adutor_coxas.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Hack", image: "assets/images/hack_machine.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Mesa Flexora", image: "assets/images/mesa_flexora.gif", sets: 3, reps: 6, weight: 140),
+    Exercise(name: "Cadeira Flexora", image: "assets/images/cadeira_flexora.gif", sets: 3, reps: 6, weight: 140),
   ];
 
   Set<int> _completedExercises = {};
@@ -110,8 +116,8 @@ class ImageDialog extends StatelessWidget  {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        width: 300,
-        height: 300,
+        width: 500,
+        height: 500,
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: ExactAssetImage(image),

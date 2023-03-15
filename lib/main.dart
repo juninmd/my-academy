@@ -14,7 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Treino do dia',
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.purple,
+        primaryColor: Colors.purple,
+        scaffoldBackgroundColor: Colors.black,
       ),
       home: const ExerciseGroupPage(title: 'Treino do dia'),
     );
