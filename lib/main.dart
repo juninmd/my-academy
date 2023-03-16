@@ -8,15 +8,18 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Treino do dia',
       theme: ThemeData(
-        primarySwatch: Colors.purple,
-        primaryColor: Colors.purple,
+        brightness: Brightness.dark,
+        primaryColor: Colors.deepPurple,
         scaffoldBackgroundColor: Colors.black,
+        textTheme: const TextTheme(
+          bodyText1: TextStyle(color: Colors.white),
+          bodyText2: TextStyle(color: Colors.white),
+        ),
       ),
       home: const ExerciseGroupPage(title: 'Treino do dia'),
     );

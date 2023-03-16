@@ -54,10 +54,15 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Image.asset(
-              widget.exercise.image,
+            Container(
               height: 200,
-              fit: BoxFit.contain,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: AssetImage(widget.exercise.image),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             SizedBox(height: 16),
             Text(
@@ -70,6 +75,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
               decoration: InputDecoration(
                 labelText: "Séries",
                 hintText: sets > 0 ? sets.toString() : "0",
+                border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -83,6 +89,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
               decoration: InputDecoration(
                 labelText: "Repetições",
                 hintText: reps > 0 ? reps.toString() : "0",
+                border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -96,6 +103,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
               decoration: InputDecoration(
                 labelText: "Peso",
                 hintText: weight > 0 ? weight.toString() : "0",
+                border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -104,10 +112,15 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
                 });
               },
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 24),
             ElevatedButton(
               onPressed: _saveExercise,
               child: Text("Salvar"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue,
+                textStyle: TextStyle(fontSize: 18),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
             ),
           ],
         ),

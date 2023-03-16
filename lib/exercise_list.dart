@@ -1,116 +1,220 @@
 import 'package:flutter/material.dart';
+import 'package:my_academy/models/exercise.dart';
+import 'package:my_academy/repository/exercise_repository.dart';
 import 'package:my_academy/widgets/nav_drawer.dart';
-import 'models/exercise.dart';
 import 'exercise_edit_page.dart';
 
 class ExerciseListPage extends StatefulWidget {
   final String title;
-  const ExerciseListPage({super.key, required this.title});
+
+  const ExerciseListPage({Key? key, required this.title}) : super(key: key);
+
   @override
   _ExerciseListPageState createState() => _ExerciseListPageState();
 }
 
 class _ExerciseListPageState extends State<ExerciseListPage> {
-  List<Exercise> exercises = [
-    Exercise(name: "Crucifixo Reto", image: "assets/images/crucifixo_reto.gif", sets: 3, reps: 10, weight: 100),
-    Exercise(name: "Supino com halteres", image: "assets/images/supino_halteres.gif", sets: 3, reps: 8, weight: 120),
-    Exercise(name: "Crucifixo Inclinado Com Halteres", image: "assets/images/crucifixo_inclinado_halteres.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Testa Barra W", image: "assets/images/tricepes_testa_barra_w.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Desenvolvimento com halteres", image: "assets/images/desenvolvimento_halteres.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Elevação Frontal", image: "assets/images/elevacao_frontal.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Remada Alta", image: "assets/images/remada_alta.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Elevação lateral", image: "assets/images/elevacao_lateral.gif", sets: 3, reps: 6, weight: 140),
-   // Exercise(name: "Elevação Lateral Sentado Sem Apoio", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Rosca de bíceps com barra W", image: "assets/images/rosca_biceps_barra_w.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Rosca Concentrada", image: "assets/images/rosca_concentrada.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Rosca de martelo alternada", image: "assets/images/rosca_martelo_alternada.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Barra (polia alta)", image: "assets/images/tricepes_barra_polia_alta.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Corda", image: "assets/images/tricepes_corda.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Tríceps Francês Halteres", image: "assets/images/tricepes_frances_halter.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Cadeira Extensora", image: "assets/images/cadeira_extensora.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Leg Pres", image: "assets/images/leg_press.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Adutor de Coxas", image: "assets/images/adutor_coxas.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Hack", image: "assets/images/hack_machine.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Mesa Flexora", image: "assets/images/mesa_flexora.gif", sets: 3, reps: 6, weight: 140),
-    Exercise(name: "Cadeira Flexora", image: "assets/images/cadeira_flexora.gif", sets: 3, reps: 6, weight: 140),
-  ];
+  final Set<int> _completedExercises = {};
+  List<Exercise> _exercises = exercises;
 
-  Set<int> _completedExercises = {};
+  TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+  List<Exercise> getExercises() {
+    return exercises;
+  }
+
+  void filterExercises(String exerciseName) {
+    if (exerciseName.isEmpty) {
+      _exercises = getExercises();
+    } else {
+      _exercises = getExercises()
+          .where((e) => e.name.toLowerCase().contains(exerciseName.toLowerCase()))
+          .toList();
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(),
-        appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      appBar: AppBar(
+        title: Text(
+          widget.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _searchController.clear();
+              });
+            },
+            icon: Icon(Icons.clear),
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(48),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Procurar Exercício',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  filterExercises(value);
+                });
+              },
+            ),
+          ),
+        ),
       ),
+
       body: GridView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        itemCount: exercises.length,
+        itemCount: _exercises.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            color:  Colors.white,
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3.0),
+            ),
             child: InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ExerciseEditPage(exercise: exercises[index])));
-              },
-              onLongPress: ()async{
-                await showDialog(
-                    context: context,
-                    builder: (_) => ImageDialog(image: exercises[index].image)
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ExerciseEditPage(exercise: _exercises[index]),
+                  ),
                 );
               },
-              child: ListView(
-                  physics: const NeverScrollableScrollPhysics(),
+              onLongPress: () async {
+                await showDialog(
+                  context: context,
+                  builder: (_) => ImageDialog(image: _exercises[index].image, id: _exercises[index].id),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(exercises[index].image, fit: BoxFit.fitWidth,height: 110, width: 300),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: CheckboxListTile(
-                          title: Text(exercises[index].name,
-                              style:  _completedExercises.contains(index) ? const TextStyle(decoration: TextDecoration.lineThrough,color: Colors.red ):  null),
-                          controlAffinity: ListTileControlAffinity.platform,
-                          value: _completedExercises.contains(index),
-                          onChanged: (bool? value) {
-                            setState(() {
-                              if (value != null && value) {
-                                _completedExercises.add(index);
-                              } else {
-                                _completedExercises.remove(index);
-                              }
-                            });
-                          }
+                  Expanded(
+                    flex:4,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(3.0),
                       ),
-                  )]),
-                  ListTile(
-                    subtitle: Text("${exercises[index].sets} sets x ${exercises[index].reps} repetições x ${exercises[index].weight} kgs"),
+                      child: Image.asset(
+                        _exercises[index].image,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                      ),
+                    ),
                   ),
+                  Expanded(
+                    flex: 2,
+                    child: ListTile(
+                      title: Text(
+                        textAlign: TextAlign.center,
+                        _exercises[index].name,
+                        style: _completedExercises.contains(_exercises[index].id)
+                            ? const TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        )
+                            : const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.fitness_center),
+                            SizedBox(width: 5),
+                            Text("${_exercises[index].sets} sets"),
+                            SizedBox(width: 5),
+                            Icon(Icons.repeat),
+                            SizedBox(width: 5),
+                            Text("${_exercises[index].reps} reps"),
+                            SizedBox(width: 5),
+                            Icon(Icons.monitor_weight),
+                            SizedBox(width: 5),
+                            Text("${_exercises[index].weight} kgs"),
+                          ],
+                        ),
+                  ),
+              Expanded(
+                flex: 1,
+                child: Checkbox(
+                  value: _completedExercises.contains(_exercises[index].id),
+                  onChanged: (bool? value) {
+                    setState(() {
+                      if (value != null && value) {
+                        _completedExercises.add(_exercises[index].id);
+                      } else {
+                        _completedExercises.remove(_exercises[index].id);
+                      }
+                    });
+                  },
+                ),
+              ),
                 ],
               ),
             ),
           );
         },
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: 1,
           childAspectRatio: 1.0,
-          crossAxisSpacing: 0.0,
+          crossAxisSpacing: 5.0,
           mainAxisSpacing: 5,
-          mainAxisExtent: 260,
+          mainAxisExtent: 200,
         ),
       ),
     );
   }
 }
 
-class ImageDialog extends StatelessWidget  {
+class ImageDialog extends StatefulWidget {
   final String image;
+  final int id;
 
-  const ImageDialog({super.key, required this.image});
+  const ImageDialog({Key? key, required this.image, required this.id}) : super(key: key);
+
+  @override
+  _ImageDialogState createState() => _ImageDialogState();
+}
+class _ImageDialogState extends State<ImageDialog> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+  super.initState();
+  _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +222,63 @@ class ImageDialog extends StatelessWidget  {
       child: Container(
         width: 500,
         height: 500,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: ExactAssetImage(image),
-                fit: BoxFit.cover
-            )
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: ExactAssetImage(widget.image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  TabBar(
+                    controller: _tabController,
+                    labelColor: Colors.black,
+                    indicatorColor: Colors.black,
+                    tabs: [
+                      Tab(
+                        text: 'Dicas',
+                      ),
+                      Tab(
+                        text: 'Músculos',
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'As dicas vão aqui',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'Músculos usados',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,0 +1,25 @@
+import '../models/exercise.dart';
+
+List<Exercise> exercises = [
+  Exercise(id:1, name: "Crucifixo Reto", image: "assets/images/crucifixo_reto.gif", sets: 3, reps: 10, weight: 100),
+  Exercise(id:2,name: "Supino com halteres", image: "assets/images/supino_halteres.gif", sets: 3, reps: 8, weight: 120),
+  Exercise(id:3,name: "Crucifixo Inclinado Com Halteres", image: "assets/images/crucifixo_inclinado_halteres.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:4,name: "Tríceps Testa Barra W", image: "assets/images/tricepes_testa_barra_w.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:5,name: "Desenvolvimento com halteres", image: "assets/images/desenvolvimento_halteres.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:6,name: "Elevação Frontal", image: "assets/images/elevacao_frontal.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:7,name: "Remada Alta", image: "assets/images/remada_alta.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:8,name: "Elevação lateral", image: "assets/images/elevacao_lateral.gif", sets: 3, reps: 6, weight: 140),
+  // Exercise(name: "Elevação Lateral Sentado Sem Apoio", image: "assets/images/deadlift.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:9,name: "Rosca de bíceps com barra W", image: "assets/images/rosca_biceps_barra_w.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:10,name: "Rosca Concentrada", image: "assets/images/rosca_concentrada.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:11,name: "Rosca de martelo alternada", image: "assets/images/rosca_martelo_alternada.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:12,name: "Tríceps Barra (polia alta)", image: "assets/images/tricepes_barra_polia_alta.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:13,name: "Tríceps Corda", image: "assets/images/tricepes_corda.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:14,name: "Tríceps Francês Halteres", image: "assets/images/tricepes_frances_halter.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:15,name: "Cadeira Extensora", image: "assets/images/cadeira_extensora.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:16,name: "Leg Pres", image: "assets/images/leg_press.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:17,name: "Adutor de Coxas", image: "assets/images/adutor_coxas.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:18,name: "Hack", image: "assets/images/hack_machine.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:19,name: "Mesa Flexora", image: "assets/images/mesa_flexora.gif", sets: 3, reps: 6, weight: 140),
+  Exercise(id:20,name: "Cadeira Flexora", image: "assets/images/cadeira_flexora.gif", sets: 3, reps: 6, weight: 140),
+];
