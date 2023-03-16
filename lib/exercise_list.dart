@@ -239,9 +239,7 @@ class _ImageDialogState extends State<ImageDialog> with SingleTickerProviderStat
                 children: [
                   TabBar(
                     controller: _tabController,
-                    labelColor: Colors.black,
-                    indicatorColor: Colors.black,
-                    tabs: [
+                    tabs: const [
                       Tab(
                         text: 'Dicas',
                       ),
@@ -253,9 +251,9 @@ class _ImageDialogState extends State<ImageDialog> with SingleTickerProviderStat
                   Expanded(
                     child: TabBarView(
                       controller: _tabController,
-                      children: [
+                      children: const [
                         Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(16.0),
                           child: Text(
                             'As dicas vão aqui',
                             style: TextStyle(
@@ -264,7 +262,7 @@ class _ImageDialogState extends State<ImageDialog> with SingleTickerProviderStat
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(16.0),
                           child: Text(
                             'Músculos usados',
                             style: TextStyle(

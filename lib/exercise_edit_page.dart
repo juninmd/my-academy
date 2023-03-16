@@ -47,7 +47,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
-        title: Text("Editar Exercício"),
+        title: const Text("Editar Exercício"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -64,18 +64,18 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               widget.exercise.name,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: "Séries",
                 hintText: sets > 0 ? sets.toString() : "0",
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -84,12 +84,12 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: "Repetições",
                 hintText: reps > 0 ? reps.toString() : "0",
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -98,12 +98,12 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: "Peso",
                 hintText: weight > 0 ? weight.toString() : "0",
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -112,14 +112,14 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
                 });
               },
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: _saveExercise,
-              child: Text("Salvar"),
+              child: const Text("Salvar"),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,
-                textStyle: TextStyle(fontSize: 18),
-                padding: EdgeInsets.symmetric(vertical: 16),
+                textStyle: const TextStyle(fontSize: 18),
+                padding: const EdgeInsets.symmetric(vertical: 16),
               ),
             ),
           ],
