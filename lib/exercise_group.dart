@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_academy/repository/exercise_group_repository.dart';
 import 'package:my_academy/widgets/nav_drawer.dart';
 import 'exercise_list.dart';
-import 'models/exercise_group.dart';
 
 class ExerciseGroupPage extends StatefulWidget {
   final String title;
@@ -11,10 +11,6 @@ class ExerciseGroupPage extends StatefulWidget {
 }
 
 class _ExerciseGroupState extends State<ExerciseGroupPage> {
-  List<ExerciseGroup> exerciseGroups = [    ExerciseGroup(name: "Pernas", image: "assets/images/leg_press.gif"),    ExerciseGroup(name: "Peitos", image: "assets/images/supino_halteres.gif"),    ExerciseGroup(name: "Ombros", image: "assets/images/elevacao_lateral.gif"),    ExerciseGroup(name: "Costas", image: "assets/images/tricepes_barra_polia_alta.gif"),  ];
-
-  Set<int> _completedExerciseGroups = {};
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +18,7 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
       appBar: AppBar(
         title: Text(
           widget.title,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
@@ -39,6 +35,7 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
           mainAxisSpacing: 16.0,
         ),
         itemBuilder: (BuildContext context, int index) {
+          var exerciseGroup = exerciseGroups[index];
           return Card(
             elevation: 4.0,
             shape: RoundedRectangleBorder(
@@ -50,7 +47,7 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        ExerciseListPage(title: exerciseGroups[index].name),
+                        ExerciseListPage(idGroup: exerciseGroup.id),
                   ),
                 );
               },
@@ -60,27 +57,23 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
                   Expanded(
                     flex: 3,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.vertical(
+                      borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(3.0),
                       ),
                       child: Image.asset(
-                        exerciseGroups[index].image,
+                        exerciseGroup.image,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Expanded(
                     flex: 1,
                     child: ListTile(
                       title: Text(
-                        exerciseGroups[index].name,
+                        exerciseGroup.name,
                         textAlign: TextAlign.center,
-                        style: _completedExerciseGroups.contains(index)
-                            ? const TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.red)
-                            : TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
