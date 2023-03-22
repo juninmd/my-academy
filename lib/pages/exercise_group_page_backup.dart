@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_academy/repository/exercise_group_repository.dart';
-import 'package:my_academy/widgets/nav_drawer.dart';
-import 'exercise_list.dart';
+import 'exercise_list_page.dart';
 
 class ExerciseGroupPage extends StatefulWidget {
-  final String title;
-  const ExerciseGroupPage({Key? key, required this.title}) : super(key: key);
+  const ExerciseGroupPage({Key? key}) : super(key: key);
   @override
   _ExerciseGroupState createState() => _ExerciseGroupState();
 }
@@ -14,15 +12,16 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavDrawer(),
       appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: const TextStyle(
+        backgroundColor: Colors.transparent,
+        elevation: 1,
+        title: const Text(
+          "Meus Exercícios",
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 24,
           ),
         ),
+        centerTitle: true,
       ),
       body: GridView.builder(
         shrinkWrap: true,
@@ -47,7 +46,7 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        ExerciseListPage(idGroup: exerciseGroup.id),
+                        ExerciseListPage(idGroup: exerciseGroup.id, description: exerciseGroup.description),
                   ),
                 );
               },

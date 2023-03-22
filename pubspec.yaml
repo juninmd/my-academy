@@ -31,7 +31,12 @@ dependencies:
   flutter:
     sdk: flutter
   fluttertoast: ^8.2.1
-
+  flutter_local_notifications: ^9.7.0
+  timezone: ^0.8.0
+  rxdart: ^0.27.5
+  path_provider: ^2.0.11
+  http: ^0.13.4
+  flutter_native_timezone: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -85,6 +90,8 @@ flutter:
     - assets/images/hack_machine.gif
     - assets/images/mesa_flexora.gif
     - assets/images/cadeira_flexora.gif
+    - assets/images/bg1.jpg
+    - assets/images/bg2.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

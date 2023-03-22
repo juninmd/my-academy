@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ExerciseDialog extends StatefulWidget {
-  final String image;
-  final int id;
+import '../models/exercise.dart';
 
-  const ExerciseDialog({Key? key, required this.image, required this.id})
+class ExerciseDialog extends StatefulWidget {
+  final Exercise exercise;
+
+  const ExerciseDialog({Key? key, required this.exercise})
       : super(key: key);
 
   @override
@@ -24,65 +25,70 @@ class _ExerciseDialogState extends State<ExerciseDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-        width: 500,
-        height: 500,
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: ExactAssetImage(widget.image),
-                    fit: BoxFit.cover,
-                  ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: ExactAssetImage(widget.exercise.image),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            Expanded(
-              child: Column(
-                children: [
-                  TabBar(
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                TabBar(
+                  labelColor: Colors.black,
+                  controller: _tabController,
+                  tabs: const [
+                    Tab(
+                      text: 'Dicas',
+                      icon: Icon(Icons.sports_mma,color: Colors.red),
+                    ),
+                    Tab(
+                      text: 'Erros Comuns',
+                      icon: Icon(Icons.block,color: Colors.red),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
                     controller: _tabController,
-                    tabs: const [
-                      Tab(
-                        text: 'Dicas',
+                    children:   [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ListView.builder(
+                          itemCount: widget.exercise.tips.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              leading: const Icon(Icons.info),
+                              title: Text(widget.exercise.tips[index]),
+                            );
+                          },
+                        )
                       ),
-                      Tab(
-                        text: 'Músculos',
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                          child: ListView.builder(
+                            itemCount: widget.exercise.errors.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                leading: const Icon(Icons.flag_outlined),
+                                title: Text(widget.exercise.errors[index]),
+                              );
+                            },
+                          )
                       ),
                     ],
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            'As dicas vão aqui',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            'Músculos usados',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

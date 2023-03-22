@@ -6,9 +6,11 @@ class Exercise {
   int reps;
   int weight;
   bool finish;
-  int muscleGroup;
+  int exerciseGroup;
+  List<String> tips;
+  List<String> errors;
 
   Exercise({required this.id, required this.name, required this.image,
     required this.sets, required this.reps, required this.weight, this.finish = false,
- required this.muscleGroup});
+ required this.exerciseGroup, required this.tips, required this.errors});
 }

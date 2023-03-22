@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../exercise_edit_page.dart';
+import '../pages/exercise_edit_page.dart';
 import '../models/exercise.dart';
 import 'exercise_dialog.dart';
 
@@ -34,7 +34,7 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
           await showDialog(
             context: context,
             builder: (_) => ExerciseDialog(
-                image: widget.exercise.image, id: widget.exercise.id),
+                exercise: widget.exercise),
           );
         },
         child: Column(
@@ -58,7 +58,7 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Text(
                       textAlign: TextAlign.center,
                       widget.exercise.name,
@@ -87,20 +87,20 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.fitness_center, color: Colors.red),
-                  SizedBox(width: 5),
+                  const Icon(Icons.fitness_center, color: Colors.red),
+                  const SizedBox(width: 5),
                   Text("${widget.exercise.sets} sets"),
-                  SizedBox(width: 5),
-                  Icon(Icons.repeat, color: Colors.red),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
+                  const Icon(Icons.repeat, color: Colors.red),
+                  const SizedBox(width: 5),
                   Text("${widget.exercise.reps} reps"),
-                  SizedBox(width: 5),
-                  Icon(Icons.monitor_weight, color: Colors.red),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
+                  const Icon(Icons.monitor_weight, color: Colors.red),
+                  const SizedBox(width: 5),
                   Text("${widget.exercise.weight} kgs"),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   IconButton(
-                    icon: Icon(Icons.edit, color: Colors.red),
+                    icon: const Icon(Icons.edit, color: Colors.red),
                     iconSize: 20,
                     onPressed: () {
                       // Ao pressionar o botão, navega para a página de edição passando o exercício como argumento
