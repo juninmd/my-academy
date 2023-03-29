@@ -86,7 +86,8 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                               vertical: 0.0, horizontal: 24.0),
                           hintText: 'Procurar Exercício',
                           iconColor: Colors.white,
-                          prefixIcon: const Icon(Icons.search, color: Colors.black),
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.black),
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -125,8 +126,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                       color: const Color(0xaa212121),
                       colorBlendMode: BlendMode.darken,
                     ),
-                    Expanded(
-                      flex: 1,
+                    Container(
                       child: Center(
                         child: Padding(
                             padding: const EdgeInsets.only(
@@ -140,42 +140,36 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                             )),
                       ),
                     ),
-                  ])
-                  ),
+                  ])),
                 ),
               ];
             },
-            body: _exercises.isNotEmpty
-                ? GridView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    itemCount: _exercises.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var exercise = _exercises[index];
-                      return ExerciseCardPage(exercise: exercise);
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      childAspectRatio: 1.0,
-                      crossAxisSpacing: 5.0,
-                      mainAxisSpacing: 5,
-                      mainAxisExtent: 200,
+            body: SingleChildScrollView(
+              child: _exercises.isNotEmpty
+                  ? GridView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      itemCount: _exercises.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var exercise = _exercises[index];
+                        return ExerciseCardPage(exercise: exercise);
+                      },
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        childAspectRatio: 1.0,
+                        crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5,
+                        mainAxisExtent: 200,
+                      ),
+                    )
+                  : Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: Text('Nenhum exercício encontrado'),
+                      ),
                     ),
-                  )
-                : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      children: const [
-                        Expanded(
-                          flex: 2,
-                          child:  Text('Nenhum exercício encontrado'),
-                        ),
-                      ],
-                    ),
-                  ),
-                )));
+            )));
   }
 }

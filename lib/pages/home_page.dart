@@ -1,73 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:motion_tab_bar_v2/motion-tab-bar.dart';
+
+// optional, only if using provided badge style
+import 'package:motion_tab_bar_v2/motion-badge.widget.dart';
+import 'package:my_academy/pages/welcome_page.dart';
+import '../repository/exercise_group_repository.dart';
 import 'exercise_group_page.dart';
 import 'meal_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int currentIndex = 0;
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late TabController _tabController;
 
-  final List<Widget> screens = const [
-    ExerciseGroupPage(),
-    MealPage(),
-    ExerciseGroupPage(),
-    ExerciseGroupPage(),
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(initialIndex: 1, vsync: this, length: 3);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController.dispose();
+  }
+
+  List<Widget> screens = [
+    const ExerciseGroupPage(),
+    WelcomePage(
+        workoutImage: 'assets/images/draws/gym-boy.gif',
+        exerciseGroup: exerciseGroups[0],
+        favoriteExerciseGroup: exerciseGroups[0]),
+    const MealPage(),
   ];
 
-  Widget currentScreen = const ExerciseGroupPage();
+  Widget currentScreen = WelcomePage(
+      workoutImage: 'assets/images/draws/gym-boy.gif',
+      exerciseGroup: exerciseGroups[0],
+      favoriteExerciseGroup: exerciseGroups[0]);
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageStorage(
-          bucket: bucket,
-          child: currentScreen,
+        bottomNavigationBar: MotionTabBar(
+          labels: const ["Treinos", "Home", "Alimentação"],
+          initialSelectedTab: "Home",
+          tabIconColor: Colors.black,
+          tabBarColor: Colors.white60,
+          tabSelectedColor: Colors.purple,
+          onTabItemSelected: (int value) {
+            setState(() {
+              _tabController.index = value;
+              currentScreen = screens[value];
+            });
+          },
+          icons: const [Icons.fitness_center, Icons.home, Icons.fastfood],
+          textStyle: const TextStyle(color: Colors.purple),
         ),
-        bottomNavigationBar: BottomAppBar(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-              // Define each item as an IconButton with an icon and a label
-              IconButton(
-                  iconSize: currentIndex == 0 ? 32 : 24,
-                  icon: const Icon(Icons.fitness_center),
-                  tooltip: 'Exercícios',
-                  onPressed: () => setState(() {
-                        currentScreen = screens[0];
-                        currentIndex = 0;
-                      })),
-              IconButton(
-                iconSize: currentIndex == 1 ? 32 : 24,
-                icon: const Icon(Icons.fastfood),
-                onPressed: () => setState(() {
-                  currentScreen = screens[1];
-                  currentIndex = 1;
-                }),
-                tooltip: 'Alimentação',
-              ),
-              IconButton(
-                iconSize: currentIndex == 2 ? 32 : 24,
-                icon: const Icon(Icons.bar_chart),
-                onPressed: () => setState(() {
-                  currentScreen = screens[2];
-                  currentIndex = 2;
-                }),
-                tooltip: 'Histórico',
-              ),
-              // Define the center item as a FloatingActionButton with an icon and no label
-              IconButton(
-                iconSize: currentIndex == 3 ? 32 : 24,
-                icon: const Icon(Icons.person),
-                tooltip: 'Perfil',
-                onPressed: () => setState(() {
-                  currentScreen = screens[3];
-                  currentIndex = 3;
-                }),
-              ),
-            ])));
+        body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: _tabController,
+            children: screens));
   }
 }

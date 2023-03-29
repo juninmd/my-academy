@@ -1,161 +1,188 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-
-class Meal {
-  final String name;
-  final String description;
-  final String photoUrl;
-  final TimeOfDay time;
-  List<String> substitutions = [];
-
-  Meal(
-      {required this.name,
-      required this.description,
-      required this.photoUrl,
-      required this.time,
-      required this.substitutions});
-}
 
 class MealPage extends StatefulWidget {
   const MealPage({Key? key}) : super(key: key);
+
   @override
   _MealPageState createState() => _MealPageState();
 }
 
 class _MealPageState extends State<MealPage> {
-  final List<Meal> meals = [
-    Meal(
-      name: 'Café da manhã',
-      description: 'Pão, queijo, presunto, café e suco',
-      photoUrl: 'https://picsum.photos/200',
-      time: const TimeOfDay(hour: 8, minute: 0),
-      substitutions: [],
-    ),
-    Meal(
-      name: 'Almoço',
-      description: 'Arroz, feijão, bife e salada',
-      photoUrl: 'https://picsum.photos/200',
-      time: const TimeOfDay(hour: 12, minute: 0),
-      substitutions: [],
-    ),
-    Meal(
-      name: 'Jantar',
-      description: 'Sopa, pão e suco',
-      photoUrl: 'https://picsum.photos/200',
-      time: const TimeOfDay(hour: 18, minute: 0),
-      substitutions: [],
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 1,
-          title: const Text(
-            "Alimentação",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        title: Text('Meu Plano Alimentar'),
+      ),
+      body: ListView(
+        children: [
+          _buildMealSection(
+            context,
+            'Café da manhã',
+            'assets/images/lanche.jpg',
+            '500 calorias',
           ),
-          centerTitle: true,
-        ),
-        body: ListView.builder(
-          itemCount: meals.length,
-          itemBuilder: (context, index) {
-            final meal = meals[index];
+          _buildMealSection(
+            context,
+            'Almoço',
+            'assets/images/lanche.jpg',
+            '800 calorias',
+          ),
+          _buildMealSection(
+            context,
+            'Jantar',
+            'assets/images/lanche.jpg',
+            '600 calorias',
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Adicione aqui a lógica para enviar a foto da refeição atual
+        },
+        child: Icon(Icons.camera_alt),
+      ),
+    );
+  }
 
-            return Card(
-              elevation: 4.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+  Widget _buildMealSection(
+      BuildContext context, String title, String imageAsset, String calories) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Image.asset(
+                imageAsset,
+                height: 60,
+                width: 60,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Image.network(
-                        meal.photoUrl,
-                        height: 200.0,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                      Positioned(
-                        bottom: 8.0,
-                        left: 16.0,
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.access_time,
-                              color: Colors.white,
-                              size: 18.0,
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  calories,
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  // Adicione aqui a lógica para curtir a refeição
+                },
+                icon: Icon(Icons.favorite_border),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              // Adicione aqui a lógica para abrir a modal com o seletor de outras refeições
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    height: 300,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Selecione um alimento:',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(width: 4.0),
-                            Text(
-                              meal.time.format(context),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                        ),
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            height: 200,
+                            autoPlay: true,
+                            enlargeCenterPage: true,
+                          ),
+                          items: [
+                            _buildCarouselItem(
+                              'assets/images/lanche.jpg',
+                              'Nome do alimento 1',
+                              'Descrição do alimento 1',
+                              '100 calorias',
+                            ),
+                            _buildCarouselItem(
+                              'assets/images/lanche.jpg',
+                              'Nome do alimento 2',
+                              'Descrição do alimento 2',
+                              '200 calorias',
+                            ),
+                            _buildCarouselItem(
+                              'assets/images/lanche.jpg',
+                              'Nome do alimento 3',
+                              'Descrição do alimento 3',
+                              '300 calorias',
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    meal.name,
-                    style: const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(meal.description),
-                  const SizedBox(height: 16.0),
-                  Row(children: const [
-                    Icon(Icons.star, color: Colors.yellow),
-                    SizedBox(width: 8.0),
-                    Icon(Icons.star, color: Colors.yellow),
-                    SizedBox(width: 8.0),
-                    Icon(Icons.star, color: Colors.yellow),
-                    SizedBox(width: 8.0),
-                    Icon(Icons.star_half, color: Colors.yellow),
-                    SizedBox(width: 8.0),
-                  ]),
-                  const SizedBox(height: 16.0),
-                  const Text(
-                    'Possible substitutions:',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: meal.substitutions.length,
-                    itemBuilder: (context, index) {
-                      final substitution = meal.substitutions[index];
-
-                      return Text(
-                        '- $substitution',
-                        style: const TextStyle(
-                          fontSize: 16.0,
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Trocar alimento
+                          },
+                          child: Text('Trocar alimento'),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            );
-          },
-        )
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+            child: Text('Trocar Alimento'),
+          ),
+        ],
+      ),
     );
   }
+}
+
+Widget _buildCarouselItem(
+    String image, String name, String description, String calories) {
+  return Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.asset(
+          image,
+          height: 150,
+        ),
+        SizedBox(height: 8),
+        Text(
+          name,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          description,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          calories,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    ),
+  );
 }

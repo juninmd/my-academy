@@ -43,8 +43,8 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
                         color: const Color(0xaa212121),
                         colorBlendMode: BlendMode.darken,
                       ),
-                      const Expanded(
-                        flex: 1,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Center(
                           child: Padding(
                               padding: EdgeInsets.only(
@@ -63,71 +63,73 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
               ),
             ];
           },
-          body: Column(
-            children: [
-              GridView.builder(
-                padding: const EdgeInsets.only(top: 8), // <
-                shrinkWrap: true,
-                itemCount: exerciseGroups.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  crossAxisSpacing: 16.0,
-                  mainAxisSpacing: 16.0,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  var exerciseGroup = exerciseGroups[index];
-                  return Card(
-                    elevation: 4.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3.0),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ExerciseListPage(idGroup: exerciseGroup.id, description: exerciseGroup.description),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(3.0),
-                              ),
-                              child: Image.asset(
-                                exerciseGroup.image,
-                                fit: BoxFit.cover,
-                              ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                GridView.builder(
+                  padding: const EdgeInsets.only(top: 8), // <
+                  shrinkWrap: true,
+                  itemCount: exerciseGroups.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.7,
+                    crossAxisSpacing: 16.0,
+                    mainAxisSpacing: 16.0,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    var exerciseGroup = exerciseGroups[index];
+                    return Card(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3.0),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ExerciseListPage(idGroup: exerciseGroup.id, description: exerciseGroup.description),
                             ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Expanded(
-                            flex: 1,
-                            child: ListTile(
-                              title: Text(
-                                exerciseGroup.name,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                          );
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(3.0),
+                                ),
+                                child: Image.asset(
+                                  exerciseGroup.image,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 8.0),
+                            Expanded(
+                              flex: 1,
+                              child: ListTile(
+                                title: Text(
+                                  exerciseGroup.name,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              )
-            ],
+                    );
+                  },
+                )
+              ],
+            ),
           )),
     );
   }

@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../models/exercise.dart';
+import '../widgets/custom_text_controller.dart';
 
 class ExerciseEditPage extends StatefulWidget {
   final Exercise exercise;
+  Function callback;
 
-  ExerciseEditPage({required this.exercise});
+  ExerciseEditPage({required this.callback, required this.exercise});
 
   @override
   _ExerciseEditPageState createState() => _ExerciseEditPageState();
 }
 
 class _ExerciseEditPageState extends State<ExerciseEditPage> {
-  late String name;
-  late String image;
+  late int id;
   late int sets;
   late int reps;
   late int weight;
@@ -22,27 +23,27 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
   @override
   void initState() {
     super.initState();
-    name = widget.exercise.name;
-    image = widget.exercise.image;
     sets = widget.exercise.sets;
     reps = widget.exercise.reps;
     weight = widget.exercise.weight;
   }
 
   void _saveExercise() {
-    if (weight > 0) {
-      Fluttertoast.showToast(
-        msg: "Parabéns! Você levantou uma carga maior desta vez!",
-        gravity: ToastGravity.TOP,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-      );
+    if (weight > widget.exercise.weight) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content:
+            const Text('Parabéns! Você levantou uma carga maior desta vez!'),
+      ));
     }
-    // Adicione aqui a lógica para salvar os valores de sets, reps, weight
+    widget.callback(weight,reps,sets);
+    Navigator.pop(
+      context,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editar Exercício"),
@@ -70,6 +71,9 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
             ),
             const SizedBox(height: 16),
             TextField(
+              autofocus: true,
+              textDirection: TextDirection.rtl,
+              controller: CustomTextController(text: sets.toString()),
               decoration: InputDecoration(
                 labelText: "Séries",
                 hintText: sets > 0 ? sets.toString() : "0",
@@ -84,6 +88,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
             ),
             const SizedBox(height: 16),
             TextField(
+              controller: CustomTextController(text: reps.toString()),
               decoration: InputDecoration(
                 labelText: "Repetições",
                 hintText: reps > 0 ? reps.toString() : "0",
@@ -98,6 +103,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
             ),
             const SizedBox(height: 16),
             TextField(
+              controller: CustomTextController(text: weight.toString()),
               decoration: InputDecoration(
                 labelText: "Peso",
                 hintText: weight > 0 ? weight.toString() : "0",

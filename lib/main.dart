@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_academy/pages/exercise_group_page.dart';
 import 'package:my_academy/pages/home_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +24,12 @@ class MyApp extends StatelessWidget {
       //   ),
       //   bottomAppBarTheme: const BottomAppBarTheme(color: Colors.transparent),
       // ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [const Locale('pt', 'BR')],
+
       home: HomePage(),
     );
   }
