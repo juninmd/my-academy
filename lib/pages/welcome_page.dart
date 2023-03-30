@@ -57,7 +57,7 @@ class _WelcomeState extends State<WelcomePage> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: Colors.purple,
+                          color: Colors.red,
                         ),
                         padding: EdgeInsets.symmetric(
                           vertical: 4,

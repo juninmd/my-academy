@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart';
-
-// optional, only if using provided badge style
-import 'package:motion_tab_bar_v2/motion-badge.widget.dart';
 import 'package:my_academy/pages/welcome_page.dart';
 import '../repository/exercise_group_repository.dart';
 import 'exercise_group_page.dart';
@@ -53,7 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           initialSelectedTab: "Home",
           tabIconColor: Colors.black,
           tabBarColor: Colors.white60,
-          tabSelectedColor: Colors.purple,
+          tabSelectedColor: Colors.red,
           onTabItemSelected: (int value) {
             setState(() {
               _tabController.index = value;
@@ -61,7 +58,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             });
           },
           icons: const [Icons.fitness_center, Icons.home, Icons.fastfood],
-          textStyle: const TextStyle(color: Colors.purple),
+          textStyle: const TextStyle(color: Colors.red),
         ),
         body: TabBarView(
             physics: const NeverScrollableScrollPhysics(),

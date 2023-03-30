@@ -6,8 +6,9 @@ import 'exercise_dialog.dart';
 
 class ExerciseCardPage extends StatefulWidget {
   final Exercise exercise;
+  final Function(Exercise) onExerciseStatusChanged;
 
-  const ExerciseCardPage({Key? key, required this.exercise}) : super(key: key);
+  const ExerciseCardPage({Key? key, required this.exercise, required this.onExerciseStatusChanged}) : super(key: key);
 
   @override
   _ExerciseCardPageState createState() => _ExerciseCardPageState();
@@ -19,6 +20,13 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
       widget.exercise.weight = weight;
       widget.exercise.reps = reps;
       widget.exercise.sets = sets;
+    });
+  }
+
+  void _toggleFinish() {
+    setState(() {
+      widget.exercise.finish = !widget.exercise.finish;
+      widget.onExerciseStatusChanged(widget.exercise); // Call the callback function
     });
   }
 
@@ -40,17 +48,61 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                   top: Radius.circular(3.0),
                 ),
                 child: InkWell(
-                  onTap: () async {
+                  onTap: () {
+                    setState(() {
+                      _toggleFinish();
+                    });
+                  },
+                  onLongPress: () async {
                     await showDialog(
                       context: context,
                       builder: (_) => ExerciseDialog(exercise: widget.exercise),
                     );
                   },
-                  child: Image.asset(
-                    widget.exercise.image,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                  child: Stack(children: [
+                    Image.asset(
+                      widget.exercise.image,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      color: widget.exercise.finish ? Colors.black54 : null,
+                      colorBlendMode:
+                          widget.exercise.finish ? BlendMode.darken : null,
+                    ),
+                    Positioned(
+                      bottom: 16,
+                      left: MediaQuery.of(context).size.width - 80,
+                      child: Row(
+                        children: widget.exercise.finish
+                            ? [
+                                const SizedBox(
+                                    child:
+                                        Icon(Icons.check, color: Colors.red)),
+                              ]
+                            : [],
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 16,
+                      right: MediaQuery.of(context).size.width - 110,
+                      child:       Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.red,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 4,
+                        ),
+                        child: Text(
+                          'DropSet',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      )
+                      ),
+                  ]),
                 ),
               ),
             ),
@@ -73,16 +125,13 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                             ? const TextStyle(
                                 decoration: TextDecoration.lineThrough,
                                 color: Colors.red,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               )
                             : const TextStyle(
                                 fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
-                      ),
-                      SizedBox(
-                        child: widget.exercise.finish
-                            ? Icon(Icons.check, color: Colors.red)
-                            : Icon(Icons.pending_outlined, color: Colors.black),
                       ),
                     ],
                   ),

@@ -4,6 +4,7 @@ import 'package:my_academy/repository/exercise_repository.dart';
 import 'package:my_academy/widgets/exercise_card.dart';
 
 import '../repository/exercise_group_repository.dart';
+import '../widgets/telegram_button.dart';
 
 class ExerciseListPage extends StatefulWidget {
   final int idGroup;
@@ -39,6 +40,17 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _updateExerciseStatus(Exercise exercise) {
+    setState(() {
+      // Find the index of the exercise in the list
+      final index = _exercises.indexWhere((e) => e.id == exercise.id);
+      if (index != -1) {
+        // Update the exercise in the list
+        _exercises[index] = exercise;
+      }
+    });
   }
 
   List<Exercise> getExercises() {
@@ -144,32 +156,39 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                 ),
               ];
             },
-            body: SingleChildScrollView(
-              child: _exercises.isNotEmpty
-                  ? GridView.builder(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      itemCount: _exercises.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        var exercise = _exercises[index];
-                        return ExerciseCardPage(exercise: exercise);
-                      },
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        childAspectRatio: 1.0,
-                        crossAxisSpacing: 5.0,
-                        mainAxisSpacing: 5,
-                        mainAxisExtent: 200,
-                      ),
-                    )
-                  : Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(30.0),
-                        child: Text('Nenhum exercício encontrado'),
-                      ),
+            body: _exercises.isNotEmpty
+                ? GridView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    itemCount: _exercises.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var exercise = _exercises[index];
+                      return ExerciseCardPage(exercise: exercise, onExerciseStatusChanged: _updateExerciseStatus);
+                    },
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      childAspectRatio: 1.0,
+                      crossAxisSpacing: 5.0,
+                      mainAxisSpacing: 5,
+                      mainAxisExtent: 200,
                     ),
-            )));
+                  )
+                : const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(30.0),
+                      child: Text('Nenhum exercício encontrado'),
+                    ),
+                  )),
+        floatingActionButton:
+            _exercises.where((element) => element.finish).toList().length ==
+                    _exercises.length
+                ? TelegramButton(
+                    channelName: '-1001661357785',
+                    message:
+                        "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} - $_title",
+                  )
+                : null);
   }
 }
