@@ -240,21 +240,21 @@ class _WelcomeState extends State<WelcomePage> {
                   ),
                 ),
               ),
+              const Text(
+                'Alimentação',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.2,
                 child: Card(
                   elevation: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text(
-                          'Alimentação',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        CaloriesProgressBar(consumed: 200,goal: 300, description: 'aa', unit: 'kcal')
+                        CaloriesProgressBar(consumed: 200,goal: 300, description: 'Calorias', unit: 'kcal')
                       ],
                   ),
                 ),

@@ -95,13 +95,17 @@ Future<void> checkExerciseOfDay() async {
   }
 
   int lastExercise = await getLastExercise();
-  print(lastExercise);
   if (currentDay == 'Sábado' ||
       currentDay == 'Quinta' ||
       currentDay == 'Sexta') {
     int exerciseIdOfDay = (lastExercise + 1) % exerciseGroups.length;
-    print(exerciseIdOfDay);
     setExerciseOfDay(exerciseIdOfDay);
+  } else if (currentDay == 'Segunda') {
+    setExerciseOfDay(0);
+  } else if (currentDay == 'Terça') {
+    setExerciseOfDay(1);
+  } else if (currentDay == 'Quarta') {
+    setExerciseOfDay(2);
   } else {
     // Se for segunda / terça / quarta tem personal
     // Se for domingo é descanso
