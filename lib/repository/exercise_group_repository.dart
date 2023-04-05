@@ -1,3 +1,4 @@
+
 import '../models/exercise_group.dart';
 
 List<ExerciseGroup> exerciseGroups = [
@@ -26,3 +27,4 @@ List<ExerciseGroup> exerciseGroups = [
       description:
           "O treino de pernas contribui para o desenvolvimento muscular, melhora do equilíbrio, da postura, e fortalecimento dos músculos das pernas e glúteos."),
 ];
+

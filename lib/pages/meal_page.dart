@@ -11,31 +11,63 @@ class MealPage extends StatefulWidget {
 class _MealPageState extends State<MealPage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Meu Plano Alimentar'),
-      ),
-      body: ListView(
-        children: [
-          _buildMealSection(
-            context,
-            'Café da manhã',
-            'assets/images/lanche.jpg',
-            '500 calorias',
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              pinned: true,
+              stretch: true,
+              toolbarHeight: size.height * 0.1,
+              collapsedHeight: size.height * 0.1,
+              expandedHeight: size.height * 0.2,
+              title: const Text(
+                "Alimentação",
+                style: TextStyle(color: Colors.white),
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.black,
+              flexibleSpace: FlexibleSpaceBar(
+                  stretchModes: <StretchMode>[
+                    StretchMode.zoomBackground,
+                    StretchMode.blurBackground,
+                  ],
+                  background: Stack(fit: StackFit.expand, children: <Widget>[
+                    Image.asset(
+                      "assets/images/bg3.jpg",
+                      fit: BoxFit.cover,
+                      color: const Color(0xaa212121),
+                      colorBlendMode: BlendMode.darken,
+                    ),
+                  ])),
+            ),
+          ];
+        },
+        body: Container(
+          child: ListView(
+            children: [
+              _buildMealSection(
+                context,
+                'Café da manhã',
+                'assets/images/lanche.jpg',
+                '500 calorias',
+              ),
+              _buildMealSection(
+                context,
+                'Almoço',
+                'assets/images/lanche.jpg',
+                '800 calorias',
+              ),
+              _buildMealSection(
+                context,
+                'Jantar',
+                'assets/images/lanche.jpg',
+                '600 calorias',
+              ),
+            ],
           ),
-          _buildMealSection(
-            context,
-            'Almoço',
-            'assets/images/lanche.jpg',
-            '800 calorias',
-          ),
-          _buildMealSection(
-            context,
-            'Jantar',
-            'assets/images/lanche.jpg',
-            '600 calorias',
-          ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

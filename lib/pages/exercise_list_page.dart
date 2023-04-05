@@ -4,7 +4,8 @@ import 'package:my_academy/repository/exercise_repository.dart';
 import 'package:my_academy/widgets/exercise_card.dart';
 
 import '../repository/exercise_group_repository.dart';
-import '../widgets/telegram_button.dart';
+import '../repository/workouts_repository.dart';
+import '../widgets/finish_workout_button.dart';
 
 class ExerciseListPage extends StatefulWidget {
   final int idGroup;
@@ -21,19 +22,28 @@ class ExerciseListPage extends StatefulWidget {
 class _ExerciseListPageState extends State<ExerciseListPage> {
   List<Exercise> _exercises = [];
   String _title = "";
+  bool alreadWorkout = true;
 
   TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    loadValues();
+  }
+
+  loadValues() async {
     _searchController = TextEditingController();
-    _exercises = exercises
-        .where((element) => element.exerciseGroup == widget.idGroup)
-        .toList();
-    _title = exerciseGroups
-        .firstWhere((element) => element.id == widget.idGroup)
-        .name;
+    bool alreadWorkoutToday = await checkAlreadWorkoutToday();
+    setState(() {
+      _exercises = exercises
+          .where((element) => element.exerciseGroup == widget.idGroup)
+          .toList();
+      _title = exerciseGroups
+          .firstWhere((element) => element.id == widget.idGroup)
+          .name;
+      alreadWorkout = alreadWorkoutToday;
+    });
   }
 
   @override
@@ -164,7 +174,9 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                     itemCount: _exercises.length,
                     itemBuilder: (BuildContext context, int index) {
                       var exercise = _exercises[index];
-                      return ExerciseCardPage(exercise: exercise, onExerciseStatusChanged: _updateExerciseStatus);
+                      return ExerciseCardPage(
+                          exercise: exercise,
+                          onExerciseStatusChanged: _updateExerciseStatus);
                     },
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -183,12 +195,21 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                   )),
         floatingActionButton:
             _exercises.where((element) => element.finish).toList().length ==
-                    _exercises.length
-                ? TelegramButton(
+                        _exercises.length &&
+                    !alreadWorkout
+                ? FinishWorkoutButton(
                     channelName: '-1001661357785',
-                    message:
-                        "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year} - $_title",
+                    message: getDateNow(),
+                    callback: () async {
+                      await loadValues();
+                      Navigator.of(context).pop(true);
+                    },
                   )
                 : null);
+  }
+
+  String getDateNow() {
+    final date = DateTime.now();
+    return "${date.day}/${date.month}/${date.year} - $_title";
   }
 }

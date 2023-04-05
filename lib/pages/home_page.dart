@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart';
 import 'package:my_academy/pages/welcome_page.dart';
-import '../repository/exercise_group_repository.dart';
 import 'exercise_group_page.dart';
 import 'meal_page.dart';
 
@@ -16,8 +15,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
+    // Já verifica os exercícios do dia
     _tabController = TabController(initialIndex: 1, vsync: this, length: 3);
   }
 
@@ -29,17 +29,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   List<Widget> screens = [
     const ExerciseGroupPage(),
-    WelcomePage(
-        workoutImage: 'assets/images/draws/gym-boy.gif',
-        exerciseGroup: exerciseGroups[0],
-        favoriteExerciseGroup: exerciseGroups[0]),
+    const WelcomePage(),
     const MealPage(),
   ];
 
-  Widget currentScreen = WelcomePage(
-      workoutImage: 'assets/images/draws/gym-boy.gif',
-      exerciseGroup: exerciseGroups[0],
-      favoriteExerciseGroup: exerciseGroups[0]);
+  Widget currentScreen = const WelcomePage();
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override

@@ -8,7 +8,9 @@ class ExerciseCardPage extends StatefulWidget {
   final Exercise exercise;
   final Function(Exercise) onExerciseStatusChanged;
 
-  const ExerciseCardPage({Key? key, required this.exercise, required this.onExerciseStatusChanged}) : super(key: key);
+  const ExerciseCardPage(
+      {Key? key, required this.exercise, required this.onExerciseStatusChanged})
+      : super(key: key);
 
   @override
   _ExerciseCardPageState createState() => _ExerciseCardPageState();
@@ -26,7 +28,8 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
   void _toggleFinish() {
     setState(() {
       widget.exercise.finish = !widget.exercise.finish;
-      widget.onExerciseStatusChanged(widget.exercise); // Call the callback function
+      widget.onExerciseStatusChanged(
+          widget.exercise); // Call the callback function
     });
   }
 
@@ -82,26 +85,25 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                       ),
                     ),
                     Positioned(
-                      bottom: 16,
-                      right: MediaQuery.of(context).size.width - 110,
-                      child:       Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.red,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 4,
-                          horizontal: 4,
-                        ),
-                        child: Text(
-                          'DropSet',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
+                        bottom: 16,
+                        right: MediaQuery.of(context).size.width - 110,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.red,
                           ),
-                        ),
-                      )
-                      ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 4,
+                          ),
+                          child: Text(
+                            'DropSet',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        )),
                   ]),
                 ),
               ),

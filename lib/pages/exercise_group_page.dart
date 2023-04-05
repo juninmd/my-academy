@@ -36,28 +36,10 @@ class _ExerciseGroupState extends State<ExerciseGroupPage> {
                     ],
                     background: Stack(fit: StackFit.expand, children: <Widget>[
                       Image.asset(
-                        "assets/images/bg1.jpg",
+                        "assets/images/bg4.jpg",
                         fit: BoxFit.cover,
                         color: const Color(0xaa212121),
                         colorBlendMode: BlendMode.darken,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: 20,
-                                  left: 12.0,
-                                  top: 10.0,
-                                  right: 12.0),
-                              child: Text(
-                                "BORA MONSTRO",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w100),
-                              )),
-                        ),
                       ),
                     ])),
               ),
