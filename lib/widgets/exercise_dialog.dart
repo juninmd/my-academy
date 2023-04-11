@@ -46,11 +46,11 @@ class _ExerciseDialogState extends State<ExerciseDialog>
                   tabs: const [
                     Tab(
                       text: 'Dicas',
-                      icon: Icon(Icons.sports_mma,color: Colors.red),
+                      icon: Icon(Icons.sports_mma,color: Colors.deepPurple),
                     ),
                     Tab(
                       text: 'Erros Comuns',
-                      icon: Icon(Icons.block,color: Colors.red),
+                      icon: Icon(Icons.block,color: Colors.deepPurple),
                     ),
                   ],
                 ),

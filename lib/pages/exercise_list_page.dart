@@ -99,7 +99,6 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                         controller: _searchController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30.0),
                             borderSide: BorderSide.none,
@@ -109,7 +108,7 @@ class _ExerciseListPageState extends State<ExerciseListPage> {
                           hintText: 'Procurar Exercício',
                           iconColor: Colors.white,
                           prefixIcon:
-                              const Icon(Icons.search, color: Colors.black),
+                              const Icon(Icons.search),
                         ),
                         onChanged: (value) {
                           setState(() {

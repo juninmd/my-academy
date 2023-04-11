@@ -22,7 +22,7 @@ List<ExerciseGroup> exerciseGroups = [
       id: 3),
   ExerciseGroup(
       name: "Pernas",
-      image: "assets/images/leg_press.gif",
+      image: "assets/images/cadeira_flexora.gif",
       id: 4,
       description:
           "O treino de pernas contribui para o desenvolvimento muscular, melhora do equilíbrio, da postura, e fortalecimento dos músculos das pernas e glúteos."),

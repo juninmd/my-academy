@@ -18,3 +18,7 @@ samples, guidance on mobile development, and a full API reference.
 flutter build apk --debug
 https://redketchup.io/gif-resizer
 https://fisiculturismo.com.br/exerc%C3%ADcios/coxa/agachamento-hack-r107/
+https://flutterawesome.com/tag/templates/
+https://github.com/anasfik/work-out-mobile-app?ref=flutterawesome.com
++https://flutterawesome.com/fitness-tracking-app-ui-with-flutter/
++https://flutterawesome.com/a-workout-planner-that-help-you-logging-and-tracking-your-workouts-progress/

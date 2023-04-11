@@ -18,7 +18,7 @@ class FinishWorkoutButton extends StatelessWidget {
       },
       label: const Text("Finalizar treino"),
       icon: const Icon(Icons.save),
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.deepPurple,
     );
   }
 }

@@ -38,7 +38,7 @@ class _GymCalendarPageState extends State<GymCalendarPage> {
               return Center(
                 child: Text(
                   text,
-                  style: TextStyle(color: Colors.red),
+                  style: TextStyle(color: Colors.deepPurple),
                 ),
               );
             }

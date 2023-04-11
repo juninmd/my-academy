@@ -79,7 +79,7 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                             ? [
                                 const SizedBox(
                                     child:
-                                        Icon(Icons.check, color: Colors.red)),
+                                        Icon(Icons.check, color: Colors.deepPurple)),
                               ]
                             : [],
                       ),
@@ -90,7 +90,7 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: Colors.red,
+                            color: Colors.deepPurple,
                           ),
                           padding: EdgeInsets.symmetric(
                             vertical: 4,
@@ -126,7 +126,7 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                         style: widget.exercise.finish
                             ? const TextStyle(
                                 decoration: TextDecoration.lineThrough,
-                                color: Colors.red,
+                                color: Colors.deepPurple,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               )
@@ -154,18 +154,20 @@ class _ExerciseCardPageState extends State<ExerciseCardPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.fitness_center, color: Colors.red),
+                    const Icon(Icons.fitness_center, color: Colors.deepPurple),
                     const SizedBox(width: 5),
                     Text("${widget.exercise.sets} sets"),
                     const SizedBox(width: 5),
-                    const Icon(Icons.repeat, color: Colors.red),
+                    const Icon(Icons.repeat, color: Colors.deepPurple),
                     const SizedBox(width: 5),
                     Text("${widget.exercise.reps} reps"),
                     const SizedBox(width: 5),
-                    const Icon(Icons.monitor_weight, color: Colors.red),
+                    const Icon(Icons.monitor_weight, color: Colors.deepPurple),
                     const SizedBox(width: 5),
                     Text("${widget.exercise.weight} kgs"),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 5),
+                    const Icon(Icons.timer, color: Colors.deepPurple),
+                    Text("${widget.exercise.interval} s"),
                   ],
                 ),
               ),

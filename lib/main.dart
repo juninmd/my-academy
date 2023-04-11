@@ -13,17 +13,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Treino do dia',
-      // theme: ThemeData(
-      //   brightness: Brightness.dark,
-      //   primaryColor: Colors.deepPurple,
-      //   scaffoldBackgroundColor: Colors.deepPurple,
-      //   splashColor: Colors.deepPurple,
-      //   textTheme: const TextTheme(
-      //     bodyLarge: TextStyle(color: Colors.white38),
-      //     bodyMedium: TextStyle(color: Colors.white60),
-      //   ),
-      //   bottomAppBarTheme: const BottomAppBarTheme(color: Colors.transparent),
-      // ),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.deepPurple,
+        scaffoldBackgroundColor: const Color(0xff0B183C).withOpacity(0.69),
+        splashColor: Colors.deepPurple,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
+        ),
+        bottomAppBarTheme: const BottomAppBarTheme(color: Colors.transparent),
+      ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
