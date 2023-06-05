@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:my_academy/pages/home_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:my_academy/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +15,9 @@ class MyApp extends StatelessWidget {
       title: 'Treino do dia',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: Colors.deepPurple,
-        scaffoldBackgroundColor: const Color(0xff0B183C).withOpacity(0.69),
-        splashColor: Colors.deepPurple,
+        primaryColor: const Color(0xFF512DA8), // Roxo profundo sugerido pelo Alfred
+        scaffoldBackgroundColor: const Color(0xFF121212),
+        splashColor: const Color(0xFFFF4081), // Cor de destaque sugerida pelo Alfred
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),
           bodyMedium: TextStyle(color: Colors.white),
@@ -28,9 +28,8 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      supportedLocales: [const Locale('pt', 'BR')],
-
-      home: HomePage(),
+      supportedLocales: const [Locale('pt', 'BR')],
+      home: const HomePage(),
     );
   }
 }

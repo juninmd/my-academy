@@ -53,8 +53,9 @@ dependencies:
   table_calendar: ^3.0.0
   motion_tab_bar_v2: ^0.2.6
   delayed_display: ^2.0.0
-
+  json_annotation: ^4.4.0
 dev_dependencies:
+  build_runner: ^2.1.4
   flutter_test:
     sdk: flutter
 
@@ -78,7 +79,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/cover.jpg
     - assets/images/crucifixo_reto.gif
     - assets/images/supino_halteres.gif
     - assets/images/crucifixo_inclinado_halteres.gif
@@ -99,11 +99,10 @@ flutter:
     - assets/images/hack_machine.gif
     - assets/images/mesa_flexora.gif
     - assets/images/cadeira_flexora.gif
+    - assets/images/flexora_unilateral.gif
     - assets/images/bg1.jpg
     - assets/images/bg2.jpg
-    - assets/images/bg3.jpg
     - assets/images/bg4.jpg
-    - assets/images/lanche.jpg
     - assets/images/draws/gym-boy.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see

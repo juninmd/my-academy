@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../models/exercise.dart';
+import '../models/workout.dart';
 import '../widgets/custom_text_controller.dart';
 
-class ExerciseEditPage extends StatefulWidget {
-  final Exercise exercise;
+class WorkoutEditPage extends StatefulWidget {
+  final Workout workout;
   Function callback;
 
-  ExerciseEditPage({required this.callback, required this.exercise});
+  WorkoutEditPage({required this.callback, required this.workout});
 
   @override
-  _ExerciseEditPageState createState() => _ExerciseEditPageState();
+  _WorkoutEditPageState createState() => _WorkoutEditPageState();
 }
 
-class _ExerciseEditPageState extends State<ExerciseEditPage> {
+class _WorkoutEditPageState extends State<WorkoutEditPage> {
   late int id;
   late int sets;
   late int reps;
@@ -22,18 +22,18 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
   @override
   void initState() {
     super.initState();
-    sets = widget.exercise.sets;
-    reps = widget.exercise.reps;
-    weight = widget.exercise.weight;
+    // sets = widget.workout.exercise!sets;
+    // reps = widget.workout.exercise!reps;
+    // weight = widget.workout.exercise!weight;
   }
 
-  void _saveExercise() {
-    if (weight > widget.exercise.weight) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content:
-            const Text('Parabéns! Você levantou uma carga maior desta vez!'),
-      ));
-    }
+  void _saveWorkout() {
+    // if (weight > widget.workout.exercise!weight) {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     content:
+    //         const Text('Parabéns! Você levantou uma carga maior desta vez!'),
+    //   ));
+    // }
     widget.callback(weight,reps,sets);
     Navigator.pop(
       context,
@@ -57,14 +57,14 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
-                  image: AssetImage(widget.exercise.image),
+                  image: AssetImage(widget.workout.exercise!.image),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              widget.exercise.name,
+              widget.workout.exercise!.name,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
@@ -117,7 +117,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
             ),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _saveExercise,
+              onPressed: _saveWorkout,
               child: const Text("Salvar"),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blue,

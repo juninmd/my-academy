@@ -1,180 +1,202 @@
 import 'package:flutter/material.dart';
 
-import '../pages/exercise_edit_page.dart';
-import '../models/exercise.dart';
-import 'exercise_dialog.dart';
+import '../models/workout.dart';
+import 'workout_dialog.dart';
 
-class ExerciseCardPage extends StatefulWidget {
-  final Exercise exercise;
-  final Function(Exercise) onExerciseStatusChanged;
+class WorkoutCard extends StatefulWidget {
+  final Workout workout;
+  final Function(Workout) onWorkoutStatusChanged;
 
-  const ExerciseCardPage(
-      {Key? key, required this.exercise, required this.onExerciseStatusChanged})
-      : super(key: key);
+  const WorkoutCard({
+    Key? key,
+    required this.workout,
+    required this.onWorkoutStatusChanged,
+  }) : super(key: key);
 
   @override
-  _ExerciseCardPageState createState() => _ExerciseCardPageState();
+  _WorkoutCardState createState() => _WorkoutCardState();
 }
 
-class _ExerciseCardPageState extends State<ExerciseCardPage> {
+class _WorkoutCardState extends State<WorkoutCard> {
+  bool finish = false;
+
   void callback(int weight, int reps, int sets) {
-    setState(() {
-      widget.exercise.weight = weight;
-      widget.exercise.reps = reps;
-      widget.exercise.sets = sets;
-    });
+    setState(() {});
   }
 
   void _toggleFinish() {
     setState(() {
-      widget.exercise.finish = !widget.exercise.finish;
-      widget.onExerciseStatusChanged(
-          widget.exercise); // Call the callback function
+      finish = !finish;
+      widget
+          .onWorkoutStatusChanged(widget.workout); // Call the callback function
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(3.0),
-      ),
-      child: InkWell(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              flex: 4,
-              child: ClipRRect(
+  Widget build(BuildContext context) => Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(3.0),
+        ),
+        child: InkWell(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(3.0),
                 ),
                 child: InkWell(
                   onTap: () {
-                    setState(() {
-                      _toggleFinish();
-                    });
+                    setState(_toggleFinish);
                   },
                   onLongPress: () async {
                     await showDialog(
                       context: context,
-                      builder: (_) => ExerciseDialog(exercise: widget.exercise),
+                      builder: (_) => WorkoutDialog(workout: widget.workout),
                     );
                   },
-                  child: Stack(children: [
-                    Image.asset(
-                      widget.exercise.image,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      color: widget.exercise.finish ? Colors.black54 : null,
-                      colorBlendMode:
-                          widget.exercise.finish ? BlendMode.darken : null,
-                    ),
-                    Positioned(
-                      bottom: 16,
-                      left: MediaQuery.of(context).size.width - 80,
-                      child: Row(
-                        children: widget.exercise.finish
-                            ? [
-                                const SizedBox(
-                                    child:
-                                        Icon(Icons.check, color: Colors.deepPurple)),
-                              ]
-                            : [],
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        widget.workout.exercise!.image,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        color: finish ? Colors.black54 : null,
+                        colorBlendMode: finish ? BlendMode.darken : null,
                       ),
-                    ),
-                    Positioned(
-                        bottom: 16,
-                        right: MediaQuery.of(context).size.width - 110,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.deepPurple,
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 4,
-                          ),
-                          child: Text(
-                            'DropSet',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.black45,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                widget.workout.exercise!.name,
+                                style: finish
+                                    ? const TextStyle(
+                                        decoration:
+                                            TextDecoration.lineThrough,
+                                        color: Colors.red,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      )
+                                    : const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                              ),
                             ),
                           ),
-                        )),
-                  ]),
-                ),
-              ),
-            ),
-            Expanded(
-                flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      widget.exercise.finish = !widget.exercise.finish;
-                    });
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(width: 5),
-                      Text(
-                        textAlign: TextAlign.center,
-                        widget.exercise.name,
-                        style: widget.exercise.finish
-                            ? const TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.deepPurple,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              )
-                            : const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                        ),
                       ),
+                      Positioned(
+                        bottom: 16,
+                        left: MediaQuery.of(context).size.width - 80,
+                        child: Row(
+                          children: finish
+                              ? [
+                                  const SizedBox(
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ]
+                              : [],
+                        ),
+                      ),
+                      if (widget.workout.method != null)
+                        Positioned(
+                          bottom: 16,
+                          right: MediaQuery.of(context).size.width - 110,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.red,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 4,
+                            ),
+                            child: const Text(
+                              'DropSet',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (widget.workout.workoutSeries!.isNotEmpty)
+                        ExpansionTile(
+                          backgroundColor: Colors.black87,
+                          collapsedBackgroundColor: Colors.black45,
+                          textColor: Colors.white,
+                          iconColor: Colors.blue,
+                          title: Row(
+                            children: [
+                              const Icon(Icons.fitness_center,
+                                  color: Colors.red),
+                              const SizedBox(width: 5),
+                              Text(
+                                  '${widget.workout.workoutSeries?.length ?? 0} set(s)'),
+                            ],
+                          ),
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount:
+                                  widget.workout.workoutSeries?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                final series =
+                                    widget.workout.workoutSeries?[index]!;
+                                return Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      Text("${index+1}"),
+
+                                      const SizedBox(width: 5),
+                                      const Icon(Icons.repeat,
+                                          color: Colors.red),
+                                      const SizedBox(width: 5),
+                                      Text("${series!.repetitions} reps"),
+                                      const SizedBox(width: 5),
+                                      const Icon(Icons.monitor_weight,
+                                          color: Colors.red),
+                                      const SizedBox(width: 5),
+                                      Text("${series!.weight} kgs"),
+                                      const SizedBox(width: 5),
+                                      const Icon(Icons.timer,
+                                          color: Colors.red),
+                                      Text("${series!.rest} s"),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                     ],
                   ),
-                )),
-            Expanded(
-              flex: 1,
-              child: InkWell(
-                onTap: () {
-                  // Ao pressionar o botão, navega para a página de edição passando o exercício como argumento
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExerciseEditPage(
-                          exercise: widget.exercise, callback: callback),
-                    ),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.fitness_center, color: Colors.deepPurple),
-                    const SizedBox(width: 5),
-                    Text("${widget.exercise.sets} sets"),
-                    const SizedBox(width: 5),
-                    const Icon(Icons.repeat, color: Colors.deepPurple),
-                    const SizedBox(width: 5),
-                    Text("${widget.exercise.reps} reps"),
-                    const SizedBox(width: 5),
-                    const Icon(Icons.monitor_weight, color: Colors.deepPurple),
-                    const SizedBox(width: 5),
-                    Text("${widget.exercise.weight} kgs"),
-                    const SizedBox(width: 5),
-                    const Icon(Icons.timer, color: Colors.deepPurple),
-                    Text("${widget.exercise.interval} s"),
-                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

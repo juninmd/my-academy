@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:my_academy/models/exercise_group.dart';
+import 'package:my_academy/models/workout_group.dart';
 
-import '../pages/exercise_list_page.dart';
+import '../pages/workouts_page.dart';
 
-class ExerciseGroupCard extends StatelessWidget {
-  final ExerciseGroup exerciseGroup;
+class WorkoutGroupCard extends StatelessWidget {
+  final WorkoutGroup workoutGroup;
   final bool alreadWorkout;
 
-  const ExerciseGroupCard(
-      {Key? key, required this.exerciseGroup, required this.alreadWorkout})
+  const WorkoutGroupCard(
+      {Key? key, required this.workoutGroup, required this.alreadWorkout})
       : super(key: key);
 
   @override
@@ -19,16 +19,14 @@ class ExerciseGroupCard extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () async {
-            if(alreadWorkout){
+            if (alreadWorkout) {
               _showAlreadWorkout(context);
               return;
             }
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ExerciseListPage(
-                    idGroup: exerciseGroup.id,
-                    description: exerciseGroup.description),
+                builder: (context) => WorkoutsPage(workoutGroup: workoutGroup),
               ),
             );
           },
@@ -40,7 +38,7 @@ class ExerciseGroupCard extends StatelessWidget {
                 child: Center(
                   child: Stack(children: [
                     Image.asset(
-                      exerciseGroup.image,
+                      workoutGroup.image,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       color: alreadWorkout ? Colors.black45 : null,
@@ -61,7 +59,7 @@ class ExerciseGroupCard extends StatelessWidget {
                               horizontal: 8,
                             ),
                             child: Text(
-                              exerciseGroup.name,
+                              workoutGroup.name,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -80,7 +78,7 @@ class ExerciseGroupCard extends StatelessWidget {
       );
 
   void _showAlreadWorkout(BuildContext context) {
-    const snackBar = SnackBar(
+    const SnackBar snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
       content: Text('Você já treinou hoje, vai descansar :)'),

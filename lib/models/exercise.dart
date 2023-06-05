@@ -1,26 +1,31 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonSerializable()
 class Exercise {
+  int id;
   String name;
   String image;
-  int sets;
-  int id;
-  int reps;
-  int weight;
-  bool finish;
-  int exerciseGroup;
   List<String> tips;
-  List<String> errors;
-  int interval;
+  List<String> mistakes;
+  String description;
 
-  Exercise(
-      {required this.id,
-      required this.name,
-      required this.image,
-      required this.sets,
-      required this.reps,
-      required this.weight,
-      this.finish = false,
-      required this.exerciseGroup,
-      required this.tips,
-      required this.errors,
-      this.interval = 60});
+  Exercise({
+    required this.id,
+    required this.name,
+    required this.image,
+    required this.tips,
+    required this.mistakes,
+    required this.description,
+  });
+
+  factory Exercise.fromJson(Map<String, dynamic> json) {
+    return Exercise(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      tips: json['tips'].split(', '),
+      mistakes: json['mistakes'].split(', '),
+      description: json['description'] ?? "",
+    );
+  }
 }

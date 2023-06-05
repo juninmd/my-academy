@@ -36,7 +36,7 @@ Future<void> _showMyDialog(context, message, channel, callback) async {
             child: Text('Sim'),
             onPressed: () async {
               postFinishWorkout(channel, message);
-              await saveExerciseOfDay();
+              // await saveExerciseOfDay();
               _showAlreadWorkout(context);
               callback();
               Navigator.of(context).pop(true);

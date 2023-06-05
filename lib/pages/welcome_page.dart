@@ -1,12 +1,8 @@
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
-import 'package:my_academy/models/exercise_group.dart';
-import '../repository/exercise_group_repository.dart';
+import '../models/workout_group.dart';
 
-import '../repository/workouts_repository.dart';
-import '../widgets/calories_progress_bar.dart';
 import '../widgets/exercise_group_card.dart';
-import 'exercise_list_page.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -16,7 +12,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomeState extends State<WelcomePage> {
-  late ExerciseGroup exerciseGroup = exerciseGroups[0];
+  late WorkoutGroup workoutGroup = WorkoutGroup(id: 1, image: 'assets/images/leg_press.gif', name: 'name', description: 'description', dateStart: DateTime.now(), dateEnd: DateTime.now(), level: 1, userId: 1);
   late int exerciseFrequency = 0;
   late String lastWorkout = '';
   late bool alreadWorkout = true;
@@ -28,19 +24,17 @@ class _WelcomeState extends State<WelcomePage> {
   }
 
   loadValues() async {
-    await checkExerciseOfDay();
-    int exerciseGroupIdIndex = await getExerciseIdOfDay();
-    int frequency = await getExerciseFrequency();
-    String lastWorkoutDate = (await getLastExerciseDate()) ?? 'Sem treinos';
-    bool alreadWorkoutToday = await checkAlreadWorkoutToday();
+    // await checkExerciseOfDay();
+    // int workoutGroupIdIndex = await getExerciseIdOfDay();
+    // int frequency = await getExerciseFrequency();
+    // String lastWorkoutDate = (await getLastExerciseDate()) ?? 'Sem treinos';
+    // bool alreadWorkoutToday = await checkAlreadWorkoutToday();
 
     setState(() {
-      lastWorkout = lastWorkoutDate;
-      exerciseFrequency = frequency;
-      exerciseGroup = exerciseGroups.firstWhere(
-          (element) => element.id == exerciseGroupIdIndex,
-          orElse: () => exerciseGroups[0]);
-      alreadWorkout = alreadWorkoutToday;
+      // lastWorkout = lastWorkoutDate;
+      // exerciseFrequency = frequency;
+      // workoutGroup =  WorkoutGroup(id: 1, name: 'name', description: 'description', dateStart: DateTime.now(), dateEnd: DateTime.now(), level: 1, userId: 1, methodId: 1);
+      // alreadWorkout = alreadWorkoutToday;
     });
   }
 
@@ -63,6 +57,7 @@ class _WelcomeState extends State<WelcomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const SizedBox(height: 60),
                 const Text(
                   'Treino do dia',
                   style: TextStyle(
@@ -76,9 +71,9 @@ class _WelcomeState extends State<WelcomePage> {
                 DelayedDisplay(
                   delay: const Duration(milliseconds: 350),
                   slidingBeginOffset: const Offset(0.0, 0.6),
-                  child: ExerciseGroupCard(
+                  child: WorkoutGroupCard(
                       alreadWorkout: alreadWorkout,
-                      exerciseGroup: exerciseGroup),
+                      workoutGroup: workoutGroup),
                 ),
                 const SizedBox(
                   height: 20,
