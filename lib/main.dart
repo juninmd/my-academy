@@ -10,14 +10,13 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
       title: 'Treino do dia',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFF512DA8), // Roxo profundo sugerido pelo Alfred
+        primaryColor: Colors.red,
         scaffoldBackgroundColor: const Color(0xFF121212),
-        splashColor: const Color(0xFFFF4081), // Cor de destaque sugerida pelo Alfred
+        splashColor: Colors.black45,
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Colors.white),
           bodyMedium: TextStyle(color: Colors.white),
@@ -31,5 +30,4 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [Locale('pt', 'BR')],
       home: const HomePage(),
     );
-  }
 }

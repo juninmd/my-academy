@@ -18,7 +18,6 @@ class WorkoutCard extends StatefulWidget {
 }
 
 class _WorkoutCardState extends State<WorkoutCard> {
-  bool finish = false;
 
   void callback(int weight, int reps, int sets) {
     setState(() {});
@@ -26,7 +25,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
 
   void _toggleFinish() {
     setState(() {
-      finish = !finish;
+      widget.workout.finish = !widget.workout.finish;
       widget
           .onWorkoutStatusChanged(widget.workout); // Call the callback function
     });
@@ -62,8 +61,8 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         widget.workout.exercise!.image,
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        color: finish ? Colors.black54 : null,
-                        colorBlendMode: finish ? BlendMode.darken : null,
+                        color: widget.workout.finish ? Colors.black54 : Colors.black12,
+                        colorBlendMode:   BlendMode.darken ,
                       ),
                       Positioned.fill(
                         child: Align(
@@ -82,7 +81,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                               child: Text(
                                 textAlign: TextAlign.center,
                                 widget.workout.exercise!.name,
-                                style: finish
+                                style: widget.workout.finish
                                     ? const TextStyle(
                                         decoration:
                                             TextDecoration.lineThrough,
@@ -103,7 +102,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         bottom: 16,
                         left: MediaQuery.of(context).size.width - 80,
                         child: Row(
-                          children: finish
+                          children: widget.workout.finish
                               ? [
                                   const SizedBox(
                                     child: Icon(

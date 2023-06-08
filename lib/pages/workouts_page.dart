@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_academy/widgets/exercise_card.dart';
+import 'package:my_academy/widgets/workout_card.dart';
 import '../models/workout.dart';
 import '../models/workout_group.dart';
 import '../services/my_academy/workout_group_api.dart';
+import '../utils.dart';
 import '../widgets/finish_workout_button.dart';
 
 class WorkoutsPage extends StatefulWidget {
@@ -18,14 +19,23 @@ class WorkoutsPage extends StatefulWidget {
 class _WorkoutsPageState extends State<WorkoutsPage> {
   List<Workout> _workouts = [];
   List<Workout> _workoutsBase = [];
-  bool alreadyWorkout = true;
   bool isLoading = false;
-
+  late String background;
   TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    List<String> imagePaths = [
+      'assets/images/bg1.jpg',
+      'assets/images/bg2.jpg',
+      'assets/images/bg3.jpg',
+      'assets/images/bg4.jpg',
+      'assets/images/bg5.jpg',
+      'assets/images/bg6.jpg',
+    ];
+
+    background = getRandomImagePath(imagePaths);
     loadValues();
   }
 
@@ -35,13 +45,11 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
     });
 
     _searchController = TextEditingController();
-    var alreadyWorkoutToday = true;
     var workouts = await getExercises();
 
     setState(() {
       _workouts = workouts;
       _workoutsBase = workouts;
-      alreadyWorkout = alreadyWorkoutToday;
       isLoading = false;
     });
   }
@@ -54,12 +62,12 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
 
   void _updateWorkoutStatus(Workout workout) {
     setState(() {
-      // // Find the index of the exercise in the list
-      // final index = _exercises.indexWhere((e) => e.id == exercise.id);
-      // if (index != -1) {
-      //   // Update the exercise in the list
-      //   _exercises[index] = exercise;
-      // }
+      // Find the index of the exercise in the list
+      final index = _workouts.indexWhere((e) => e.id == workout.id);
+      if (index != -1) {
+        // Update the exercise in the list
+        _workouts[index] = workout;
+      }
     });
   }
 
@@ -89,7 +97,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
-            expandedHeight: size.height * 0.3,
+            expandedHeight: size.height * 0.25,
             pinned: true,
             floating: false,
             bottom: PreferredSize(
@@ -131,7 +139,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 onPressed: () {
                   setState(() {
                     _searchController.clear();
-                    _workouts = List.empty();
+                    _workouts = _workoutsBase;
                   });
                 },
                 icon: const Icon(Icons.clear),
@@ -142,7 +150,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 fit: StackFit.expand,
                 children: <Widget>[
                   Image.asset(
-                    "assets/images/bg2.jpg",
+                    background, // random
                     fit: BoxFit.cover,
                     color: const Color(0xaa212121),
                     colorBlendMode: BlendMode.darken,
@@ -201,19 +209,18 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     ),
                   ),
       ),
-      floatingActionButton:
-          _workouts.where((element) => element.finish).toList().length ==
-                      _workouts.length &&
-                  !alreadyWorkout
-              ? FinishWorkoutButton(
-                  channelName: '-1001661357785',
-                  message: getDateNow(),
-                  callback: () async {
-                    await loadValues();
-                    Navigator.of(context).pop(true);
-                  },
-                )
-              : null,
+      floatingActionButton: _workouts.length > 0 &&
+              _workouts.where((element) => element.finish).length ==
+                  _workouts.length
+          ? FinishWorkoutButton(
+              channelName: '-1001661357785',
+              message: getDateNow(),
+              callback: () async {
+                await loadValues();
+                Navigator.of(context).pop(true);
+              },
+            )
+          : null,
     );
   }
 

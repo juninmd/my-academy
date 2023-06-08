@@ -102,7 +102,10 @@ flutter:
     - assets/images/flexora_unilateral.gif
     - assets/images/bg1.jpg
     - assets/images/bg2.jpg
+    - assets/images/bg3.jpg
     - assets/images/bg4.jpg
+    - assets/images/bg5.jpg
+    - assets/images/bg6.jpg
     - assets/images/draws/gym-boy.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see

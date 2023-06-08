@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../repository/workouts_repository.dart';
-
 class FinishWorkoutButton extends StatelessWidget {
   final String channelName;
   final String message;
@@ -16,9 +14,12 @@ class FinishWorkoutButton extends StatelessWidget {
       onPressed: () async {
         await _showMyDialog(context, message, channelName, callback);
       },
-      label: const Text("Finalizar treino"),
-      icon: const Icon(Icons.save),
-      backgroundColor: Colors.deepPurple,
+      label: const Text(
+        "Finalizar treino",
+        style: TextStyle(color: Colors.white),
+      ),
+      icon: const Icon(Icons.check, color: Colors.white),
+      backgroundColor: Colors.red,
     );
   }
 }
