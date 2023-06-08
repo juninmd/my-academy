@@ -27,9 +27,9 @@ Future<Method> getMethodById(int id) async {
   throw response;
 }
 
-Future<Method> postMethod(Method exercise) async {
+Future<Method> postMethod(Method body) async {
   var url = Uri.parse("${host}/methods");
-  var response = await http.post(url, body: exercise);
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
@@ -39,9 +39,9 @@ Future<Method> postMethod(Method exercise) async {
   throw response;
 }
 
-Future<Method> putMethod(Method exercise) async {
-  var url = Uri.parse('${host}/methods/${exercise.id}');
-  var response = await http.post(url, body: exercise);
+Future<Method> putMethod(Method body) async {
+  var url = Uri.parse('${host}/methods/${body.id}');
+  var response = await http.post(url,body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);

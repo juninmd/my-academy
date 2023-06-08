@@ -29,7 +29,7 @@ Future<User> getUserById(int id) async {
 
 Future<User> postUser(User body) async {
   var url = Uri.parse("${host}/users");
-  var response = await http.post(url, body: body);
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
@@ -41,7 +41,7 @@ Future<User> postUser(User body) async {
 
 Future<User> putUser(User body) async {
   var url = Uri.parse('${host}/users/${body.id}');
-  var response = await http.post(url, body: body);
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);

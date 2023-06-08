@@ -114,21 +114,21 @@ class _WorkoutCardState extends State<WorkoutCard> {
                               : [],
                         ),
                       ),
-                      if (widget.workout.method != null)
+                      if (widget.workout.method?.name != null)
                         Positioned(
                           bottom: 16,
                           right: MediaQuery.of(context).size.width - 110,
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: Colors.red,
+                              color: Colors.deepPurple,
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: 4,
                               horizontal: 4,
                             ),
-                            child: const Text(
-                              'DropSet',
+                            child: Text(
+                              widget.workout.method!.name!,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,

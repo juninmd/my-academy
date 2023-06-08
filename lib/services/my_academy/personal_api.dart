@@ -27,9 +27,9 @@ Future<Personal> getPersonalById(int id) async {
   throw response;
 }
 
-Future<Personal> postPersonal(Personal exercise) async {
+Future<Personal> postPersonal(Personal body) async {
   var url = Uri.parse("${host}/personals");
-  var response = await http.post(url, body: exercise);
+  var response = await http.post(url,body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
@@ -39,9 +39,9 @@ Future<Personal> postPersonal(Personal exercise) async {
   throw response;
 }
 
-Future<Personal> putPersonal(Personal exercise) async {
-  var url = Uri.parse('${host}/personals/${exercise.id}');
-  var response = await http.post(url, body: exercise);
+Future<Personal> putPersonal(Personal body) async {
+  var url = Uri.parse('${host}/personals/${body.id}');
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);

@@ -9,8 +9,14 @@ import '../widgets/finish_workout_button.dart';
 
 class WorkoutsPage extends StatefulWidget {
   final WorkoutGroup workoutGroup;
+  final Function callback;
 
-  const WorkoutsPage({Key? key, required this.workoutGroup}) : super(key: key);
+  const WorkoutsPage(
+      {Key? key,
+        required this.workoutGroup,
+        required this.callback
+      })
+      : super(key: key);
 
   @override
   _WorkoutsPageState createState() => _WorkoutsPageState();
@@ -177,7 +183,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           ),
         ],
         body: isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : _workouts.isNotEmpty
@@ -215,9 +221,10 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           ? FinishWorkoutButton(
               channelName: '-1001661357785',
               message: getDateNow(),
+              workoutGroupId: widget.workoutGroup.id,
               callback: () async {
-                await loadValues();
                 Navigator.of(context).pop(true);
+                widget.callback();
               },
             )
           : null,

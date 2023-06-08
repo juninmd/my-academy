@@ -6,9 +6,12 @@ import '../pages/workouts_page.dart';
 class WorkoutGroupCard extends StatelessWidget {
   final WorkoutGroup workoutGroup;
   final bool alreadWorkout;
+  final Function callback;
 
   const WorkoutGroupCard(
-      {Key? key, required this.workoutGroup, required this.alreadWorkout})
+      {Key? key, required this.workoutGroup, required this.alreadWorkout,
+        required this.callback
+      })
       : super(key: key);
 
   @override
@@ -21,12 +24,14 @@ class WorkoutGroupCard extends StatelessWidget {
           onTap: () async {
             if (alreadWorkout) {
               _showAlreadWorkout(context);
+              callback();
               return;
             }
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => WorkoutsPage(workoutGroup: workoutGroup),
+                builder: (context) =>
+                    WorkoutsPage(workoutGroup: workoutGroup, callback: callback),
               ),
             );
           },
@@ -69,6 +74,32 @@ class WorkoutGroupCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if (alreadWorkout)
+                      Positioned(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.deepPurple,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4,
+                                horizontal: 4,
+                              ),
+                              child: const Text(
+                                'Você já treinou!',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ]),
                 ),
               ),

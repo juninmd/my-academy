@@ -27,9 +27,9 @@ Future<Exercise> getExerciseById(int id) async {
   throw response;
 }
 
-Future<Exercise> postExercise(Exercise exercise) async {
+Future<Exercise> postExercise(Exercise body) async {
   var url = Uri.parse("${host}/exercises");
-  var response = await http.post(url, body: exercise);
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
@@ -39,9 +39,9 @@ Future<Exercise> postExercise(Exercise exercise) async {
   throw response;
 }
 
-Future<Exercise> putExercise(Exercise exercise) async {
-  var url = Uri.parse('${host}/exercises/${exercise.id}');
-  var response = await http.post(url, body: exercise);
+Future<Exercise> putExercise(Exercise body) async {
+  var url = Uri.parse('${host}/exercises/${body.id}');
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);

@@ -50,7 +50,7 @@ Future<WorkoutGroup> getWorkoutGroupExercisesById(int id) async {
 
 Future<WorkoutGroup> postWorkoutGroup(WorkoutGroup body) async {
   final url = Uri.parse("${host}/workouts-groups");
-  final response = await http.post(url, body: body);
+  final response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);
@@ -62,7 +62,7 @@ Future<WorkoutGroup> postWorkoutGroup(WorkoutGroup body) async {
 
 Future<WorkoutGroup> putWorkoutGroup(WorkoutGroup body) async {
   final url = Uri.parse("${host}/workouts-groups/${body.id}");
-  final response = await http.post(url, body: body);
+  final response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);

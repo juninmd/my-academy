@@ -31,8 +31,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
@@ -58,5 +57,4 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
-  }
 }

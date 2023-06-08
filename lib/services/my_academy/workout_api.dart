@@ -29,7 +29,7 @@ Future<Workout> getWorkoutById(int id) async {
 
 Future<Workout> postWorkout(Workout body) async {
   var url = Uri.parse("${host}/workouts");
-  var response = await http.post(url, body: body);
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
@@ -41,7 +41,7 @@ Future<Workout> postWorkout(Workout body) async {
 
 Future<Workout> putWorkout(Workout body) async {
   var url = Uri.parse('${host}/workouts/${body.id}');
-  var response = await http.post(url, body: body);
+  var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
