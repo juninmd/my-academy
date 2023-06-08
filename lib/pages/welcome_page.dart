@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../constants.dart';
 import '../dto/workout-summary.dart';
 
 import '../services/my_academy/workout_session_api.dart';
@@ -27,7 +28,7 @@ class _WelcomeState extends State<WelcomePage> {
   }
 
   loadValues() async {
-    WorkoutSummary summary = await getWorkoutSummary(1);
+    WorkoutSummary summary = await getWorkoutSummary(idUser);
 
     try {
       setState(() {

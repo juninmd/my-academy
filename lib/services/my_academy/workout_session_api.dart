@@ -4,14 +4,16 @@ import '../../dto/workout-summary.dart';
 import '../../models/workout_session.dart';
 import '../my_academy_api.dart';
 
-Future<WorkoutSession> getWorkoutSessions() async {
-  final url = Uri.parse("${host}/workouts-sessions");
+Future<List<WorkoutSession>> getWorkoutSessions(idUser) async {
+  final url = Uri.parse("${host}/workouts-sessions/${idUser}");
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
-    final jsonResponse = json.decode(response.body);
-    final data = WorkoutSession.fromJson(jsonResponse);
-    return data;
+    final jsonResponse = json.decode(response.body) as  List<dynamic>;;
+    final workoutSession = jsonResponse.map((data) {
+      return WorkoutSession.fromJson(data);
+    }).toList();
+    return workoutSession;
   }
   throw response;
 }
