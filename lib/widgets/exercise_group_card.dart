@@ -5,11 +5,11 @@ import '../pages/workouts_page.dart';
 
 class WorkoutGroupCard extends StatelessWidget {
   final WorkoutGroup workoutGroup;
-  final bool alreadWorkout;
+  final bool alreadyWorkout;
   final Function callback;
 
   const WorkoutGroupCard(
-      {Key? key, required this.workoutGroup, required this.alreadWorkout,
+      {Key? key, required this.workoutGroup, required this.alreadyWorkout,
         required this.callback
       })
       : super(key: key);
@@ -22,7 +22,7 @@ class WorkoutGroupCard extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () async {
-            if (alreadWorkout) {
+            if (alreadyWorkout) {
               _showAlreadWorkout(context);
               callback();
               return;
@@ -46,8 +46,8 @@ class WorkoutGroupCard extends StatelessWidget {
                       workoutGroup.image,
                       fit: BoxFit.cover,
                       width: double.infinity,
-                      color: alreadWorkout ? Colors.black45 : null,
-                      colorBlendMode: alreadWorkout ? BlendMode.darken : null,
+                      color: alreadyWorkout ? Colors.black45 : null,
+                      colorBlendMode: alreadyWorkout ? BlendMode.darken : null,
                     ),
                     Positioned.fill(
                       child: Align(
@@ -74,7 +74,7 @@ class WorkoutGroupCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (alreadWorkout)
+                    if (alreadyWorkout)
                       Positioned(
                         child: Align(
                           alignment: Alignment.topCenter,
@@ -83,7 +83,7 @@ class WorkoutGroupCard extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                color: Colors.deepPurple,
+                                color: Colors.blue,
                               ),
                               padding: const EdgeInsets.symmetric(
                                 vertical: 4,

@@ -7,6 +7,7 @@ import '../widgets/workout_group_card_placeholder.dart';
 
 class WorkoutGroupPage extends StatefulWidget {
   const WorkoutGroupPage({Key? key}) : super(key: key);
+
   @override
   _WorkoutGroupState createState() => _WorkoutGroupState();
 }
@@ -27,16 +28,38 @@ class _WorkoutGroupState extends State<WorkoutGroupPage> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Meus Treinos",
-            style: TextStyle(color: Colors.white),
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
+          SliverAppBar(
+            expandedHeight: size.height * 0.15,
+            pinned: true,
+            floating: false,
+            title: const Text(
+              "Meus Treinos",
+              style: TextStyle(color: Colors.white),
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.black,
+            toolbarHeight: 100,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/images/bg1.jpg", // random
+                    fit: BoxFit.cover,
+                    color: const Color(0xaa212121),
+                    colorBlendMode: BlendMode.darken,
+                  ),
+                ],
+              ),
+            ),
           ),
-          centerTitle: true,
-          backgroundColor: Colors.black,
-        ),
+        ],
         body: FutureBuilder<List<WorkoutGroup>>(
           future: _workoutGroupsFuture,
           builder: (context, snapshot) {
@@ -62,7 +85,7 @@ class _WorkoutGroupState extends State<WorkoutGroupPage> {
                         return WorkoutGroupCardPlaceholder();
                       } else {
                         return WorkoutGroupCard(
-                          alreadWorkout: false,
+                          alreadyWorkout: false,
                           workoutGroup: workoutGroup,
                           callback: loadValues,
                         );
@@ -74,10 +97,11 @@ class _WorkoutGroupState extends State<WorkoutGroupPage> {
             }
           },
         ),
-      );
+      ),
+    );
+  }
 
-  Widget _buildLoadingState() =>
-      GridView.builder(
+  Widget _buildLoadingState() => GridView.builder(
         padding: const EdgeInsets.only(top: 8),
         itemCount: 4, // Simulating 4 placeholders
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -88,5 +112,4 @@ class _WorkoutGroupState extends State<WorkoutGroupPage> {
           return WorkoutGroupCardPlaceholder();
         },
       );
-
 }

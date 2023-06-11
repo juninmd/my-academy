@@ -121,7 +121,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: Colors.deepPurple,
+                              color: Colors.blue,
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: 4,

@@ -23,11 +23,11 @@ class MyApp extends StatelessWidget {
         ),
         bottomAppBarTheme: const BottomAppBarTheme(color: Colors.transparent),
       ),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: const [Locale('pt', 'BR')],
-      home: const HomePage(),
+      home: HomePage(),
     );
 }

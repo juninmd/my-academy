@@ -217,7 +217,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
       ),
       floatingActionButton: _workouts.length > 0 &&
               _workouts.where((element) => element.finish).length ==
-                  _workouts.length
+                  _workouts.length && _searchController.text.isEmpty
           ? FinishWorkoutButton(
               channelName: '-1001661357785',
               message: getDateNow(),

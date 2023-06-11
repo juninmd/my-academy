@@ -1,65 +1,139 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:mobx/mobx.dart';
+
 import '../constants.dart';
 import '../dto/workout-summary.dart';
-
 import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
 import '../widgets/workout_group_card_placeholder.dart';
+
+part 'welcome_page.g.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
   @override
-  _WelcomeState createState() => _WelcomeState();
+  _WelcomePageState createState() => _WelcomePageState();
 }
 
-class _WelcomeState extends State<WelcomePage> {
-  late WorkoutSummary workoutSummary;
-  late int exerciseFrequency = 0;
-  late String lastWorkout = 'Nenhum';
-  late bool alreadWorkout = false;
-  late bool isLoading = true; // Add this line
+class _WelcomePageState extends State<WelcomePage> {
+  final WelcomePageStore _store = WelcomePageStore();
 
   @override
   void initState() {
     super.initState();
-    loadValues();
+    _store.loadValues();
   }
 
-  loadValues() async {
-    WorkoutSummary summary = await getWorkoutSummary(idUser);
-
-    try {
-      setState(() {
-        isLoading = true; // Set isLoading to true before making the request
-        // Load workout summary from API
-        workoutSummary = summary;
-        // Other state updates
-        exerciseFrequency = summary.counter; // Update exerciseFrequency
-        lastWorkout = summary.lastSession?.workoutsGroups?.name ??
-            'Nenhum'; // Update lastWorkout
-
-        // Compare last workout date with current day
-        if (summary.lastSession != null) {
-          DateTime currentDay = DateTime.now();
-          DateTime lastWorkoutDay = summary.lastSession!.date;
-          alreadWorkout = DateFormat('yyyy-MM-dd').format(currentDay) ==
-              DateFormat('yyyy-MM-dd').format(lastWorkoutDay);
-        }
-      });
-    } catch (error) {
-      // Handle the error
-    } finally {
-      setState(() {
-        isLoading =
-            false; // Set isLoading to false after the request is completed
-      });
-    }
+  WelcomePage({Key? key}) {
+    _store.loadValues();
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
+          SliverAppBar(
+            expandedHeight: size.height * 0.15,
+            pinned: false,
+            floating: false,
+            centerTitle: true,
+            backgroundColor: Colors.black,
+            toolbarHeight: 100,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Image.asset(
+                    "assets/images/bg1.jpg", // random
+                    fit: BoxFit.cover,
+                    color: Colors.black.withOpacity(0.8),
+                    colorBlendMode: BlendMode.darken,
+                  ),
+                  Observer(builder: (_) {
+                    if (!_store.isLoading) {
+                      return Center(
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 60),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Último treino',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.blue,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 8,
+                                  ),
+                                  child: Text(
+                                    _store.lastWorkout,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Sequência de',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.blue,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 8,
+                                  ),
+                                  child: Text(
+                                    '${_store.exerciseFrequency} treino(s)',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return WorkoutGroupCardPlaceholder();
+                    }
+                  }),
+                ],
+              ),
+            ),
+          ),
+        ],
         body: Stack(
           fit: StackFit.expand,
           children: [
@@ -71,7 +145,7 @@ class _WelcomeState extends State<WelcomePage> {
               ),
             ),
             Container(
-              color: const Color(0xff0B183C).withOpacity(0.69),
+              color: Colors.blue.withOpacity(0.2),
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,97 +158,70 @@ class _WelcomeState extends State<WelcomePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  const SizedBox(height: 10),
+                  Observer(
+                    builder: (_) {
+                      if (_store.isLoading ||
+                          _store.workoutSummary?.workoutGroupOfDay == null) {
+                        return WorkoutGroupCardPlaceholder();
+                      } else {
+                        return WorkoutGroupCard(
+                          alreadyWorkout: _store.alreadyWorkout,
+                          workoutGroup:
+                          _store.workoutSummary!.workoutGroupOfDay!,
+                          callback: _store.loadValues,
+                        );
+                      }
+                    },
                   ),
-                  // Show a loading circle while isLoading is true
-                  if (isLoading || workoutSummary?.workoutGroupOfDay == null)
-                    WorkoutGroupCardPlaceholder()
-                  else
-                    WorkoutGroupCard(
-                      alreadWorkout: alreadWorkout,
-                      workoutGroup: workoutSummary.workoutGroupOfDay!,
-                      callback: loadValues,
-                    ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  if (!isLoading)
-                    Center(
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 60),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                'Último treino',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.deepPurple,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4,
-                                  horizontal: 8,
-                                ),
-                                child: Text(
-                                  lastWorkout,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 20),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                'Sequência de',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.deepPurple,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4,
-                                  horizontal: 8,
-                                ),
-                                child: Text(
-                                  '$exerciseFrequency treinos',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    WorkoutGroupCardPlaceholder(),
-                  const SizedBox(height: 8),
                 ],
               ),
             ),
           ],
         ),
-      );
+      ),
+    );
+  }
+}
+
+class WelcomePageStore = _WelcomePageStoreBase with _$WelcomePageStore;
+
+abstract class _WelcomePageStoreBase with Store {
+  @observable
+  WorkoutSummary? workoutSummary;
+
+  @observable
+  int exerciseFrequency = 0;
+
+  @observable
+  String lastWorkout = 'Nenhum';
+
+  @observable
+  bool alreadyWorkout = false;
+
+  @observable
+  bool isLoading = true;
+
+  @action
+  Future<void> loadValues() async {
+    try {
+      isLoading = true;
+      workoutSummary = await getWorkoutSummary(idUser);
+      if (workoutSummary != null) {
+        exerciseFrequency = workoutSummary!.counter;
+        lastWorkout =
+            workoutSummary!.lastSession?.workoutsGroups?.name ?? 'Nenhum';
+        if (workoutSummary!.lastSession != null) {
+          DateTime currentDay = DateTime.now();
+          DateTime lastWorkoutDay = workoutSummary!.lastSession!.date;
+          alreadyWorkout = DateFormat('yyyy-MM-dd').format(currentDay) ==
+              DateFormat('yyyy-MM-dd').format(lastWorkoutDay);
+        }
+      }
+    } catch (error) {
+      // Handle the error
+    } finally {
+      isLoading = false;
+    }
+  }
 }
