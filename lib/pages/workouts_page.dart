@@ -5,6 +5,7 @@ import '../models/workout.dart';
 import '../models/workout_group.dart';
 import '../services/my_academy/workout_group_api.dart';
 import '../utils.dart';
+import '../widgets/confirm_finish_workout.dart';
 import '../widgets/finish_workout_button.dart';
 
 class WorkoutsPage extends StatefulWidget {
@@ -12,10 +13,7 @@ class WorkoutsPage extends StatefulWidget {
   final Function callback;
 
   const WorkoutsPage(
-      {Key? key,
-        required this.workoutGroup,
-        required this.callback
-      })
+      {Key? key, required this.workoutGroup, required this.callback})
       : super(key: key);
 
   @override
@@ -150,6 +148,17 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 },
                 icon: const Icon(Icons.clear),
               ),
+              IconButton(
+                onPressed: () async {
+                  await ConfirmFinishWorkout(
+                      context, getDateNow(), '-1001661357785', () async {
+                    Navigator.of(context).pop(true);
+                    widget.callback();
+                  }, widget.workoutGroup.id);
+                },
+                color: Colors.blue,
+                icon: const Icon(Icons.check),
+              ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -217,7 +226,8 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
       ),
       floatingActionButton: _workouts.length > 0 &&
               _workouts.where((element) => element.finish).length ==
-                  _workouts.length && _searchController.text.isEmpty
+                  _workouts.length &&
+              _searchController.text.isEmpty
           ? FinishWorkoutButton(
               channelName: '-1001661357785',
               message: getDateNow(),

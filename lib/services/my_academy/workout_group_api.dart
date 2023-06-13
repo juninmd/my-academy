@@ -5,9 +5,9 @@ import "package:http/http.dart" as http;
 import "../../models/workout_group.dart";
 import "../my_academy_api.dart";
 
-Future<List<WorkoutGroup>> getWorkoutGroups() async {
+Future<List<WorkoutGroup>> getWorkoutGroups(int idUser) async {
   try {
-    final url = Uri.parse("$host/workouts-groups");
+    final url = Uri.parse("$host/workouts-groups/$idUser");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

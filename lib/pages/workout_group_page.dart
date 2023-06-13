@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../models/workout_group.dart';
 import '../services/my_academy/workout_group_api.dart';
 import '../widgets/exercise_group_card.dart';
@@ -23,7 +24,7 @@ class _WorkoutGroupState extends State<WorkoutGroupPage> {
 
   loadValues() async {
     setState(() {
-      _workoutGroupsFuture = getWorkoutGroups();
+      _workoutGroupsFuture = getWorkoutGroups(idUser);
     });
   }
 
