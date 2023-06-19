@@ -77,7 +77,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
 
   Future<List<Workout>> getExercises() async {
     var workoutGroup =
-        await getWorkoutGroupExercisesById(widget.workoutGroup.id);
+        await getWorkoutGroupExercisesById(widget.workoutGroup.id!);
     return workoutGroup.workouts!;
   }
 
@@ -231,7 +231,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           ? FinishWorkoutButton(
               channelName: '-1001661357785',
               message: getDateNow(),
-              workoutGroupId: widget.workoutGroup.id,
+              workoutGroupId: widget.workoutGroup.id!,
               callback: () async {
                 Navigator.of(context).pop(true);
                 widget.callback();

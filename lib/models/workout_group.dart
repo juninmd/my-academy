@@ -4,7 +4,7 @@ import 'workout.dart';
 
 @JsonSerializable()
 class WorkoutGroup {
-  int id;
+  int? id;
   String name;
   String description;
   String image;
@@ -15,7 +15,7 @@ class WorkoutGroup {
   List<Workout>? workouts;
 
   WorkoutGroup({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.image,

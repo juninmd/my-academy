@@ -3,14 +3,16 @@ import 'dart:convert';
 import '../../models/exercise.dart';
 import '../my_academy_api.dart';
 
-Future<Exercise> getExercises() async {
+Future<List<Exercise>> getExercises()  async {
   var url = Uri.parse("${host}/exercises");
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = Exercise.fromJson(jsonResponse);
-    return data;
+    final jsonResponse = json.decode(response.body) as List<dynamic>;
+    final exercices = jsonResponse.map((data) {
+      return Exercise.fromJson(data);
+    }).toList();
+    return exercices.toList();
   }
   throw response;
 }

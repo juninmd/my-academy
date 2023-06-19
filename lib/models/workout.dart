@@ -6,7 +6,7 @@ import 'method.dart';
 
 @JsonSerializable()
 class Workout {
-  int id;
+  int? id;
   int exerciseId;
   String description;
   Exercise? exercise;
@@ -15,7 +15,7 @@ class Workout {
   bool finish;
 
   Workout({
-    required this.id,
+    this.id,
     required this.exerciseId,
     required this.description,
     this.workoutSeries,
