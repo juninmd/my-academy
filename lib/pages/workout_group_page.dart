@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_academy/pages/workout_group_create_page.dart';
 
 import '../constants.dart';

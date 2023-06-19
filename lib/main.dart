@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_academy/pages/home_page.dart';
 
 void main() {
@@ -23,10 +22,6 @@ class MyApp extends StatelessWidget {
         ),
         bottomAppBarTheme: const BottomAppBarTheme(color: Colors.transparent),
       ),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
       supportedLocales: const [Locale('pt', 'BR')],
       home: HomePage(),
     );
