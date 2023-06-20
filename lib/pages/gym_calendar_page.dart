@@ -1,45 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_academy/pages/workouts_page.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:mobx/mobx.dart';
+
 import '../constants.dart';
 import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
 
-part 'gym_calendar_page.g.dart';
+final gymCalendarPageStoreProvider =
+    ChangeNotifierProvider((ref) => GymCalendarPageStore());
 
-class GymCalendarPage extends StatefulWidget {
+class GymCalendarPage extends HookConsumerWidget {
   const GymCalendarPage({Key? key}) : super(key: key);
 
   @override
-  _GymCalendarPageState createState() => _GymCalendarPageState();
-}
-
-class _GymCalendarPageState extends State<GymCalendarPage> {
-  late final GymCalendarPageStore _store;
-
-  @override
-  void initState() {
-    _store = GymCalendarPageStore();
-    initializeDateFormatting('pt_BR');
-    super.initState();
-    _store.loadValues();
-  }
-
-  @override
-  void dispose() {
-    _store.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final GymCalendarPageStore store = ref.watch(gymCalendarPageStoreProvider);
     final now = DateTime.now();
+
+    useEffect(() {
+      store.loadValues();
+      return null;
+    }, const []);
+
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendário'),
+        title: const Text('Calendário'),
       ),
       body: Column(
         children: [
@@ -49,7 +39,7 @@ class _GymCalendarPageState extends State<GymCalendarPage> {
               locale: 'pt_BR',
               startingDayOfWeek: StartingDayOfWeek.monday,
               headerVisible: false,
-              calendarStyle: CalendarStyle(
+              calendarStyle: const CalendarStyle(
                 outsideDaysVisible: false,
               ),
               calendarBuilders: CalendarBuilders(
@@ -65,9 +55,9 @@ class _GymCalendarPageState extends State<GymCalendarPage> {
                 },
               ),
               selectedDayPredicate: (day) =>
-                  _store.isSameDate(day, _store.selectedDay),
+                  store.isSameDate(day, store.selectedDay),
               onDaySelected: (selectedDay, focusedDay) {
-                _store.setSelectedDay(selectedDay);
+                store.setSelectedDay(selectedDay);
               },
               focusedDay: DateTime.now(),
               firstDay: DateTime(now.year, now.month, 1),
@@ -76,13 +66,16 @@ class _GymCalendarPageState extends State<GymCalendarPage> {
           ),
           const SizedBox(height: 8.0),
           Expanded(
-            child: Observer(
-              builder: (_) {
-                if (_store.isLoading) {
-                  return CircularProgressIndicator();
+            child: Consumer(
+              builder: (context, ref, _) {
+                final selectedEvents = ref.watch(gymCalendarPageStoreProvider
+                    .select((value) => value.selectedEvents));
+
+                if (store.isLoading) {
+                  return const CircularProgressIndicator();
                 } else {
                   return ListView.builder(
-                    itemCount: _store.selectedEvents.length,
+                    itemCount: selectedEvents.length,
                     itemBuilder: (context, index) => Container(
                       margin: const EdgeInsets.symmetric(
                         horizontal: 12.0,
@@ -99,14 +92,14 @@ class _GymCalendarPageState extends State<GymCalendarPage> {
                             MaterialPageRoute(
                               builder: (context) => WorkoutsPage(
                                 workoutGroup:
-                                _store.selectedEvents[index].workoutsGroups!,
+                                    selectedEvents[index].workoutsGroups!,
                                 callback: () => {},
                               ),
                             ),
                           ),
                         },
                         title: Text(
-                            '${_store.selectedEvents[index].workoutsGroups!.name}'),
+                            '${selectedEvents[index].workoutsGroups!.name}'),
                       ),
                     ),
                   );
@@ -120,44 +113,35 @@ class _GymCalendarPageState extends State<GymCalendarPage> {
   }
 }
 
-class GymCalendarPageStore = _GymCalendarPageStoreBase
-    with _$GymCalendarPageStore;
-
-abstract class _GymCalendarPageStoreBase with Store {
-  @observable
+class GymCalendarPageStore extends ChangeNotifier {
   List<WorkoutSession> workoutSessions = [];
-
-  @observable
   DateTime selectedDay = DateTime.now();
+  bool isLoading = false;
 
-  @computed
   List<WorkoutSession> get selectedEvents => workoutSessions
       .where((session) => isSameDate(session.date, selectedDay))
       .toList();
 
-  @observable
-  bool isLoading = false;
-
-  @action
   Future<void> loadValues() async {
-    isLoading = true;
-    List<WorkoutSession> sessions = await getWorkoutSessions(idUser);
-
-    workoutSessions = sessions;
-    isLoading = false;
+    try {
+      isLoading = true;
+      initializeDateFormatting('pt_BR');
+      workoutSessions = await getWorkoutSessions(idUser);
+    } catch (error) {
+// Handle the error
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
-  @action
   void setSelectedDay(DateTime day) {
     selectedDay = day;
+    notifyListeners();
   }
 
   bool isSameDate(DateTime date1, DateTime date2) =>
       date1.year == date2.year &&
-          date1.month == date2.month &&
-          date1.day == date2.day;
-
-  void dispose() {
-    // Dispose any disposables here, if necessary
-  }
+      date1.month == date2.month &&
+      date1.day == date2.day;
 }

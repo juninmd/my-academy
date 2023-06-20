@@ -8,6 +8,7 @@ import 'method.dart';
 class Workout {
   int? id;
   int exerciseId;
+  int? methodId;
   String description;
   Exercise? exercise;
   Method? method;
@@ -16,6 +17,7 @@ class Workout {
 
   Workout({
     this.id,
+    this.methodId,
     required this.exerciseId,
     required this.description,
     this.workoutSeries,

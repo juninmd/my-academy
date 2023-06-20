@@ -1,47 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:my_academy/pages/workout_group_create_page.dart';
 
-import '../constants.dart';
-import '../models/exercise.dart';
-import '../models/workout_group.dart';
-import '../services/my_academy/exercises_api.dart';
-import '../services/my_academy/workout_group_api.dart';
+import '../stores/workout_group_store.dart';
 import '../widgets/exercise_group_card.dart';
 import '../widgets/workout_group_card_placeholder.dart';
 
-class WorkoutGroupPage extends StatefulWidget {
-  const WorkoutGroupPage({Key? key }) : super(key: key);
+final workoutGroupStoreProvider =
+    ChangeNotifierProvider((ref) => WorkoutGroupStore());
+
+class WorkoutGroupPage extends HookConsumerWidget {
+  const WorkoutGroupPage({Key? key}) : super(key: key);
 
   @override
-  _WorkoutGroupState createState() => _WorkoutGroupState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final store = ref.watch(workoutGroupStoreProvider);
 
-class _WorkoutGroupState extends State<WorkoutGroupPage> {
-  late Future<List<WorkoutGroup>> _workoutGroupsFuture;
-  late Future<List<Exercise>> _exercises;
+    useEffect(() {
+      store.loadValues();
+      return null;
+    }, []);
 
-  @override
-  void initState() {
-    super.initState();
-    loadValues();
-  }
-
-  loadValues() async {
-    setState(() {
-      _workoutGroupsFuture = getWorkoutGroups(idUser);
-      _exercises = getExercises();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
-            expandedHeight: size.height * 0.15,
+            expandedHeight: MediaQuery.of(context).size.height * 0.15,
             pinned: true,
             floating: false,
             title: const Text(
@@ -66,50 +53,29 @@ class _WorkoutGroupState extends State<WorkoutGroupPage> {
             ),
           ),
         ],
-        body: FutureBuilder<List<WorkoutGroup>>(
-          future: _workoutGroupsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return _buildLoadingState();
-            } else if (snapshot.hasError) {
-              return Text('Erro: ${snapshot.error}');
-            } else {
-              final List<WorkoutGroup> data = snapshot.data!;
-              return GridView.builder(
+        body: store.isLoading
+            ? _buildLoadingState()
+            : GridView.builder(
                 padding: const EdgeInsets.only(top: 8),
-                itemCount: data.length,
+                itemCount: store.workoutGroups.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 32.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  final workoutGroup = data[index];
-                  return FutureBuilder<bool>(
-                    future: simulateWidgetLoading(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return WorkoutGroupCardPlaceholder();
-                      } else {
-                        return WorkoutGroupCard(
-                          alreadyWorkout: false,
-                          workoutGroup: workoutGroup,
-                          callback: loadValues,
-                        );
-                      }
-                    },
-                  );
+                  final workoutGroup = store.workoutGroups[index];
+                  return WorkoutGroupCard(
+                      alreadyWorkout: false,
+                      workoutGroup: workoutGroup,
+                      callback: store.loadValues);
                 },
-              );
-            }
-          },
-        ),
+              ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
               context: context,
-              builder: (BuildContext context) =>
-                  WorkoutGroupCreatePage());
+              builder: (BuildContext context) => WorkoutGroupCreatePage());
         },
         child: Icon(Icons.add),
       ),
