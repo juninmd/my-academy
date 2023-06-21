@@ -27,12 +27,14 @@ class HomePage extends ConsumerWidget {
       ),
       bottomNavigationBar: Consumer(
         builder: (context, ref, _) {
-          final currentIndex = ref.watch(homePageStoreProvider.select((value) => value.currentIndex));
+          final currentIndex = ref.watch(
+              homePageStoreProvider.select((value) => value.currentIndex));
 
           return BottomNavigationBar(
             currentIndex: currentIndex,
             onTap: (index) => store.onTabSelected(index, context),
-            selectedItemColor: Colors.blue, // Roxo profundo sugerido pelo Alfred
+            selectedItemColor:
+                Colors.blue, // Roxo profundo sugerido pelo Alfred
             unselectedItemColor: Colors.white,
             items: const [
               BottomNavigationBarItem(
@@ -52,7 +54,6 @@ class HomePage extends ConsumerWidget {
         },
       ),
     );
-
   }
 }
 

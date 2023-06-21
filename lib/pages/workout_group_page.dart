@@ -72,7 +72,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
+          showDialog(
               context: context,
               builder: (BuildContext context) => WorkoutGroupCreatePage());
         },

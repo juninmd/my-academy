@@ -57,7 +57,7 @@ class WelcomePage extends HookConsumerWidget {
                           ListTile(
                             leading: CircleAvatar(
                               backgroundImage:
-                                  NetworkImage(store.personal!.photoUrl!),
+                                  NetworkImage(store.personal!.photoUrl),
                             ),
                             title: Text(
                               store.me.name,
@@ -87,7 +87,7 @@ class WelcomePage extends HookConsumerWidget {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 8),
                             child: Text(
-                              '${store.lastSession!.workoutsGroups!.name!} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date!.toUtc())}',
+                              '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -106,7 +106,7 @@ class WelcomePage extends HookConsumerWidget {
                           const SizedBox(height: 4),
                           if (store.personal != null)
                             Text(
-                              'Personal: ${store.personal!.name!}',
+                              'Personal: ${store.personal!.name}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,

@@ -8,6 +8,12 @@ import '../services/my_academy/workout_group_api.dart';
 
 class WorkoutGroupStore extends ChangeNotifier {
   List<WorkoutGroup> workoutGroups = [];
+  List<Exercise> _filteredExercises = [];
+  List<Exercise> _exercises = [];
+
+  List<Exercise> get exercises =>
+      _filteredExercises.isNotEmpty ? _filteredExercises : _exercises;
+  List<Exercise> get filteredExercises => _filteredExercises;
 
   WorkoutGroup workoutGroup = WorkoutGroup(
       name: '',
@@ -19,14 +25,32 @@ class WorkoutGroupStore extends ChangeNotifier {
       level: 1,
       workouts: []);
 
-  List<Exercise> exercises = [];
   bool isLoading = true;
+
+  void notify(){
+    notifyListeners();
+  }
+
+  void filterExercises(String filter) {
+    if (filter.isEmpty) {
+      _filteredExercises = _exercises;
+      notifyListeners();
+      return;
+    }
+    var lowercaseFilter = filter.toLowerCase();
+    _filteredExercises = _exercises
+        .where(
+            (exercise) => exercise.name.toLowerCase().contains(lowercaseFilter))
+        .toList();
+    notifyListeners();
+  }
 
   Future<void> loadValues() async {
     try {
       isLoading = true;
       workoutGroups = await getWorkoutGroups(idUser);
-      exercises = await getExercises();
+      _exercises = await getExercises();
+      _filteredExercises = _exercises;
     } catch (error) {
 // Handle the error
     } finally {

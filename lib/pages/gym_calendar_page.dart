@@ -26,7 +26,6 @@ class GymCalendarPage extends HookConsumerWidget {
       return null;
     }, const []);
 
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendário'),
@@ -65,6 +64,13 @@ class GymCalendarPage extends HookConsumerWidget {
             ),
           ),
           const SizedBox(height: 8.0),
+          Text(
+            store.selectedEvents.length > 0
+                ? 'Você fez ${store.selectedEvents.length} treino(s)'
+                : 'Você não treinou',
+            style: TextStyle(fontSize: 12),
+          ),
+          const SizedBox(height: 4),
           Expanded(
             child: Consumer(
               builder: (context, ref, _) {
@@ -72,36 +78,64 @@ class GymCalendarPage extends HookConsumerWidget {
                     .select((value) => value.selectedEvents));
 
                 if (store.isLoading) {
-                  return const CircularProgressIndicator();
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
                 } else {
                   return ListView.builder(
                     itemCount: selectedEvents.length,
-                    itemBuilder: (context, index) => Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WorkoutsPage(
-                                workoutGroup:
-                                    selectedEvents[index].workoutsGroups!,
-                                callback: () => {},
-                              ),
+                    itemBuilder: (context, index) {
+                      final workoutSession = selectedEvents[index];
+                      final workoutGroup = workoutSession.workoutsGroups!;
+                      final workoutCount = selectedEvents.length;
+
+                      return GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WorkoutsPage(
+                              workoutGroup: workoutGroup,
+                              callback: () {},
                             ),
                           ),
-                        },
-                        title: Text(
-                            '${selectedEvents[index].workoutsGroups!.name}'),
-                      ),
-                    ),
+                        ),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 4.0,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Image.asset(
+                                workoutGroup.image,
+                                fit: BoxFit.cover,
+                                height: 120,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      workoutGroup.name,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   );
                 }
               },
@@ -128,7 +162,7 @@ class GymCalendarPageStore extends ChangeNotifier {
       initializeDateFormatting('pt_BR');
       workoutSessions = await getWorkoutSessions(idUser);
     } catch (error) {
-// Handle the error
+      // Handle the error
     } finally {
       isLoading = false;
       notifyListeners();
