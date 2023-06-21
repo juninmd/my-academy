@@ -5,7 +5,7 @@ import '../my_academy_api.dart';
 
 Future<List<Exercise>> getExercises()  async {
   var url = Uri.parse("${host}/exercises");
-  var response = await http.get(url);
+  var response = await http.get(url).timeout(const Duration(seconds: 5));
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body) as List<dynamic>;
@@ -19,7 +19,7 @@ Future<List<Exercise>> getExercises()  async {
 
 Future<Exercise> getExerciseById(int id) async {
   var url = Uri.parse("${host}/exercises/${id}");
-  var response = await http.get(url);
+  var response = await http.get(url).timeout(const Duration(seconds: 5));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);

@@ -28,16 +28,15 @@ class WorkoutGroupPage extends HookConsumerWidget {
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height * 0.15,
+            expandedHeight: MediaQuery.of(context).size.height * 0.05,
             pinned: true,
-            floating: false,
+            floating: true,
             title: const Text(
               "Meus Treinos",
               style: TextStyle(color: Colors.white),
             ),
             centerTitle: true,
             backgroundColor: Colors.black,
-            toolbarHeight: 100,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 fit: StackFit.expand,

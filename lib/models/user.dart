@@ -7,6 +7,7 @@ class User {
   int id;
   String name;
   String email;
+  String photoUrl;
   List<Personal>? personals;
   List<Student>? students;
   // WorkoutsGroups workoutsGroups;
@@ -15,6 +16,7 @@ class User {
     required this.id,
     required this.name,
     required this.email,
+    required this.photoUrl,
     this.personals,
     this.students,
   });
@@ -23,6 +25,7 @@ class User {
         id: json['id'],
         name: json['name'],
         email: json['email'],
+        photoUrl: json['photoUrl'],
         personals: json['personals'] != null
             ? List<Personal>.from(json['personals']
                 .map((personal) => Personal.fromJson(personal)))
