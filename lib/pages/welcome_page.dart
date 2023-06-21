@@ -169,6 +169,7 @@ class WelcomePageStore extends ChangeNotifier {
   WorkoutSummary? workoutSummary;
   int exerciseFrequency = 0;
   String lastWorkout = 'Nenhum';
+  String name = '';
   bool alreadyWorkout = false;
   bool isLoading = true;
 
@@ -178,6 +179,7 @@ class WelcomePageStore extends ChangeNotifier {
       workoutSummary = await getWorkoutSummary(idUser);
       if (workoutSummary != null) {
         exerciseFrequency = workoutSummary!.counter;
+        name = workoutSummary!.user!.name;
         lastWorkout =
             workoutSummary!.lastSession?.workoutsGroups?.name ?? 'Nenhum';
         if (workoutSummary!.lastSession != null) {

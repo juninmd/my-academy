@@ -1,5 +1,6 @@
 import "package:json_annotation/json_annotation.dart";
 
+import '../models/user.dart';
 import '../models/workout_group.dart';
 import '../models/workout_session.dart';
 
@@ -8,9 +9,11 @@ class WorkoutSummary {
   WorkoutSession? lastSession;
   int counter;
   WorkoutGroup? workoutGroupOfDay;
+  User? user;
 
   WorkoutSummary({
     this.lastSession,
+    this.user,
     required this.counter,
     this.workoutGroupOfDay,
   });
