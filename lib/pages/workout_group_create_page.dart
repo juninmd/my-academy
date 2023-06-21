@@ -27,27 +27,32 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
     void createWorkoutGroup() {
       String trainingName = _nameController.text;
       store.workoutGroup.name = trainingName;
-      store.workoutGroups.add(store.workoutGroup);
-      // TODO: Save the training group to API
 
       // Reset form
       _nameController.clear();
       _seriesList.clear();
     }
 
+    var list = ['a', 'b'];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Training'),
+        title: const Text('Novo Treino'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nome do treino',
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do treino',
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             Row(
