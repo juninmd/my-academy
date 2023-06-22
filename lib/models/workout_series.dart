@@ -3,14 +3,14 @@ import "package:json_annotation/json_annotation.dart";
 @JsonSerializable()
 class WorkoutSeries {
   int id;
-  int workoutId;
+  int? workoutId;
   int repetitions;
   int weight;
   int rest;
 
   WorkoutSeries({
     required this.id,
-    required this.workoutId,
+    this.workoutId,
     required this.repetitions,
     required this.weight,
     required this.rest,
@@ -18,7 +18,7 @@ class WorkoutSeries {
 
   factory WorkoutSeries.fromJson(Map<String, dynamic> json) {
     return WorkoutSeries(
-      id: json['id'],
+      id: json['id'] != null ? json['id'] : null,
       workoutId: json['workoutId'],
       repetitions: json['repetitions'],
       weight: json['weight'],

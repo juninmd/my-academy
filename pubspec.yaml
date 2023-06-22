@@ -83,6 +83,7 @@ flutter:
   assets:
     - assets/images/crucifixo_reto.gif
     - assets/images/supino_halteres.gif
+    - assets/images/supino_inclinado_barra.gif
     - assets/images/crucifixo_inclinado_halteres.gif
     - assets/images/tricepes_testa_barra_w.gif
     - assets/images/desenvolvimento_halteres.gif
