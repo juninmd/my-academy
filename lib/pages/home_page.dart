@@ -10,6 +10,7 @@ import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
 import '../widgets/workout_group_card_placeholder.dart';
+import 'gym_calendar_page.dart';
 
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());
 
@@ -83,18 +84,24 @@ class HomePage extends HookConsumerWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              const SizedBox(width: 8),
+                              if (store.lastSession?.workoutsGroups?.name !=
+                                      null &&
+                                  store.lastSession?.date != null)
+                                Chip(
+                                  backgroundColor: Colors
+                                      .white, // Use white background for contrast
+                                  label: Text(
+                                    '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
+                                    style: TextStyle(
+                                        fontSize:
+                                            15, // Slightly larger font size for better readability
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors
+                                            .deepPurple), // Inverse text color for the chip
+                                  ),
+                                ),
                             ],
-                          ),
-                          const SizedBox(height: 8),
-                          Chip(
-                            backgroundColor: Colors
-                                .white, // Use white background for contrast
-                            label: Text(
-                              '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
-                              style: TextStyle(
-                                  color: Colors
-                                      .deepPurple), // Inverse text color for the chip
-                            ),
                           ),
                           const SizedBox(
                               height: 16), // Increased spacing between sections
@@ -112,6 +119,18 @@ class HomePage extends HookConsumerWidget {
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                              IconButton(
+                                tooltip: 'Visualizar Histórico',
+                                onPressed: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => GymCalendarPage(),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(Icons.calendar_month),
                               ),
                             ],
                           ),
@@ -147,11 +166,12 @@ class HomePage extends HookConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  WorkoutGroupCard(
-                    alreadyWorkout: store.alreadyWorkout,
-                    workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
-                    callback: store.loadValues,
-                  ),
+                  if (store.workoutSummary?.workoutGroupOfDay != null)
+                    WorkoutGroupCard(
+                      alreadyWorkout: store.alreadyWorkout,
+                      workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
+                      callback: store.loadValues,
+                    ),
                 ],
               ),
             ),

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../constants.dart';
 import '../dto/workout_series_dto.dart';
 import '../models/exercise.dart';
 import '../services/my_academy/workout_group_api.dart';
@@ -17,13 +15,16 @@ final workoutGroupStoreProvider =
 
 class WorkoutGroupCreatePage extends HookConsumerWidget {
   final _seriesList = <WorkoutSeriesDTO>[];
+  final int idUser;
+
+    WorkoutGroupCreatePage(this.idUser, {  Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(workoutGroupStoreProvider);
 
     useEffect(() {
-      store.loadValues();
+      store.loadValues(idUser);
       return null;
     }, []);
 
@@ -246,11 +247,11 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
 }
 
 class ExerciseCard extends StatelessWidget {
-  final Exercise exercise;
-  final void Function()? onTap;
 
   const ExerciseCard({Key? key, required this.exercise, required this.onTap})
       : super(key: key);
+  final Exercise exercise;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) => Card(

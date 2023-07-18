@@ -45,7 +45,7 @@ class WorkoutGroupStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadValues() async {
+  Future<void> loadValues(idUser) async {
     try {
       isLoading = true;
       workoutGroups = await getWorkoutGroups(idUser);

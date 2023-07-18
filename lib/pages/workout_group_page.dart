@@ -12,14 +12,16 @@ final workoutGroupStoreProvider =
     ChangeNotifierProvider((ref) => WorkoutGroupStore());
 
 class WorkoutGroupPage extends HookConsumerWidget {
-  const WorkoutGroupPage({Key? key}) : super(key: key);
+  final int idUser;
+  final String? name;
+  const WorkoutGroupPage(this.idUser, this.name, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(workoutGroupStoreProvider);
 
     useEffect(() {
-      store.loadValues();
+      store.loadValues(idUser);
       return null;
     }, []);
 
@@ -31,8 +33,8 @@ class WorkoutGroupPage extends HookConsumerWidget {
             expandedHeight: MediaQuery.of(context).size.height * 0.05,
             pinned: true,
             floating: true,
-            title: const Text(
-              "Meus Treinos",
+            title: Text(
+              "Treinos ${name ?? ''}",
               style: TextStyle(color: Colors.white),
             ),
             centerTitle: true,
@@ -75,7 +77,8 @@ class WorkoutGroupPage extends HookConsumerWidget {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (BuildContext context) => WorkoutGroupCreatePage());
+              builder: (BuildContext context) =>
+                  WorkoutGroupCreatePage(idUser));
         },
         child: Icon(Icons.add_box),
       ),

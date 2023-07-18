@@ -74,8 +74,7 @@ class GymCalendarPage extends HookConsumerWidget {
           Expanded(
             child: Consumer(
               builder: (context, ref, _) {
-                final selectedEvents = ref.watch(gymCalendarPageStoreProvider
-                    .select((value) => value.selectedEvents));
+                final selectedEvents = ref.watch(gymCalendarPageStoreProvider.select((value) => value.selectedEvents));
 
                 if (store.isLoading) {
                   return Center(
@@ -87,7 +86,6 @@ class GymCalendarPage extends HookConsumerWidget {
                     itemBuilder: (context, index) {
                       final workoutSession = selectedEvents[index];
                       final workoutGroup = workoutSession.workoutsGroups!;
-                      final workoutCount = selectedEvents.length;
 
                       return GestureDetector(
                         onTap: () => Navigator.push(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_academy/pages/home_page.dart';
-import 'classes_page.dart';
+import '../constants.dart';
+import 'students_page.dart';
 import 'workout_group_page.dart';
 import 'gym_calendar_page.dart';
 
@@ -10,10 +11,9 @@ final menusPageStoreProvider =
 
 class MenusPage extends ConsumerWidget {
   final List<Widget> _screens = [
-    ClassesPage(),
-    WorkoutGroupPage(),
+    StudentsPage(),
     HomePage(),
-    GymCalendarPage(),
+    WorkoutGroupPage(idUser, null),
   ];
 
   @override
@@ -53,16 +53,12 @@ class MenusPage extends ConsumerWidget {
                 label: 'Aulas',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.fitness_center),
-                label: 'Treinos',
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month),
-                label: 'Calendário',
+                icon: Icon(Icons.fitness_center),
+                label: 'Treinos',
               ),
             ],
           );
