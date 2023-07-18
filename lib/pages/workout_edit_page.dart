@@ -34,7 +34,7 @@ class _WorkoutEditPageState extends State<WorkoutEditPage> {
     //         const Text('Parabéns! Você levantou uma carga maior desta vez!'),
     //   ));
     // }
-    widget.callback(weight,reps,sets);
+    widget.callback(weight, reps, sets);
     Navigator.pop(
       context,
     );
@@ -42,7 +42,6 @@ class _WorkoutEditPageState extends State<WorkoutEditPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editar Exercício"),
@@ -120,7 +119,7 @@ class _WorkoutEditPageState extends State<WorkoutEditPage> {
               onPressed: _saveWorkout,
               child: const Text("Salvar"),
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                primary: Colors.deepPurple,
                 textStyle: const TextStyle(fontSize: 18),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),

@@ -19,4 +19,12 @@ class Method {
       description: json['description'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'description': description,
+    };
+  }
 }

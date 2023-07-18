@@ -16,7 +16,6 @@ final workoutGroupStoreProvider =
     ChangeNotifierProvider((ref) => WorkoutGroupStore());
 
 class WorkoutGroupCreatePage extends HookConsumerWidget {
-  final _nameController = TextEditingController();
   final _seriesList = <WorkoutSeriesDTO>[];
 
   @override
@@ -40,8 +39,6 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
 
       final background = getRandomImagePath(imagePaths);
 
-      String trainingName = _nameController.text;
-      store.workoutGroup.name = trainingName;
       store.workoutGroup.image = background;
       store.workoutGroup.userId = idUser;
       store.workoutGroup.level = 1;
@@ -49,7 +46,6 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
       await postWorkoutGroup(store.workoutGroup);
 
       // Reset form
-      _nameController.clear();
       _seriesList.clear();
     }
 
@@ -65,7 +61,9 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _nameController,
+                    controller: TextEditingController(
+                      text: store.workoutGroup.name,
+                    ),
                     decoration: const InputDecoration(
                       labelText: 'Nome do treino',
                     ),
@@ -129,6 +127,17 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                     ),
                   ),
                 ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: TextFormField(
+                    controller: TextEditingController(
+                      text: store.workoutGroup.level.toString(),
+                    ),
+                    decoration: const InputDecoration(
+                      labelText: 'Nível',
+                    ),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 16),
@@ -176,8 +185,8 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                               );
                             },
                             style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.blue),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.deepPurple),
                             ),
                             child: Text(
                               exist

@@ -156,7 +156,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     widget.callback();
                   }, widget.workoutGroup.id);
                 },
-                color: Colors.blue,
+                color: Colors.deepPurple,
                 icon: const Icon(Icons.check),
               ),
             ],

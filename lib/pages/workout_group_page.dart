@@ -71,12 +71,13 @@ class WorkoutGroupPage extends HookConsumerWidget {
               ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
         onPressed: () {
           showDialog(
               context: context,
               builder: (BuildContext context) => WorkoutGroupCreatePage());
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add_box),
       ),
     );
   }

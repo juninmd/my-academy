@@ -39,4 +39,17 @@ class Workout {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'exerciseId': exerciseId,
+      'methodId': methodId,
+      'description': description,
+      'exercise': exercise?.toJson(),
+      'method': method?.toJson(),
+      'workoutSeries': workoutSeries?.map((series) => series.toJson()).toList(),
+      'finish': finish,
+    };
+  }
 }

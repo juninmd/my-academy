@@ -18,7 +18,6 @@ class WorkoutCard extends StatefulWidget {
 }
 
 class _WorkoutCardState extends State<WorkoutCard> {
-
   void callback(int weight, int reps, int sets) {
     setState(() {});
   }
@@ -61,8 +60,10 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         widget.workout.exercise!.image,
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        color: widget.workout.finish ? Colors.black54 : Colors.black12,
-                        colorBlendMode:   BlendMode.darken ,
+                        color: widget.workout.finish
+                            ? Colors.black54
+                            : Colors.black12,
+                        colorBlendMode: BlendMode.darken,
                       ),
                       Positioned.fill(
                         child: Align(
@@ -83,8 +84,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                                 widget.workout.exercise!.name,
                                 style: widget.workout.finish
                                     ? const TextStyle(
-                                        decoration:
-                                            TextDecoration.lineThrough,
+                                        decoration: TextDecoration.lineThrough,
                                         color: Colors.red,
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -121,14 +121,14 @@ class _WorkoutCardState extends State<WorkoutCard> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: Colors.blue,
+                              color: Colors.deepPurple,
                             ),
                             padding: const EdgeInsets.symmetric(
                               vertical: 4,
                               horizontal: 4,
                             ),
                             child: Text(
-                              widget.workout.method!.name!,
+                              widget.workout.method!.name,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -141,16 +141,11 @@ class _WorkoutCardState extends State<WorkoutCard> {
                           backgroundColor: Colors.black87,
                           collapsedBackgroundColor: Colors.black45,
                           textColor: Colors.white,
-                          iconColor: Colors.blue,
-                          title: Row(
-                            children: [
-                              const Icon(Icons.fitness_center,
-                                  color: Colors.red),
-                              const SizedBox(width: 5),
-                              Text(
-                                  '${widget.workout.workoutSeries?.length ?? 0} set(s)'),
-                            ],
-                          ),
+                          iconColor: Colors.deepPurple,
+                          leading: const Icon(Icons.fitness_center,
+                              color: Colors.red),
+                          title: Text(
+                              '${widget.workout.workoutSeries?.length ?? 0} set(s)'),
                           children: [
                             ListView.builder(
                               shrinkWrap: true,
@@ -159,31 +154,31 @@ class _WorkoutCardState extends State<WorkoutCard> {
                                   widget.workout.workoutSeries?.length ?? 0,
                               itemBuilder: (context, index) {
                                 final series =
-                                    widget.workout.workoutSeries?[index]!;
+                                    widget.workout.workoutSeries?[index];
                                 return Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 5),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      Text("${index+1}"),
-
-                                      const SizedBox(width: 5),
-                                      const Icon(Icons.repeat,
-                                          color: Colors.red),
-                                      const SizedBox(width: 5),
-                                      Text("${series!.repetitions} reps"),
-                                      const SizedBox(width: 5),
-                                      const Icon(Icons.monitor_weight,
-                                          color: Colors.red),
-                                      const SizedBox(width: 5),
-                                      Text("${series!.weight} kgs"),
-                                      const SizedBox(width: 5),
-                                      const Icon(Icons.timer,
-                                          color: Colors.red),
-                                      Text("${series!.rest} s"),
-                                    ],
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text("${index + 1}"),
+                                        const SizedBox(width: 5),
+                                        const Icon(Icons.repeat,
+                                            color: Colors.red),
+                                        const SizedBox(width: 5),
+                                        Text("${series!.repetitions} reps"),
+                                        const SizedBox(width: 5),
+                                        const Icon(Icons.monitor_weight,
+                                            color: Colors.red),
+                                        const SizedBox(width: 5),
+                                        Text("${series.weight} kgs"),
+                                        const SizedBox(width: 5),
+                                        const Icon(Icons.timer,
+                                            color: Colors.red),
+                                        Text("${series.rest} s"),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

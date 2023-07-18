@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_academy/pages/home_page.dart';
+import 'package:my_academy/pages/menus_page.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -29,6 +29,6 @@ class MyApp extends StatelessWidget {
       GlobalWidgetsLocalizations.delegate
     ],
     supportedLocales: const [Locale('pt', 'BR')],
-    home: HomePage(),
+    home: MenusPage(),
   );
 }

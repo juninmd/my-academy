@@ -1,73 +1,196 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_academy/pages/welcome_page.dart';
-import 'workout_group_page.dart';
-import 'gym_calendar_page.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
+
+import '../constants.dart';
+import '../dto/workout-summary.dart';
+import '../models/user.dart';
+import '../models/workout_session.dart';
+import '../services/my_academy/workout_session_api.dart';
+import '../widgets/exercise_group_card.dart';
+import '../widgets/workout_group_card_placeholder.dart';
 
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());
 
-class HomePage extends ConsumerWidget {
-  final List<Widget> _screens = [
-    WorkoutGroupPage(),
-    WelcomePage(),
-    GymCalendarPage(),
-  ];
+class HomePage extends HookConsumerWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final HomePageStore store = ref.watch(homePageStoreProvider);
 
-    return Scaffold(
-      body: Consumer(
-        builder: (context, ref, _) => PageView(
-          controller: store.pageController,
-          onPageChanged: store.onPageChanged,
-          children: _screens,
-        ),
-      ),
-      bottomNavigationBar: Consumer(
-        builder: (context, ref, _) {
-          final currentIndex = ref.watch(
-              homePageStoreProvider.select((value) => value.currentIndex));
+    useEffect(() {
+      store.loadValues();
+      return null;
+    }, const []);
 
-          return BottomNavigationBar(
-            currentIndex: currentIndex,
-            onTap: (index) => store.onTabSelected(index, context),
-            selectedItemColor:
-                Colors.blue, // Roxo profundo sugerido pelo Alfred
-            unselectedItemColor: Colors.white,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.fitness_center),
-                label: 'Treinos',
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            child: SizedBox(
+              width: double.infinity,
+              child: Image.asset(
+                'assets/images/bg1.jpg',
+                fit: BoxFit.cover,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+            ),
+          ),
+          if (store.isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.9),
+              child: Center(
+                child: WorkoutGroupCardPlaceholder(),
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month),
-                label: 'Calendário',
+            ),
+          if (!store.isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.9),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Card(
+                    color: Colors.deepPurple, // Modern color scheme
+                    elevation: 4, // Add some elevation for a nice shadow effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10), // Rounded corners for a modern look
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // Align content to the left
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.fitness_center,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Último treino',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      12, // Slightly larger font size for better readability
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Chip(
+                            backgroundColor: Colors
+                                .white, // Use white background for contrast
+                            label: Text(
+                              '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
+                              style: TextStyle(
+                                  color: Colors
+                                      .deepPurple), // Inverse text color for the chip
+                            ),
+                          ),
+                          const SizedBox(
+                              height: 16), // Increased spacing between sections
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.timeline,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Sequência de ${store.exerciseFrequency} treino(s)',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          if (store.personal != null)
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Personal: ${store.personal!.name}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize:
+                                        12, // Adjusted font size for personal info
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'Treino do dia',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  WorkoutGroupCard(
+                    alreadyWorkout: store.alreadyWorkout,
+                    workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
+                    callback: store.loadValues,
+                  ),
+                ],
               ),
-            ],
-          );
-        },
+            ),
+        ],
       ),
     );
   }
 }
 
 class HomePageStore extends ChangeNotifier {
-  int currentIndex = 1;
-  final PageController pageController = PageController(initialPage: 1);
+  WorkoutSummary? workoutSummary;
+  int exerciseFrequency = 0;
+  WorkoutSession? lastSession;
+  User me = User(id: idUser, name: '', email: '', photoUrl: '');
+  User? personal;
+  bool alreadyWorkout = false;
+  bool isLoading = true;
 
-  void onTabSelected(int index, BuildContext context) {
-    currentIndex = index;
-    pageController.jumpToPage(index);
-  }
-
-  void onPageChanged(int index) {
-    currentIndex = index;
-    notifyListeners();
+  Future<void> loadValues() async {
+    try {
+      isLoading = true;
+      workoutSummary = await getWorkoutSummary(idUser);
+      if (workoutSummary != null) {
+        exerciseFrequency = workoutSummary!.counter;
+        me = workoutSummary!.user!;
+        personal = workoutSummary?.personal;
+        if (workoutSummary!.lastSession != null) {
+          lastSession = workoutSummary!.lastSession!;
+          DateTime currentDay = DateTime.now();
+          DateTime lastWorkoutDay = workoutSummary!.lastSession!.date;
+          alreadyWorkout = DateFormat('yyyy-MM-dd').format(currentDay) ==
+              DateFormat('yyyy-MM-dd').format(lastWorkoutDay);
+        }
+      }
+    } catch (error) {
+      print(error);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

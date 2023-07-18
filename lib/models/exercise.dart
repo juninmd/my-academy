@@ -28,4 +28,15 @@ class Exercise {
       description: json['description'] ?? "",
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'image': image,
+      'tips': tips,
+      'mistakes': mistakes,
+      'description': description,
+    };
+  }
 }

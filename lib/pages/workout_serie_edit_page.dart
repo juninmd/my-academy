@@ -40,7 +40,6 @@ class WorkoutSerieEdit extends HookConsumerWidget {
               TextEditingController(text: repetitionsController.text),
           restController: TextEditingController(text: restController.text),
           weightController: TextEditingController(text: weightController.text),
-
           repetitions: int.parse(repetitionsController.text),
           rest: int.parse(restController.text),
           weight: int.parse(weightController.text),
@@ -121,7 +120,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
-                   controller: restController,
+                    controller: restController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       labelText: 'Descanso',
@@ -228,7 +227,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
+                      MaterialStateProperty.all<Color>(Colors.deepPurple),
                 ),
                 child: const Text(
                   'Salvar Séries',

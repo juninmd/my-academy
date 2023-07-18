@@ -1,7 +1,5 @@
 import "dart:convert";
-
-import "package:http/http.dart" as http;
-
+import 'package:http/http.dart' as http;
 import "../../models/workout_group.dart";
 import "../my_academy_api.dart";
 
@@ -50,7 +48,12 @@ Future<WorkoutGroup> getWorkoutGroupExercisesById(int id) async {
 
 Future<WorkoutGroup> postWorkoutGroup(WorkoutGroup body) async {
   final url = Uri.parse("${host}/workouts-groups");
-  final response = await http.post(url, body: jsonEncode(body));
+  final response = await http.post(url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(body.toJson()),
+      encoding: utf8);
 
   if (response.statusCode == 200) {
     final jsonResponse = json.decode(response.body);

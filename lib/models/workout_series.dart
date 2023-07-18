@@ -25,4 +25,15 @@ class WorkoutSeries {
       rest: json['rest'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'workoutId': workoutId,
+      'repetitions': repetitions,
+      'weight': weight,
+      'rest': rest,
+    };
+  }
+
 }

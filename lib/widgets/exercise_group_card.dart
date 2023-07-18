@@ -9,9 +9,10 @@ class WorkoutGroupCard extends StatelessWidget {
   final Function callback;
 
   const WorkoutGroupCard(
-      {Key? key, required this.workoutGroup, required this.alreadyWorkout,
-        required this.callback
-      })
+      {Key? key,
+      required this.workoutGroup,
+      required this.alreadyWorkout,
+      required this.callback})
       : super(key: key);
 
   @override
@@ -30,8 +31,8 @@ class WorkoutGroupCard extends StatelessWidget {
             await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    WorkoutsPage(workoutGroup: workoutGroup, callback: callback),
+                builder: (context) => WorkoutsPage(
+                    workoutGroup: workoutGroup, callback: callback),
               ),
             );
           },
@@ -83,7 +84,7 @@ class WorkoutGroupCard extends StatelessWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
-                                color: Colors.blue,
+                                color: Colors.deepPurple,
                               ),
                               padding: const EdgeInsets.symmetric(
                                 vertical: 4,

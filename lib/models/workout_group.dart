@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import "package:json_annotation/json_annotation.dart";
 
 import 'workout.dart';
@@ -31,7 +33,7 @@ class WorkoutGroup {
       id: json['id'],
       name: json['name'],
       description: json['description'],
-      image: json?['image'] ?? '',
+      image: json['image'] ?? '',
       dateStart: DateTime.parse(json['dateStart']),
       dateEnd: DateTime.parse(json['dateEnd']),
       level: json['level'],
@@ -41,5 +43,21 @@ class WorkoutGroup {
               json['workouts'].map((workout) => Workout.fromJson(workout)))
           : null,
     );
+  }
+
+  Map<String, String> toJson() {
+    return {
+      if (id != null) 'id': id.toString(),
+      'name': name,
+      'description': description,
+      'image': image,
+      'dateStart': dateStart.toIso8601String(),
+      'dateEnd': dateEnd.toIso8601String(),
+      'level': level.toString(),
+      'userId': userId.toString(),
+      if (workouts != null)
+        'workouts':
+            jsonEncode(workouts!.map((workout) => workout.toJson()).toList()),
+    };
   }
 }
