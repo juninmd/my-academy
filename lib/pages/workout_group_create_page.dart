@@ -3,52 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../dto/workout_series_dto.dart';
 import '../models/exercise.dart';
-import '../services/my_academy/workout_group_api.dart';
-import '../stores/workout_group_store.dart';
-import '../utils.dart';
+import '../models/workout_series.dart';
+import '../stores/workout_group_create_store.dart';
 import 'workout_serie_edit_page.dart';
+import 'package:collection/collection.dart';
 
-final workoutGroupStoreProvider =
-    ChangeNotifierProvider((ref) => WorkoutGroupStore());
+final workoutGroupCreateStoreProvider =
+    ChangeNotifierProvider((ref) => WorkoutGroupCreateStore());
 
 class WorkoutGroupCreatePage extends HookConsumerWidget {
-  final _seriesList = <WorkoutSeriesDTO>[];
+  final _seriesList = <WorkoutSeries>[];
   final int idUser;
 
-    WorkoutGroupCreatePage(this.idUser, {  Key? key}) : super(key: key);
+  WorkoutGroupCreatePage(this.idUser, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final store = ref.watch(workoutGroupStoreProvider);
+    final store = ref.watch(workoutGroupCreateStoreProvider);
 
     useEffect(() {
       store.loadValues(idUser);
       return null;
     }, []);
-
-    void createWorkoutGroup() async {
-      List<String> imagePaths = [
-        'assets/images/bg1.jpg',
-        'assets/images/bg2.jpg',
-        'assets/images/bg3.jpg',
-        'assets/images/bg4.jpg',
-        'assets/images/bg5.jpg',
-        'assets/images/bg6.jpg',
-      ];
-
-      final background = getRandomImagePath(imagePaths);
-
-      store.workoutGroup.image = background;
-      store.workoutGroup.userId = idUser;
-      store.workoutGroup.level = 1;
-
-      await postWorkoutGroup(store.workoutGroup);
-
-      // Reset form
-      _seriesList.clear();
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -157,68 +134,9 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                   itemCount: store.filteredExercises.length,
                   itemBuilder: (context, index) {
                     final exercise = store.filteredExercises[index];
-                    // store.workoutGroups
-                    var exist = true;
                     return Column(
                       children: [
                         ExerciseCard(exercise: exercise, onTap: () {}),
-                        Text(
-                          exercise.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        ListTile(
-                          title: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => Card(
-                                  child: WorkoutSerieEdit(
-                                    exercise: exercise,
-                                    seriesList: _seriesList,
-                                    onTap: (value) {
-                                      print(value);
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.deepPurple),
-                            ),
-                            child: Text(
-                              exist
-                                  ? 'Editar Exercício'
-                                  : 'Adicionar Exercício',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.fitness_center,
-                                    size: 16,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${_seriesList.length} Série(s)',
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                            ],
-                          ),
-                        )
                       ],
                     );
                   }),
@@ -226,7 +144,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                createWorkoutGroup();
+                store.createWorkoutGroup(idUser);
                 print('CADASTRAR TREINO');
               },
               style: ButtonStyle(
@@ -246,38 +164,102 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
   }
 }
 
-class ExerciseCard extends StatelessWidget {
-
+class ExerciseCard extends HookConsumerWidget {
   const ExerciseCard({Key? key, required this.exercise, required this.onTap})
       : super(key: key);
   final Exercise exercise;
   final void Function()? onTap;
 
   @override
-  Widget build(BuildContext context) => Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: InkWell(
-          onTap: onTap,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Center(
-                  child: Stack(children: [
-                    Image.asset(
-                      exercise.image,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final store = ref.watch(workoutGroupCreateStoreProvider);
+
+    var series = store.workouts
+            .firstWhereOrNull((element) => element.exerciseId == exercise.id)
+            ?.workoutSeries ??
+        [];
+
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Center(
+                child: Stack(children: [
+                  Image.asset(
+                    exercise.image,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                ]),
+              ),
+            ),
+            Text(
+              exercise.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            ListTile(
+              title: ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => Card(
+                      child: WorkoutSerieEdit(
+                        exercise: exercise,
+                        onTap: (workoutSeries, exercise, workoutId) {
+                          store.addWorkout(
+                              workoutId, exercise.id, workoutSeries);
+                          store.notify();
+                        },
+                      ),
                     ),
-                  ]),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.deepPurple),
+                ),
+                child: Text(
+                  '${series.length == 0 ? 'Adicionar Exercício' : 'Editar Exercício'}',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ],
-          ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.fitness_center,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${series.length} Série(s)',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            )
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

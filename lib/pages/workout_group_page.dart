@@ -38,7 +38,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: Image.asset(
-                  'assets/images/bg2.jpg',
+                  'assets/images/bg3.jpg',
                   fit: BoxFit.cover,
                 ),
               ),

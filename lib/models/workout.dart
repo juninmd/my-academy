@@ -19,7 +19,7 @@ class Workout {
     this.id,
     this.methodId,
     required this.exerciseId,
-    required this.description,
+    this.description = '',
     this.workoutSeries,
     this.exercise,
     this.method,

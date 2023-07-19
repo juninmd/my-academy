@@ -2,14 +2,14 @@ import "package:json_annotation/json_annotation.dart";
 
 @JsonSerializable()
 class WorkoutSeries {
-  int id;
+  int? id;
   int? workoutId;
   int repetitions;
   int weight;
   int rest;
 
   WorkoutSeries({
-    required this.id,
+    this.id,
     this.workoutId,
     required this.repetitions,
     required this.weight,

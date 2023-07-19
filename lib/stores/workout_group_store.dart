@@ -15,19 +15,9 @@ class WorkoutGroupStore extends ChangeNotifier {
       _filteredExercises.isNotEmpty ? _filteredExercises : _exercises;
   List<Exercise> get filteredExercises => _filteredExercises;
 
-  WorkoutGroup workoutGroup = WorkoutGroup(
-      name: '',
-      userId: idUser,
-      description: '',
-      dateEnd: DateTime.now(),
-      dateStart: DateTime.now(),
-      image: '',
-      level: 1,
-      workouts: []);
-
   bool isLoading = true;
 
-  void notify(){
+  void notify() {
     notifyListeners();
   }
 
@@ -46,6 +36,24 @@ class WorkoutGroupStore extends ChangeNotifier {
   }
 
   Future<void> loadValues(idUser) async {
+    try {
+      isLoading = true;
+      workoutGroups = await getWorkoutGroups(idUser);
+      _exercises = await getExercises();
+      _filteredExercises = _exercises;
+    } catch (error) {
+      print(error);
+// Handle the error
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadWorkoutsSeriesByWorkout(int? workoutId) async {
+    if (workoutId == null) {
+      return;
+    }
     try {
       isLoading = true;
       workoutGroups = await getWorkoutGroups(idUser);
