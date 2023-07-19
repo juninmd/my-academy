@@ -98,10 +98,18 @@ class HomePage extends HookConsumerWidget {
                           // Espaço entre a imagem e o texto
                           SizedBox(height: 10),
                           // Texto que descreve a imagem
-                          Text(
-                            'Você não tem nenhum treino cadastrado',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                          Chip(
+                            backgroundColor: Colors
+                                .white, // Use white background for contrast
+                            label: Text(
+                              'Você não tem nenhum treino cadastrado :(',
+                              style: TextStyle(
+                                  fontSize:
+                                  15, // Slightly larger font size for better readability
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors
+                                      .deepPurple), // Inverse text color for the chip
+                            ),
                           ),
                         ],
                       ),

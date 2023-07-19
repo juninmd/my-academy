@@ -83,7 +83,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
             )
           else if (store.workoutGroups.isEmpty)
             Container(
-              padding: const EdgeInsets.only(top: 120), // Espaço acima dos treinos
+              padding: const EdgeInsets.only(top: 40,left: 10,right: 10), // Espaço acima dos treinos
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -91,11 +91,17 @@ class WorkoutGroupPage extends HookConsumerWidget {
                     SizedBox(height: 40),
                     Image.asset('assets/images/stickers/treino.png'),
                     SizedBox(height: 10),
-                    Text(
-                      'Você não tem nenhum treino cadastrado',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    Chip(
+                      backgroundColor: Colors
+                          .white, // Use white background for contrast
+                      label: Text(
+                        'Você não tem nenhum treino cadastrado :(',
+                        style: TextStyle(
+                            fontSize:
+                            15, // Slightly larger font size for better readability
+                            fontWeight: FontWeight.bold,
+                            color: Colors
+                                .deepPurple), // Inverse text color for the chip
                       ),
                     ),
                   ],
