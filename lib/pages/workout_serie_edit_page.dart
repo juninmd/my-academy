@@ -23,24 +23,42 @@ class WorkoutSerieEdit extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var repetitionsController = useTextEditingController(text: '15');
-    var restController = useTextEditingController(text: '60');
-    var weightController = useTextEditingController(text: '10');
-
     final store = ref.watch(workoutGroupCreateStoreProvider);
 
-    useEffect(() {
-      store.loadWorkoutsSeriesByWorkout(workoutId, exercise.id);
-      return null;
-    }, const []);
+    List<TextEditingController> repetitionsControllers = [];
+    List<TextEditingController> restControllers = [];
+    List<TextEditingController> weightControllers = [];
 
-    void addSeries() {
+    // Helper function to ensure controllers list matches the seriesList length
+    void updateControllersList() {
+      for (var i = repetitionsControllers.length; i < store.seriesList.length; i++) {
+        repetitionsControllers.add(TextEditingController(text: store.seriesList[i].repetitions.toString()));
+        restControllers.add(TextEditingController(text: store.seriesList[i].rest.toString()));
+        weightControllers.add(TextEditingController(text: store.seriesList[i].weight.toString()));
+      }
+    }
+
+    updateControllersList();
+
+    useEffect(() {
+      print('useEffect');
+      store.loadWorkoutsSeriesByWorkout(workoutId, exercise.id);
+      updateControllersList();
+
+      print(repetitionsControllers.length);
+      print(store.seriesList.length);
+    }, [workoutId, exercise.id]);
+
+    void addSeries(int index) {
+      store.seriesList[index].repetitions = int.parse(repetitionsControllers[index].text);
+      store.seriesList[index].rest = int.parse(restControllers[index].text);
+      store.seriesList[index].weight = int.parse(weightControllers[index].text);
       store.seriesList.add(
         WorkoutSeries(
           workoutId: workoutId,
-          repetitions: int.parse(repetitionsController.text),
-          rest: int.parse(restController.text),
-          weight: int.parse(weightController.text),
+          repetitions: int.parse(repetitionsControllers[index].text),
+          rest: int.parse(restControllers[index].text),
+          weight: int.parse(weightControllers[index].text),
           id: null,
         ),
       );
@@ -48,23 +66,20 @@ class WorkoutSerieEdit extends HookConsumerWidget {
     }
 
     void removeSeries(int index) {
-      print('removeSeries ${index}');
       store.seriesList.removeAt(index);
       store.notify();
     }
 
     void updateSerie(int index) {
-      print('updateSerie ${index}');
-
-      store.seriesList[index].rest = 0;
-      store.seriesList[index].repetitions = 0;
-      store.seriesList[index].weight = 0;
+      store.seriesList[index].repetitions =
+          int.parse(repetitionsControllers[index].text);
+      store.seriesList[index].rest = int.parse(restControllers[index].text);
+      store.seriesList[index].weight = int.parse(weightControllers[index].text);
       store.notify();
     }
 
     void saveSeries() {
       print('saveSeries');
-
       onTap(store.seriesList, exercise, workoutId);
       store.notify();
     }
@@ -89,8 +104,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                       decoration: const InputDecoration(
                         labelText: 'Quantidade de repetições',
                       ),
-                      controller: TextEditingController(
-                          text: repetitionsController.text),
+                      controller: repetitionsControllers[seriesIndex],
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -98,8 +112,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                       decoration: const InputDecoration(
                         labelText: 'Carga',
                       ),
-                      controller:
-                          TextEditingController(text: weightController.text),
+                      controller: weightControllers[seriesIndex],
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -107,8 +120,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                       decoration: const InputDecoration(
                         labelText: 'Descanso',
                       ),
-                      controller:
-                          TextEditingController(text: restController.text),
+                      controller: restControllers[seriesIndex],
                     ),
                     const SizedBox(height: 16),
                     if (seriesIndex == 0)
@@ -116,7 +128,9 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: addSeries,
+                              onPressed: () {
+                                addSeries(seriesIndex);
+                              },
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
