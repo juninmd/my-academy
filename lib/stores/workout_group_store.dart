@@ -52,6 +52,7 @@ class WorkoutGroupStore extends ChangeNotifier {
       _exercises = await getExercises();
       _filteredExercises = _exercises;
     } catch (error) {
+      print(error);
 // Handle the error
     } finally {
       isLoading = false;

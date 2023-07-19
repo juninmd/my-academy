@@ -26,51 +26,102 @@ class WorkoutGroupPage extends HookConsumerWidget {
     }, []);
 
     return Scaffold(
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
-          SliverAppBar(
-            expandedHeight: MediaQuery.of(context).size.height * 0.05,
-            pinned: true,
-            floating: true,
-            title: Text(
-              "Treinos ${name ?? ''}",
-              style: TextStyle(color: Colors.white),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.9),
+              BlendMode.color,
             ),
-            centerTitle: true,
-            backgroundColor: Colors.black,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Image.asset(
-                    "assets/images/bg1.jpg", // random
-                    fit: BoxFit.cover,
-                    color: const Color(0xaa212121),
-                    colorBlendMode: BlendMode.darken,
-                  ),
-                ],
+            child: Container(
+              child: SizedBox(
+                width: double.infinity,
+                child: Image.asset(
+                  'assets/images/bg2.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
-        ],
-        body: store.isLoading
-            ? _buildLoadingState()
-            : GridView.builder(
-                padding: const EdgeInsets.only(top: 8),
-                itemCount: store.workoutGroups.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 32.0,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  final workoutGroup = store.workoutGroups[index];
-                  return WorkoutGroupCard(
-                      alreadyWorkout: false,
-                      workoutGroup: workoutGroup,
-                      callback: store.loadValues);
-                },
+          Positioned(
+            top: 15,
+            left: 10,
+            right: 10,
+            child: Card(
+              color: Colors.deepPurple, // Modern color scheme
+              elevation: 4, // Add some elevation for a nice shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    10), // Rounded corners for a modern look
               ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.fitness_center,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Treinos ${name ?? ''}",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          if (store.isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.9),
+              child: Center(
+                child: _buildLoadingState(),
+              ),
+            )
+          else if (store.workoutGroups.isEmpty)
+            Container(
+              padding: const EdgeInsets.only(top: 120), // Espaço acima dos treinos
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 40),
+                    Image.asset('assets/images/stickers/treino.png'),
+                    SizedBox(height: 10),
+                    Text(
+                      'Você não tem nenhum treino cadastrado',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else if (!store.isLoading)
+              Container(
+                padding: const EdgeInsets.only(top: 80,left: 10,right: 10), // Espaço acima dos treinos
+                child: GridView.builder(
+                  padding: const EdgeInsets.only(top: 8),
+                  itemCount: store.workoutGroups.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 6.0,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    final workoutGroup = store.workoutGroups[index];
+                    return WorkoutGroupCard(
+                        alreadyWorkout: false,
+                        workoutGroup: workoutGroup,
+                        callback: store.loadValues);
+                  },
+                ),
+              ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
@@ -86,13 +137,13 @@ class WorkoutGroupPage extends HookConsumerWidget {
   }
 
   Widget _buildLoadingState() => GridView.builder(
-        padding: const EdgeInsets.only(top: 8),
-        itemCount: 4, // Simulating 4 placeholders
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16.0,
-        ),
-        itemBuilder: (BuildContext context, int index) =>
-            WorkoutGroupCardPlaceholder(),
-      );
+    padding: const EdgeInsets.only(top: 8),
+    itemCount: 4, // Simulating 4 placeholders
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      mainAxisSpacing: 16.0,
+    ),
+    itemBuilder: (BuildContext context, int index) =>
+        WorkoutGroupCardPlaceholder(),
+  );
 }
