@@ -8,9 +8,6 @@ import '../stores/workout_group_store.dart';
 import '../widgets/exercise_group_card.dart';
 import '../widgets/workout_group_card_placeholder.dart';
 
-final workoutGroupStoreProvider =
-    ChangeNotifierProvider((ref) => WorkoutGroupStore());
-
 class WorkoutGroupPage extends HookConsumerWidget {
   final int idUser;
   final String? name;
@@ -23,7 +20,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
     useEffect(() {
       store.loadValues(idUser);
       return null;
-    }, []);
+    }, [idUser]);
 
     return Scaffold(
       body: Stack(
@@ -83,7 +80,8 @@ class WorkoutGroupPage extends HookConsumerWidget {
             )
           else if (store.workoutGroups.isEmpty)
             Container(
-              padding: const EdgeInsets.only(top: 40,left: 10,right: 10), // Espaço acima dos treinos
+              padding: const EdgeInsets.only(
+                  top: 40, left: 10, right: 10), // Espaço acima dos treinos
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -92,13 +90,13 @@ class WorkoutGroupPage extends HookConsumerWidget {
                     Image.asset('assets/images/stickers/treino.png'),
                     SizedBox(height: 10),
                     Chip(
-                      backgroundColor: Colors
-                          .white, // Use white background for contrast
+                      backgroundColor:
+                          Colors.white, // Use white background for contrast
                       label: Text(
                         'Você não tem nenhum treino cadastrado :(',
                         style: TextStyle(
                             fontSize:
-                            15, // Slightly larger font size for better readability
+                                15, // Slightly larger font size for better readability
                             fontWeight: FontWeight.bold,
                             color: Colors
                                 .deepPurple), // Inverse text color for the chip
@@ -109,33 +107,39 @@ class WorkoutGroupPage extends HookConsumerWidget {
               ),
             )
           else if (!store.isLoading)
-              Container(
-                padding: const EdgeInsets.only(top: 80,left: 10,right: 10), // Espaço acima dos treinos
-                child: GridView.builder(
-                  padding: const EdgeInsets.only(top: 8),
-                  itemCount: store.workoutGroups.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 6.0,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    final workoutGroup = store.workoutGroups[index];
-                    return WorkoutGroupCard(
-                        alreadyWorkout: false,
-                        workoutGroup: workoutGroup,
-                        callback: store.loadValues);
-                  },
+            Container(
+              padding: const EdgeInsets.only(
+                  top: 80, left: 10, right: 10), // Espaço acima dos treinos
+              child: GridView.builder(
+                padding: const EdgeInsets.only(top: 8),
+                itemCount: store.workoutGroups.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 6.0,
                 ),
+                itemBuilder: (BuildContext context, int index) {
+                  final workoutGroup = store.workoutGroups[index];
+                  return WorkoutGroupCard(
+                      alreadyWorkout: false,
+                      workoutGroup: workoutGroup,
+                      callback: store.loadValues);
+                },
               ),
+            ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurple,
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  WorkoutGroupCreatePage(idUser));
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => WorkoutGroupCreatePage(idUser),
+            ),
+          ).then((_) {
+            // This callback will be executed after WorkoutGroupCreatePage is popped.
+            store.loadValues(idUser);
+          });
         },
         child: Icon(Icons.add_box),
       ),
@@ -143,13 +147,13 @@ class WorkoutGroupPage extends HookConsumerWidget {
   }
 
   Widget _buildLoadingState() => GridView.builder(
-    padding: const EdgeInsets.only(top: 8),
-    itemCount: 4, // Simulating 4 placeholders
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 2,
-      mainAxisSpacing: 16.0,
-    ),
-    itemBuilder: (BuildContext context, int index) =>
-        WorkoutGroupCardPlaceholder(),
-  );
+        padding: const EdgeInsets.only(top: 8),
+        itemCount: 4, // Simulating 4 placeholders
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 16.0,
+        ),
+        itemBuilder: (BuildContext context, int index) =>
+            WorkoutGroupCardPlaceholder(),
+      );
 }

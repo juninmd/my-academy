@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/exercise.dart';
 import '../stores/workout_group_create_store.dart';
+import '../stores/workout_group_store.dart';
 import 'workout_serie_edit_page.dart';
 import 'package:collection/collection.dart';
 
@@ -21,7 +22,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
     useEffect(() {
       store.loadValues(idUser);
       return null;
-    }, []);
+    }, [idUser]);
 
     var nameController = TextEditingController(
       text: store.workoutGroup.name,
@@ -38,7 +39,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child:TextFormField(
+                  child: TextFormField(
                     decoration: InputDecoration(
                       errorText: store.workoutGroup.name.isEmpty
                           ? 'Campo obrigatório'
@@ -74,13 +75,9 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                     },
                     child: TextFormField(
                       enabled: false,
-                      // onChanged: (value){
-                      //   store.workoutGroup.dateStart = value as DateTime;
-                      //   store.notify();
-                      // },
                       controller: TextEditingController(
-                        text: DateFormat('dd/MM/yyyy').format(store.workoutGroup.dateStart.toUtc())
-                      ),
+                          text: DateFormat('dd/MM/yyyy')
+                              .format(store.workoutGroup.dateStart.toUtc())),
                       decoration: const InputDecoration(
                         labelText: 'Início do treino',
                       ),
@@ -110,8 +107,8 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                       //   store.notify();
                       // },
                       controller: TextEditingController(
-                        text: DateFormat('dd/MM/yyyy').format(store.workoutGroup.dateEnd.toUtc())
-                      ),
+                          text: DateFormat('dd/MM/yyyy')
+                              .format(store.workoutGroup.dateEnd.toUtc())),
                       decoration: const InputDecoration(
                         labelText: 'Fim do treino',
                       ),
@@ -165,8 +162,9 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                store.createWorkoutGroup(idUser);
+              onPressed:  () async {
+                await store.createWorkoutGroup(idUser);
+                Navigator.pop(context);
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),

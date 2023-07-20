@@ -55,7 +55,7 @@ Future<WorkoutGroup> postWorkoutGroup(WorkoutGroup body) async {
       body: jsonEncode(body.toJson()),
       encoding: utf8);
 
-  if (response.statusCode == 200) {
+  if (response.statusCode == 201) {
     final jsonResponse = json.decode(response.body);
     final data = WorkoutGroup.fromJson(jsonResponse);
     return data;

@@ -115,12 +115,9 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
 
   Future<void> createWorkoutGroup(idUser) async {
     List<String> imagePaths = [
-      'assets/images/bg1.jpg',
-      'assets/images/bg2.jpg',
-      'assets/images/bg3.jpg',
-      'assets/images/bg4.jpg',
-      'assets/images/bg5.jpg',
-      'assets/images/bg6.jpg',
+      'assets/images/crucifixo_reto.gif',
+      'assets/images/remada_alta.gif',
+      'assets/images/cadeira_flexora.gif'
     ];
 
     final background = getRandomImagePath(imagePaths);

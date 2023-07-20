@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../constants.dart';
 import '../models/exercise.dart';
@@ -68,3 +69,6 @@ class WorkoutGroupStore extends ChangeNotifier {
     }
   }
 }
+
+final workoutGroupStoreProvider =
+ChangeNotifierProvider((ref) => WorkoutGroupStore());
