@@ -4,16 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../models/exercise.dart';
-import '../models/workout_series.dart';
 import '../stores/workout_group_create_store.dart';
 import 'workout_serie_edit_page.dart';
 import 'package:collection/collection.dart';
 
-final workoutGroupCreateStoreProvider =
-    ChangeNotifierProvider((ref) => WorkoutGroupCreateStore());
-
 class WorkoutGroupCreatePage extends HookConsumerWidget {
-  final _seriesList = <WorkoutSeries>[];
   final int idUser;
 
   WorkoutGroupCreatePage(this.idUser, {Key? key}) : super(key: key);
@@ -211,14 +206,21 @@ class ExerciseCard extends HookConsumerWidget {
             ListTile(
               title: ElevatedButton(
                 onPressed: () {
+                  print('series antes de clicar');
+                  var series = store.workouts
+                      .firstWhereOrNull((element) => element.exerciseId == exercise.id)
+                      ?.workoutSeries ??
+                      [];
+                  print(series);
+
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => Card(
                       child: WorkoutSerieEdit(
                         exercise: exercise,
-                        onTap: (workoutSeries, exercise, workoutId) {
+                        onTap: (workoutSeries, methodId) {
                           store.addWorkout(
-                              workoutId, exercise.id, workoutSeries);
+                              null, exercise.id, workoutSeries,methodId);
                           store.notify();
                         },
                       ),

@@ -5,14 +5,11 @@ import '../models/exercise.dart';
 import '../models/workout_series.dart';
 import '../stores/workout_group_create_store.dart';
 
-final workoutGroupCreateStoreProvider =
-    ChangeNotifierProvider((ref) => WorkoutGroupCreateStore());
-
 class WorkoutSerieEdit extends HookConsumerWidget {
   final int? workoutId;
   final Exercise exercise;
   final void Function(
-      List<WorkoutSeries> value, Exercise exercise, int? workoutId) onTap;
+      List<WorkoutSeries> value,  int? methodId) onTap;
 
   const WorkoutSerieEdit({
     Key? key,
@@ -31,26 +28,28 @@ class WorkoutSerieEdit extends HookConsumerWidget {
 
     // Helper function to ensure controllers list matches the seriesList length
     void updateControllersList() {
-      for (var i = repetitionsControllers.length; i < store.seriesList.length; i++) {
-        repetitionsControllers.add(TextEditingController(text: store.seriesList[i].repetitions.toString()));
-        restControllers.add(TextEditingController(text: store.seriesList[i].rest.toString()));
-        weightControllers.add(TextEditingController(text: store.seriesList[i].weight.toString()));
+      for (var i = repetitionsControllers.length;
+          i < store.seriesList.length;
+          i++) {
+        repetitionsControllers.add(TextEditingController(
+            text: store.seriesList[i].repetitions.toString()));
+        restControllers.add(
+            TextEditingController(text: store.seriesList[i].rest.toString()));
+        weightControllers.add(
+            TextEditingController(text: store.seriesList[i].weight.toString()));
       }
     }
 
     updateControllersList();
 
     useEffect(() {
-      print('useEffect');
-      store.loadWorkoutsSeriesByWorkout(workoutId, exercise.id);
+      store..loadWorkoutsSeriesByWorkout(workoutId, exercise.id)..loadMethods();
       updateControllersList();
-
-      print(repetitionsControllers.length);
-      print(store.seriesList.length);
-    }, [workoutId, exercise.id]);
+    }, [store.workouts]);
 
     void addSeries(int index) {
-      store.seriesList[index].repetitions = int.parse(repetitionsControllers[index].text);
+      store.seriesList[index].repetitions =
+          int.parse(repetitionsControllers[index].text);
       store.seriesList[index].rest = int.parse(restControllers[index].text);
       store.seriesList[index].weight = int.parse(weightControllers[index].text);
       store.seriesList.add(
@@ -79,8 +78,12 @@ class WorkoutSerieEdit extends HookConsumerWidget {
     }
 
     void saveSeries() {
-      print('saveSeries');
-      onTap(store.seriesList, exercise, workoutId);
+      onTap(store.seriesList,store.methodId);
+      store.notify();
+    }
+
+    void updateMethod(String? methodId) {
+         store.methodId = methodId != null ? int.parse(methodId) : null;
       store.notify();
     }
 
@@ -94,33 +97,90 @@ class WorkoutSerieEdit extends HookConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Método', // Legenda para o Dropdown
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  DropdownButtonFormField<String?>(
+                    value: store.methodId
+                        ?.toString(), // Valor selecionado (null ou um método)
+                    onChanged: (methodId) {
+                      updateMethod(methodId);
+                    },
+                    items: [
+                      // Adicionar a opção "Nenhum" com valor nulo no início
+                      DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Nenhum'),
+                      ),
+                      // Mapear os métodos disponíveis para itens do dropdown
+                      for (var method in store.methods)
+                        DropdownMenuItem<String?>(
+                          value: method.id.toString(),
+                          child: Text(method.name),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
               for (var seriesIndex = 0;
                   seriesIndex < store.seriesList.length;
                   seriesIndex++)
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Quantidade de repetições',
-                      ),
-                      controller: repetitionsControllers[seriesIndex],
+                    // Ícone e campo "Quantidade de repetições"
+                    Row(
+                      children: [
+                        Icon(Icons.numbers),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Quantidade de repetições',
+                            ),
+                            controller: repetitionsControllers[seriesIndex],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Carga',
-                      ),
-                      controller: weightControllers[seriesIndex],
+                    // Ícone e campo "Carga"
+                    Row(
+                      children: [
+                        Icon(Icons.monitor_weight),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Carga',
+                            ),
+                            controller: weightControllers[seriesIndex],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Descanso',
-                      ),
-                      controller: restControllers[seriesIndex],
+                    // Ícone e campo "Descanso"
+                    Row(
+                      children: [
+                        Icon(Icons.timer),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: 'Descanso',
+                            ),
+                            controller: restControllers[seriesIndex],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     if (seriesIndex == 0)
@@ -134,13 +194,23 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.green),
-                              ),
-                              child: const Text(
-                                'Adicionar Série',
-                                style: TextStyle(
-                                  color: Colors.white,
+                                  Colors.green,
                                 ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add, size: 18),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Adicionar Série',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -152,20 +222,28 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                updateSerie(
-                                  seriesIndex,
-                                );
+                                updateSerie(seriesIndex);
                               },
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.green),
-                              ),
-                              child: const Text(
-                                'Atualizar Série',
-                                style: TextStyle(
-                                  color: Colors.white,
+                                  Colors.green,
                                 ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.edit, size: 18),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Atualizar Série',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -176,13 +254,23 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.red),
-                              ),
-                              child: const Text(
-                                'Remover Série',
-                                style: TextStyle(
-                                  color: Colors.white,
+                                  Colors.red,
                                 ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.delete, size: 18),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    'Remover Série',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

@@ -76,8 +76,16 @@ class HomePage extends HookConsumerWidget {
             ),
           ),
           if (store.isLoading)
-            Center(
-              child: WorkoutGroupCardPlaceholder(),
+            Column(
+              children: [
+                SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.only(top: 100),
+                  child: Center(
+                    child: WorkoutGroupCardPlaceholder(),
+                  ),
+                ),
+              ],
             )
           else if (!store.isLoading)
             Container(

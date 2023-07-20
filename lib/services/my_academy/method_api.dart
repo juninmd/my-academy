@@ -3,14 +3,16 @@ import 'dart:convert';
 import '../../models/method.dart';
 import '../my_academy_api.dart';
 
-Future<Method> getMethods() async {
+Future<List<Method>> getMethods() async {
   var url = Uri.parse("${host}/methods");
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = Method.fromJson(jsonResponse);
-    return data;
+    final jsonResponse = json.decode(response.body) as List<dynamic>;
+    final methods = jsonResponse.map((data) {
+      return Method.fromJson(data);
+    }).toList();
+    return methods.toList();
   }
   throw response;
 }
