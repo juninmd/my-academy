@@ -46,10 +46,11 @@ class Workout {
       'exerciseId': exerciseId,
       'methodId': methodId,
       'description': description,
-      'exercise': exercise?.toJson(),
-      'method': method?.toJson(),
-      'workoutSeries': workoutSeries?.map((series) => series.toJson()).toList(),
-      'finish': finish,
+      if (exercise != null) 'exercise': exercise?.toJson(),
+      if (method != null) 'method': method?.toJson(),
+      if (workoutSeries != null)
+        'workoutSeries':
+            workoutSeries?.map((series) => series.toJson()).toList(),
     };
   }
 }

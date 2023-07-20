@@ -127,7 +127,6 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
 
     workoutGroup.image = background;
     workoutGroup.userId = idUser;
-    workoutGroup.level = 1;
     workoutGroup.workouts = workouts;
 
     await postWorkoutGroup(workoutGroup);

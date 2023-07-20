@@ -45,19 +45,18 @@ class WorkoutGroup {
     );
   }
 
-  Map<String, String> toJson() {
+  Map<String, dynamic> toJson() {
     return {
-      if (id != null) 'id': id.toString(),
+      if (id != null) 'id': id,
       'name': name,
       'description': description,
       'image': image,
-      'dateStart': dateStart.toIso8601String(),
-      'dateEnd': dateEnd.toIso8601String(),
-      'level': level.toString(),
-      'userId': userId.toString(),
+      'dateStart': dateStart.toUtc().toIso8601String(),
+      'dateEnd': dateEnd.toUtc().toIso8601String(),
+      'level': level,
+      'userId': userId,
       if (workouts != null)
-        'workouts':
-            jsonEncode(workouts!.map((workout) => workout.toJson()).toList()),
+        'workouts': workouts!.map((workout) => workout.toJson()).toList(),
     };
   }
 }

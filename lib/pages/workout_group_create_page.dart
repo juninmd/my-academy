@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../models/exercise.dart';
 import '../stores/workout_group_create_store.dart';
 import 'workout_serie_edit_page.dart';
@@ -22,6 +23,10 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
       return null;
     }, []);
 
+    var nameController = TextEditingController(
+      text: store.workoutGroup.name,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Treino'),
@@ -33,13 +38,18 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: TextEditingController(
-                      text: store.workoutGroup.name,
+                  child:TextFormField(
+                    decoration: InputDecoration(
+                      errorText: store.workoutGroup.name.isEmpty
+                          ? 'Campo obrigatório'
+                          : null,
+                      labelText: "Nome do treino",
                     ),
-                    decoration: const InputDecoration(
-                      labelText: 'Nome do treino',
-                    ),
+                    onTapOutside: (e) {
+                      store.workoutGroup.name = nameController.text;
+                      store.notify();
+                    },
+                    controller: nameController,
                   ),
                 ),
               ],
@@ -50,22 +60,26 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
+                      var dateNow = DateTime.now();
                       DateTime? selectedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
+                        initialDate: dateNow,
+                        firstDate: dateNow,
+                        lastDate: dateNow.add(new Duration(days: 90)),
                       );
                       if (selectedDate != null) {
-                        store.workoutGroup.dateStart = selectedDate;
+                        store.workoutGroup.dateStart = selectedDate.toUtc();
+                        store.notify();
                       }
                     },
                     child: TextFormField(
                       enabled: false,
+                      // onChanged: (value){
+                      //   store.workoutGroup.dateStart = value as DateTime;
+                      //   store.notify();
+                      // },
                       controller: TextEditingController(
-                        text: store.workoutGroup.dateStart
-                            .toUtc()
-                            .toIso8601String(),
+                        text: DateFormat('dd/MM/yyyy').format(store.workoutGroup.dateStart.toUtc())
                       ),
                       decoration: const InputDecoration(
                         labelText: 'Início do treino',
@@ -77,22 +91,26 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                 Expanded(
                   child: GestureDetector(
                     onTap: () async {
+                      var dateNow = DateTime.now();
                       DateTime? selectedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
+                        initialDate: dateNow,
+                        firstDate: dateNow,
+                        lastDate: dateNow.add(new Duration(days: 90)),
                       );
                       if (selectedDate != null) {
-                        store.workoutGroup.dateEnd = selectedDate;
+                        store.workoutGroup.dateEnd = selectedDate.toUtc();
+                        store.notify();
                       }
                     },
                     child: TextFormField(
                       enabled: false,
+                      // onChanged: (value){
+                      //   store.workoutGroup.dateEnd = value as DateTime;
+                      //   store.notify();
+                      // },
                       controller: TextEditingController(
-                        text: store.workoutGroup.dateEnd
-                            .toUtc()
-                            .toIso8601String(),
+                        text: DateFormat('dd/MM/yyyy').format(store.workoutGroup.dateEnd.toUtc())
                       ),
                       decoration: const InputDecoration(
                         labelText: 'Fim do treino',
@@ -102,13 +120,22 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: TextFormField(
-                    controller: TextEditingController(
-                      text: store.workoutGroup.level.toString(),
-                    ),
+                  child: DropdownButtonFormField<int>(
+                    value: store.workoutGroup.level,
+                    onChanged: (value) {
+                      store.workoutGroup.level = value!;
+                      store.notify();
+                    },
                     decoration: const InputDecoration(
                       labelText: 'Nível',
                     ),
+                    items: [
+                      for (int level = 1; level <= 5; level++)
+                        DropdownMenuItem<int>(
+                          value: level,
+                          child: Text('Nível $level'),
+                        ),
+                    ],
                   ),
                 ),
               ],
@@ -140,7 +167,6 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 store.createWorkoutGroup(idUser);
-                print('CADASTRAR TREINO');
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
@@ -175,6 +201,7 @@ class ExerciseCard extends HookConsumerWidget {
         [];
 
     return Card(
+      color: Colors.black,
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -187,15 +214,19 @@ class ExerciseCard extends HookConsumerWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Center(
-                child: Stack(children: [
-                  Image.asset(
-                    exercise.image,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ]),
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      exercise.image,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: 100, // Defina a altura desejada para a imagem
+                    ),
+                  ],
+                ),
               ),
             ),
+            const SizedBox(height: 8),
             Text(
               exercise.name,
               style: const TextStyle(
@@ -206,13 +237,6 @@ class ExerciseCard extends HookConsumerWidget {
             ListTile(
               title: ElevatedButton(
                 onPressed: () {
-                  print('series antes de clicar');
-                  var series = store.workouts
-                      .firstWhereOrNull((element) => element.exerciseId == exercise.id)
-                      ?.workoutSeries ??
-                      [];
-                  print(series);
-
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => Card(
@@ -220,7 +244,7 @@ class ExerciseCard extends HookConsumerWidget {
                         exercise: exercise,
                         onTap: (workoutSeries, methodId) {
                           store.addWorkout(
-                              null, exercise.id, workoutSeries,methodId);
+                              null, exercise.id, workoutSeries, methodId);
                           store.notify();
                         },
                       ),
