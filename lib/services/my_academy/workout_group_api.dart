@@ -5,7 +5,7 @@ import "../my_academy_api.dart";
 
 Future<List<WorkoutGroup>> getWorkoutGroups(int idUser) async {
   try {
-    final url = Uri.parse("$host/workouts-groups/$idUser");
+    final url = Uri.parse("$host/workouts-groups/user/$idUser");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
