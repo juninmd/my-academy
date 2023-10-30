@@ -5,7 +5,7 @@ import "../my_academy_api.dart";
 
 Future<List<WorkoutGroup>> getWorkoutGroups(int idUser) async {
   try {
-    final url = Uri.parse("$host/workouts-groups/$idUser");
+    final url = Uri.parse("$host/workouts-groups/user/$idUser?activated=true");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -75,8 +75,8 @@ Future<WorkoutGroup> putWorkoutGroup(WorkoutGroup body) async {
   throw response;
 }
 
-Future<void> deleteWorkoutGroup(int id) async {
-  final url = Uri.parse("${host}/workouts-groups/${id}");
+Future<void> disableWorkoutGroup(int id) async {
+  final url = Uri.parse("${host}/workouts-groups/disable/${id}");
   final response = await http.delete(url);
 
   if (response.statusCode == 200) {

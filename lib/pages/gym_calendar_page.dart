@@ -47,7 +47,7 @@ class GymCalendarPage extends HookConsumerWidget {
                     return Center(
                       child: Text(
                         'Dom',
-                        style: TextStyle(color: Colors.deepPurple),
+                        style: TextStyle(color: Colors.red),
                       ),
                     );
                   }

@@ -68,6 +68,22 @@ class WorkoutGroupStore extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> handleDisableWorkoutGroup(idUser, idWorkout) async {
+    try {
+      print('handleDeleteWorkoutGroup');
+      isLoading = true;
+      await disableWorkoutGroup(idWorkout);
+    } catch (error) {
+      print('handleDeleteWorkoutGroup error');
+      print(error);
+// Handle the error
+    } finally {
+      print('handleDeleteWorkoutGroup fim');
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }
 
 final workoutGroupStoreProvider =

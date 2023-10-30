@@ -45,7 +45,7 @@ class MenusPage extends HookConsumerWidget {
             currentIndex: currentIndex,
             onTap: (index) => store.onTabSelected(index, context),
             selectedItemColor:
-                Colors.deepPurple, // Roxo profundo sugerido pelo Alfred
+                Colors.red, // Roxo profundo sugerido pelo Alfred
             unselectedItemColor: Colors.white,
             selectedFontSize: 16,
             selectedLabelStyle: TextStyle(shadows: <Shadow>[

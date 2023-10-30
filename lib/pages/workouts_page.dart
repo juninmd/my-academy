@@ -4,7 +4,6 @@ import 'package:my_academy/widgets/workout_card.dart';
 import '../models/workout.dart';
 import '../models/workout_group.dart';
 import '../services/my_academy/workout_group_api.dart';
-import '../utils.dart';
 import '../widgets/confirm_finish_workout.dart';
 import '../widgets/finish_workout_button.dart';
 
@@ -29,18 +28,8 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
 
   @override
   void initState() {
-    super.initState();
-    List<String> imagePaths = [
-      'assets/images/bg1.jpg',
-      'assets/images/bg2.jpg',
-      'assets/images/bg3.jpg',
-      'assets/images/bg4.jpg',
-      'assets/images/bg5.jpg',
-      'assets/images/bg6.jpg',
-    ];
-
-    background = getRandomImagePath(imagePaths);
     loadValues();
+    super.initState();
   }
 
   loadValues() async {
@@ -101,7 +90,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
         floatHeaderSlivers: true,
         headerSliverBuilder: (context, innerBoxIsScrolled) => <Widget>[
           SliverAppBar(
-            expandedHeight: size.height * 0.25,
+            expandedHeight: size.height * 0.15,
             pinned: true,
             floating: false,
             bottom: PreferredSize(
@@ -131,10 +120,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 ),
               ),
             ),
-            title: Text(
-              widget.workoutGroup.name,
-              style: const TextStyle(color: Colors.white),
-            ),
+            title:Text( widget.workoutGroup.name),
             centerTitle: true,
             backgroundColor: Colors.black,
             toolbarHeight: 100,
@@ -156,39 +142,10 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     widget.callback();
                   }, widget.workoutGroup.id);
                 },
-                color: Colors.deepPurple,
+                color: Colors.red,
                 icon: const Icon(Icons.check),
               ),
             ],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Image.asset(
-                    background, // random
-                    fit: BoxFit.cover,
-                    color: const Color(0xaa212121),
-                    colorBlendMode: BlendMode.darken,
-                  ),
-                  Container(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 20, left: 12.0, top: 10.0, right: 12.0),
-                        child: Text(
-                          'Período de treino de ${DateFormat('dd/MM/yyyy').format(widget.workoutGroup.dateStart)} até ${DateFormat('dd/MM/yyyy').format(widget.workoutGroup.dateEnd)}',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w100,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
         body: isLoading

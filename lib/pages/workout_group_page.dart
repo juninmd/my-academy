@@ -32,13 +32,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
               BlendMode.color,
             ),
             child: Container(
-              child: SizedBox(
-                width: double.infinity,
-                child: Image.asset(
-                  'assets/images/bg3.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
+             color: Colors.black,
             ),
           ),
           Positioned(
@@ -46,7 +40,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
             left: 10,
             right: 10,
             child: Card(
-              color: Colors.deepPurple, // Modern color scheme
+              color: Colors.red, // Modern color scheme
               elevation: 4, // Add some elevation for a nice shadow effect
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -99,7 +93,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
                                 15, // Slightly larger font size for better readability
                             fontWeight: FontWeight.bold,
                             color: Colors
-                                .deepPurple), // Inverse text color for the chip
+                                .red), // Inverse text color for the chip
                       ),
                     ),
                   ],
@@ -114,7 +108,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
                 padding: const EdgeInsets.only(top: 8),
                 itemCount: store.workoutGroups.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: 1,
                   mainAxisSpacing: 6.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
@@ -129,19 +123,19 @@ class WorkoutGroupPage extends HookConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.red,
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => WorkoutGroupCreatePage(idUser),
+              builder: (BuildContext context) => WorkoutGroupCreatePage(idUser, null),
             ),
           ).then((_) {
             // This callback will be executed after WorkoutGroupCreatePage is popped.
             store.loadValues(idUser);
           });
         },
-        child: Icon(Icons.add_box),
+        child: Center(child: Icon(Icons.add_box)),
       ),
     );
   }

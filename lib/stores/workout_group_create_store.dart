@@ -83,6 +83,10 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
       }
       seriesList = [WorkoutSeries(repetitions: 15, weight: 10, rest: 60)];
       return;
+    } else {
+      var workout = workouts
+          .firstWhereOrNull((element) => element.exerciseId == exerciseId);
+      seriesList = workout?.workoutSeries ?? [WorkoutSeries(repetitions: 15, weight: 10, rest: 60)];
     }
     try {
       isLoading = true;
@@ -153,6 +157,20 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
       methods = await getMethods();
     } catch (error) {
       print(error);
+    } finally {
+      isLoading = false;
+      notify();
+    }
+  }
+
+  Future<void> loadWorkoutGroup(int workoutGroupId) async {
+    try {
+      isLoading = true;
+      workoutGroup = await getWorkoutGroupById(workoutGroupId);
+      workouts = workoutGroup.workouts!;
+    } catch (error) {
+      print(error);
+// Handle the error
     } finally {
       isLoading = false;
       notify();

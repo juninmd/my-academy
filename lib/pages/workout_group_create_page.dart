@@ -6,23 +6,27 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/exercise.dart';
 import '../stores/workout_group_create_store.dart';
-import '../stores/workout_group_store.dart';
 import 'workout_serie_edit_page.dart';
 import 'package:collection/collection.dart';
 
 class WorkoutGroupCreatePage extends HookConsumerWidget {
   final int idUser;
+  final int? workoutGroupId;
 
-  WorkoutGroupCreatePage(this.idUser, {Key? key}) : super(key: key);
+  WorkoutGroupCreatePage(this.idUser, this.workoutGroupId, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(workoutGroupCreateStoreProvider);
 
     useEffect(() {
+      if(workoutGroupId != null){
+        store.loadWorkoutGroup(workoutGroupId!);
+      };
       store.loadValues(idUser);
       return null;
-    }, [idUser]);
+    }, [idUser, workoutGroupId]);
 
     var nameController = TextEditingController(
       text: store.workoutGroup.name,
@@ -30,7 +34,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Novo Treino'),
+        title: Text(workoutGroupId == null ? 'Novo Treino' : 'Editar Treino'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -162,7 +166,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed:  () async {
+              onPressed: () async {
                 await store.createWorkoutGroup(idUser);
                 Navigator.pop(context);
               },
@@ -194,9 +198,10 @@ class ExerciseCard extends HookConsumerWidget {
     final store = ref.watch(workoutGroupCreateStoreProvider);
 
     var series = store.workouts
-            .firstWhereOrNull((element) => element.exerciseId == exercise.id)
-            ?.workoutSeries ??
-        [];
+            ?.firstWhereOrNull((element) => element.exerciseId == exercise.id)?.workoutSeries ?? [];
+
+    print(store.workoutGroup.workouts?.length);
+    print(series.length);
 
     return Card(
       color: Colors.black,
@@ -251,7 +256,7 @@ class ExerciseCard extends HookConsumerWidget {
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.deepPurple),
+                      MaterialStateProperty.all<Color>(Colors.red),
                 ),
                 child: Text(
                   '${series.length == 0 ? 'Adicionar Exercício' : 'Editar Exercício'}',

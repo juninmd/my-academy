@@ -36,13 +36,7 @@ class HomePage extends HookConsumerWidget {
               BlendMode.color,
             ),
             child: Container(
-              child: SizedBox(
-                width: double.infinity,
-                child: Image.asset(
-                  'assets/images/bg1.jpg',
-                  fit: BoxFit.cover,
-                ),
-              ),
+             color: Colors.black,
             ),
           ),
           Positioned(
@@ -50,7 +44,7 @@ class HomePage extends HookConsumerWidget {
             left: 10,
             right: 10,
             child: Card(
-              color: Colors.deepPurple, // Modern color scheme
+              color: Colors.red, // Modern color scheme
               elevation: 4, // Add some elevation for a nice shadow effect
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -116,7 +110,7 @@ class HomePage extends HookConsumerWidget {
                                   15, // Slightly larger font size for better readability
                                   fontWeight: FontWeight.bold,
                                   color: Colors
-                                      .deepPurple), // Inverse text color for the chip
+                                      .red), // Inverse text color for the chip
                             ),
                           ),
                         ],
@@ -130,7 +124,7 @@ class HomePage extends HookConsumerWidget {
                     ),
                   const SizedBox(height: 10),
                   Card(
-                    color: Colors.deepPurple, // Modern color scheme
+                    color: Colors.red, // Modern color scheme
                     elevation: 4, // Add some elevation for a nice shadow effect
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
@@ -173,7 +167,7 @@ class HomePage extends HookConsumerWidget {
                                             15, // Slightly larger font size for better readability
                                         fontWeight: FontWeight.bold,
                                         color: Colors
-                                            .deepPurple), // Inverse text color for the chip
+                                            .red), // Inverse text color for the chip
                                   ),
                                 ),
                               if (store.lastSession?.workoutsGroups?.name ==
@@ -188,7 +182,7 @@ class HomePage extends HookConsumerWidget {
                                             15, // Slightly larger font size for better readability
                                         fontWeight: FontWeight.bold,
                                         color: Colors
-                                            .deepPurple), // Inverse text color for the chip
+                                            .red), // Inverse text color for the chip
                                   ),
                                 ),
                             ],
