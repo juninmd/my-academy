@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_academy/widgets/workout_card.dart';
 import '../models/workout.dart';
 import '../models/workout_group.dart';
@@ -99,18 +98,20 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 padding:
                     const EdgeInsets.only(bottom: 20, left: 12.0, right: 12.0),
                 child: TextField(
+                  style: TextStyle(color: Colors.white),
                   controller: _searchController,
                   decoration: InputDecoration(
                     filled: true,
+                    fillColor: Colors.white12,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 0.0, horizontal: 24.0),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 24.0),
                     hintText: 'Procurar Exercício',
-                    iconColor: Colors.white,
-                    prefixIcon: const Icon(Icons.search),
+                    helperStyle: TextStyle(color: Colors.black),
+                    prefixIcon: const Icon(Icons.search, color: Colors.white),
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -120,7 +121,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                 ),
               ),
             ),
-            title:Text( widget.workoutGroup.name),
+            title: Text(widget.workoutGroup.name),
             centerTitle: true,
             backgroundColor: Colors.black,
             toolbarHeight: 100,
@@ -142,8 +143,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     widget.callback();
                   }, widget.workoutGroup.id);
                 },
-                color: Colors.red,
-                icon: const Icon(Icons.check),
+                icon: const Icon(Icons.check, color: Colors.white),
               ),
             ],
           ),
@@ -167,7 +167,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     },
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
+                      crossAxisCount: 2,
                       childAspectRatio: 1.0,
                       crossAxisSpacing: 5.0,
                       mainAxisSpacing: 5,

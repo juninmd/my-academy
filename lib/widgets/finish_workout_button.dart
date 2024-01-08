@@ -25,6 +25,6 @@ class FinishWorkoutButton extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         icon: const Icon(Icons.check, color: Colors.white),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.deepPurple,
       );
 }

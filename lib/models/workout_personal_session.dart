@@ -8,7 +8,7 @@ class WorkoutPersonalSession {
   int personalsId;
   int userId;
   DateTime date;
-  User users;
+  Users users;
 
   WorkoutPersonalSession({
     this.id,
@@ -25,7 +25,7 @@ class WorkoutPersonalSession {
           userId: json['userId'],
           date:
               DateTime.parse(json['date']), // Convert string to DateTime object
-          users: User.fromJson(json['users']));
+          users: Users.fromJson(json['users']));
 
   Map<String, dynamic> toJson() => {
         if (id != null) 'id': id,

@@ -9,8 +9,8 @@ class WorkoutSummary {
   WorkoutSession? lastSession;
   int counter;
   WorkoutGroup? workoutGroupOfDay;
-  User? user;
-  User? personal;
+  Users? user;
+  Users? personal;
 
   WorkoutSummary({
     this.lastSession,
@@ -29,10 +29,10 @@ class WorkoutSummary {
             ? WorkoutGroup.fromJson(json['workoutGroupOfDay'])
             : null,
     user: json['user'] != null
-        ? User.fromJson(json['user'])
+        ? Users.fromJson(json['user'])
         : null,
     personal: json['personal'] != null
-        ? User.fromJson(json['personal'])
+        ? Users.fromJson(json['personal'])
         : null,
         // Convert string to DateTime object
       );

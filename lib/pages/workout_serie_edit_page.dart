@@ -254,7 +254,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                  Colors.red,
+                                  Colors.deepPurple,
                                 ),
                               ),
                               child: Row(
@@ -286,7 +286,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red),
+                      MaterialStateProperty.all<Color>(Colors.deepPurple),
                 ),
                 child: const Text(
                   'Salvar',

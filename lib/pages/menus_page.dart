@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,10 @@ final menusPageStoreProvider =
     ChangeNotifierProvider((ref) => MenusPageStore());
 
 class MenusPage extends HookConsumerWidget {
+  final User user;
+
+  const MenusPage({Key? key, required this.user}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final MenusPageStore store = ref.watch(menusPageStoreProvider);
@@ -24,7 +29,7 @@ class MenusPage extends HookConsumerWidget {
 
     final screens = <Widget>[
       if (store.personal != null) const StudentsPage(),
-      const HomePage(),
+      HomePage(user: user),
       WorkoutGroupPage(idUser, null),
     ];
 
@@ -45,7 +50,7 @@ class MenusPage extends HookConsumerWidget {
             currentIndex: currentIndex,
             onTap: (index) => store.onTabSelected(index, context),
             selectedItemColor:
-                Colors.red, // Roxo profundo sugerido pelo Alfred
+                Colors.deepPurple, // Roxo profundo sugerido pelo Alfred
             unselectedItemColor: Colors.white,
             selectedFontSize: 16,
             selectedLabelStyle: TextStyle(shadows: <Shadow>[
@@ -78,8 +83,8 @@ class MenusPage extends HookConsumerWidget {
 }
 
 class MenusPageStore extends ChangeNotifier {
-  int currentIndex = 1;
-  final PageController pageController = PageController(initialPage: 1);
+  int currentIndex = 0;
+  final PageController pageController = PageController(initialPage: 0);
   bool isLoading = true;
   Personal? personal = null;
 

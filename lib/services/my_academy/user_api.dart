@@ -3,49 +3,49 @@ import 'dart:convert';
 import '../../models/user.dart';
 import '../my_academy_api.dart';
 
-Future<User> getUsers() async {
+Future<Users> getUsers() async {
   var url = Uri.parse("${host}/users");
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
-    var data = User.fromJson(jsonResponse);
+    var data = Users.fromJson(jsonResponse);
     return data;
   }
   throw response;
 }
 
-Future<User> getUserById(int id) async {
+Future<Users> getUserById(int id) async {
   var url = Uri.parse("${host}/users/${id}");
   var response = await http.get(url);
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
-    var data = User.fromJson(jsonResponse);
+    var data = Users.fromJson(jsonResponse);
     return data;
   }
   throw response;
 }
 
-Future<User> postUser(User body) async {
+Future<Users> postUser(Users body) async {
   var url = Uri.parse("${host}/users");
   var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
-    var data = User.fromJson(jsonResponse);
+    var data = Users.fromJson(jsonResponse);
     return data;
   }
   throw response;
 }
 
-Future<User> putUser(User body) async {
+Future<Users> putUser(Users body) async {
   var url = Uri.parse('${host}/users/${body.id}');
   var response = await http.post(url, body: jsonEncode(body));
 
   if (response.statusCode == 200) {
     var jsonResponse = json.decode(response.body);
-    var data = User.fromJson(jsonResponse);
+    var data = Users.fromJson(jsonResponse);
     return data;
   }
   throw response;

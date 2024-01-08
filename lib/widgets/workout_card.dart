@@ -73,10 +73,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.black,
-                                ),
+
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 4,
                                   horizontal: 8,
@@ -89,7 +86,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                                   style: widget.workout.finish
                                       ? const TextStyle(
                                           decoration: TextDecoration.lineThrough,
-                                          color: Colors.red,
+                                          color: Colors.deepPurple,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         )
@@ -102,44 +99,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                             ),
                           ),
                         ),
-                        if (widget.workout.workoutSeries!.isNotEmpty)
-                        Positioned.fill(
-                          child:   Align(
-                            alignment: Alignment.center,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: widget.workout.workoutSeries?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final series = widget.workout.workoutSeries?[index];
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 5),
-                                  child: ListBody(children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text("${index + 1}"),
-                                        const SizedBox(width: 5),
-                                        const Icon(Icons.repeat, color: Colors.red),
-                                        const SizedBox(width: 5),
-                                        Text("${series!.repetitions} reps"),
-                                        const SizedBox(width: 5),
-                                        const Icon(Icons.monitor_weight,
-                                            color: Colors.red),
-                                        const SizedBox(width: 5),
-                                        Text("${series.weight} kgs"),
-                                        const SizedBox(width: 5),
-                                        const Icon(Icons.timer, color: Colors.red),
-                                        Text("${series.rest} s"),
-                                      ],
-                                    ),
-                                  ]),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
+
                         Positioned(
                           bottom: 16,
                           left: MediaQuery.of(context).size.width - 80,
@@ -149,7 +109,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                                     const SizedBox(
                                       child: Icon(
                                         Icons.check,
-                                        color: Colors.red,
+                                        color: Colors.deepPurple,
                                       ),
                                     ),
                                   ]

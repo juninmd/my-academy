@@ -40,7 +40,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
             left: 10,
             right: 10,
             child: Card(
-              color: Colors.red, // Modern color scheme
+              color: Colors.deepPurple, // Modern color scheme
               elevation: 4, // Add some elevation for a nice shadow effect
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -123,7 +123,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.deepPurple,
         onPressed: () async {
           await Navigator.push(
             context,

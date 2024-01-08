@@ -198,7 +198,7 @@ class ExerciseCard extends HookConsumerWidget {
     final store = ref.watch(workoutGroupCreateStoreProvider);
 
     var series = store.workouts
-            ?.firstWhereOrNull((element) => element.exerciseId == exercise.id)?.workoutSeries ?? [];
+            .firstWhereOrNull((element) => element.exerciseId == exercise.id)?.workoutSeries ?? [];
 
     print(store.workoutGroup.workouts?.length);
     print(series.length);
@@ -256,7 +256,7 @@ class ExerciseCard extends HookConsumerWidget {
                 },
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.red),
+                      MaterialStateProperty.all<Color>(Colors.deepPurple),
                 ),
                 child: Text(
                   '${series.length == 0 ? 'Adicionar Exercício' : 'Editar Exercício'}',

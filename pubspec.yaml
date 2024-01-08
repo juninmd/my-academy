@@ -57,9 +57,14 @@ dependencies:
   flutter_riverpod: ^2.3.6
   hooks_riverpod: ^2.3.6
   flutter_hooks: ^0.18.6
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  firebase_core: ^2.17.0
+  firebase_auth: ^4.16.0
+  sign_in_button: ^3.2.0
+  google_sign_in: ^5.2.1
+
+dependency_overrides:
+  test_api: 0.5.2
+  matcher: 0.12.16
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -112,6 +117,7 @@ flutter:
     - assets/images/draws/gym-boy.gif
     - assets/images/stickers/treino.png
     - assets/images/stickers/treino2.png
+    - assets/images/ia/a.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -3,7 +3,7 @@ import 'package:my_academy/models/personal.dart';
 import 'package:my_academy/models/student.dart';
 
 @JsonSerializable()
-class User {
+class Users {
   int id;
   String name;
   String email;
@@ -12,7 +12,7 @@ class User {
   List<Student>? students;
   // WorkoutsGroups workoutsGroups;
 
-  User({
+  Users({
     required this.id,
     required this.name,
     required this.email,
@@ -21,7 +21,7 @@ class User {
     this.students,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory Users.fromJson(Map<String, dynamic> json) => Users(
         id: json['id'],
         name: json['name'],
         email: json['email'],
