@@ -9,7 +9,7 @@ import '../models/user.dart';
 import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
-import '../widgets/workout_group_card_placeholder.dart';
+import '../widgets/loading.dart';
 import 'gym_calendar_page.dart';
 
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());
@@ -72,127 +72,130 @@ class HomePage extends HookConsumerWidget {
           child: CircularProgressIndicator(),
         )
       else if (!store.isLoading)
-        Container(
-          padding: const EdgeInsets.only(top: 80, left: 10, right: 10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (store.workoutSummary?.workoutGroupOfDay == null)
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 40),
-                      Image.asset('assets/images/stickers/treino2.png',
-                          width: 200, height: 200),
-                      SizedBox(height: 20),
-                      Text(
-                        'Nenhum treino programado para hoje',
-                        style: TextStyle(color: Colors.white, fontSize: 24),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+        SingleChildScrollView( // Adicionado SingleChildScrollView
+          child: Container(
+            padding: const EdgeInsets.only(top: 80, left: 10, right: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (store.workoutSummary?.workoutGroupOfDay == null)
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 40),
+                        Image.asset('assets/images/stickers/treino2.png',
+                            width: 200, height: 200),
+                        SizedBox(height: 20),
+                        Text(
+                          'Nenhum treino programado para hoje',
+                          style: TextStyle(color: Colors.white, fontSize: 24),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  WorkoutGroupCard(
+                    alreadyWorkout: store.alreadyWorkout,
+                    workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
+                    callback: store.loadValues,
                   ),
-                )
-              else
-                WorkoutGroupCard(
-                  alreadyWorkout: store.alreadyWorkout,
-                  workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
-                  callback: store.loadValues,
-                ),
-              const SizedBox(height: 10),
-              Card(
-                color: Colors.deepPurple,
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.fitness_center,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Último treino:',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          if (store.lastSession?.workoutsGroups?.name != null &&
-                              store.lastSession?.date != null)
-                            Text(
-                              '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
-                            ),
-                          if (store.lastSession?.workoutsGroups?.name == null)
-                            Chip(
-                              backgroundColor: Colors.white,
-                              label: Text(
-                                'Você não treinou :(',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.deepPurple),
-                              ),
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          IconButton(
-                            tooltip: 'Visualizar Histórico',
-                            onPressed: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GymCalendarPage(),
-                                ),
-                              );
-                            },
-                            icon: Icon(Icons.calendar_month),
-                          ),
-                          Text(
-                            'Sequência de: ${store.exerciseFrequency} treino(s)',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      if (store.personal != null)
+                const SizedBox(height: 10),
+                Card(
+                  color: Colors.deepPurple,
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(
-                              Icons.person,
+                              Icons.fitness_center,
                               color: Colors.white,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Personal: ${store.personal!.name}',
+                              'Último treino:',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            if (store.lastSession?.workoutsGroups?.name != null &&
+                                store.lastSession?.date != null)
+                              Text(
+                                '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
+                              ),
+                            if (store.lastSession?.workoutsGroups?.name == null)
+                              Chip(
+                                backgroundColor: Colors.white,
+                                label: Text(
+                                  'Você não treinou :(',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.deepPurple),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            IconButton(
+                              tooltip: 'Visualizar Histórico',
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GymCalendarPage(),
+                                  ),
+                                );
+                              },
+                              icon: Icon(Icons.calendar_month),
+                            ),
+                            Text(
+                              'Sequência de: ${store.exerciseFrequency} treino(s)',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                           ],
                         ),
-                    ],
+                        const SizedBox(height: 8),
+                        if (store.personal != null)
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Personal: ${store.personal!.name}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
     ];
+
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
