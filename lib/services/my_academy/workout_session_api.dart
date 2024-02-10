@@ -69,14 +69,10 @@ Future<void> deleteWorkoutSession(int id) async {
   throw response;
 }
 
-Future<WorkoutSummary> getWorkoutSummary(int idUser) async {
-  final url = Uri.parse("${host}/workouts-sessions/${idUser}/summary");
-  final response = await http.get(url).timeout(const Duration(seconds: 20));
+var httpApi = HttpApi();
 
-  if (response.statusCode == 200) {
-    final jsonResponse = json.decode(response.body);
-    final data = WorkoutSummary.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+Future<WorkoutSummary>getWorkoutSummary(int idUser) async {
+  var response = await httpApi.get<WorkoutSummary>(
+      'workouts-sessions/${idUser}/summary', WorkoutSummary.fromJson);
+  return response;
 }

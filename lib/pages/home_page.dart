@@ -9,7 +9,6 @@ import '../models/user.dart';
 import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
-import '../widgets/loading.dart';
 import 'gym_calendar_page.dart';
 
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());

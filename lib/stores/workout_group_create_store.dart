@@ -33,7 +33,6 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
       dateEnd: DateTime.now(),
       dateStart: DateTime.now(),
       image: '',
-      level: 1,
       workouts: []);
 
   bool isLoading = true;

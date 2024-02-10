@@ -86,7 +86,9 @@ class WorkoutGroupPage extends HookConsumerWidget {
                       return WorkoutGroupCard(
                         alreadyWorkout: false,
                         workoutGroup: workoutGroup,
-                        callback: store.loadValues,
+                        callback: () {
+                          store.loadValues(idUser);
+                        },
                       );
                     },
                   ),

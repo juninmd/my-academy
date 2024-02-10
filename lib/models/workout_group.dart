@@ -12,7 +12,6 @@ class WorkoutGroup {
   String image;
   DateTime dateStart;
   DateTime dateEnd;
-  int level;
   int userId;
   List<Workout>? workouts;
 
@@ -23,7 +22,6 @@ class WorkoutGroup {
     required this.image,
     required this.dateStart,
     required this.dateEnd,
-    required this.level,
     required this.userId,
     this.workouts,
   });
@@ -36,7 +34,6 @@ class WorkoutGroup {
       image: json['image'] ?? '',
       dateStart: DateTime.parse(json['dateStart']),
       dateEnd: DateTime.parse(json['dateEnd']),
-      level: json['level'],
       userId: json['userId'],
       workouts: json['workouts'] != null
           ? List<Workout>.from(
@@ -53,7 +50,6 @@ class WorkoutGroup {
       'image': image,
       'dateStart': dateStart.toUtc().toIso8601String(),
       'dateEnd': dateEnd.toUtc().toIso8601String(),
-      'level': level,
       'userId': userId,
       if (workouts != null)
         'workouts': workouts!.map((workout) => workout.toJson()).toList(),

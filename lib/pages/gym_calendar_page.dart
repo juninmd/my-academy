@@ -93,7 +93,9 @@ class GymCalendarPage extends HookConsumerWidget {
                           MaterialPageRoute(
                             builder: (context) => WorkoutsPage(
                               workoutGroup: workoutGroup,
-                              callback: () {},
+                              callback: () {
+
+                              },
                             ),
                           ),
                         ),

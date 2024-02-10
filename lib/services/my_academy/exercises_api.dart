@@ -1,64 +1,31 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../../models/exercise.dart';
 import '../my_academy_api.dart';
 
-Future<List<Exercise>> getExercises()  async {
-  var url = Uri.parse("${host}/exercises");
-  var response = await http.get(url).timeout(const Duration(seconds: 5));
+var httpApi = HttpApi();
 
-  if (response.statusCode == 200) {
-    final jsonResponse = json.decode(response.body) as List<dynamic>;
-    final exercices = jsonResponse.map((data) {
-      return Exercise.fromJson(data);
-    }).toList();
-    return exercices.toList();
-  }
-  throw response;
+Future<List<Exercise>> getExercises() async {
+  final url = 'exercises';
+  var exercises =
+      await httpApi.request<Exercise>('get', url, Exercise.fromJson);
+  return exercises;
 }
 
-Future<Exercise> getExerciseById(int id) async {
-  var url = Uri.parse("${host}/exercises/${id}");
-  var response = await http.get(url).timeout(const Duration(seconds: 5));
-
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = Exercise.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+Future<Exercise> getExerciseById(int id) {
+  final url = 'exercises/$id';
+  return httpApi.request<Exercise>('get', url, Exercise.fromJson);
 }
 
-Future<Exercise> postExercise(Exercise body) async {
-  var url = Uri.parse("${host}/exercises");
-  var response = await http.post(url, body: jsonEncode(body));
-
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = Exercise.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+Future<Exercise> postExercise(Exercise body) {
+  final url = 'exercises';
+  return httpApi.request<Exercise>('post', url, Exercise.fromJson, body: body);
 }
 
-Future<Exercise> putExercise(Exercise body) async {
-  var url = Uri.parse('${host}/exercises/${body.id}');
-  var response = await http.post(url, body: jsonEncode(body));
-
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = Exercise.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+Future<Exercise> putExercise(Exercise body) {
+  final url = 'exercises/${body.id}';
+  return httpApi.request<Exercise>('put', url, Exercise.fromJson, body: body);
 }
 
 Future<void> deleteExercise(int id) async {
-  var url = Uri.parse('${host}/exercises/${id}');
-  final response = await http.delete(url);
-
-  if (response.statusCode == 200) {
-    return;
-  }
-  throw response;
+  final url = 'exercises/$id';
+  await httpApi.request('delete', url, null);
 }

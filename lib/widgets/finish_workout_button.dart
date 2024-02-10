@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
+import '../models/workout_group.dart';
 import 'confirm_finish_workout.dart';
 
 class FinishWorkoutButton extends StatelessWidget {
-  final String channelName;
-  final String message;
-  final int workoutGroupId;
+  final WorkoutGroup workoutGroup;
   Function callback;
 
   FinishWorkoutButton(
-      {super.key,
-      required this.callback,
-      required this.channelName,
-      required this.workoutGroupId,
-      required this.message});
+      {super.key, required this.callback, required this.workoutGroup});
 
   @override
   Widget build(BuildContext context) => FloatingActionButton.extended(
         onPressed: () async {
-          await ConfirmFinishWorkout(
-              context, message, channelName, callback, workoutGroupId);
+          await ConfirmFinishWorkout(context, callback, workoutGroup);
         },
         label: const Text(
           "Finalizar treino",

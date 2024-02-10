@@ -120,25 +120,6 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: DropdownButtonFormField<int>(
-                    value: store.workoutGroup.level,
-                    onChanged: (value) {
-                      store.workoutGroup.level = value!;
-                      store.notify();
-                    },
-                    decoration: const InputDecoration(
-                      labelText: 'Nível',
-                    ),
-                    items: [
-                      for (int level = 1; level <= 5; level++)
-                        DropdownMenuItem<int>(
-                          value: level,
-                          child: Text('Nível $level'),
-                        ),
-                    ],
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 16),

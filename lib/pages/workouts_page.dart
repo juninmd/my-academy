@@ -3,6 +3,7 @@ import 'package:my_academy/widgets/workout_card.dart';
 import '../models/workout.dart';
 import '../models/workout_group.dart';
 import '../services/my_academy/workout_group_api.dart';
+import '../widgets/confirm_delete_workout.dart';
 import '../widgets/confirm_finish_workout.dart';
 import '../widgets/finish_workout_button.dart';
 
@@ -126,25 +127,64 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
             backgroundColor: Colors.black,
             toolbarHeight: 100,
             actions: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    _searchController.clear();
-                    _workouts = _workoutsBase;
-                  });
+              PopupMenuButton<int>(
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: ListTile(
+                      leading: Icon(Icons.clear),
+                      title: Text('Limpar Procura'),
+                    ),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 2,
+                    child: ListTile(
+                      leading: Icon(Icons.edit),
+                      title: Text('Editar Exercícios'),
+                    ),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 3,
+                    child: ListTile(
+                      leading: Icon(Icons.delete),
+                      title: Text('Deletar Grupo'),
+                    ),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 4,
+                    child: ListTile(
+                      leading: Icon(Icons.check, color: Colors.white),
+                      title: Text('Finalizar Treino'),
+                    ),
+                  ),
+                ],
+                onSelected: (int value) {
+                  switch (value) {
+                    case 1:
+                      setState(() {
+                        _searchController.clear();
+                        _workouts = _workoutsBase;
+                      });
+                      break;
+                    case 2:
+                      // Adicione aqui a lógica para editar exercícios
+                      break;
+                    case 3:
+                      ConfirmDeleteWorkout(context, widget.workoutGroup.id,
+                          () async {
+                        Navigator.of(context).pop(true);
+                        widget.callback();
+                      });
+                      break;
+                    case 4:
+                      ConfirmFinishWorkout(context, () async {
+                        Navigator.of(context).pop(true);
+                        widget.callback();
+                      }, widget.workoutGroup.id);
+                      break;
+                  }
                 },
-                icon: const Icon(Icons.clear),
-              ),
-              IconButton(
-                onPressed: () async {
-                  await ConfirmFinishWorkout(
-                      context, getDateNow(), '-1001661357785', () async {
-                    Navigator.of(context).pop(true);
-                    widget.callback();
-                  }, widget.workoutGroup.id);
-                },
-                icon: const Icon(Icons.check, color: Colors.white),
-              ),
+              )
             ],
           ),
         ],
@@ -186,9 +226,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                   _workouts.length &&
               _searchController.text.isEmpty
           ? FinishWorkoutButton(
-              channelName: '-1001661357785',
-              message: getDateNow(),
-              workoutGroupId: widget.workoutGroup.id!,
+              workoutGroup: widget.workoutGroup,
               callback: () async {
                 Navigator.of(context).pop(true);
                 widget.callback();
@@ -196,10 +234,5 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
             )
           : null,
     );
-  }
-
-  String getDateNow() {
-    final date = DateTime.now();
-    return "${date.day}/${date.month}/${date.year} - ${widget.workoutGroup.description}";
   }
 }
