@@ -39,6 +39,9 @@ class WorkoutGroupStore extends ChangeNotifier {
   Future<void> loadValues(idUser) async {
     try {
       isLoading = true;
+      workoutGroups.clear();
+      _exercises.clear();
+      _filteredExercises.clear();
       workoutGroups = await getWorkoutGroups(idUser);
       _exercises = await getExercises();
       _filteredExercises = _exercises;
@@ -87,4 +90,4 @@ class WorkoutGroupStore extends ChangeNotifier {
 }
 
 final workoutGroupStoreProvider =
-ChangeNotifierProvider((ref) => WorkoutGroupStore());
+    ChangeNotifierProvider((ref) => WorkoutGroupStore());

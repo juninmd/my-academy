@@ -37,9 +37,9 @@ class LoginPageState extends State<LoginPage> {
 
   Future<void> _handleSignIn() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
+      final googleSignInAccount =
           await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
+      final googleSignInAuthentication =
           await googleSignInAccount!.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
@@ -47,12 +47,12 @@ class LoginPageState extends State<LoginPage> {
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final UserCredential authResult =
+      final authResult =
           await _auth.signInWithCredential(credential);
 
       print("Signed in: ${authResult.user!.displayName}");
 
-      Navigator.pushReplacement(
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => MenusPage(user: _user!)),
       );

@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/exercise.dart';
-
 const host = 'http://localhost:9000';
 
 class HttpApi {
@@ -25,7 +23,6 @@ class HttpApi {
 
       var isList = decodedJson is List;
 
-
       if (isList) {
         var responseJson = <T>[];
 
@@ -42,11 +39,15 @@ class HttpApi {
     throw response;
   }
 
-  Future<T> requestBase<T>(String method, String url,
+  Future<http.Response> requestBase<T>(String method, String url,
       dynamic Function(Map<String, dynamic> data)? fromJson,
-      {Object? body}) async {
+      {body}) async {
     final uri = Uri.parse('$host/$url');
-    var response;
+    http.Response response;
+
+    if (body != null) {
+      body = jsonEncode(body.toJson());
+    }
 
     switch (method) {
       case 'get':
@@ -55,12 +56,12 @@ class HttpApi {
         break;
       case 'post':
         response = await http
-            .post(uri, body: body, headers: await _getHeaders())
+            .post(uri, body: body, encoding: utf8, headers: await _getHeaders())
             .timeout(duration);
         break;
       case 'put':
         response = await http
-            .put(uri, body: body, headers: await _getHeaders())
+            .put(uri, body: body, encoding: utf8, headers: await _getHeaders())
             .timeout(duration);
         break;
       case 'delete':
@@ -111,6 +112,10 @@ class HttpApi {
 
   Future<Map<String, String>> _getHeaders() async {
     final firebaseAuthToken = await getAuth();
-    return {'Authorization': 'Bearer $firebaseAuthToken'};
+
+    return {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $firebaseAuthToken'
+    };
   }
 }

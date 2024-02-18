@@ -1,62 +1,24 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../../models/workout_series.dart';
 import '../my_academy_api.dart';
 
-Future<WorkoutSeries> getWorkoutSeries() async {
-  var url = Uri.parse("${host}/exercises-series");
-  var response = await http.get(url);
+var httpApi = HttpApi();
 
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = WorkoutSeries.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+Future<WorkoutSeries> getWorkoutSeries() async {
+  return await httpApi.request<WorkoutSeries>('get', 'exercises-series', WorkoutSeries.fromJson);
 }
 
 Future<WorkoutSeries> getWorkoutSeriesById(int id) async {
-  var url = Uri.parse("${host}/exercises-series/${id}");
-  var response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = WorkoutSeries.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+  return await httpApi.request<WorkoutSeries>('get', 'exercises-series/${id}', WorkoutSeries.fromJson);
 }
 
 Future<WorkoutSeries> postWorkoutSeries(WorkoutSeries body) async {
-  var url = Uri.parse("${host}/exercises-series");
-  var response = await http.post(url, body: jsonEncode(body));
-
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = WorkoutSeries.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+  return await httpApi.request<WorkoutSeries>('post', 'exercises-series', WorkoutSeries.fromJson, body: body);
 }
 
 Future<WorkoutSeries> putWorkoutSeries(WorkoutSeries body) async {
-  var url = Uri.parse('${host}/exercises-series/${body.id}');
-  var response = await http.post(url, body: jsonEncode(body));
-
-  if (response.statusCode == 200) {
-    var jsonResponse = json.decode(response.body);
-    var data = WorkoutSeries.fromJson(jsonResponse);
-    return data;
-  }
-  throw response;
+  return await httpApi.request<WorkoutSeries>('put', 'exercises-series/${body.id}', WorkoutSeries.fromJson, body: body);
 }
 
 Future<void> deleteWorkoutSeries(int id) async {
-  var url = Uri.parse('${host}/exercises-series/${id}');
-  final response = await http.delete(url);
-
-  if (response.statusCode == 200) {
-    return;
-  }
-  throw response;
+  return await httpApi.request<WorkoutSeries>('delete', 'exercises-series/${id}', WorkoutSeries.fromJson);
 }
