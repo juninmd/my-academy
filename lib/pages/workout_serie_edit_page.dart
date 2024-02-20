@@ -45,7 +45,13 @@ class WorkoutSerieEdit extends HookConsumerWidget {
       store
         ..loadWorkoutsSeriesByWorkout(workoutId, exercise.id)
         ..loadMethods();
+      return null;
+      // updateControllersList();
+    }, [workoutId, exercise.id]);
+
+    useEffect(() {
       updateControllersList();
+      return null;
     }, [store.workouts]);
 
     void addSeries(int index) {
@@ -136,16 +142,18 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                     // Ícone e campo "Quantidade de repetições"
                     Row(
                       children: [
-                        Icon(Icons.numbers),
-                        SizedBox(width: 8),
                         Expanded(
                           child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Quantidade de repetições',
-                            ),
-                            controller: repetitionsControllers[seriesIndex],
-                          ),
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Quantidade de repetições',
+                                icon: Icon(Icons.numbers),
+                                hintText: 'Exemplo: 15',
+                              ),
+                              controller: repetitionsControllers[seriesIndex],
+                              onTapOutside: (_) {
+                                updateSerie(seriesIndex);
+                              }),
                         ),
                       ],
                     ),
@@ -153,16 +161,18 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                     // Ícone e campo "Carga"
                     Row(
                       children: [
-                        Icon(Icons.monitor_weight),
-                        SizedBox(width: 8),
                         Expanded(
                           child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Carga',
-                            ),
-                            controller: weightControllers[seriesIndex],
-                          ),
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Carga',
+                                icon: Icon(Icons.monitor_weight),
+                                hintText: 'Exemplo: 30',
+                              ),
+                              controller: weightControllers[seriesIndex],
+                              onTapOutside: (_) {
+                                updateSerie(seriesIndex);
+                              }),
                         ),
                       ],
                     ),
@@ -170,16 +180,18 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                     // Ícone e campo "Descanso"
                     Row(
                       children: [
-                        Icon(Icons.timer),
-                        SizedBox(width: 8),
                         Expanded(
                           child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: 'Descanso',
-                            ),
-                            controller: restControllers[seriesIndex],
-                          ),
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Descanso',
+                                icon: Icon(Icons.timer),
+                                hintText: 'Exemplo: 60',
+                              ),
+                              controller: restControllers[seriesIndex],
+                              onTapOutside: (_) {
+                                updateSerie(seriesIndex);
+                              }),
                         ),
                       ],
                     ),
@@ -220,35 +232,6 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                     else
                       Row(
                         children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                updateSerie(seriesIndex);
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  Colors.green,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.edit, size: 18),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Atualizar Série',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () => removeSeries(seriesIndex),

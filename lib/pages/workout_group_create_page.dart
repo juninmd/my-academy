@@ -96,7 +96,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             ElevatedButton(
                 onPressed: () async {
                   if (store.workoutGroup.name.isEmpty ||
-                      store.workouts?.length == 0) {
+                      store.workouts.isEmpty) {
                     snackBar(
                         context, 'Preencha nome e adicione os exercícios!');
                     return;
@@ -106,7 +106,6 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
                   } else {
                     await store.updateWorkoutGroup(idUser);
                   }
-
                   Navigator.pop(context);
                 },
                 style: ButtonStyle(

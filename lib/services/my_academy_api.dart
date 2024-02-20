@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
-// const host = 'http://localhost:9000';
-const host = 'http://antoniocode.dev';
+const host = 'http://localhost:9000';
 
 class HttpApi {
   Duration duration = Duration(seconds: 15);
