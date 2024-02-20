@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import '../models/exercise.dart';
 import '../stores/workout_group_create_store.dart';
+import '../widgets/snackbar.dart';
 import 'workout_serie_edit_page.dart';
 import 'package:collection/collection.dart';
 
@@ -21,9 +21,9 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
     final store = ref.watch(workoutGroupCreateStoreProvider);
 
     useEffect(() {
-      if(workoutGroupId != null){
+      if (workoutGroupId != null) {
         store.loadWorkoutGroup(workoutGroupId!);
-      };
+      }
       store.loadValues(idUser);
       return null;
     }, [idUser, workoutGroupId]);
@@ -60,69 +60,6 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      var dateNow = DateTime.now();
-                      DateTime? selectedDate = await showDatePicker(
-                        context: context,
-                        initialDate: dateNow,
-                        firstDate: dateNow,
-                        lastDate: dateNow.add(new Duration(days: 90)),
-                      );
-                      if (selectedDate != null) {
-                        store.workoutGroup.dateStart = selectedDate.toUtc();
-                        store.notify();
-                      }
-                    },
-                    child: TextFormField(
-                      enabled: false,
-                      controller: TextEditingController(
-                          text: DateFormat('dd/MM/yyyy')
-                              .format(store.workoutGroup.dateStart.toUtc())),
-                      decoration: const InputDecoration(
-                        labelText: 'Início do treino',
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      var dateNow = DateTime.now();
-                      DateTime? selectedDate = await showDatePicker(
-                        context: context,
-                        initialDate: dateNow,
-                        firstDate: dateNow,
-                        lastDate: dateNow.add(new Duration(days: 90)),
-                      );
-                      if (selectedDate != null) {
-                        store.workoutGroup.dateEnd = selectedDate.toUtc();
-                        store.notify();
-                      }
-                    },
-                    child: TextFormField(
-                      enabled: false,
-                      // onChanged: (value){
-                      //   store.workoutGroup.dateEnd = value as DateTime;
-                      //   store.notify();
-                      // },
-                      controller: TextEditingController(
-                          text: DateFormat('dd/MM/yyyy')
-                              .format(store.workoutGroup.dateEnd.toUtc())),
-                      decoration: const InputDecoration(
-                        labelText: 'Fim do treino',
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-              ],
-            ),
-            const SizedBox(height: 16),
             TextFormField(
               onChanged: (value) {
                 store.filterExercises(value.toLowerCase());
@@ -134,33 +71,63 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView.builder(
+                flex: 1,
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   itemCount: store.filteredExercises.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (BuildContext context, int index) {
                     final exercise = store.filteredExercises[index];
-                    return Column(
-                      children: [
-                        ExerciseCard(exercise: exercise, onTap: () {}),
-                      ],
-                    );
-                  }),
-            ),
+                    return ExerciseCard(
+                        exercise: exercise,
+                        workoutGroupId: workoutGroupId,
+                        onTap: () {});
+                  },
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 1,
+                    mainAxisSpacing: 1,
+                    mainAxisExtent: 220,
+                  ),
+                )),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () async {
-                await store.createWorkoutGroup(idUser);
-                Navigator.pop(context);
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-              ),
-              child: const Text(
-                'Cadastrar Grupo de Treino',
-                style: TextStyle(
-                  color: Colors.white,
+                onPressed: () async {
+                  if (store.workoutGroup.name.isEmpty ||
+                      store.workouts?.length == 0) {
+                    snackBar(
+                        context, 'Preencha nome e adicione os exercícios!');
+                    return;
+                  }
+                  if (workoutGroupId == null) {
+                    await store.createWorkoutGroup(idUser);
+                  } else {
+                    await store.updateWorkoutGroup(idUser);
+                  }
+
+                  Navigator.pop(context);
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.deepPurple),
                 ),
-              ),
-            ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.save, size: 18),
+                    SizedBox(width: 8),
+                    Text(
+                      workoutGroupId == null ? 'Novo Treino' : 'Editar Treino',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                )),
           ],
         ),
       ),
@@ -169,105 +136,134 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
 }
 
 class ExerciseCard extends HookConsumerWidget {
-  const ExerciseCard({Key? key, required this.exercise, required this.onTap})
+  const ExerciseCard(
+      {Key? key,
+      required this.exercise,
+      required this.workoutGroupId,
+      required this.onTap})
       : super(key: key);
   final Exercise exercise;
+  final int? workoutGroupId;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final store = ref.watch(workoutGroupCreateStoreProvider);
 
-    var series = store.workouts
-            .firstWhereOrNull((element) => element.exerciseId == exercise.id)?.workoutSeries ?? [];
+    var workout = store.workouts
+        .firstWhereOrNull((element) => element.exerciseId == exercise.id);
+    var series = workout?.workoutSeries ?? [];
 
-    print(store.workoutGroup.workouts?.length);
-    print(series.length);
+    var method = store.methods
+        .firstWhereOrNull((element) => element.id == workout?.methodId);
 
     return Card(
-      color: Colors.black,
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: InkWell(
         onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Center(
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      exercise.image,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 100, // Defina a altura desejada para a imagem
-                    ),
-                  ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment
+                .spaceEvenly, // Distribui os elementos igualmente ao longo do eixo principal
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  exercise.image,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 80, // Defina a altura desejada para a imagem
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              exercise.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            ListTile(
-              title: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => Card(
-                      child: WorkoutSerieEdit(
-                        exercise: exercise,
-                        onTap: (workoutSeries, methodId) {
-                          store.addWorkout(
-                              null, exercise.id, workoutSeries, methodId);
-                          store.notify();
-                        },
-                      ),
-                    ),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.deepPurple),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  '${series.length == 0 ? 'Adicionar Exercício' : 'Editar Exercício'}',
-                  style: TextStyle(
-                    color: Colors.white,
+                  exercise.name,
+                  textAlign: TextAlign.center, // Centraliza o texto
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 ),
               ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.fitness_center,
-                        size: 16,
+              ListTile(
+                title: ElevatedButton.icon(
+                  icon: Icon(series.isEmpty
+                      ? Icons.add
+                      : Icons.edit), // Adiciona ícones aos botões
+                  label: Text(
+                    workout?.id == null
+                        ? 'Adicionar Exercício'
+                        : 'Editar Exercício',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => Card(
+                        child: WorkoutSerieEdit(
+                          workoutId: workout?.id,
+                          exercise: exercise,
+                          onTap: (workoutSeries, methodId) {
+                            store.addWorkout(workout?.id, exercise.id,
+                                workoutSeries, methodId);
+                            store.notify();
+                          },
+                        ),
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${series.length} Série(s)',
-                        style: const TextStyle(fontSize: 12),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.deepPurple),
+                  ),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Column(
+                    children: [
+                      if (method?.name != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Centraliza os elementos no eixo principal
+                          children: [
+                            const Icon(
+                              Icons.info,
+                              size: 11,
+                            ),
+                            Text(
+                              method?.name ?? 'Sem método',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .center, // Centraliza os elementos no eixo principal
+                        children: [
+                          const Icon(
+                            Icons.fitness_center,
+                            size: 11,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${series.length} Série(s)',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            )
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

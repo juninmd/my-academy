@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 const host = 'http://localhost:9000';
 
 class HttpApi {
-  Duration duration = Duration(seconds: 5);
+  Duration duration = Duration(seconds: 15);
 
   Future<String> getAuth() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -85,30 +85,6 @@ class HttpApi {
     var processed = await _processResponse<T>(response, fromJson);
     return processed;
   }
-
-  Future<T> get<T>(String url,
-          dynamic Function(Map<String, dynamic> data) fromJson) async =>
-      request<T>('get', url, fromJson);
-
-  Future<T> post<T>(
-          String url, dynamic Function(Map<String, dynamic> data) fromJson,
-          {Object? body}) async =>
-      request<T>('post', url, fromJson, body: body);
-
-  Future<T> put<T>(
-          String url, dynamic Function(Map<String, dynamic> data) fromJson,
-          {Object? body}) async =>
-      request<T>('put', url, fromJson, body: body);
-
-  Future<void> delete(String url) async {
-    var uri = Uri.parse("$host/$url");
-    await http.delete(uri, headers: await _getHeaders()).timeout(duration);
-  }
-
-  Future<T> patch<T>(
-          String url, dynamic Function(Map<String, dynamic> data) fromJson,
-          {Object? body}) async =>
-      request<T>('patch', url, fromJson, body: body);
 
   Future<Map<String, String>> _getHeaders() async {
     final firebaseAuthToken = await getAuth();

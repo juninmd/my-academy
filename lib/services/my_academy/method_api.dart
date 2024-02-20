@@ -4,11 +4,11 @@ import '../my_academy_api.dart';
 var httpApi = HttpApi();
 
 Future<List<Method>> getMethods()  async{
-  return await httpApi.get<List<Method>>('methods', Method.fromJson);
+  return await httpApi.request<Method>('get','methods', Method.fromJson);
 }
 
 Future<Method> getMethodById(int id) async {
-  return await httpApi.get<Method>('methods/$id', Method.fromJson);
+  return await httpApi.request<Method>('get','methods/$id', Method.fromJson);
 }
 
 Future<Method> postMethod(Method body) async {

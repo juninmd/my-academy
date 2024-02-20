@@ -29,9 +29,6 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
   WorkoutGroup workoutGroup = WorkoutGroup(
       name: '',
       userId: idUser,
-      description: '',
-      dateEnd: DateTime.now(),
-      dateStart: DateTime.now(),
       image: '',
       workouts: []);
 
@@ -111,8 +108,7 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
     }
 
     workouts.add(Workout(
-        exerciseId: exerciseId, id: workoutId, workoutSeries: workoutSeries));
-
+        exerciseId: exerciseId, methodId: methodId, id: workoutId, workoutSeries: workoutSeries));
     notify();
   }
 
@@ -130,6 +126,28 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
     workoutGroup.workouts = workouts;
 
     await postWorkoutGroup(workoutGroup);
+    workoutGroup.name = '';
+    workoutGroup.workouts!.clear();
+    workouts.clear();
+  }
+
+  Future<void> updateWorkoutGroup(idUser) async {
+    List<String> imagePaths = [
+      'assets/images/crucifixo_reto.gif',
+      'assets/images/remada_alta.gif',
+      'assets/images/cadeira_flexora.gif'
+    ];
+
+    final background = getRandomImagePath(imagePaths);
+
+    workoutGroup.image = background;
+    workoutGroup.userId = idUser;
+    workoutGroup.workouts = workouts;
+
+    await putWorkoutGroup(workoutGroup);
+    workoutGroup.name = '';
+    workoutGroup.workouts!.clear();
+    workouts.clear();
   }
 
   Future<void> loadWorkouts(int? workoutGroupId) async {

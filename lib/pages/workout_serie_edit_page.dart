@@ -8,8 +8,7 @@ import '../stores/workout_group_create_store.dart';
 class WorkoutSerieEdit extends HookConsumerWidget {
   final int? workoutId;
   final Exercise exercise;
-  final void Function(
-      List<WorkoutSeries> value,  int? methodId) onTap;
+  final void Function(List<WorkoutSeries> value, int? methodId) onTap;
 
   const WorkoutSerieEdit({
     Key? key,
@@ -43,7 +42,9 @@ class WorkoutSerieEdit extends HookConsumerWidget {
     updateControllersList();
 
     useEffect(() {
-      store..loadWorkoutsSeriesByWorkout(workoutId, exercise.id)..loadMethods();
+      store
+        ..loadWorkoutsSeriesByWorkout(workoutId, exercise.id)
+        ..loadMethods();
       updateControllersList();
     }, [store.workouts]);
 
@@ -78,18 +79,18 @@ class WorkoutSerieEdit extends HookConsumerWidget {
     }
 
     void saveSeries() {
-      onTap(store.seriesList,store.methodId);
+      onTap(store.seriesList, store.methodId);
       store.notify();
     }
 
     void updateMethod(String? methodId) {
-         store.methodId = methodId != null ? int.parse(methodId) : null;
+      store.methodId = methodId != null ? int.parse(methodId) : null;
       store.notify();
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Séries'),
+        title: Text(exercise.name),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -279,21 +280,65 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                     const SizedBox(height: 16),
                   ],
                 ),
-              ElevatedButton(
-                onPressed: () {
-                  saveSeries();
-                  Navigator.pop(context); // Close the bottom sheet
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.deepPurple),
-                ),
-                child: const Text(
-                  'Salvar',
-                  style: TextStyle(
-                    color: Colors.white,
+              Row(
+                children: [
+                  if (workoutId != null)
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            saveSeries();
+                            Navigator.pop(context); // Close the bottom sheet
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.delete, size: 18),
+                              SizedBox(width: 8),
+                              Text(
+                                'Apagar Exercício',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )),
+                    ),
+                  if (workoutId != null) const SizedBox(width: 8),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          saveSeries();
+                          Navigator.pop(context); // Close the bottom sheet
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.deepPurple),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.save, size: 18),
+                            SizedBox(width: 8),
+                            Text(
+                              'Aplicar',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )),
                   ),
-                ),
+                ],
               ),
               const SizedBox(height: 16),
             ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_academy/pages/workout_group_create_page.dart';
 import 'package:my_academy/widgets/workout_card.dart';
+import '../constants.dart';
 import '../models/workout.dart';
 import '../models/workout_group.dart';
 import '../services/my_academy/workout_group_api.dart';
@@ -140,14 +142,14 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     value: 2,
                     child: ListTile(
                       leading: Icon(Icons.edit),
-                      title: Text('Editar Exercícios'),
+                      title: Text('Editar Treino'),
                     ),
                   ),
                   const PopupMenuItem<int>(
                     value: 3,
                     child: ListTile(
                       leading: Icon(Icons.delete),
-                      title: Text('Deletar Grupo'),
+                      title: Text('Deletar Treino'),
                     ),
                   ),
                   const PopupMenuItem<int>(
@@ -158,7 +160,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                     ),
                   ),
                 ],
-                onSelected: (int value) {
+                onSelected: (int value) async {
                   switch (value) {
                     case 1:
                       setState(() {
@@ -167,6 +169,16 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                       });
                       break;
                     case 2:
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              WorkoutGroupCreatePage(
+                                  idUser, widget.workoutGroup.id) ,
+                        ),
+                      ).then((_) {
+                        loadValues();
+                      });
                       // Adicione aqui a lógica para editar exercícios
                       break;
                     case 3:

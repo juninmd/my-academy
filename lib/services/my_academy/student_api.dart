@@ -12,11 +12,13 @@ Future<Student> getStudentById(int id) async {
 }
 
 Future<Student> postStudent(Student body) async {
-  return await httpApi.request<Student>('post', 'students', Student.fromJson);
+  return await httpApi.request<Student>('post', 'students', Student.fromJson,
+      body: body);
 }
 
 Future<Student> putStudent(Student body) async {
-  return await httpApi.request<Student>('put', 'students/${body.id}', Student.fromJson);
+  return await httpApi.request<Student>('put', 'students/${body.id}', Student.fromJson,
+      body: body);
 }
 
 Future<void> deleteStudent(int id) async {

@@ -12,11 +12,13 @@ Future<Users> getUserById(int id) async {
 }
 
 Future<Users> postUser(Users body) async {
-  return await httpApi.request<Users>('post', 'users', Users.fromJson);
+  return await httpApi.request<Users>('post', 'users', Users.fromJson,
+      body: body);
 }
 
 Future<Users> putUser(Users body) async {
-  return  await httpApi.request<Users>('post', 'users/${body.id}', Users.fromJson);
+  return  await httpApi.request<Users>('post', 'users/${body.id}', Users.fromJson,
+      body: body);
 }
 
 Future<void> deleteUser(int id) async {
