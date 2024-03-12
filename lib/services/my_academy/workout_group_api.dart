@@ -4,8 +4,8 @@ import "../my_academy_api.dart";
 var httpApi = HttpApi();
 
 Future<List<WorkoutGroup>> getWorkoutGroups(int idUser) async {
-  return await httpApi.request<WorkoutGroup>('get',
-      'workouts-groups/user/$idUser?activated=true', WorkoutGroup.fromJson);
+  return await httpApi.request<WorkoutGroup>(
+      'get', 'workouts-groups/user/$idUser', WorkoutGroup.fromJson);
 }
 
 Future<WorkoutGroup> getWorkoutGroupById(int id) async {
@@ -19,8 +19,7 @@ Future<WorkoutGroup> getWorkoutGroupExercisesById(int id) async {
 }
 
 Future<void> postWorkoutGroup(WorkoutGroup body) async {
-  await httpApi.request<WorkoutGroup>(
-      'post', 'workouts-groups', null,
+  await httpApi.request<WorkoutGroup>('post', 'workouts-groups', null,
       body: body);
 }
 
@@ -30,7 +29,7 @@ Future<void> putWorkoutGroup(WorkoutGroup body) async {
       body: body);
 }
 
-Future<void> disableWorkoutGroup(int id) async {
+Future<void> deleteWorkoutGroup(int id) async {
   return await httpApi.request<WorkoutGroup>(
-      'delete', 'workouts-groups/disable/${id}', WorkoutGroup.fromJson);
+      'delete', 'workouts-groups/${id}', WorkoutGroup.fromJson);
 }

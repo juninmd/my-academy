@@ -72,11 +72,11 @@ class WorkoutGroupStore extends ChangeNotifier {
     }
   }
 
-  Future<void> handleDisableWorkoutGroup(idUser, idWorkout) async {
+  Future<void> handleDeleteWorkoutGroup(idUser, idWorkout) async {
     try {
       print('handleDeleteWorkoutGroup');
       isLoading = true;
-      await disableWorkoutGroup(idWorkout);
+      await deleteWorkoutGroup(idWorkout);
     } catch (error) {
       print('handleDeleteWorkoutGroup error');
       print(error);

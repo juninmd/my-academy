@@ -71,7 +71,8 @@ class HomePage extends HookConsumerWidget {
           child: CircularProgressIndicator(),
         )
       else if (!store.isLoading)
-        SingleChildScrollView( // Adicionado SingleChildScrollView
+        SingleChildScrollView(
+          // Adicionado SingleChildScrollView
           child: Container(
             padding: const EdgeInsets.only(top: 80, left: 10, right: 10),
             child: Column(
@@ -128,28 +129,29 @@ class HomePage extends HookConsumerWidget {
                               ),
                             ),
                             const SizedBox(width: 4),
-                            if (store.lastSession?.workoutsGroups?.name != null &&
+                            if (store.lastSession?.workoutsGroups?.name !=
+                                    null &&
                                 store.lastSession?.date != null)
                               Text(
                                 '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
                               ),
                             if (store.lastSession?.workoutsGroups?.name == null)
-                              Chip(
-                                backgroundColor: Colors.white,
-                                label: Text(
-                                  'Você não treinou :(',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.deepPurple),
-                                ),
+                              Text(
+                                'Nenhum',
+                                style: TextStyle(color: Colors.white),
                               ),
                           ],
                         ),
                         const SizedBox(height: 16),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            IconButton(
-                              tooltip: 'Visualizar Histórico',
+                            Icon(
+                              Icons.calendar_month,
+                              color: Colors.white,
+                            ),
+                            TextButton(
+                              child: const Text('Visualizar Histórico'),
                               onPressed: () async {
                                 await Navigator.push(
                                   context,
@@ -158,10 +160,22 @@ class HomePage extends HookConsumerWidget {
                                   ),
                                 );
                               },
-                              icon: Icon(Icons.calendar_month),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.security,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 4),
                             Text(
-                              'Sequência de: ${store.exerciseFrequency} treino(s)',
+                              store.exerciseFrequency == 0
+                                  ? 'Você não realizou algum treino ainda'
+                                  : 'Sequência de ${store.exerciseFrequency} dia(s)',
                               style: TextStyle(
                                 color: Colors.white,
                               ),

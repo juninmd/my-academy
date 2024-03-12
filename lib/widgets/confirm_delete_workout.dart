@@ -7,7 +7,7 @@ import 'confirm_dialog.dart';
 Future<void> ConfirmDeleteWorkout(context, workoutGroupId, callback) async =>
     ConfirmDialog(context, 'Confirmação', 'Deseja apagar seu treino?',
         () async {
-      await disableWorkoutGroup(workoutGroupId);
+      await deleteWorkoutGroup(workoutGroupId);
       Navigator.of(context).pop(true);
       snackBar(context, 'Treino Apagado com sucesso');
       callback();
