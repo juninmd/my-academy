@@ -83,7 +83,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
                     itemCount: store.workoutGroups.length,
                     itemBuilder: (BuildContext context, int index) {
                       final workoutGroup = store.workoutGroups[index];
-                      return WorkoutGroupCard(
+                      return ExerciseGroupCard(
                         alreadyWorkout: false,
                         workoutGroup: workoutGroup,
                         callback: () {

@@ -28,7 +28,7 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
 
   WorkoutGroup workoutGroup = WorkoutGroup(
       name: '',
-      userId: idUser,
+      userId: FireBaseUser.uid,
       image: '',
       workouts: []);
 

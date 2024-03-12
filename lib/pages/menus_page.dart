@@ -29,8 +29,8 @@ class MenusPage extends HookConsumerWidget {
 
     final screens = <Widget>[
       if (store.personal != null) const StudentsPage(),
-      HomePage(user: user),
-      WorkoutGroupPage(idUser, null),
+      const HomePage(),
+      WorkoutGroupPage(FireBaseUser.uid, null),
     ];
 
     return Scaffold(
@@ -50,7 +50,7 @@ class MenusPage extends HookConsumerWidget {
             currentIndex: currentIndex,
             onTap: (index) => store.onTabSelected(index, context),
             selectedItemColor:
-                Colors.deepPurple, // Roxo profundo sugerido pelo Alfred
+                Colors.red,
             unselectedItemColor: Colors.white,
             selectedFontSize: 16,
             selectedLabelStyle: TextStyle(shadows: <Shadow>[
@@ -91,7 +91,7 @@ class MenusPageStore extends ChangeNotifier {
   Future<void> loadValues() async {
     try {
       isLoading = true;
-      personal = await getPersonalById(idUser);
+      personal = await getPersonalById(FireBaseUser.uid);
     } catch (error) {
       print(error);
     } finally {

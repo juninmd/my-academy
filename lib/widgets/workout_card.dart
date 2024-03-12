@@ -86,7 +86,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
                                   style: widget.workout.finish
                                       ? const TextStyle(
                                           decoration: TextDecoration.lineThrough,
-                                          color: Colors.deepPurple,
+                                          color: Colors.red,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         )

@@ -25,7 +25,7 @@ class LoginPageState extends State<LoginPage> {
       setState(() {
         _user = event;
         if (_user != null) {
-          idUser = _user!.uid;
+          FireBaseUser = _user!;
           // Usuário já está logado, redirecione para MenusPage
           Navigator.pushReplacement(
             context,
@@ -54,7 +54,7 @@ class LoginPageState extends State<LoginPage> {
 
       print("Signed in: ${authResult.user!.displayName}");
 
-      idUser = authResult.user!.uid;
+      FireBaseUser = authResult.user!;
 
       await Navigator.pushReplacement(
         context,

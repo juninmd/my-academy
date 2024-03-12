@@ -174,7 +174,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
                               WorkoutGroupCreatePage(
-                                  idUser, widget.workoutGroup.id) ,
+                                  FireBaseUser.uid, widget.workoutGroup.id) ,
                         ),
                       ).then((_) {
                         loadValues();

@@ -14,16 +14,14 @@ import 'gym_calendar_page.dart';
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());
 
 class HomePage extends HookConsumerWidget {
-  final User user;
-
-  const HomePage({Key? key, required this.user}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final HomePageStore store = ref.watch(homePageStoreProvider);
 
     useEffect(() {
-      store.loadValues(idUser);
+      store.loadValues(FireBaseUser.uid);
       return null;
     }, const []);
 
@@ -48,26 +46,39 @@ class HomePage extends HookConsumerWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(6),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.calendar_today,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  "Treino do dia de ${user?.displayName} ${idUser}",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Treino do dia de",
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    Text(
+                      "${FireBaseUser.displayName}",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    // Adicione outros widgets aqui, se necessário
+                  ],
                 )
+
+
               ],
             ),
           ),
         ),
       ),
       if (store.isLoading)
-        Center(
+        const Center(
           child: CircularProgressIndicator(),
         )
       else if (!store.isLoading)
@@ -79,16 +90,17 @@ class HomePage extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const SizedBox(height: 16),
                 if (store.workoutSummary?.workoutGroupOfDay == null)
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                         Image.asset('assets/images/stickers/treino2.png',
                             width: 200, height: 200),
-                        SizedBox(height: 20),
-                        Text(
+                        const SizedBox(height: 20),
+                        const Text(
                           'Nenhum treino programado para hoje',
                           style: TextStyle(color: Colors.white, fontSize: 24),
                           textAlign: TextAlign.center,
@@ -97,14 +109,13 @@ class HomePage extends HookConsumerWidget {
                     ),
                   )
                 else
-                  WorkoutGroupCard(
+                  ExerciseGroupCard(
                     alreadyWorkout: store.alreadyWorkout,
                     workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
                     callback: () {
-                      store.loadValues(idUser);
+                      store.loadValues(FireBaseUser.uid);
                     },
                   ),
-                const SizedBox(height: 10),
                 Card(
                   color: Colors.deepPurple,
                   elevation: 4,
@@ -119,12 +130,12 @@ class HomePage extends HookConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.fitness_center,
                               color: Colors.white,
                             ),
                             const SizedBox(width: 8),
-                            Text(
+                            const Text(
                               'Último treino:',
                               style: TextStyle(
                                 color: Colors.white,
@@ -138,7 +149,7 @@ class HomePage extends HookConsumerWidget {
                                 '${store.lastSession!.workoutsGroups!.name} - ${DateFormat('dd/MM/yyyy').format(store.lastSession!.date.toUtc())}',
                               ),
                             if (store.lastSession?.workoutsGroups?.name == null)
-                              Text(
+                              const Text(
                                 'Nenhum',
                                 style: TextStyle(color: Colors.white),
                               ),
@@ -148,7 +159,7 @@ class HomePage extends HookConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.calendar_month,
                               color: Colors.white,
                             ),
@@ -158,7 +169,8 @@ class HomePage extends HookConsumerWidget {
                                 await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => GymCalendarPage(),
+                                    builder: (context) =>
+                                        const GymCalendarPage(),
                                   ),
                                 );
                               },
@@ -169,7 +181,7 @@ class HomePage extends HookConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.security,
                               color: Colors.white,
                             ),
@@ -178,7 +190,7 @@ class HomePage extends HookConsumerWidget {
                               store.exerciseFrequency == 0
                                   ? 'Você não realizou algum treino ainda'
                                   : 'Sequência de ${store.exerciseFrequency} dia(s)',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),
@@ -188,14 +200,14 @@ class HomePage extends HookConsumerWidget {
                         if (store.personal != null)
                           Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.person,
                                 color: Colors.white,
                               ),
                               const SizedBox(width: 8),
                               Text(
                                 'Personal: ${store.personal!.name}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
@@ -224,7 +236,7 @@ class HomePageStore extends ChangeNotifier {
   WorkoutSummary? workoutSummary;
   int exerciseFrequency = 0;
   WorkoutSession? lastSession;
-  Users me = Users(id: idUser, name: '', email: '', photoUrl: '');
+  Users me = Users(id: FireBaseUser.uid, name: '', email: '', photoUrl: '');
   Users? personal;
   bool alreadyWorkout = false;
   bool isLoading = true;

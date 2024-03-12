@@ -5,12 +5,12 @@ import 'package:my_academy/models/workout_group.dart';
 import '../pages/workouts_page.dart';
 import 'snackbar.dart';
 
-class WorkoutGroupCard extends HookConsumerWidget {
+class ExerciseGroupCard extends HookConsumerWidget {
   final WorkoutGroup workoutGroup;
   final bool alreadyWorkout;
   final Function callback;
 
-  const WorkoutGroupCard({
+  const ExerciseGroupCard({
     Key? key,
     required this.workoutGroup,
     required this.alreadyWorkout,
@@ -19,7 +19,6 @@ class WorkoutGroupCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -42,56 +41,50 @@ class WorkoutGroupCard extends HookConsumerWidget {
           );
         },
         child: Stack(
-          // Adicionado o Stack envolvendo o Column
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 160, // Altura desejada para o container
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(workoutGroup
-                          .image), // Substitua pelo caminho da sua imagem
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.bottomCenter,
+            Image.asset(
+              workoutGroup.image,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              color: Colors.black12,
+              colorBlendMode: BlendMode.darken,
+            ),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black54],
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 8,
                     ),
-                  ),
-                  child: Text(
-                    workoutGroup.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                if (alreadyWorkout)
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Chip(
-                      backgroundColor: Colors.deepPurple,
-                      label: const Text(
-                        'Você já treinou!',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      workoutGroup.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
                   ),
-              ],
+                ),
+              ),
             ),
+            if (alreadyWorkout)
+              Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Chip(
+                    backgroundColor: Colors.deepPurple,
+                    label: const Text(
+                      'Você já treinou hoje!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ))
           ],
         ),
       ),

@@ -113,7 +113,7 @@ class StudentsPageStore extends ChangeNotifier {
     try {
       isLoading = true;
       students = await getStudentsSessions(
-          idUser);
+          FireBaseUser.uid);
     } catch (error) {
       print(error);
     } finally {

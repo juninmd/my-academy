@@ -9,6 +9,7 @@ import 'package:table_calendar/table_calendar.dart';
 import '../constants.dart';
 import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
+import '../widgets/exercise_group_card.dart';
 
 final gymCalendarPageStoreProvider =
     ChangeNotifierProvider((ref) => GymCalendarPageStore());
@@ -22,9 +23,9 @@ class GymCalendarPage extends HookConsumerWidget {
     final now = DateTime.now();
 
     useEffect(() {
-      store.loadValues(idUser);
+      store.loadValues(FireBaseUser.uid);
       return null;
-    }, [idUser]);
+    }, [FireBaseUser.uid]);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,10 +37,13 @@ class GymCalendarPage extends HookConsumerWidget {
             padding: const EdgeInsets.all(16.0),
             child: TableCalendar<WorkoutSession>(
               locale: 'pt_BR',
+              daysOfWeekVisible: true,
               startingDayOfWeek: StartingDayOfWeek.monday,
-              headerVisible: false,
+              headerVisible: true,
+              headerStyle:
+                  HeaderStyle(formatButtonVisible: false, titleCentered: true),
               calendarStyle: const CalendarStyle(
-                outsideDaysVisible: false,
+                outsideDaysVisible: true,
               ),
               calendarBuilders: CalendarBuilders(
                 dowBuilder: (context, day) {
@@ -53,13 +57,14 @@ class GymCalendarPage extends HookConsumerWidget {
                   }
                 },
               ),
+              availableGestures: AvailableGestures.all,
               selectedDayPredicate: (day) =>
                   store.isSameDate(day, store.selectedDay),
               onDaySelected: (selectedDay, focusedDay) {
                 store.setSelectedDay(selectedDay);
               },
-              focusedDay: DateTime.now(),
-              firstDay: DateTime(now.year, now.month, 1),
+              focusedDay: store.selectedDay,
+              firstDay: DateTime(2023, 1, 1),
               lastDay: DateTime(now.year, now.month + 1, 0),
             ),
           ),
@@ -82,61 +87,27 @@ class GymCalendarPage extends HookConsumerWidget {
                     child: CircularProgressIndicator(),
                   );
                 } else {
-                  return ListView.builder(
+                  return GridView.builder(
                     itemCount: selectedEvents.length,
                     itemBuilder: (context, index) {
                       final workoutSession = selectedEvents[index];
                       final workoutGroup = workoutSession.workoutsGroups!;
 
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WorkoutsPage(
-                              workoutGroup: workoutGroup,
-                              callback: () {
-                                store.loadValues(idUser);
-                              },
-                            ),
-                          ),
-                        ),
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                            vertical: 4.0,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Image.asset(
-                                workoutGroup.image,
-                                fit: BoxFit.cover,
-                                height: 120,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      workoutGroup.name,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return ExerciseGroupCard(
+                          workoutGroup: workoutGroup,
+                          callback: () {
+                            store.loadValues(FireBaseUser.uid);
+                          },
+                          alreadyWorkout: false);
                     },
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 1,
+                      mainAxisSpacing: 1,
+                      mainAxisExtent: 220,
+                    ),
                   );
                 }
               },
@@ -162,7 +133,6 @@ class GymCalendarPageStore extends ChangeNotifier {
       isLoading = true;
       initializeDateFormatting('pt_BR');
       workoutSessions = await getWorkoutSessions(idUser);
-      print(workoutSessions);
     } catch (error) {
       // Handle the error
     } finally {
