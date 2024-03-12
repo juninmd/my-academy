@@ -7,7 +7,7 @@ Future<Personal> getPersonals() async{
   return await httpApi.request<Personal>('get', 'personals', Personal.fromJson);
 }
 
-Future<Personal> getPersonalById(int id) async {
+Future<Personal> getPersonalById(String id) async {
   return await httpApi.request<Personal>('get', 'personals/${id}', Personal.fromJson);
 }
 
@@ -22,6 +22,6 @@ Future<Personal> putPersonal(Personal body)  async{
       body: body);
 }
 
-Future<void> deletePersonal(int id) async {
+Future<void> deletePersonal(String id) async {
   return await httpApi.request<Personal>('delete', 'personals/${id}', null);
 }

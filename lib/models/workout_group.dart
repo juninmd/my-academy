@@ -7,7 +7,7 @@ class WorkoutGroup {
   int? id;
   String name;
   String image;
-  int userId;
+  String userId;
   List<Workout>? workouts;
 
   WorkoutGroup({

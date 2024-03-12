@@ -3,7 +3,7 @@ import "../my_academy_api.dart";
 
 var httpApi = HttpApi();
 
-Future<List<WorkoutGroup>> getWorkoutGroups(int idUser) async {
+Future<List<WorkoutGroup>> getWorkoutGroups(String idUser) async {
   return await httpApi.request<WorkoutGroup>(
       'get', 'workouts-groups/user/$idUser', WorkoutGroup.fromJson);
 }

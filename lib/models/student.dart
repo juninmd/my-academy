@@ -3,7 +3,7 @@ import "package:json_annotation/json_annotation.dart";
 @JsonSerializable()
 class Student {
   int id;
-  int userId;
+  String userId;
   int? personalsId;
 
   Student({

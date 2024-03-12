@@ -23,7 +23,7 @@ class HomePage extends HookConsumerWidget {
     final HomePageStore store = ref.watch(homePageStoreProvider);
 
     useEffect(() {
-      store.loadValues();
+      store.loadValues(idUser);
       return null;
     }, const []);
 
@@ -58,7 +58,7 @@ class HomePage extends HookConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  "Treino do dia de ${user?.displayName}",
+                  "Treino do dia de ${user?.displayName} ${idUser}",
                   style: TextStyle(color: Colors.white, fontSize: 18),
                 )
               ],
@@ -100,7 +100,9 @@ class HomePage extends HookConsumerWidget {
                   WorkoutGroupCard(
                     alreadyWorkout: store.alreadyWorkout,
                     workoutGroup: store.workoutSummary!.workoutGroupOfDay!,
-                    callback: store.loadValues,
+                    callback: () {
+                      store.loadValues(idUser);
+                    },
                   ),
                 const SizedBox(height: 10),
                 Card(
@@ -227,7 +229,7 @@ class HomePageStore extends ChangeNotifier {
   bool alreadyWorkout = false;
   bool isLoading = true;
 
-  Future<void> loadValues() async {
+  Future<void> loadValues(String idUser) async {
     try {
       isLoading = true;
       workoutSummary = await getWorkoutSummary(idUser);

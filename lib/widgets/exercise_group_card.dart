@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:my_academy/models/workout_group.dart';
-import '../constants.dart';
 import '../pages/workouts_page.dart';
-import '../stores/workout_group_store.dart';
 import 'snackbar.dart';
 
 class WorkoutGroupCard extends HookConsumerWidget {
@@ -32,7 +29,6 @@ class WorkoutGroupCard extends HookConsumerWidget {
         onTap: () async {
           if (alreadyWorkout) {
             snackBar(context, 'Você já treinou hoje');
-            callback(idUser);
             return;
           }
           await Navigator.push(

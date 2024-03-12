@@ -189,10 +189,10 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
                       });
                       break;
                     case 4:
-                      ConfirmFinishWorkout(context, () async {
+                      ConfirmFinishWorkout(context, widget.workoutGroup, () async {
                         Navigator.of(context).pop(true);
                         widget.callback();
-                      }, widget.workoutGroup.id);
+                      });
                       break;
                   }
                 },
@@ -240,7 +240,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           ? FinishWorkoutButton(
               workoutGroup: widget.workoutGroup,
               callback: () async {
-                Navigator.of(context).pop(true);
+                Navigator.pop(context);
                 widget.callback();
               },
             )

@@ -9,7 +9,7 @@ import '../widgets/exercise_group_card.dart';
 import '../widgets/loading.dart';
 
 class WorkoutGroupPage extends HookConsumerWidget {
-  final int idUser;
+  final String idUser;
   final String? name;
   const WorkoutGroupPage(this.idUser, this.name, {Key? key}) : super(key: key);
 

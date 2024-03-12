@@ -22,9 +22,9 @@ class GymCalendarPage extends HookConsumerWidget {
     final now = DateTime.now();
 
     useEffect(() {
-      store.loadValues();
+      store.loadValues(idUser);
       return null;
-    }, const []);
+    }, [idUser]);
 
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +74,8 @@ class GymCalendarPage extends HookConsumerWidget {
           Expanded(
             child: Consumer(
               builder: (context, ref, _) {
-                final selectedEvents = ref.watch(gymCalendarPageStoreProvider.select((value) => value.selectedEvents));
+                final selectedEvents = ref.watch(gymCalendarPageStoreProvider
+                    .select((value) => value.selectedEvents));
 
                 if (store.isLoading) {
                   return Center(
@@ -94,7 +95,7 @@ class GymCalendarPage extends HookConsumerWidget {
                             builder: (context) => WorkoutsPage(
                               workoutGroup: workoutGroup,
                               callback: () {
-
+                                store.loadValues(idUser);
                               },
                             ),
                           ),
@@ -156,11 +157,12 @@ class GymCalendarPageStore extends ChangeNotifier {
       .where((session) => isSameDate(session.date, selectedDay))
       .toList();
 
-  Future<void> loadValues() async {
+  Future<void> loadValues(idUser) async {
     try {
       isLoading = true;
       initializeDateFormatting('pt_BR');
       workoutSessions = await getWorkoutSessions(idUser);
+      print(workoutSessions);
     } catch (error) {
       // Handle the error
     } finally {

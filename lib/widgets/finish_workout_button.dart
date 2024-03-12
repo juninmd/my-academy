@@ -12,7 +12,7 @@ class FinishWorkoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FloatingActionButton.extended(
         onPressed: () async {
-          await ConfirmFinishWorkout(context, callback, workoutGroup);
+          await ConfirmFinishWorkout(context, workoutGroup, callback);
         },
         label: const Text(
           "Finalizar treino",

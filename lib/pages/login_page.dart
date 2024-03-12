@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_button/sign_in_button.dart';
+import '../constants.dart';
 import 'menus_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class LoginPageState extends State<LoginPage> {
       setState(() {
         _user = event;
         if (_user != null) {
+          idUser = _user!.uid;
           // Usuário já está logado, redirecione para MenusPage
           Navigator.pushReplacement(
             context,
@@ -51,6 +53,8 @@ class LoginPageState extends State<LoginPage> {
           await _auth.signInWithCredential(credential);
 
       print("Signed in: ${authResult.user!.displayName}");
+
+      idUser = authResult.user!.uid;
 
       await Navigator.pushReplacement(
         context,

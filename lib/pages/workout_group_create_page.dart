@@ -10,7 +10,7 @@ import 'workout_serie_edit_page.dart';
 import 'package:collection/collection.dart';
 
 class WorkoutGroupCreatePage extends HookConsumerWidget {
-  final int idUser;
+  final String idUser;
   final int? workoutGroupId;
 
   WorkoutGroupCreatePage(this.idUser, this.workoutGroupId, {Key? key})

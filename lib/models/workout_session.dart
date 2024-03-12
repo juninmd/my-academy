@@ -22,7 +22,7 @@ class WorkoutSession {
         workoutsGroups: json['workoutsGroups'] != null
             ? WorkoutGroup.fromJson(json['workoutsGroups'])
             : null,
-        date: DateTime.parse(json['date']), // Convert string to DateTime object
+        date: DateTime.parse(json['date']).toLocal(), // Convert string to DateTime object
       );
 
   Map<String, dynamic> toJson() => {

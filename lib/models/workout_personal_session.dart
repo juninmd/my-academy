@@ -6,7 +6,7 @@ import 'user.dart';
 class WorkoutPersonalSession {
   int? id;
   int personalsId;
-  int userId;
+  String userId;
   DateTime date;
   Users users;
 
@@ -24,7 +24,7 @@ class WorkoutPersonalSession {
           personalsId: json['personalsId'],
           userId: json['userId'],
           date:
-              DateTime.parse(json['date']), // Convert string to DateTime object
+              DateTime.parse(json['date']).toLocal(), // Convert string to DateTime object
           users: Users.fromJson(json['users']));
 
   Map<String, dynamic> toJson() => {

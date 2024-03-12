@@ -1,4 +1,4 @@
-var idUser = 1;
+var idUser = 'xxx';
 
 String getDateNow() {
   final date = DateTime.now();

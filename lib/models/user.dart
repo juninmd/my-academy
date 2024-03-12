@@ -4,7 +4,7 @@ import 'package:my_academy/models/student.dart';
 
 @JsonSerializable()
 class Users {
-  int id;
+  String id;
   String name;
   String email;
   String photoUrl;
