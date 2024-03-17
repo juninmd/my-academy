@@ -53,11 +53,13 @@ class LoginPage extends HookConsumerWidget {
     }, [FireBaseUser]);
 
     _auth.authStateChanges().listen((User? event) async {
-      print('authStateChanges');
-      print(event);
-      FireBaseUser = event!;
+      FireBaseUser = event;
       await setUser();
       if(FireBaseUser != null){
+        final idTokenResult = await FireBaseUser!.getIdTokenResult();
+        final token = idTokenResult.token;
+        print('token');
+        print(token);
         return redirect(context);
       }
     });
