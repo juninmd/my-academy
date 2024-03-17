@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-User FireBaseUser = User as User;
+User? FireBaseUser;
 
 String getDateNow() {
   final date = DateTime.now();

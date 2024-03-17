@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +28,20 @@ class WorkoutGroupPage extends HookConsumerWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/ia/d.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+              ),
+            ),
+          ),
           Column(
             children: [
               Card(
@@ -54,26 +70,19 @@ class WorkoutGroupPage extends HookConsumerWidget {
               ),
               if (store.workoutGroups.isEmpty && !store.isLoading)
                 Container(
-                  padding: const EdgeInsets.only(top: 40, left: 10, right: 10),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 40),
-                        Image.asset('assets/images/stickers/treino.png'),
-                        SizedBox(height: 10),
-                        Chip(
-                          backgroundColor: Colors.white,
-                          label: Text(
-                            'Você não tem nenhum treino cadastrado :(',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
+                  padding: const EdgeInsets.only(top: 0, left: 10, right: 10),
+                  child: Card(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            'Você ainda não cadastrou algum treino',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 )
@@ -104,9 +113,10 @@ class WorkoutGroupPage extends HookConsumerWidget {
             ),
           if (!store.isLoading)
             Positioned(
-              bottom: 16,
+              bottom: 8,
               right: 16,
-              child: FloatingActionButton(
+              width: 120,
+              child: FloatingActionButton.extended(
                 backgroundColor: Colors.deepPurple,
                 onPressed: () async {
                   await Navigator.push(
@@ -119,7 +129,11 @@ class WorkoutGroupPage extends HookConsumerWidget {
                     store.loadValues(idUser);
                   });
                 },
-                child: Icon(Icons.add),
+                label:const Text(
+                  "Novo treino",
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                icon: const Icon(Icons.add, color: Colors.white),
               ),
             ),
         ],

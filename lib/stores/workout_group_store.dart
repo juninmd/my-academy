@@ -60,7 +60,7 @@ class WorkoutGroupStore extends ChangeNotifier {
     }
     try {
       isLoading = true;
-      workoutGroups = await getWorkoutGroups(FireBaseUser.uid);
+      workoutGroups = await getWorkoutGroups(FireBaseUser!.uid);
       _exercises = await getExercises();
       _filteredExercises = _exercises;
     } catch (error) {

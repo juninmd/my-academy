@@ -97,6 +97,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(exercise.name),
+        backgroundColor: Colors.deepPurple,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -212,7 +213,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: const [
                                   Icon(Icons.add, size: 18),
                                   SizedBox(width: 8),
                                   Text(
@@ -243,7 +244,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: const [
                                   Icon(Icons.delete, size: 18),
                                   SizedBox(width: 8),
                                   Text(
@@ -279,7 +280,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: const [
                               Icon(Icons.delete, size: 18),
                               SizedBox(width: 8),
                               Text(
@@ -307,7 +308,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: const [
                             Icon(Icons.save, size: 18),
                             SizedBox(width: 8),
                             Text(

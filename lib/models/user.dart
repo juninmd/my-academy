@@ -35,4 +35,14 @@ class Users {
                 json['students'].map((student) => Student.fromJson(student)))
             : null,
       );
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'name': name,
+      'photoUrl': photoUrl,
+      'email': email
+    };
+  }
+
 }

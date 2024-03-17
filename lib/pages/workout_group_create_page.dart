@@ -34,6 +34,7 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
         title: Text(workoutGroupId == null ? 'Novo Treino' : 'Editar Treino'),
       ),
       body: Padding(

@@ -28,7 +28,7 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
 
   WorkoutGroup workoutGroup = WorkoutGroup(
       name: '',
-      userId: FireBaseUser.uid,
+      userId: FireBaseUser!.uid,
       image: '',
       workouts: []);
 
@@ -113,15 +113,13 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
   }
 
   Future<void> createWorkoutGroup(idUser) async {
-    List<String> imagePaths = [
-      'assets/images/crucifixo_reto.gif',
-      'assets/images/remada_alta.gif',
-      'assets/images/cadeira_flexora.gif'
-    ];
 
-    final background = getRandomImagePath(imagePaths);
+    var exerciseId = workouts
+        .first.exerciseId;
 
-    workoutGroup.image = background;
+    var image = exercises.firstWhere((element) => element.id == exerciseId).image;
+
+    workoutGroup.image = image;
     workoutGroup.userId = idUser;
     workoutGroup.workouts = workouts;
 

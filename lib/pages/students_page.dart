@@ -27,6 +27,7 @@ class StudentsPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Aulas do dia'),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +114,7 @@ class StudentsPageStore extends ChangeNotifier {
     try {
       isLoading = true;
       students = await getStudentsSessions(
-          FireBaseUser.uid);
+          FireBaseUser!.uid);
     } catch (error) {
       print(error);
     } finally {

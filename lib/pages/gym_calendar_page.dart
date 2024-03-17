@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:my_academy/pages/workouts_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../constants.dart';
@@ -23,13 +22,14 @@ class GymCalendarPage extends HookConsumerWidget {
     final now = DateTime.now();
 
     useEffect(() {
-      store.loadValues(FireBaseUser.uid);
+      store.loadValues(FireBaseUser!.uid);
       return null;
-    }, [FireBaseUser.uid]);
+    }, [FireBaseUser!.uid]);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendário'),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Column(
         children: [
@@ -96,7 +96,7 @@ class GymCalendarPage extends HookConsumerWidget {
                       return ExerciseGroupCard(
                           workoutGroup: workoutGroup,
                           callback: () {
-                            store.loadValues(FireBaseUser.uid);
+                            store.loadValues(FireBaseUser!.uid);
                           },
                           alreadyWorkout: false);
                     },

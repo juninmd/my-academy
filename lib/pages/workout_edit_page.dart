@@ -45,6 +45,7 @@ class _WorkoutEditPageState extends State<WorkoutEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editar Exercício"),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -119,7 +120,7 @@ class _WorkoutEditPageState extends State<WorkoutEditPage> {
               onPressed: _saveWorkout,
               child: const Text("Salvar"),
               style: ElevatedButton.styleFrom(
-                primary: Colors.deepPurple,
+                backgroundColor: Colors.deepPurple,
                 textStyle: const TextStyle(fontSize: 18),
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),

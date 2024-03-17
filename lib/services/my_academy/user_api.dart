@@ -7,20 +7,19 @@ Future<List<Users>> getUsers() async {
   return await httpApi.request<Users>('get', 'users', Users.fromJson);
 }
 
-Future<Users> getUserById(int id) async {
+Future<Users> getUserById(String id) async {
   return await httpApi.request<Users>('get', 'users/${id}', Users.fromJson);
 }
 
-Future<Users> postUser(Users body) async {
-  return await httpApi.request<Users>('post', 'users', Users.fromJson,
-      body: body);
+Future<void> postUser(Users body) async {
+  await httpApi.request<Users>('post', 'users', null, body: body);
 }
 
 Future<Users> putUser(Users body) async {
-  return  await httpApi.request<Users>('post', 'users/${body.id}', Users.fromJson,
-      body: body);
+  return await httpApi
+      .request<Users>('post', 'users/${body.id}', Users.fromJson, body: body);
 }
 
-Future<void> deleteUser(int id) async {
+Future<void> deleteUser(String id) async {
   return await httpApi.request<Users>('delete', 'users/${id}', Users.fromJson);
 }

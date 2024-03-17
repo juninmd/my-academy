@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,9 +13,7 @@ final menusPageStoreProvider =
     ChangeNotifierProvider((ref) => MenusPageStore());
 
 class MenusPage extends HookConsumerWidget {
-  final User user;
-
-  const MenusPage({Key? key, required this.user}) : super(key: key);
+  const MenusPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +27,7 @@ class MenusPage extends HookConsumerWidget {
     final screens = <Widget>[
       if (store.personal != null) const StudentsPage(),
       const HomePage(),
-      WorkoutGroupPage(FireBaseUser.uid, null),
+      WorkoutGroupPage(FireBaseUser!.uid, null),
     ];
 
     return Scaffold(
@@ -91,7 +88,7 @@ class MenusPageStore extends ChangeNotifier {
   Future<void> loadValues() async {
     try {
       isLoading = true;
-      personal = await getPersonalById(FireBaseUser.uid);
+      personal = await getPersonalById(FireBaseUser!.uid);
     } catch (error) {
       print(error);
     } finally {

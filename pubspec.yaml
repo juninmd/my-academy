@@ -114,10 +114,19 @@ flutter:
     - assets/images/bg4.jpg
     - assets/images/bg5.jpg
     - assets/images/bg6.jpg
-    - assets/images/draws/gym-boy.gif
-    - assets/images/stickers/treino.png
-    - assets/images/stickers/treino2.png
     - assets/images/ia/a.jpg
+    - assets/images/ia/b.jpg
+    - assets/images/ia/c.jpg
+    - assets/images/ia/d.jpg
+    - assets/images/ia/e.jpg
+    - assets/images/ia/f.jpg
+    - assets/images/ia/g.jpg
+    - assets/images/ia/h.jpg
+    - assets/images/ia/i.jpg
+    - assets/images/ia/j.jpg
+    - assets/images/ia/k.jpg
+    - assets/images/ia/l.jpg
+    - assets/images/ia/m.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -25,7 +25,6 @@ class _WorkoutDialogState extends State<WorkoutDialog>
     if (widget.workout.workoutSeries!.isNotEmpty) {
       length++;
     }
-    print(length);
     _tabController = TabController(
       length: length,
       vsync: this,
