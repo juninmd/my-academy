@@ -10,7 +10,7 @@ import 'students_page.dart';
 import 'workout_group_page.dart';
 
 final menusPageStoreProvider =
-    ChangeNotifierProvider((ref) => MenusPageStore());
+ChangeNotifierProvider((ref) => MenusPageStore());
 
 class MenusPage extends HookConsumerWidget {
   const MenusPage({Key? key}) : super(key: key);
@@ -36,6 +36,7 @@ class MenusPage extends HookConsumerWidget {
           controller: store.pageController,
           onPageChanged: store.onPageChanged,
           children: screens,
+          physics: const BouncingScrollPhysics(), // Add bouncing effect
         ),
       ),
       bottomNavigationBar: Consumer(
@@ -43,35 +44,44 @@ class MenusPage extends HookConsumerWidget {
           final currentIndex = ref.watch(
               menusPageStoreProvider.select((value) => value.currentIndex));
 
-          return BottomNavigationBar(
-            currentIndex: currentIndex,
-            onTap: (index) => store.onTabSelected(index, context),
-            selectedItemColor:
-                Colors.red,
-            unselectedItemColor: Colors.white,
-            selectedFontSize: 16,
-            selectedLabelStyle: TextStyle(shadows: <Shadow>[
-              Shadow(
-                offset: Offset(1.0, 0.0),
-                blurRadius: 15.0,
-                color: Color.fromARGB(55, 0, 0, 0),
-              ),
-            ]),
-            items: [
-              if (store.personal != null)
-                const BottomNavigationBarItem(
-                  icon: Icon(Icons.note_alt_rounded),
-                  label: 'Aulas',
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300), // Animation duration
+            curve: Curves.easeInOutCubic, // Animation curve
+            decoration: BoxDecoration(
+              color: currentIndex == 0
+                  ? Colors.red // Change color based on index
+                  : Colors.blueGrey, // Change color based on index
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1), // Subtle shadow
+                  blurRadius: 10.0,
+                  spreadRadius: 0.0,
+                  offset: const Offset(0.0, 5.0),
                 ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.fitness_center),
-                label: 'Treinos',
-              ),
-            ],
+              ],
+            ),
+            child: BottomNavigationBar(
+              currentIndex: currentIndex,
+              onTap: (index) => store.onTabSelected(index, context),
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white54,
+              selectedFontSize: 16,
+              items: [
+                if (store.personal != null)
+                  const BottomNavigationBarItem(
+                    icon: Icon(Icons.note_alt_rounded),
+                    label: 'Aulas',
+                  ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.fitness_center),
+                  label: 'Treinos',
+                ),
+              ],
+            ),
           );
         },
       ),

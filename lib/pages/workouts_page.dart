@@ -126,7 +126,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
             ),
             title: Text(widget.workoutGroup.name),
             centerTitle: true,
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.deepPurple,
             toolbarHeight: 100,
             actions: [
               PopupMenuButton<int>(

@@ -55,7 +55,7 @@ class LoginPage extends HookConsumerWidget {
     _auth.authStateChanges().listen((User? event) async {
       FireBaseUser = event;
       await setUser();
-      if(FireBaseUser != null){
+      if (FireBaseUser != null) {
         final idTokenResult = await FireBaseUser!.getIdTokenResult();
         final token = idTokenResult.token;
         print('token');
@@ -85,7 +85,7 @@ class LoginPage extends HookConsumerWidget {
         return redirect(context);
       } catch (error) {
         print("Error signing in with Google: $error");
-        const snackBar = SnackBar(
+        var snackBar = SnackBar(
           content: Text(
               'Erro ao fazer login com o Google. Por favor, tente novamente.'),
           duration: Duration(seconds: 5),
@@ -94,7 +94,7 @@ class LoginPage extends HookConsumerWidget {
       }
     }
 
-    Widget _googleSignInButton(BuildContext context) => Container(
+    Widget _buildGoogleSignInButton(BuildContext context) => Container(
           margin: const EdgeInsets.all(16),
           child: SizedBox(
             height: 50,
@@ -112,44 +112,38 @@ class LoginPage extends HookConsumerWidget {
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/ia/a.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
-          ),
+        children: [
+          // Background image with blur effect
+          _buildBackgroundImage(),
+
+          // Login content centered on screen
           Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 20),
                   Text(
                     'Bem-vindo de volta!',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color:
+                          Colors.white, // Adjust based on background contrast
                     ),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Faça login para continuar',
+                    'Faça login para acessar!',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey[100],
+                      color:
+                          Colors.white70, // Adjust based on background contrast
                     ),
                   ),
-                  SizedBox(height: 20),
-                  _googleSignInButton(context),
+                  SizedBox(height: 40),
+
+                  // Google sign-in button with improved design
+                  _buildGoogleSignInButton(context),
                 ],
               ),
             ),
@@ -158,6 +152,25 @@ class LoginPage extends HookConsumerWidget {
       ),
     );
   }
+
+  Widget _buildBackgroundImage() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/ia/a.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Container(
+          color: Colors.black.withOpacity(0.3),
+        ),
+      ),
+    );
+  }
+
+// Login logic remains the same (refer to original code)
 }
 
 class LoginPageStore extends ChangeNotifier {

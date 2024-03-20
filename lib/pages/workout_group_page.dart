@@ -25,6 +25,10 @@ class WorkoutGroupPage extends HookConsumerWidget {
     }, [idUser]);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Treinos'),
+        backgroundColor: Colors.deepPurple,
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -44,30 +48,6 @@ class WorkoutGroupPage extends HookConsumerWidget {
           ),
           Column(
             children: [
-              Card(
-                color: Colors.deepPurple,
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.fitness_center,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        "Treinos ${name ?? ''}",
-                        style: TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
-                ),
-              ),
               if (store.workoutGroups.isEmpty && !store.isLoading)
                 Container(
                   padding: const EdgeInsets.only(top: 0, left: 10, right: 10),
