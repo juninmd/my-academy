@@ -29,94 +29,84 @@ class WorkoutGroupPage extends HookConsumerWidget {
         title: const Text('Treinos'),
         backgroundColor: Colors.deepPurple,
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/ia/d.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-              ),
-            ),
-          ),
-          Column(
-            children: [
-              if (store.workoutGroups.isEmpty && !store.isLoading)
-                Container(
-                  padding: const EdgeInsets.only(top: 0, left: 10, right: 10),
-                  child: Card(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'Você ainda não cadastrou algum treino',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+
+            Column(
+              children: [
+                if (store.workoutGroups.isEmpty && !store.isLoading)
+                  Container(
+                    padding: const EdgeInsets.only(top: 0, left: 10, right: 10),
+                    child: Card(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'Você ainda não cadastrou algum treino',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              else // Se houver treinos cadastrados, adiciona um Expanded para ocupar o espaço restante
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: store.workoutGroups.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final workoutGroup = store.workoutGroups[index];
-                      return ExerciseGroupCard(
-                        alreadyWorkout: false,
-                        workoutGroup: workoutGroup,
-                        callback: () {
-                          store.loadValues(idUser);
-                        },
-                      );
-                    },
-                  ),
-                ),
-            ],
-          ),
-          if (store.isLoading) // Adiciona o widget de loading sobreposto
-            Container(
-              color: Colors.black.withOpacity(0.9),
-              child: Center(
-                child: LoadingWidget(),
-              ),
-            ),
-          if (!store.isLoading)
-            Positioned(
-              bottom: 8,
-              right: 16,
-              width: 120,
-              child: FloatingActionButton.extended(
-                backgroundColor: Colors.deepPurple,
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          WorkoutGroupCreatePage(idUser, null),
+                  )
+                else // Se houver treinos cadastrados, adiciona um Expanded para ocupar o espaço restante
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: store.workoutGroups.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final workoutGroup = store.workoutGroups[index];
+                        return ExerciseGroupCard(
+                          alreadyWorkout: false,
+                          workoutGroup: workoutGroup,
+                          callback: () {
+                            store.loadValues(idUser);
+                          },
+                        );
+                      },
                     ),
-                  ).then((_) {
-                    store.loadValues(idUser);
-                  });
-                },
-                label:const Text(
-                  "Novo treino",
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-                icon: const Icon(Icons.add, color: Colors.white),
-              ),
+                  ),
+              ],
             ),
-        ],
+            if (store.isLoading) // Adiciona o widget de loading sobreposto
+              Container(
+                color: Colors.black.withOpacity(0.9),
+                child: Center(
+                  child: LoadingWidget(),
+                ),
+              ),
+            if (!store.isLoading)
+              Positioned(
+                bottom: 8,
+                right: 16,
+                width: 120,
+                child: FloatingActionButton.extended(
+                  backgroundColor: Colors.deepPurple,
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            WorkoutGroupCreatePage(idUser, null),
+                      ),
+                    ).then((_) {
+                      store.loadValues(idUser);
+                    });
+                  },
+                  label:const Text(
+                    "Novo treino",
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                  icon: const Icon(Icons.add, color: Colors.white),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
