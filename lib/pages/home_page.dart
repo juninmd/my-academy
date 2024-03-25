@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,6 +12,7 @@ import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
 import 'gym_calendar_page.dart';
+import 'login_page.dart';
 
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());
 
@@ -28,9 +30,28 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Treino do dia'),
-        backgroundColor: Colors.deepPurple,
-      ),
+          title: const Text('Treino do dia'),
+          backgroundColor: Colors.deepPurple,
+          actions: [
+            PopupMenuButton<int>(
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                const PopupMenuItem<int>(
+                  value: 1,
+                  child: ListTile(
+                    leading: Icon(Icons.person_off),
+                    title: Text('Fazer Log-out'),
+                  ),
+                ),
+              ],
+              onSelected: (int value) async {
+                switch (value) {
+                  case 1:
+                    store.logout(context);
+                    break;
+                }
+              },
+            )
+          ]),
       body: AnimatedContainer(
         duration: const Duration(milliseconds: 500), // Animation duration
         curve: Curves.easeInOutCubic, // Animation curve
@@ -39,20 +60,6 @@ class HomePage extends HookConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: Stack(
               children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/ia/l.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ),
-                ),
                 Center(
                   child: Column(
                     children: [
@@ -61,7 +68,10 @@ class HomePage extends HookConsumerWidget {
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            colors: [Colors.black.withOpacity(0.1), Colors.black],
+                            colors: [
+                              Colors.black.withOpacity(0.1),
+                              Colors.black
+                            ],
                           ),
                         ),
                       ),
@@ -81,11 +91,10 @@ class HomePage extends HookConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "${FireBaseUser!.displayName}",
-                                    style: TextStyle(
+                                    '${FireBaseUser!.displayName}',
+                                    style: const TextStyle(
                                         color: Colors.white, fontSize: 18),
                                   ),
-                                  // Adicione outros widgets aqui, se necessário
                                 ],
                               )
                             ],
@@ -102,7 +111,8 @@ class HomePage extends HookConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (store.workoutSummary?.workoutGroupOfDay == null)
+                              if (store.workoutSummary?.workoutGroupOfDay ==
+                                  null)
                                 Container(
                                   padding: const EdgeInsets.only(
                                       top: 0, left: 10, right: 10),
@@ -142,7 +152,8 @@ class HomePage extends HookConsumerWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -172,8 +183,8 @@ class HomePage extends HookConsumerWidget {
                                               null)
                                             const Text(
                                               'Nenhum',
-                                              style:
-                                                  TextStyle(color: Colors.white),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
                                         ],
                                       ),
@@ -216,25 +227,6 @@ class HomePage extends HookConsumerWidget {
                                                 ? 'Você não realizou algum treino ainda'
                                                 : 'Sequência de ${store.exerciseFrequency} dia(s)',
                                             style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const Icon(
-                                            Icons.info,
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            'Faça os exercícios com supervisão de um profissional',
-                                            style: const TextStyle(
-                                              fontSize: 11,
                                               color: Colors.white,
                                             ),
                                           ),
@@ -285,6 +277,16 @@ class HomePageStore extends ChangeNotifier {
   bool alreadyWorkout = false;
   bool isLoading = true;
 
+  logout(context) {
+    FireBaseUser = null;
+    final auth = FirebaseAuth.instance;
+    auth.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   Future<void> loadValues(String idUser) async {
     try {
       isLoading = true;
@@ -302,6 +304,9 @@ class HomePageStore extends ChangeNotifier {
         }
       }
     } catch (error) {
+      workoutSummary = null;
+      exerciseFrequency = 0;
+      alreadyWorkout = false;
       print(error);
     } finally {
       isLoading = false;

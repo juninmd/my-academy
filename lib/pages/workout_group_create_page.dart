@@ -23,6 +23,8 @@ class WorkoutGroupCreatePage extends HookConsumerWidget {
     useEffect(() {
       if (workoutGroupId != null) {
         store.loadWorkoutGroup(workoutGroupId!);
+      } else {
+        store.reset();
       }
       store.loadValues(idUser);
       return null;

@@ -97,7 +97,7 @@ class LoginPage extends HookConsumerWidget {
     Widget _buildGoogleSignInButton(BuildContext context) => Container(
           margin: const EdgeInsets.all(16),
           child: SizedBox(
-            height: 50,
+            height: 40,
             child: SignInButton(
               Buttons.google,
               text: "Entrar com Google",
@@ -115,36 +115,80 @@ class LoginPage extends HookConsumerWidget {
         children: [
           // Background image with blur effect
           _buildBackgroundImage(),
-
-          // Login content centered on screen
-          Center(
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Bem-vindo de volta!',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          Colors.white, // Adjust based on background contrast
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Faça login para acessar!',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color:
-                          Colors.white70, // Adjust based on background contrast
-                    ),
-                  ),
-                  SizedBox(height: 40),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          children: [
+                            Text(
+                              'My Academy',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                Colors.white, // Adjust based on background contrast
+                              ),
+                            ),
 
-                  // Google sign-in button with improved design
-                  _buildGoogleSignInButton(context),
-                ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Seja muito bem vindo!',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                        Colors.white70, // Adjust based on background contrast
+                      ),
+                    ),
+                    // Google sign-in button with improved design
+                    _buildGoogleSignInButton(context),
+                    Card(
+                      color: Colors.deepPurple,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            children: const [
+                              Icon(
+                                Icons.info,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'Realize os exercícios com supervisão de um profissional',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

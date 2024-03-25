@@ -27,10 +27,7 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
   List<Exercise> get filteredExercises => _filteredExercises;
 
   WorkoutGroup workoutGroup = WorkoutGroup(
-      name: '',
-      userId: FireBaseUser!.uid,
-      image: '',
-      workouts: []);
+      name: '', userId: FireBaseUser!.uid, image: '', workouts: []);
 
   bool isLoading = true;
 
@@ -73,7 +70,8 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
       if (workouts.isNotEmpty) {
         var workout = workouts
             .firstWhereOrNull((element) => element.exerciseId == exerciseId);
-        seriesList = workout?.workoutSeries ?? [WorkoutSeries(repetitions: 15, weight: 10, rest: 60)];
+        seriesList = workout?.workoutSeries ??
+            [WorkoutSeries(repetitions: 15, weight: 10, rest: 60)];
         methodId = workout?.methodId;
         return;
       }
@@ -82,7 +80,8 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
     } else {
       var workout = workouts
           .firstWhereOrNull((element) => element.exerciseId == exerciseId);
-      seriesList = workout?.workoutSeries ?? [WorkoutSeries(repetitions: 15, weight: 10, rest: 60)];
+      seriesList = workout?.workoutSeries ??
+          [WorkoutSeries(repetitions: 15, weight: 10, rest: 60)];
     }
     try {
       isLoading = true;
@@ -108,16 +107,18 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
     }
 
     workouts.add(Workout(
-        exerciseId: exerciseId, methodId: methodId, id: workoutId, workoutSeries: workoutSeries));
+        exerciseId: exerciseId,
+        methodId: methodId,
+        id: workoutId,
+        workoutSeries: workoutSeries));
     notify();
   }
 
   Future<void> createWorkoutGroup(idUser) async {
+    var exerciseId = workouts.first.exerciseId;
 
-    var exerciseId = workouts
-        .first.exerciseId;
-
-    var image = exercises.firstWhere((element) => element.id == exerciseId).image;
+    var image =
+        exercises.firstWhere((element) => element.id == exerciseId).image;
 
     workoutGroup.image = image;
     workoutGroup.userId = idUser;
@@ -130,15 +131,11 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
   }
 
   Future<void> updateWorkoutGroup(idUser) async {
-    List<String> imagePaths = [
-      'assets/images/crucifixo_reto.gif',
-      'assets/images/remada_alta.gif',
-      'assets/images/cadeira_flexora.gif'
-    ];
+    var exerciseId = workouts.first.exerciseId;
+    var image =
+        exercises.firstWhere((element) => element.id == exerciseId).image;
 
-    final background = getRandomImagePath(imagePaths);
-
-    workoutGroup.image = background;
+    workoutGroup.image = image;
     workoutGroup.userId = idUser;
     workoutGroup.workouts = workouts;
 
@@ -183,6 +180,27 @@ class WorkoutGroupCreateStore extends ChangeNotifier {
       isLoading = true;
       workoutGroup = await getWorkoutGroupById(workoutGroupId);
       workouts = workoutGroup.workouts!;
+    } catch (error) {
+      print(error);
+// Handle the error
+    } finally {
+      isLoading = false;
+      notify();
+    }
+  }
+
+  Future<void> reset() async {
+    try {
+      isLoading = true;
+      workoutGroup = WorkoutGroup(
+          name: '', userId: FireBaseUser!.uid, image: '', workouts: []);
+      workouts = [];
+      _filteredExercises = [];
+      _exercises = [];
+      seriesList = [];
+      workouts = [];
+      methods = [];
+      methodId = null;
     } catch (error) {
       print(error);
 // Handle the error

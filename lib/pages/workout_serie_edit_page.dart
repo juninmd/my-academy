@@ -94,6 +94,11 @@ class WorkoutSerieEdit extends HookConsumerWidget {
       store.notify();
     }
 
+    void removeWorkout(int workoutId) {
+      store.workouts.removeWhere((element) => element.id == workoutId);
+      store.notify();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(exercise.name),
@@ -271,7 +276,7 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                       flex: 2,
                       child: ElevatedButton(
                           onPressed: () {
-                            saveSeries();
+                            removeWorkout(workoutId!);
                             Navigator.pop(context); // Close the bottom sheet
                           },
                           style: ButtonStyle(
@@ -282,11 +287,11 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const [
                               Icon(Icons.delete, size: 18),
-                              SizedBox(width: 8),
+                              SizedBox(width: 6),
                               Text(
                                 'Apagar Exercício',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -294,9 +299,9 @@ class WorkoutSerieEdit extends HookConsumerWidget {
                             ],
                           )),
                     ),
-                  if (workoutId != null) const SizedBox(width: 8),
+                  if (workoutId != null) const SizedBox(width: 6),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: ElevatedButton(
                         onPressed: () {
                           saveSeries();

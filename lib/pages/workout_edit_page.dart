@@ -22,9 +22,6 @@ class _WorkoutEditPageState extends State<WorkoutEditPage> {
   @override
   void initState() {
     super.initState();
-    // sets = widget.workout.exercise!sets;
-    // reps = widget.workout.exercise!reps;
-    // weight = widget.workout.exercise!weight;
   }
 
   void _saveWorkout() {

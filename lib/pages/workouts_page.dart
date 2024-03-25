@@ -37,6 +37,8 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
   loadValues() async {
     setState(() {
       isLoading = true;
+      _workouts = [];
+      _workoutsBase = [];
     });
 
     _searchController = TextEditingController();

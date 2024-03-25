@@ -24,10 +24,42 @@ class WorkoutGroupPage extends HookConsumerWidget {
       return null;
     }, [idUser]);
 
+    newWorkout() async {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) =>
+              WorkoutGroupCreatePage(idUser, null),
+        ),
+      ).then((_) {
+        store.loadValues(idUser);
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Treinos'),
         backgroundColor: Colors.deepPurple,
+          actions: [
+            PopupMenuButton<int>(
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                const PopupMenuItem<int>(
+                  value: 1,
+                  child: ListTile(
+                    leading: Icon(Icons.add),
+                    title: Text('Novo treino'),
+                  ),
+                ),
+              ],
+              onSelected: (int value) async {
+                switch (value) {
+                  case 1:
+                    await newWorkout();
+                    break;
+                }
+              },
+            )
+          ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -80,24 +112,14 @@ class WorkoutGroupPage extends HookConsumerWidget {
                   child: LoadingWidget(),
                 ),
               ),
-            if (!store.isLoading)
+            if (!store.isLoading && store.workoutGroups.isEmpty)
               Positioned(
                 bottom: 8,
                 right: 16,
                 width: 120,
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.deepPurple,
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            WorkoutGroupCreatePage(idUser, null),
-                      ),
-                    ).then((_) {
-                      store.loadValues(idUser);
-                    });
-                  },
+                  onPressed: newWorkout,
                   label:const Text(
                     "Novo treino",
                     style: TextStyle(color: Colors.white, fontSize: 12),
@@ -110,4 +132,6 @@ class WorkoutGroupPage extends HookConsumerWidget {
       ),
     );
   }
+
 }
+
