@@ -22,7 +22,7 @@ class GymCalendarPage extends HookConsumerWidget {
 
     useEffect(() {
       initializeDateFormatting('pt_BR');
-      store.loadValues(FireBaseUser!.uid);
+      store.loadValues(FireBaseUser!.uid, now.month, now.year);
       return null;
     }, [FireBaseUser!.uid]);
 
@@ -48,9 +48,11 @@ class GymCalendarPage extends HookConsumerWidget {
               calendarBuilders: CalendarBuilders(
                 dowBuilder: (context, day) {
                   if (day.weekday == DateTime.sunday) {
-                    return Text(
-                      'Dom',
-                      style: TextStyle(color: Colors.deepPurple),
+                    return Center(
+                      child: Text(
+                        'Dom',
+                        style: TextStyle(color: Colors.deepPurple),
+                      ),
                     );
                   }
                   return null;
@@ -107,7 +109,7 @@ class GymCalendarPage extends HookConsumerWidget {
                     return ExerciseGroupCard(
                         workoutGroup: workoutGroup,
                         callback: () {
-                          store.loadValues(FireBaseUser!.uid);
+                          store.loadValues(FireBaseUser!.uid, now.month, now.year);
                         },
                         alreadyWorkout: false);
                   },
@@ -116,7 +118,7 @@ class GymCalendarPage extends HookConsumerWidget {
                     childAspectRatio: 1,
                     crossAxisSpacing: 1,
                     mainAxisSpacing: 1,
-                    mainAxisExtent:150,
+                    mainAxisExtent: 150,
                   ),
                 ),
               ),
@@ -137,10 +139,10 @@ class GymCalendarPageStore extends ChangeNotifier {
       .where((session) => isSameDate(session.date, selectedDay))
       .toList();
 
-  Future<void> loadValues(idUser) async {
+  Future<void> loadValues(idUser, month, year) async {
     try {
       isLoading = true;
-      workoutSessions = await getWorkoutSessions(idUser);
+      workoutSessions = await getWorkoutSessions(idUser, month, year);
       totalWorkoutsThisMonth = workoutSessions
           .where((session) => session.date.month == selectedDay.month)
           .length;
@@ -157,8 +159,9 @@ class GymCalendarPageStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setMonth(DateTime day) {
+  Future<void> setMonth(DateTime day) async {
     selectedDay = day;
+    workoutSessions = await getWorkoutSessions(FireBaseUser!.uid, day.month, day.year);
     totalWorkoutsThisMonth = workoutSessions
         .where((session) => session.date.month == day.month)
         .length;

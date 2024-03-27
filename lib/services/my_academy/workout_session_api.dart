@@ -4,9 +4,9 @@ import '../my_academy_api.dart';
 
 var httpApi = HttpApi();
 
-getWorkoutSessions(idUser) async {
+getWorkoutSessions(idUser, month, year) async {
   return await httpApi.request<WorkoutSession>(
-      'get', 'workouts-sessions/${idUser}', WorkoutSession.fromJson);
+      'get', 'workouts-sessions/${idUser}?month=${month}&year=${year}', WorkoutSession.fromJson);
 }
 
 Future<WorkoutSession> postWorkoutSession(WorkoutSession body) async {
