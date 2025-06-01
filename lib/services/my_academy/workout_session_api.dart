@@ -22,8 +22,7 @@ Future<WorkoutSession> putWorkoutSession(WorkoutSession body) async {
 }
 
 Future<void> deleteWorkoutSession(int id) async {
-  return await httpApi.request<WorkoutSession>(
-      'put', 'workouts-sessions/${id}', null);
+  await httpApi.request('delete', 'workouts-sessions/${id}', null);
 }
 
 Future<WorkoutSummary> getWorkoutSummary(String idUser) async {

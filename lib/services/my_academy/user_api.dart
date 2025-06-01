@@ -21,7 +21,7 @@ Future<void> postUser(Users body) async {
 
 Future<Users> putUser(Users body) async {
   return await httpApi
-      .request<Users>('post', 'users/${body.id}', Users.fromJson, body: body);
+      .request<Users>('put', 'users/${body.id}', Users.fromJson, body: body);
 }
 
 Future<void> deleteUser(String id) async {
