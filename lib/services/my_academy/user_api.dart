@@ -11,6 +11,10 @@ Future<Users> getUserById(String id) async {
   return await httpApi.request<Users>('get', 'users/${id}', Users.fromJson);
 }
 
+Future<Users> getUserByEmail(String email) async {
+  return await httpApi.request<Users>('get', 'users/email/${email}', Users.fromJson);
+}
+
 Future<void> postUser(Users body) async {
   await httpApi.request<Users>('post', 'users', null, body: body);
 }

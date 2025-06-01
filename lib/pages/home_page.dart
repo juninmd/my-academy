@@ -13,6 +13,8 @@ import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
 import 'gym_calendar_page.dart';
 import 'login_page.dart';
+import 'settings_page.dart';
+import 'students_page.dart';
 
 final homePageStoreProvider = ChangeNotifierProvider((ref) => HomePageStore());
 
@@ -38,15 +40,45 @@ class HomePage extends HookConsumerWidget {
                 const PopupMenuItem<int>(
                   value: 1,
                   child: ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text('Configurações'),
+                  ),
+                ),
+                const PopupMenuItem<int>(
+                  value: 2,
+                  child: ListTile(
                     leading: Icon(Icons.person_off),
                     title: Text('Fazer Log-out'),
+                  ),
+                ),
+                const PopupMenuItem<int>(
+                  value:3,
+                  child: ListTile(
+                    leading: Icon(Icons.people_alt_rounded),
+                    title: Text('Alunos'),
                   ),
                 ),
               ],
               onSelected: (int value) async {
                 switch (value) {
                   case 1:
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
+                      ),
+                    );
+                    break;
+                  case 2:
                     store.logout(context);
+                    break;
+                  case 3:
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StudentsPage(),
+                      ),
+                    );
                     break;
                 }
               },
@@ -293,7 +325,6 @@ class HomePageStore extends ChangeNotifier {
       workoutSummary = await getWorkoutSummary(idUser);
       if (workoutSummary != null) {
         exerciseFrequency = workoutSummary!.counter;
-        me = workoutSummary!.user!;
         personal = workoutSummary?.personal;
         if (workoutSummary!.lastSession != null) {
           lastSession = workoutSummary!.lastSession!;

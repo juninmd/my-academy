@@ -9,12 +9,10 @@ class WorkoutSummary {
   WorkoutSession? lastSession;
   int counter;
   WorkoutGroup? workoutGroupOfDay;
-  Users? user;
   Users? personal;
 
   WorkoutSummary({
     this.lastSession,
-    this.user,
     this.personal,
     required this.counter,
     this.workoutGroupOfDay,
@@ -28,9 +26,6 @@ class WorkoutSummary {
         workoutGroupOfDay: json['workoutGroupOfDay'] != null
             ? WorkoutGroup.fromJson(json['workoutGroupOfDay'])
             : null,
-    user: json['user'] != null
-        ? Users.fromJson(json['user'])
-        : null,
     personal: json['personal'] != null
         ? Users.fromJson(json['personal'])
         : null,

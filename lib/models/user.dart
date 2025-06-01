@@ -4,19 +4,21 @@ import 'package:my_academy/models/student.dart';
 
 @JsonSerializable()
 class Users {
-  String id;
-  String name;
+  String? id;
+  String? name;
   String email;
-  String photoUrl;
+  String? photoUrl;
+  String? telegramId;
   List<Personal>? personals;
   List<Student>? students;
   // WorkoutsGroups workoutsGroups;
 
   Users({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
     required this.email,
-    required this.photoUrl,
+    this.photoUrl,
+    this.telegramId,
     this.personals,
     this.students,
   });
@@ -44,5 +46,4 @@ class Users {
       'email': email
     };
   }
-
 }

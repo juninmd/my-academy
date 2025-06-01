@@ -1,50 +1,34 @@
 import "package:json_annotation/json_annotation.dart";
-import 'package:my_academy/models/personal.dart';
-import 'package:my_academy/models/student.dart';
 
 @JsonSerializable()
-class Users {
-  String id;
-  String name;
-  String email;
-  String photoUrl;
-  String? telegramId;
-  List<Personal>? personals;
-  List<Student>? students;
-  // WorkoutsGroups workoutsGroups;
+class Schedule {
+  int? id;
+  int dayOfWeek;
+  String time;
+  int personalsId;
 
-  Users({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.photoUrl,
-    this.telegramId,
-    this.personals,
-    this.students,
+  Schedule({
+    this.id,
+    required this.dayOfWeek,
+    required this.time,
+    required this.personalsId,
   });
 
-  factory Users.fromJson(Map<String, dynamic> json) => Users(
-        id: json['id'],
-        name: json['name'],
-        email: json['email'],
-        photoUrl: json['photoUrl'],
-        personals: json['personals'] != null
-            ? List<Personal>.from(json['personals']
-                .map((personal) => Personal.fromJson(personal)))
-            : null,
-        students: json['students'] != null
-            ? List<Student>.from(
-                json['students'].map((student) => Student.fromJson(student)))
-            : null,
-      );
+  factory Schedule.fromJson(Map<String, dynamic> json) {
+    return Schedule(
+      id: json['id'],
+      dayOfWeek: json['dayOfWeek'],
+      time: json['time'],
+      personalsId: json['personalsId'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'name': name,
-      'photoUrl': photoUrl,
-      'email': email
+      'dayOfWeek': dayOfWeek,
+      'time': time,
+      'personalsId': personalsId
     };
   }
-
 }

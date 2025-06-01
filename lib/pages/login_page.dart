@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,8 +19,8 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final LoginPageStore store = ref.watch(loginPageStoreProvider);
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final store = ref.watch(loginPageStoreProvider);
+    final auth = FirebaseAuth.instance;
 
     void redirect(BuildContext context) {
       Navigator.pushReplacement(
@@ -30,6 +31,10 @@ class LoginPage extends HookConsumerWidget {
 
     Future<User?> setUser() async {
       try {
+        // To change it after initialization, use `setPersistence()`:
+        await auth.setPersistence(Persistence.LOCAL);
+
+        await Firebase.initializeApp();
         if (FireBaseUser == null) {
           return null;
         }
@@ -52,7 +57,7 @@ class LoginPage extends HookConsumerWidget {
       return null;
     }, [FireBaseUser]);
 
-    _auth.authStateChanges().listen((User? event) async {
+    auth.authStateChanges().listen((User? event) async {
       FireBaseUser = event;
       await setUser();
       if (FireBaseUser != null) {
@@ -130,8 +135,8 @@ class LoginPage extends HookConsumerWidget {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color:
-                              Colors.black87, // Adjust based on background contrast
+                              color: Colors
+                                  .black87, // Adjust based on background contrast
                             ),
                           ),
                         ],
@@ -145,12 +150,10 @@ class LoginPage extends HookConsumerWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: const [
                               Icon(
                                 Icons.info,

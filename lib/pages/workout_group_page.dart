@@ -12,8 +12,7 @@ import '../widgets/loading.dart';
 
 class WorkoutGroupPage extends HookConsumerWidget {
   final String idUser;
-  final String? name;
-  const WorkoutGroupPage(this.idUser, this.name, {Key? key}) : super(key: key);
+  const WorkoutGroupPage(this.idUser,  {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

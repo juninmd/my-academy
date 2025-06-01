@@ -1,3 +1,4 @@
+import '../../dto/student-dto.dart';
 import '../../models/personal.dart';
 import '../my_academy_api.dart';
 
@@ -24,4 +25,13 @@ Future<Personal> putPersonal(Personal body)  async{
 
 Future<void> deletePersonal(String id) async {
   return await httpApi.request<Personal>('delete', 'personals/${id}', null);
+}
+
+Future<List<StudentDto>> getStudents(personalId) async{
+  return await httpApi.request<StudentDto>('get', 'personals/${personalId}/students', StudentDto.fromJson);
+}
+
+Future<Personal> postStudents(personalId, StudentDto body) async {
+  return await httpApi.request<Personal>('post', 'personals/${personalId}/students', null,
+      body: body);
 }

@@ -27,7 +27,7 @@ class MenusPage extends HookConsumerWidget {
     final screens = <Widget>[
       if (store.personal != null) const StudentsPage(),
       const HomePage(),
-      WorkoutGroupPage(FireBaseUser!.uid, null),
+      WorkoutGroupPage(FireBaseUser!.uid),
     ];
 
     return Scaffold(
