@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final darkTheme = Theme.of(context).brightness == Brightness.dark;
@@ -17,7 +19,7 @@ class LoadingWidget extends StatelessWidget {
               ),
               strokeWidth: 4,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Carregando',
               style: TextStyle(

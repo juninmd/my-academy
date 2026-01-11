@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CustomTextController extends TextEditingController {
-
   CustomTextController({required String text}) {
     this.text = text;
   }
@@ -9,9 +8,9 @@ class CustomTextController extends TextEditingController {
   @override
   set text(String newText) {
     value = value.copyWith(
-        text: newText,
-        selection: TextSelection.collapsed(offset: newText.length),
-        composing: TextRange.empty
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+      composing: TextRange.empty,
     );
   }
 }

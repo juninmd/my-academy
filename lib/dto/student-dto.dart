@@ -1,21 +1,20 @@
-import "package:json_annotation/json_annotation.dart";
+import 'package:json_annotation/json_annotation.dart';
 
-import '../models/schedule.dart';
-import '../models/user.dart';
+import '../features/students/domain/entities/student_entity.dart';
 
 @JsonSerializable()
 class StudentDto {
-  Users student;
-  List<Schedule> schedule;
+  StudentDto({required this.student, required this.schedule});
 
-  StudentDto({
-    required this.student,
-    required this.schedule,
-  });
-
-  factory StudentDto.fromJson(Map<String, dynamic> json) {
-    return StudentDto(
-        student: Users.fromJson(json['student']),
-        schedule: List<Schedule>.from(json['schedule'].map((schedule) => Schedule.fromJson(schedule))));
-  }
+  factory StudentDto.fromJson(Map<String, dynamic> json) => StudentDto(
+    student: StudentEntity(
+      id: json['student']['id'] ?? '',
+      name: json['student']['name'] ?? '',
+      email: json['student']['email'] ?? '',
+      photoUrl: json['student']['photoUrl'],
+    ),
+    schedule: json['schedule'] != null ? [] : [],
+  );
+  StudentEntity student;
+  List<dynamic> schedule;
 }
