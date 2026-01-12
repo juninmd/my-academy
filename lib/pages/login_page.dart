@@ -2,29 +2,59 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 import '../constants.dart';
 import '../models/user.dart';
 import '../services/my_academy/user_api.dart';
+import '../theme/app_theme.dart';
 import 'menus_page.dart';
 
-final loginPageStoreProvider =
-    ChangeNotifierProvider((ref) => LoginPageStore());
+final loginPageStoreProvider = ChangeNotifierProvider(
+  (ref) => LoginPageStore(),
+);
 
 class LoginPage extends HookConsumerWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final LoginPageStore store = ref.watch(loginPageStoreProvider);
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final animationController = useAnimationController(
+      duration: const Duration(milliseconds: 1500),
+    );
+    final fadeAnimation = useAnimation(
+      CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+    );
+    final slideAnimation = useMemoized(
+      () =>
+          Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+        CurvedAnimation(
+          parent: animationController,
+          curve: Curves.easeOutCubic,
+        ),
+      ),
+      [animationController],
+    );
+
+    useEffect(() {
+      animationController.forward();
+      return null;
+    }, const []);
 
     void redirect(BuildContext context) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const MenusPage()),
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const MenusPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
       );
     }
 
@@ -37,10 +67,11 @@ class LoginPage extends HookConsumerWidget {
         return FireBaseUser;
       } catch (err) {
         final user = Users(
-            id: FireBaseUser!.uid,
-            photoUrl: FireBaseUser!.photoURL!,
-            email: FireBaseUser!.email!,
-            name: FireBaseUser!.displayName!);
+          id: FireBaseUser!.uid,
+          photoUrl: FireBaseUser!.photoURL!,
+          email: FireBaseUser!.email!,
+          name: FireBaseUser!.displayName!,
+        );
 
         await postUser(user);
         return FireBaseUser;
@@ -52,26 +83,28 @@ class LoginPage extends HookConsumerWidget {
       return null;
     }, [FireBaseUser]);
 
-    _auth.authStateChanges().listen((User? event) async {
+    auth.authStateChanges().listen((User? event) async {
       FireBaseUser = event;
       await setUser();
       if (FireBaseUser != null) {
         final idTokenResult = await FireBaseUser!.getIdTokenResult();
         final token = idTokenResult.token;
-        print('token');
-        print(token);
+        debugPrint('Token: $token');
       }
     });
 
-    Future<void> _handleSignIn(BuildContext context) async {
+    Future<void> handleSignIn(BuildContext context) async {
       try {
         if (FireBaseUser != null) {
           return redirect(context);
         }
 
         final googleSignInAccount = await store.googleSignIn.signIn();
+        if (googleSignInAccount == null) {
+          throw Exception('Google Sign In was cancelled');
+        }
         final googleSignInAuthentication =
-            await googleSignInAccount?.authentication;
+            await googleSignInAccount.authentication;
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication!.accessToken,
@@ -83,93 +116,216 @@ class LoginPage extends HookConsumerWidget {
         FireBaseUser = authResult.user;
         return redirect(context);
       } catch (error) {
-        print("Error signing in with Google: $error");
-        var snackBar = SnackBar(
-          content: Text(
-              'Erro ao fazer login com o Google. Por favor, tente novamente.'),
-          duration: Duration(seconds: 5),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        debugPrint("Error signing in with Google: $error");
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                'Erro ao fazer login com o Google. Por favor, tente novamente.',
+              ),
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: AppTheme.error,
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
       }
     }
 
-    Widget _buildGoogleSignInButton(BuildContext context) => Container(
-          margin: const EdgeInsets.all(16),
-          child: SizedBox(
-            height: 40,
-            child: SignInButton(
-              Buttons.google,
-              text: "Entrar com Google",
-              onPressed: () => _handleSignIn(context),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Animated gradient background
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF1A1A2E),
+                  Color(0xFF16213E),
+                  Color(0xFF0F0F1A),
+                ],
               ),
             ),
           ),
-        );
-
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Stack(
-        children: [
-          // Background image with blur effect
-          _buildBackgroundImage(context),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Text(
-                            'My Academy',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color:
-                              Colors.black87, // Adjust based on background contrast
-                            ),
+          // Background image with blur
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/ia/a.jpg',
+              fit: BoxFit.cover,
+              color: Colors.black.withValues(alpha: 0.7),
+              colorBlendMode: BlendMode.darken,
+            ),
+          ),
+          // Blur overlay
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+              child: Container(
+                color: AppTheme.backgroundDark.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+          // Content
+          SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: SlideTransition(
+                  position: slideAnimation,
+                  child: FadeTransition(
+                    opacity: AlwaysStoppedAnimation(fadeAnimation),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Logo/Title
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: AppTheme.accentGradient,
+                            boxShadow: AppTheme.glowShadow,
                           ),
-                        ],
-                      ),
-                    ),
-                    _buildGoogleSignInButton(context),
-                    Card(
-                      color: Colors.deepPurple,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: const [
-                              Icon(
-                                Icons.info,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 4),
+                          child: const Icon(
+                            Icons.fitness_center_rounded,
+                            size: 60,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'My Academy',
+                          style: AppTheme.headingLarge.copyWith(
+                            fontSize: 36,
+                            letterSpacing: -1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Seu treino na palma da mão',
+                          style: AppTheme.bodyMedium.copyWith(
+                            color: AppTheme.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 48),
+                        // Glassmorphism card
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: GlassDecoration(
+                            borderRadius: AppTheme.radiusXLarge,
+                          ),
+                          child: Column(
+                            children: [
+                              Text('Bem-vindo!', style: AppTheme.headingSmall),
+                              const SizedBox(height: 8),
                               Text(
-                                'Realize os exercícios com supervisão de um profissional',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.white,
+                                'Entre com sua conta Google para continuar',
+                                style: AppTheme.bodySmall,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 24),
+                              // Custom styled sign-in button
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () => handleSignIn(context),
+                                  borderRadius: BorderRadius.circular(
+                                    AppTheme.radiusMedium,
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                      vertical: 14,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(
+                                        AppTheme.radiusMedium,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.network(
+                                          'https://www.google.com/favicon.ico',
+                                          height: 24,
+                                          width: 24,
+                                          errorBuilder:
+                                              (context, error, stackTrace) =>
+                                                  const Icon(
+                                            Icons.g_mobiledata,
+                                            size: 24,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        const Text(
+                                          'Entrar com Google',
+                                          style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 32),
+                        // Info card
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppTheme.info.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(
+                              AppTheme.radiusMedium,
+                            ),
+                            border: Border.all(
+                              color: AppTheme.info.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.info_outline_rounded,
+                                color: AppTheme.info,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  'Realize os exercícios com supervisão de um profissional',
+                                  style: AppTheme.bodySmall.copyWith(
+                                    color: AppTheme.info,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -178,28 +334,11 @@ class LoginPage extends HookConsumerWidget {
       ),
     );
   }
-
-  Widget _buildBackgroundImage(context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/ia/a.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Container(
-          color: Colors.black.withOpacity(0.3),
-        ),
-      ),
-    );
-  }
-
-// Login logic remains the same (refer to original code)
 }
 
 class LoginPageStore extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+  );
 }

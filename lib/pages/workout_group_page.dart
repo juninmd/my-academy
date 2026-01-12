@@ -28,8 +28,8 @@ class WorkoutGroupPage extends HookConsumerWidget {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) =>
-              WorkoutGroupCreatePage(idUser, null),
+          builder:
+              (BuildContext context) => WorkoutGroupCreatePage(idUser, null),
         ),
       ).then((_) {
         store.loadValues(idUser);
@@ -40,33 +40,33 @@ class WorkoutGroupPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text('Treinos'),
         backgroundColor: Colors.deepPurple,
-          actions: [
-            PopupMenuButton<int>(
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-                const PopupMenuItem<int>(
-                  value: 1,
-                  child: ListTile(
-                    leading: Icon(Icons.add),
-                    title: Text('Novo treino'),
+        actions: [
+          PopupMenuButton<int>(
+            itemBuilder:
+                (BuildContext context) => <PopupMenuEntry<int>>[
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: ListTile(
+                      leading: Icon(Icons.add),
+                      title: Text('Novo treino'),
+                    ),
                   ),
-                ),
-              ],
-              onSelected: (int value) async {
-                switch (value) {
-                  case 1:
-                    await newWorkout();
-                    break;
-                }
-              },
-            )
-          ]
+                ],
+            onSelected: (int value) async {
+              switch (value) {
+                case 1:
+                  await newWorkout();
+                  break;
+              }
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(
           fit: StackFit.expand,
           children: [
-
             Column(
               children: [
                 if (store.workoutGroups.isEmpty && !store.isLoading)
@@ -79,7 +79,10 @@ class WorkoutGroupPage extends HookConsumerWidget {
                           children: const [
                             Text(
                               'Você ainda não cadastrou algum treino',
-                              style: TextStyle(color: Colors.white, fontSize: 18),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -107,10 +110,8 @@ class WorkoutGroupPage extends HookConsumerWidget {
             ),
             if (store.isLoading) // Adiciona o widget de loading sobreposto
               Container(
-                color: Colors.black.withOpacity(0.9),
-                child: Center(
-                  child: LoadingWidget(),
-                ),
+                color: Colors.black.withValues(alpha: 0.9),
+                child: Center(child: LoadingWidget()),
               ),
             if (!store.isLoading && store.workoutGroups.isEmpty)
               Positioned(
@@ -120,7 +121,7 @@ class WorkoutGroupPage extends HookConsumerWidget {
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.deepPurple,
                   onPressed: newWorkout,
-                  label:const Text(
+                  label: const Text(
                     "Novo treino",
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
@@ -132,6 +133,4 @@ class WorkoutGroupPage extends HookConsumerWidget {
       ),
     );
   }
-
 }
-

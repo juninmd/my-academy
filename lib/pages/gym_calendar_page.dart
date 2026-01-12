@@ -9,8 +9,9 @@ import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
 import '../widgets/exercise_group_card.dart';
 
-final gymCalendarPageStoreProvider =
-    ChangeNotifierProvider((ref) => GymCalendarPageStore());
+final gymCalendarPageStoreProvider = ChangeNotifierProvider(
+  (ref) => GymCalendarPageStore(),
+);
 
 class GymCalendarPage extends HookConsumerWidget {
   const GymCalendarPage({Key? key}) : super(key: key);
@@ -40,11 +41,11 @@ class GymCalendarPage extends HookConsumerWidget {
               daysOfWeekVisible: true,
               startingDayOfWeek: StartingDayOfWeek.sunday,
               headerVisible: true,
-              headerStyle:
-                  HeaderStyle(formatButtonVisible: false, titleCentered: true),
-              calendarStyle: const CalendarStyle(
-                outsideDaysVisible: true,
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
               ),
+              calendarStyle: const CalendarStyle(outsideDaysVisible: true),
               calendarBuilders: CalendarBuilders(
                 dowBuilder: (context, day) {
                   if (day.weekday == DateTime.sunday) {
@@ -68,7 +69,9 @@ class GymCalendarPage extends HookConsumerWidget {
                 store.setMonth(onPageChanged);
               },
               eventLoader: (day) => store.workoutSessions
-                  .where((session) => store.isSameDate(session.date, day))
+                  .where(
+                    (session) => store.isSameDate(session.date, day),
+                  )
                   .toList(),
               focusedDay: store.selectedDay,
               firstDay: DateTime(2023, 1, 1),
@@ -99,19 +102,26 @@ class GymCalendarPage extends HookConsumerWidget {
                 height: 150.0,
                 child: GridView.builder(
                   shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 4,
+                  ),
                   itemCount: store.selectedEvents.length,
                   itemBuilder: (context, index) {
                     final workoutSession = store.selectedEvents[index];
                     final workoutGroup = workoutSession.workoutsGroups!;
 
                     return ExerciseGroupCard(
-                        workoutGroup: workoutGroup,
-                        callback: () {
-                          store.loadValues(FireBaseUser!.uid, now.month, now.year);
-                        },
-                        alreadyWorkout: false);
+                      workoutGroup: workoutGroup,
+                      callback: () {
+                        store.loadValues(
+                          FireBaseUser!.uid,
+                          now.month,
+                          now.year,
+                        );
+                      },
+                      alreadyWorkout: false,
+                    );
                   },
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
@@ -161,7 +171,11 @@ class GymCalendarPageStore extends ChangeNotifier {
 
   Future<void> setMonth(DateTime day) async {
     selectedDay = day;
-    workoutSessions = await getWorkoutSessions(FireBaseUser!.uid, day.month, day.year);
+    workoutSessions = await getWorkoutSessions(
+      FireBaseUser!.uid,
+      day.month,
+      day.year,
+    );
     totalWorkoutsThisMonth = workoutSessions
         .where((session) => session.date.month == day.month)
         .length;
@@ -200,7 +214,7 @@ class WorkoutSummaryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withValues(alpha: 0.3),
               blurRadius: 5.0,
               spreadRadius: 1.0,
             ),
@@ -225,10 +239,7 @@ class WorkoutSummaryCard extends StatelessWidget {
                     // Wrap the message text
                     child: Text(
                       message,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ],
@@ -239,8 +250,9 @@ class WorkoutSummaryCard extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.fitness_center_outlined,
-                    color: Colors.white
-                        .withOpacity(0.8), // Slightly reduced opacity
+                    color: Colors.white.withValues(
+                      alpha: 0.8,
+                    ), // Slightly reduced opacity
                     size: 24.0,
                   ),
                   const SizedBox(width: 10.0),
@@ -250,7 +262,7 @@ class WorkoutSummaryCard extends StatelessWidget {
                       totalMessage,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withValues(alpha: 0.8),
                       ),
                     ),
                   ),

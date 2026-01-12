@@ -6,11 +6,13 @@ import 'package:my_academy/pages/home_page.dart';
 import '../constants.dart';
 import '../models/personal.dart';
 import '../services/my_academy/personal_api.dart';
+import '../theme/app_theme.dart';
 import 'students_page.dart';
 import 'workout_group_page.dart';
 
-final menusPageStoreProvider =
-ChangeNotifierProvider((ref) => MenusPageStore());
+final menusPageStoreProvider = ChangeNotifierProvider(
+  (ref) => MenusPageStore(),
+);
 
 class MenusPage extends HookConsumerWidget {
   const MenusPage({Key? key}) : super(key: key);
@@ -42,7 +44,8 @@ class MenusPage extends HookConsumerWidget {
       bottomNavigationBar: Consumer(
         builder: (context, ref, _) {
           final currentIndex = ref.watch(
-              menusPageStoreProvider.select((value) => value.currentIndex));
+            menusPageStoreProvider.select((value) => value.currentIndex),
+          );
 
           return AnimatedContainer(
             duration: const Duration(milliseconds: 300), // Animation duration
@@ -53,7 +56,7 @@ class MenusPage extends HookConsumerWidget {
                   : Colors.blueGrey, // Change color based on index
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1), // Subtle shadow
+                  color: Colors.black.withValues(alpha: 0.1), // Subtle shadow
                   blurRadius: 10.0,
                   spreadRadius: 0.0,
                   offset: const Offset(0.0, 5.0),

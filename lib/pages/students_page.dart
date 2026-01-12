@@ -46,27 +46,26 @@ class StudentsPage extends HookConsumerWidget {
           Expanded(
             child: store.isLoading
                 ? Center(
-              child: CircularProgressIndicator(),
-            )
+                    child: CircularProgressIndicator(),
+                  )
                 : store.students.isEmpty
-                ? Center(
-              child: Text('Nenhum aluno encontrado.'),
-            )
-                : ListView.builder(
-              itemCount: store.students.length,
-              itemBuilder: (context, index) {
-                return StudentCard(
-                  student: store.students[index],
-                );
-              },
-            ),
+                    ? Center(
+                        child: Text('Nenhum aluno encontrado.'),
+                      )
+                    : ListView.builder(
+                        itemCount: store.students.length,
+                        itemBuilder: (context, index) {
+                          return StudentCard(
+                            student: store.students[index],
+                          );
+                        },
+                      ),
           ),
         ],
       ),
     );
   }
 }
-
 
 class StudentCard extends StatelessWidget {
   final WorkoutPersonalSession student;
@@ -113,8 +112,7 @@ class StudentsPageStore extends ChangeNotifier {
   Future<void> loadValues() async {
     try {
       isLoading = true;
-      students = await getStudentsSessions(
-          FireBaseUser!.uid);
+      students = await getStudentsSessions(FireBaseUser!.uid);
     } catch (error) {
       print(error);
     } finally {

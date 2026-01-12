@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../constants.dart';
@@ -10,6 +11,7 @@ import '../dto/workout-summary.dart';
 import '../models/user.dart';
 import '../models/workout_session.dart';
 import '../services/my_academy/workout_session_api.dart';
+import '../theme/app_theme.dart';
 import '../widgets/exercise_group_card.dart';
 import 'gym_calendar_page.dart';
 import 'login_page.dart';
@@ -30,28 +32,29 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Treino do dia'),
-          backgroundColor: Colors.deepPurple,
-          actions: [
-            PopupMenuButton<int>(
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-                const PopupMenuItem<int>(
-                  value: 1,
-                  child: ListTile(
-                    leading: Icon(Icons.person_off),
-                    title: Text('Fazer Log-out'),
-                  ),
+        title: const Text('Treino do dia'),
+        backgroundColor: Colors.deepPurple,
+        actions: [
+          PopupMenuButton<int>(
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 1,
+                child: ListTile(
+                  leading: Icon(Icons.person_off),
+                  title: Text('Fazer Log-out'),
                 ),
-              ],
-              onSelected: (int value) async {
-                switch (value) {
-                  case 1:
-                    store.logout(context);
-                    break;
-                }
-              },
-            )
-          ]),
+              ),
+            ],
+            onSelected: (int value) async {
+              switch (value) {
+                case 1:
+                  store.logout(context);
+                  break;
+              }
+            },
+          ),
+        ],
+      ),
       body: AnimatedContainer(
         duration: const Duration(milliseconds: 500), // Animation duration
         curve: Curves.easeInOutCubic, // Animation curve
@@ -69,8 +72,8 @@ class HomePage extends HookConsumerWidget {
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.black.withOpacity(0.1),
-                              Colors.black
+                              Colors.black.withValues(alpha: 0.1),
+                              Colors.black,
                             ],
                           ),
                         ),
@@ -93,18 +96,18 @@ class HomePage extends HookConsumerWidget {
                                   Text(
                                     '${FireBaseUser!.displayName}',
                                     style: const TextStyle(
-                                        color: Colors.white, fontSize: 18),
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),
                       ),
                       if (store.isLoading)
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        )
+                        const Center(child: CircularProgressIndicator())
                       else if (!store.isLoading)
                         SingleChildScrollView(
                           child: Column(
@@ -115,7 +118,10 @@ class HomePage extends HookConsumerWidget {
                                   null)
                                 Container(
                                   padding: const EdgeInsets.only(
-                                      top: 0, left: 10, right: 10),
+                                    top: 0,
+                                    left: 10,
+                                    right: 10,
+                                  ),
                                   child: Card(
                                     child: Center(
                                       child: Column(
@@ -125,8 +131,9 @@ class HomePage extends HookConsumerWidget {
                                           Text(
                                             'Nenhum treino programado para hoje',
                                             style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18),
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                            ),
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
@@ -184,7 +191,8 @@ class HomePage extends HookConsumerWidget {
                                             const Text(
                                               'Nenhum',
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                color: Colors.white,
+                                              ),
                                             ),
                                         ],
                                       ),
@@ -199,7 +207,8 @@ class HomePage extends HookConsumerWidget {
                                           ),
                                           TextButton(
                                             child: const Text(
-                                                'Visualizar Histórico'),
+                                              'Visualizar Histórico',
+                                            ),
                                             onPressed: () async {
                                               await Navigator.push(
                                                 context,
@@ -258,7 +267,7 @@ class HomePage extends HookConsumerWidget {
                         ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
