@@ -1,0 +1,139 @@
+import 'package:dio/dio.dart';
+import '../utils/logger.dart';
+import '../exceptions/failure.dart';
+
+class ApiClient {
+  ApiClient({required String baseUrl, String? authToken}) {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 15),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+      ),
+    );
+
+    if (authToken != null) {
+      setAuthToken(authToken);
+    }
+
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          logger.i('REQUEST[${options.method}] => PATH: ${options.path}');
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          logger.d(
+            'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
+          );
+          return handler.next(response);
+        },
+        onError: (e, handler) {
+          logger.e(
+            'ERROR[${e.response?.statusCode}] => PATH: ${e.requestOptions.path}',
+            error: e.error,
+            stackTrace: e.stackTrace,
+          );
+          return handler.next(e);
+        },
+      ),
+    );
+  }
+  late final Dio _dio;
+
+  void setAuthToken(String token) {
+    _dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  void clearAuthToken() {
+    _dio.options.headers.remove('Authorization');
+  }
+
+  Future<dynamic> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      final response = await _dio.get(path, queryParameters: queryParameters);
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
+  Future<dynamic> post(
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      final response = await _dio.post(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
+  Future<dynamic> put(
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      final response = await _dio.put(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
+  Future<dynamic> delete(
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      final response = await _dio.delete(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
+  Failure _handleDioError(DioException e) {
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.sendTimeout) {
+      return const NetworkFailure('Connection timed out');
+    }
+
+    if (e.type == DioExceptionType.connectionError) {
+      return const NetworkFailure('No internet connection');
+    }
+
+    if (e.response != null) {
+      final statusCode = e.response?.statusCode;
+      final message = e.response?.data['message'] ?? 'Unknown server error';
+
+      if (statusCode == 401) {
+        return AuthFailure(message);
+      }
+      return ServerFailure(message, statusCode: statusCode);
+    }
+
+    return ServerFailure(e.message ?? 'Unknown error');
+  }
+}

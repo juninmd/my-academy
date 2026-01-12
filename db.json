@@ -1,0 +1,171 @@
+{
+    "workout-groups": [
+        {
+            "id": 1,
+            "name": "Peito e Tríceps",
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
+            "image": "assets/images/supino_inclinado_barra.gif",
+            "workouts": [
+                {
+                    "id": 101,
+                    "exerciseId": 1,
+                    "description": "Supino reto 4x12",
+                    "isFinished": false,
+                    "exercise": {
+                        "id": 1,
+                        "name": "Supino Reto",
+                        "image": "assets/images/supino_halteres.gif",
+                        "description": "Peito",
+                        "tips": "Mantenha os cotovelos a 45 graus",
+                        "mistakes": "Arquear muito as costas"
+                    }
+                },
+                {
+                    "id": 102,
+                    "exerciseId": 4,
+                    "description": "Tríceps Corda 3x15",
+                    "isFinished": true,
+                    "exercise": {
+                        "id": 4,
+                        "name": "Tríceps Corda",
+                        "image": "assets/images/tricepes_corda.gif",
+                        "description": "Tríceps",
+                        "tips": "Estique todo o braço",
+                        "mistakes": "Mexer o cotovelo"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Costas e Bíceps",
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
+            "image": "assets/images/remada_alta.gif",
+            "workouts": []
+        },
+        {
+            "id": 3,
+            "name": "Pernas",
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
+            "image": "assets/images/leg_press.gif",
+            "workouts": []
+        }
+    ],
+    "exercises": [
+        {
+            "id": 1,
+            "name": "Supino Reto",
+            "image": "assets/images/supino_halteres.gif",
+            "description": "Peito",
+            "tips": "Mantenha os cotovelos a 45 graus",
+            "mistakes": "Arquear muito as costas"
+        },
+        {
+            "id": 2,
+            "name": "Agachamento",
+            "image": "assets/images/hack_machine.gif",
+            "description": "Pernas",
+            "tips": "Joelho não passa da ponta do pé",
+            "mistakes": "Curvar as costas"
+        },
+        {
+            "id": 3,
+            "name": "Puxada Alta",
+            "image": "assets/images/remada_alta.gif",
+            "description": "Costas",
+            "tips": "Tronco levemente inclinado",
+            "mistakes": "Balançar o corpo"
+        },
+        {
+            "id": 4,
+            "name": "Tríceps Corda",
+            "image": "assets/images/tricepes_corda.gif",
+            "description": "Tríceps",
+            "tips": "Estique todo o braço",
+            "mistakes": "Mexer o cotovelo"
+        }
+    ],
+    "students": [
+        {
+            "id": "student1",
+            "name": "João da Silva",
+            "email": "joao@example.com",
+            "photoUrl": "https://i.pravatar.cc/150?u=student1",
+            "personalId": "db6i035Vjtb77a7cBDnXQVPd3oL2"
+        },
+        {
+            "id": "student2",
+            "name": "Maria Oliveira",
+            "email": "maria@example.com",
+            "photoUrl": "https://i.pravatar.cc/150?u=student2",
+            "personalId": "db6i035Vjtb77a7cBDnXQVPd3oL2"
+        }
+    ],
+    "personals": [
+        {
+            "id": "db6i035Vjtb77a7cBDnXQVPd3oL2",
+            "name": "Personal Trainer Mock",
+            "email": "mock@example.com",
+            "students": [
+                {
+                    "student": {
+                        "id": "student1",
+                        "name": "João da Silva",
+                        "email": "joao@example.com",
+                        "photoUrl": "https://i.pravatar.cc/150?u=student1"
+                    }
+                },
+                {
+                    "student": {
+                        "id": "student2",
+                        "name": "Maria Oliveira",
+                        "email": "maria@example.com",
+                        "photoUrl": "https://i.pravatar.cc/150?u=student2"
+                    }
+                }
+            ]
+        }
+    ],
+    "workouts-sessions": [
+        {
+            "id": 1,
+            "workoutGroupId": 1,
+            "date": "2026-01-15T00:00:00.000",
+            "checked": true,
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2"
+        },
+        {
+            "id": 2,
+            "workoutGroupId": 2,
+            "date": "2026-01-18T00:00:00.000",
+            "checked": false,
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2"
+        },
+        {
+            "id": 3,
+            "workoutGroupId": 3,
+            "date": "2026-01-20T00:00:00.000",
+            "checked": true,
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2"
+        }
+    ],
+    "workouts-summaries": [
+        {
+            "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
+            "counter": 42,
+            "lastSession": {
+                "date": "2026-01-10",
+                "workoutsGroups": {
+                    "name": "Peito e Tríceps"
+                }
+            },
+            "workoutGroupOfDay": {
+                "id": 2,
+                "name": "Costas e Bíceps"
+            },
+            "personal": {
+                "name": "Personal Mock"
+            }
+        }
+    ]
+}

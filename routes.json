@@ -1,0 +1,7 @@
+{
+    "/personals/:userId/students": "/personals/:userId",
+    "/workouts-sessions/:userId": "/workouts-sessions?userId=:userId",
+    "/workouts-sessions/:userId/summary": "/workouts-summaries?userId=:userId",
+    "/workout-groups": "/workout-groups",
+    "/exercises": "/exercises"
+}
