@@ -32,3 +32,5 @@ flutter build apk --debug
 
 
 - https://bodyshape.netlify.app/#/
+
+ flutter run -d web-server --web-hostname localhost --web-port 3000

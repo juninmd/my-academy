@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
-const host = 'http://localhost:9000';
+const host = 'http://localhost:9001';
 //const host = 'https://antoniocode.dev';
 
 class HttpApi {
