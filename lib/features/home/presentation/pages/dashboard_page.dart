@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -164,7 +165,11 @@ class DashboardPage extends ConsumerWidget {
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // Navigate to Workout Details
+                                        if (summary.workoutGroupId != null) {
+                                          context.go(
+                                            '/workouts/${summary.workoutGroupId}',
+                                          );
+                                        }
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.white,

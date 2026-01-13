@@ -7,11 +7,13 @@ class WorkoutSummaryEntity extends Equatable {
     this.lastSessionDate,
     this.workoutName,
     this.personalName,
+    this.workoutGroupId,
   });
   final int counter;
   final String? lastSessionDate; // Simplified for display
   final String? workoutName;
   final String? personalName;
+  final int? workoutGroupId;
   final bool hasWorkoutToday;
 
   @override
@@ -20,6 +22,7 @@ class WorkoutSummaryEntity extends Equatable {
     lastSessionDate,
     workoutName,
     personalName,
+    workoutGroupId,
     hasWorkoutToday,
   ];
 }
