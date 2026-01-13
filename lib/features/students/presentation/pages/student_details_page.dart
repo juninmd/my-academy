@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/student_entity.dart';
 
-class StudentDetailsPage extends ConsumerWidget {
+class StudentDetailsPage extends HookConsumerWidget {
   const StudentDetailsPage({required this.student, super.key});
   final StudentEntity student;
 
@@ -12,6 +13,9 @@ class StudentDetailsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    // State for notification
+    final telegramNotification = useState(false);
 
     return Scaffold(
       body: CustomScrollView(
@@ -142,6 +146,141 @@ class StudentDetailsPage extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
+                // Notifications Config
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: SwitchListTile(
+                    title: const Text(
+                      'Notificações Telegram',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text('Receber atualizações de treino'),
+                    secondary: Icon(
+                      Icons.telegram,
+                      color: telegramNotification.value ? Colors.blue : Colors.grey,
+                    ),
+                    value: telegramNotification.value,
+                    onChanged: (val) {
+                      telegramNotification.value = val;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            val
+                                ? 'Notificações ativadas'
+                                : 'Notificações desativadas',
+                          ),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Last Workout Card
+                _ModernInteractiveCard(
+                  title: 'Último Treino',
+                  icon: Icons.history,
+                  color: Colors.orange.shade100,
+                  iconColor: Colors.orange.shade800,
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Peito e Tríceps',
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Ontem, 18:30',
+                        style: textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+                      ),
+                      const SizedBox(height: 8),
+                      LinearProgressIndicator(
+                        value: 1.0,
+                        backgroundColor: Colors.white,
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Concluído',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    // Navigate to history
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Today's Workout Card
+                _ModernInteractiveCard(
+                  title: 'Treino de Hoje',
+                  icon: Icons.fitness_center,
+                  color: Colors.blue.shade100,
+                  iconColor: Colors.blue.shade800,
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Costas e Bíceps',
+                        style: textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(Icons.timer_outlined, size: 16, color: Colors.grey[700]),
+                          const SizedBox(width: 4),
+                          Text(
+                            '~60 min',
+                            style: textTheme.bodySmall,
+                          ),
+                          const SizedBox(width: 16),
+                          Icon(Icons.local_fire_department_outlined, size: 16, color: Colors.grey[700]),
+                          const SizedBox(width: 4),
+                          Text(
+                            '~450 kcal',
+                            style: textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            foregroundColor: colorScheme.onPrimary,
+                          ),
+                          child: const Text('Iniciar Treino'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {},
+                ),
+                const SizedBox(height: 16),
+
+                // Measurements Section
+                _SectionHeader(title: 'Medidas', icon: Icons.straighten),
+                const SizedBox(height: 8),
+                _MeasurementsCard(colorScheme: colorScheme),
+                const SizedBox(height: 16),
+
                 // Contact Info Card
                 _InfoCard(
                   title: 'Informações de Contato',
@@ -154,50 +293,6 @@ class StudentDetailsPage extends ConsumerWidget {
                       onTap: () {
                         // Could open mailto:
                       },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Weekly Schedule Card
-                _InfoCard(
-                  title: 'Agenda Semanal',
-                  icon: Icons.calendar_today_outlined,
-                  children: [
-                    _buildScheduleRow(context, 'Segunda', '08:00 - 09:00'),
-                    _buildScheduleRow(context, 'Quarta', '08:00 - 09:00'),
-                    _buildScheduleRow(context, 'Sexta', '08:00 - 09:00'),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Training Progress Card
-                _InfoCard(
-                  title: 'Progresso do Treino',
-                  icon: Icons.trending_up,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _StatItem(
-                            value: '12',
-                            label: 'Treinos\nconcluídos',
-                            color: Colors.green,
-                          ),
-                          _StatItem(
-                            value: '3',
-                            label: 'Treinos\nperdidos',
-                            color: Colors.orange,
-                          ),
-                          _StatItem(
-                            value: '80%',
-                            label: 'Taxa de\nfrequência',
-                            color: colorScheme.primary,
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),
@@ -265,32 +360,6 @@ class StudentDetailsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildScheduleRow(BuildContext context, String day, String time) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(day, style: Theme.of(context).textTheme.bodyLarge),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              time,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -325,6 +394,175 @@ class StudentDetailsPage extends ConsumerWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<StudentEntity>('student', student));
+  }
+}
+
+class _ModernInteractiveCard extends StatelessWidget {
+  const _ModernInteractiveCard({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.iconColor,
+    required this.content,
+    required this.onTap,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color color;
+  final Color iconColor;
+  final Widget content;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shadowColor: color.withValues(alpha: 0.5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient: LinearGradient(
+              colors: [color.withValues(alpha: 0.3), Colors.white],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Icon(icon, color: iconColor, size: 24),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+                ],
+              ),
+              const SizedBox(height: 16),
+              content,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MeasurementsCard extends StatelessWidget {
+  const _MeasurementsCard({required this.colorScheme});
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _MeasurementItem(label: 'Peso', value: '75.5 kg', diff: '-0.5'),
+                _MeasurementItem(label: 'Altura', value: '178 cm', diff: null),
+                _MeasurementItem(label: 'Gordura', value: '18%', diff: '-1.2%'),
+              ],
+            ),
+            const Divider(height: 24),
+            InkWell(
+              onTap: () {
+                // Navigate to details
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Ver histórico completo',
+                      style: TextStyle(
+                        color: colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.chevron_right, color: colorScheme.primary, size: 16),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MeasurementItem extends StatelessWidget {
+  const _MeasurementItem({
+    required this.label,
+    required this.value,
+    required this.diff,
+  });
+
+  final String label;
+  final String value;
+  final String? diff;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(color: Colors.grey, fontSize: 12),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        if (diff != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            diff!,
+            style: const TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ],
+    );
   }
 }
 
@@ -416,35 +654,24 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-class _StatItem extends StatelessWidget {
-  const _StatItem({
-    required this.value,
-    required this.label,
-    required this.color,
-  });
-
-  final String value;
-  final String label;
-  final Color color;
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, required this.icon});
+  final String title;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
+        Icon(icon, size: 20, color: Colors.grey[800]),
+        const SizedBox(width: 8),
         Text(
-          value,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: color,
+          title,
+          style: const TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: Colors.black87,
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          textAlign: TextAlign.center,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
         ),
       ],
     );
