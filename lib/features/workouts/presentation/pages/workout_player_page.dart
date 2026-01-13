@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/entities/workout_entity.dart';
 import 'workout_details_page.dart'; // To access the provider
+import '../widgets/rest_timer_dialog.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -207,14 +208,48 @@ class _ExercisePlayerView extends HookWidget {
                   Positioned(
                     bottom: 16,
                     left: 16,
-                    child: Text(
-                      workout.exercise?.name ?? 'Exercício',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        shadows: [Shadow(blurRadius: 10, color: Colors.black)],
-                      ),
+                    right: 16,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            workout.exercise?.name ?? 'Exercício',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(blurRadius: 10, color: Colors.black),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (workout.description != null &&
+                            workout.description!.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(
+                              Icons.info_outline,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      title: const Text('Instruções'),
+                                      content: Text(workout.description!),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => context.pop(),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                              );
+                            },
+                          ),
+                      ],
                     ),
                   ),
                 ],
@@ -300,6 +335,17 @@ class _ExercisePlayerView extends HookWidget {
                       final newSet = Set<int>.from(completedSets.value);
                       if (val == true) {
                         newSet.add(index);
+                        // Trigger Rest Timer
+                        if (series.rest > 0) {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => RestTimerDialog(
+                              initialDuration: series.rest,
+                              onComplete: () {},
+                            ),
+                          );
+                        }
                       } else {
                         newSet.remove(index);
                       }

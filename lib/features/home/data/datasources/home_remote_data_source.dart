@@ -44,6 +44,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       lastSessionDate: lastDate,
       workoutName: wName,
       personalName: personal != null ? personal['name'] : null,
+      workoutGroupId: workoutGroupOfDay != null ? workoutGroupOfDay['id'] : null,
       hasWorkoutToday: workoutGroupOfDay != null,
     );
   }
