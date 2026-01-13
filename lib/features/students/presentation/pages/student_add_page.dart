@@ -3,6 +3,10 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../data/repositories/student_repository.dart';
+import '../../domain/entities/student_entity.dart';
+
 class StudentAddPage extends HookConsumerWidget {
   const StudentAddPage({super.key});
 
@@ -14,27 +18,87 @@ class StudentAddPage extends HookConsumerWidget {
     final phoneController = useTextEditingController();
     final notesController = useTextEditingController();
     final isLoading = useState(false);
+    final photoUrl = useState<String?>(null);
 
     final colorScheme = Theme.of(context).colorScheme;
+    final studentRepository = ref.watch(studentRepositoryProvider);
+
+    Future<void> checkEmail() async {
+      final email = emailController.text.trim();
+      if (email.isEmpty || !email.contains('@')) return;
+
+      isLoading.value = true;
+      final result = await studentRepository.checkStudentExists(email);
+      isLoading.value = false;
+
+      result.fold(
+        (failure) {
+          // Silent fail or log?
+        },
+        (student) {
+          if (student != null) {
+            nameController.text = student.name;
+            photoUrl.value = student.photoUrl;
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Aluno encontrado! Dados preenchidos.'),
+                  backgroundColor: Colors.blue,
+                ),
+              );
+            }
+          }
+        },
+      );
+    }
 
     Future<void> handleSubmit() async {
       if (!formKey.currentState!.validate()) return;
 
+      final user = ref.read(authNotifierProvider).value;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erro: Usuário não autenticado'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       isLoading.value = true;
 
-      // TODO: Implement actual API call to add student
-      await Future.delayed(const Duration(seconds: 1));
+      final student = StudentEntity(
+        id: '', // Server generated
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        photoUrl: photoUrl.value,
+      );
+
+      final result = await studentRepository.addStudent(student, user.id);
 
       isLoading.value = false;
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Aluno ${nameController.text} adicionado!'),
-            backgroundColor: Colors.green,
-          ),
+        result.fold(
+          (failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Erro ao adicionar: ${failure.message}'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+          (success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Aluno ${success.name} adicionado!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            context.pop();
+          },
         );
-        context.pop();
       }
     }
 
@@ -69,11 +133,18 @@ class StudentAddPage extends HookConsumerWidget {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: colorScheme.primaryContainer,
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
-                        color: colorScheme.onPrimaryContainer,
-                      ),
+                      backgroundImage:
+                          photoUrl.value != null
+                              ? NetworkImage(photoUrl.value!)
+                              : null,
+                      child:
+                          photoUrl.value == null
+                              ? Icon(
+                                Icons.person,
+                                size: 50,
+                                color: colorScheme.onPrimaryContainer,
+                              )
+                              : null,
                     ),
                     Positioned(
                       bottom: 0,
@@ -115,6 +186,34 @@ class StudentAddPage extends HookConsumerWidget {
               const SizedBox(height: 12),
 
               TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: const Icon(Icons.email_outlined),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    tooltip: 'Verificar existência',
+                    onPressed: checkEmail,
+                  ),
+                  helperText:
+                      'Clique na lupa para buscar se o aluno já existe',
+                ),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                onFieldSubmitted: (_) => checkEmail(),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Por favor, insira o email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Por favor, insira um email válido';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
                 controller: nameController,
                 decoration: const InputDecoration(
                   labelText: 'Nome completo',
@@ -124,25 +223,6 @@ class StudentAddPage extends HookConsumerWidget {
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Por favor, insira o nome';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email_outlined),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Por favor, insira o email';
-                  }
-                  if (!value.contains('@')) {
-                    return 'Por favor, insira um email válido';
                   }
                   return null;
                 },
