@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../entities/exercise_entity.dart';
+import '../entities/exercise_log_entity.dart';
 import '../entities/workout_group_entity.dart';
 
 abstract class WorkoutRepository {
@@ -12,5 +13,13 @@ abstract class WorkoutRepository {
     int groupId,
   );
   Future<Either<Failure, List<ExerciseEntity>>> getExercises();
-  // Add other methods (create, delete, update) as we implement them
+
+  Future<Either<Failure, List<ExerciseLogEntity>>> getExerciseLogs(
+    String userId,
+    int exerciseId,
+  );
+
+  Future<Either<Failure, ExerciseLogEntity>> saveExerciseLog(
+    ExerciseLogEntity log,
+  );
 }
