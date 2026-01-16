@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/repositories/workout_repository_impl.dart';
+import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../../domain/repositories/workout_repository.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -21,5 +22,23 @@ Future<List<WorkoutGroupEntity>> workoutGroups(
   return result.fold(
     (failure) => throw Exception(failure.message),
     (groups) => groups,
+  );
+}
+
+@riverpod
+Future<List<ExerciseLogEntity>> exerciseLogs(
+  Ref ref,
+  int exerciseId,
+) async {
+  final userAsync = ref.watch(authProvider);
+  final user = userAsync.value;
+  if (user == null) {
+    return [];
+  }
+  final repository = ref.watch(workoutRepositoryProvider);
+  final result = await repository.getExerciseLogs(user.id, exerciseId);
+  return result.fold(
+    (failure) => throw Exception(failure.message),
+    (logs) => logs,
   );
 }

@@ -5,10 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/workout_series_entity.dart';
-import 'workout_details_page.dart';
+import '../../domain/entities/exercise_log_entity.dart';
+import '../../domain/entities/set_log_entity.dart';
+import '../providers/workout_provider.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/rest_timer_widget.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
@@ -99,9 +103,29 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           return '$m:$s';
         }
 
-        void onExerciseFinished(Map<int, SetLog> logs, String notes) {
+        Future<void> onExerciseFinished(Map<int, SetLogState> logs, String notes) async {
           stopRestTimer();
           final currentWorkout = activeWorkouts[currentExerciseIndex.value];
+
+          // Save to Repository
+          final userId = ref.read(authProvider).value?.id;
+          if (userId != null) {
+             final logEntity = ExerciseLogEntity(
+                userId: userId,
+                exerciseId: currentWorkout.exerciseId,
+                date: DateTime.now(),
+                sets: logs.values.map((l) => SetLogEntity(
+                    reps: l.actualReps,
+                    weight: l.actualWeight,
+                    rpe: l.rpe,
+                )).toList(),
+                notes: notes,
+            );
+            await ref.read(workoutRepositoryProvider).saveExerciseLog(logEntity);
+            ref.invalidate(exerciseLogsProvider(currentWorkout.exerciseId));
+          }
+
+
           final newSessionLogs =
               Map<int, ExerciseSessionLog>.from(sessionLogs.value);
           newSessionLogs[currentExerciseIndex.value] = ExerciseSessionLog(
@@ -117,43 +141,45 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               curve: Curves.easeInOut,
             );
           } else {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => AlertDialog(
-                title: const Text('Treino Concluído!'),
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('Resumo do treino:'),
-                      const SizedBox(height: 8),
-                      ...newSessionLogs.values.map((log) {
-                        final workout = activeWorkouts.firstWhere(
-                          (w) => w.exerciseId == log.exerciseId,
-                        );
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            '• ${workout.exercise?.name}: ${log.setLogs.length} séries',
-                          ),
-                        );
-                      }),
-                    ],
+            if (context.mounted) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => AlertDialog(
+                  title: const Text('Treino Concluído!'),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('Resumo do treino:'),
+                        const SizedBox(height: 8),
+                        ...newSessionLogs.values.map((log) {
+                          final workout = activeWorkouts.firstWhere(
+                            (w) => w.exerciseId == log.exerciseId,
+                          );
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              '• ${workout.exercise?.name}: ${log.setLogs.length} séries',
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        context.pop();
+                        context.pop();
+                      },
+                      child: const Text('Voltar'),
+                    ),
+                  ],
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      context.pop();
-                      context.pop();
-                    },
-                    child: const Text('Voltar'),
-                  ),
-                ],
-              ),
-            );
+              );
+            }
           }
         }
 
@@ -235,15 +261,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
       error: (e, s) => Scaffold(body: Center(child: Text('Erro: $e'))),
     );
   }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(IntProperty('groupId', groupId));
-  }
 }
 
-class _ExercisePlayerView extends HookWidget {
+class _ExercisePlayerView extends HookConsumerWidget {
   const _ExercisePlayerView({
     required this.workout,
     required this.isTimerRunning,
@@ -257,17 +277,17 @@ class _ExercisePlayerView extends HookWidget {
   final bool isTimerRunning;
   final String timerValue;
   final VoidCallback onToggleTimer;
-  final Function(Map<int, SetLog>, String) onFinished;
+  final Function(Map<int, SetLogState>, String) onFinished;
   final Function(int) onSetCompleted;
 
   @override
-  Widget build(BuildContext context) {
-    final logs = useState<Map<int, SetLog>>(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logs = useState<Map<int, SetLogState>>(
       Map.fromEntries(
         workout.series.asMap().entries.map(
               (e) => MapEntry(
                 e.key,
-                SetLog(
+                SetLogState(
                   actualReps: e.value.repetitions,
                   actualWeight: e.value.weight,
                 ),
@@ -276,130 +296,138 @@ class _ExercisePlayerView extends HookWidget {
       ),
     );
     final notesController = useTextEditingController();
+    final tabController = useTabController(initialLength: 2);
 
     final allSetsCompleted = workout.series.isEmpty ||
         (logs.value.values.every((l) => l.isCompleted) &&
             logs.value.isNotEmpty &&
             logs.value.length == workout.series.length);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: 100,
-      ), // Padding for bottom timer
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildHeaderImage(context),
-          const SizedBox(height: 24),
-          _buildExerciseTimer(context),
-          const SizedBox(height: 24),
-          if (workout.description != null && workout.description!.isNotEmpty) ...[
-            _buildInfoSection(context, 'Instruções', workout.description!),
-            const SizedBox(height: 16),
+    return Column(
+      children: [
+        _buildHeaderImage(context),
+        TabBar(
+          controller: tabController,
+          tabs: const [
+            Tab(text: 'Execução'),
+            Tab(text: 'Histórico'),
           ],
-          if (workout.exercise?.tips.isNotEmpty == true) ...[
-            _buildExpandableSection(
-              context,
-              'Dicas',
-              workout.exercise!.tips,
-              Icons.lightbulb_outline,
-              Colors.amber,
-            ),
-            const SizedBox(height: 16),
-          ],
-          if (workout.exercise?.mistakes.isNotEmpty == true) ...[
-            _buildExpandableSection(
-              context,
-              'Erros Comuns',
-              workout.exercise!.mistakes,
-              Icons.warning_amber_rounded,
-              Colors.redAccent,
-            ),
-            const SizedBox(height: 16),
-          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: tabController,
+            children: [
+              // Execution View
+              SingleChildScrollView(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                  bottom: 100,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildExerciseTimer(context),
+                    const SizedBox(height: 24),
+                     if (workout.description != null && workout.description!.isNotEmpty) ...[
+                      _buildInfoSection(context, 'Instruções', workout.description!),
+                      const SizedBox(height: 16),
+                    ],
+                    if (workout.exercise?.tips.isNotEmpty == true) ...[
+                      _buildExpandableSection(
+                        context,
+                        'Dicas',
+                        workout.exercise!.tips,
+                        Icons.lightbulb_outline,
+                        Colors.amber,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
 
-          Text('Séries', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
-          _buildSetsList(context, logs),
-          const SizedBox(height: 24),
-          TextField(
-            controller: notesController,
-            decoration: const InputDecoration(
-              labelText: 'Notas do exercício',
-              border: OutlineInputBorder(),
-              hintText: 'Ex: senti desconforto no ombro...',
-            ),
-            maxLines: 3,
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            height: 56,
-            child: ElevatedButton(
-              onPressed: allSetsCompleted
-                  ? () => onFinished(logs.value, notesController.text)
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Colors.white,
+                    Text('Séries', style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 8),
+                    _buildSetsList(context, logs),
+                    const SizedBox(height: 24),
+                    TextField(
+                      controller: notesController,
+                      decoration: const InputDecoration(
+                        labelText: 'Notas do exercício',
+                        border: OutlineInputBorder(),
+                        hintText: 'Ex: senti desconforto no ombro...',
+                      ),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: allSetsCompleted
+                            ? () => onFinished(logs.value, notesController.text)
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text(
+                          'Próximo Exercício',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: const Text(
-                'Próximo Exercício',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
+              // History View
+              _HistoryView(exerciseId: workout.exerciseId),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildHeaderImage(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (workout.exercise?.image != null)
-              Image.network(
-                workout.exercise!.image!,
-                fit: BoxFit.cover,
-                errorBuilder: (c, e, s) => Container(color: Colors.grey[800]),
-              )
-            else
-              Container(
-                color: Colors.grey[800],
-                child: const Icon(Icons.fitness_center, size: 48),
-              ),
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          if (workout.exercise?.image != null)
+            Image.network(
+              workout.exercise!.image!,
+              fit: BoxFit.cover,
+              errorBuilder: (c, e, s) => Container(color: Colors.grey[800]),
+            )
+          else
             Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black54],
-                ),
+              color: Colors.grey[800],
+              child: const Icon(Icons.fitness_center, size: 48),
+            ),
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.black54],
               ),
             ),
-            Positioned(
-              bottom: 16,
-              left: 16,
-              right: 16,
-              child: Text(
-                workout.exercise?.name ?? 'Exercício',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  shadows: [Shadow(blurRadius: 10, color: Colors.black)],
-                ),
+          ),
+          Positioned(
+            bottom: 16,
+            left: 16,
+            right: 16,
+            child: Text(
+              workout.exercise?.name ?? 'Exercício',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                shadows: [Shadow(blurRadius: 10, color: Colors.black)],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -477,7 +505,7 @@ class _ExercisePlayerView extends HookWidget {
 
   Widget _buildSetsList(
     BuildContext context,
-    ValueNotifier<Map<int, SetLog>> logs,
+    ValueNotifier<Map<int, SetLogState>> logs,
   ) {
     return Column(
       children: workout.series.asMap().entries.map((entry) {
@@ -492,14 +520,14 @@ class _ExercisePlayerView extends HookWidget {
           series: series,
           log: log,
           onChanged: (newLog) {
-            final newLogs = Map<int, SetLog>.from(logs.value);
+            final newLogs = Map<int, SetLogState>.from(logs.value);
             newLogs[index] = newLog;
             logs.value = newLogs;
           },
           onCompleted: () {
-            final newLogs = Map<int, SetLog>.from(logs.value);
+            final newLogs = Map<int, SetLogState>.from(logs.value);
             final wasCompleted = log.isCompleted;
-            newLogs[index] = SetLog(
+            newLogs[index] = SetLogState(
               actualReps: log.actualReps,
               actualWeight: log.actualWeight,
               rpe: log.rpe,
@@ -515,55 +543,51 @@ class _ExercisePlayerView extends HookWidget {
       }).toList(),
     );
   }
+}
 
-  Widget _buildStatBadge(BuildContext context, String value, String unit) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: RichText(
-        text: TextSpan(
-          style: DefaultTextStyle.of(context).style,
-          children: [
-            TextSpan(
-              text: value,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            TextSpan(
-              text: ' $unit',
-              style: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+class _HistoryView extends HookConsumerWidget {
+  const _HistoryView({required this.exerciseId});
+  final int exerciseId;
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<WorkoutEntity>('workout', workout));
-    properties.add(DiagnosticsProperty<bool>('isTimerRunning', isTimerRunning));
-    properties.add(StringProperty('timerValue', timerValue));
-    properties.add(
-      ObjectFlagProperty<VoidCallback>.has('onToggleTimer', onToggleTimer),
-    );
-    properties.add(
-      ObjectFlagProperty<Function(Map<int, SetLog>, String)>.has(
-        'onFinished',
-        onFinished,
-      ),
-    );
-    properties.add(
-      ObjectFlagProperty<Function(int)>.has('onSetCompleted', onSetCompleted),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logsAsync = ref.watch(exerciseLogsProvider(exerciseId));
+
+    return logsAsync.when(
+      data: (logs) {
+        if (logs.isEmpty) {
+          return const Center(child: Text('Nenhum histórico encontrado'));
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.only(bottom: 100, top: 16),
+          itemCount: logs.length,
+          separatorBuilder: (c, i) => const Divider(),
+          itemBuilder: (context, index) {
+            final log = logs[index];
+            return ListTile(
+              title: Text(DateFormat('dd/MM/yyyy HH:mm').format(log.date)),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...log.sets.asMap().entries.map((e) => Text(
+                    'Série ${e.key + 1}: ${e.value.reps} reps @ ${e.value.weight}kg (RPE: ${e.value.rpe ?? "-"})',
+                  )),
+                  if (log.notes != null && log.notes!.isNotEmpty)
+                     Text('Notas: ${log.notes}', style: const TextStyle(fontStyle: FontStyle.italic)),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, s) => Center(child: Text('Erro ao carregar histórico: $e')),
     );
   }
 }
 
-class SetLog {
-  SetLog({
+class SetLogState {
+  SetLogState({
     required this.actualReps,
     required this.actualWeight,
     this.rpe,
@@ -584,7 +608,7 @@ class ExerciseSessionLog {
   });
 
   final int exerciseId;
-  final Map<int, SetLog> setLogs;
+  final Map<int, SetLogState> setLogs;
   final String? notes;
 }
 
@@ -600,8 +624,8 @@ class _SetRow extends HookWidget {
 
   final int index;
   final WorkoutSeriesEntity series;
-  final SetLog log;
-  final ValueChanged<SetLog> onChanged;
+  final SetLogState log;
+  final ValueChanged<SetLogState> onChanged;
   final VoidCallback onCompleted;
 
   @override
@@ -613,7 +637,6 @@ class _SetRow extends HookWidget {
       text: log.actualWeight.toString(),
     );
 
-    // Sync controllers with state if state changes externally (optional, but good practice)
     useEffect(() {
       if (int.tryParse(repsController.text) != log.actualReps) {
         repsController.text = log.actualReps.toString();
@@ -676,7 +699,7 @@ class _SetRow extends HookWidget {
                   onChanged: (v) {
                     final val = int.tryParse(v);
                     if (val != null) {
-                       onChanged(SetLog(
+                       onChanged(SetLogState(
                         actualReps: val,
                         actualWeight: log.actualWeight,
                         rpe: log.rpe,
@@ -700,7 +723,7 @@ class _SetRow extends HookWidget {
                   onChanged: (v) {
                     final val = int.tryParse(v);
                     if (val != null) {
-                      onChanged(SetLog(
+                      onChanged(SetLogState(
                         actualReps: log.actualReps,
                         actualWeight: val,
                         rpe: log.rpe,
@@ -710,33 +733,34 @@ class _SetRow extends HookWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
-              Container(
-                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                 decoration: BoxDecoration(
-                   border: Border.all(color: Colors.grey),
-                   borderRadius: BorderRadius.circular(4),
-                 ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<int>(
-                    value: log.rpe,
-                    hint: const Text('RPE'),
-                    items: List.generate(10, (i) => i + 1)
-                        .map((e) => DropdownMenuItem(value: e, child: Text('$e')))
-                        .toList(),
-                    onChanged: log.isCompleted ? null : (v) {
-                       onChanged(SetLog(
-                        actualReps: log.actualReps,
-                        actualWeight: log.actualWeight,
-                        rpe: v,
-                        isCompleted: log.isCompleted,
-                      ));
-                    },
-                  ),
-                ),
-              ),
             ],
           ),
+          const SizedBox(height: 12),
+          // Improved RPE Selector
+           Row(
+            children: [
+              const Text('RPE: '),
+              Expanded(
+                child: Slider(
+                  value: (log.rpe ?? 5).toDouble(),
+                  min: 1,
+                  max: 10,
+                  divisions: 9,
+                  label: log.rpe?.toString() ?? '-',
+                  onChanged: log.isCompleted ? null : (v) {
+                    onChanged(SetLogState(
+                      actualReps: log.actualReps,
+                      actualWeight: log.actualWeight,
+                      rpe: v.round(),
+                      isCompleted: log.isCompleted,
+                    ));
+                  },
+                ),
+              ),
+              Text(log.rpe?.toString() ?? '-'),
+            ],
+          ),
+
           const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,

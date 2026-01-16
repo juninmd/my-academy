@@ -5,6 +5,7 @@ import '../../../../utils/constants.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/exercise_entity.dart';
+import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/repositories/workout_repository.dart';
 
 // Helper to map dynamic JSON to Entities (simplified for now, ideally strictly typed DTOs)
@@ -44,6 +45,39 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       return Right(
         data.cast<Map<String, dynamic>>().map(_mapExercise).toList(),
       );
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ExerciseLogEntity>>> getExerciseLogs(
+    String userId,
+    int exerciseId,
+  ) async {
+    try {
+      final response = await _apiClient.get(
+        'exercise-logs?userId=$userId&exerciseId=$exerciseId&_sort=date&_order=desc',
+      );
+      final List<dynamic> data = response;
+      return Right(
+        data
+            .cast<Map<String, dynamic>>()
+            .map(ExerciseLogEntity.fromJson)
+            .toList(),
+      );
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ExerciseLogEntity>> saveExerciseLog(
+    ExerciseLogEntity log,
+  ) async {
+    try {
+      final response = await _apiClient.post('exercise-logs', data: log.toJson());
+      return Right(ExerciseLogEntity.fromJson(response));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
