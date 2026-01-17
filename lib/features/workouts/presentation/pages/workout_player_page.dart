@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -394,10 +395,10 @@ class _ExercisePlayerView extends HookConsumerWidget {
         fit: StackFit.expand,
         children: [
           if (workout.exercise?.image != null)
-            Image.network(
-              workout.exercise!.image!,
+            CachedNetworkImage(
+              imageUrl: workout.exercise!.image!,
               fit: BoxFit.cover,
-              errorBuilder: (c, e, s) => Container(color: Colors.grey[800]),
+              errorWidget: (c, e, s) => Container(color: Colors.grey[800]),
             )
           else
             Container(
