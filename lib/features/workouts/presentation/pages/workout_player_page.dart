@@ -14,6 +14,9 @@ import '../../domain/entities/set_log_entity.dart';
 import '../providers/workout_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/rest_timer_widget.dart';
+import '../widgets/number_input_control.dart';
+import '../widgets/one_rep_max_display.dart';
+import '../widgets/plate_calculator_dialog.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -297,6 +300,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
     );
     final notesController = useTextEditingController();
     final tabController = useTabController(initialLength: 2);
+    final historyLogsAsync = ref.watch(exerciseLogsProvider(workout.exerciseId));
 
     final allSetsCompleted = workout.series.isEmpty ||
         (logs.value.values.every((l) => l.isCompleted) &&
@@ -347,7 +351,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
                     Text('Séries', style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 8),
-                    _buildSetsList(context, logs),
+                    _buildSetsList(context, logs, historyLogsAsync.asData?.value.firstOrNull),
                     const SizedBox(height: 24),
                     TextField(
                       controller: notesController,
@@ -506,6 +510,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
   Widget _buildSetsList(
     BuildContext context,
     ValueNotifier<Map<int, SetLogState>> logs,
+    ExerciseLogEntity? lastLog,
   ) {
     return Column(
       children: workout.series.asMap().entries.map((entry) {
@@ -513,12 +518,18 @@ class _ExercisePlayerView extends HookConsumerWidget {
         final series = entry.value;
         final log = logs.value[index];
 
+        // Try to match with last session set
+        final lastSet = (lastLog != null && lastLog.sets.length > index)
+            ? lastLog.sets[index]
+            : null;
+
         if (log == null) return const SizedBox.shrink();
 
         return _SetRow(
           index: index,
           series: series,
           log: log,
+          lastSet: lastSet,
           onChanged: (newLog) {
             final newLogs = Map<int, SetLogState>.from(logs.value);
             newLogs[index] = newLog;
@@ -619,34 +630,19 @@ class _SetRow extends HookWidget {
     required this.log,
     required this.onChanged,
     required this.onCompleted,
+    this.lastSet,
     super.key,
   });
 
   final int index;
   final WorkoutSeriesEntity series;
   final SetLogState log;
+  final SetLogEntity? lastSet;
   final ValueChanged<SetLogState> onChanged;
   final VoidCallback onCompleted;
 
   @override
   Widget build(BuildContext context) {
-    final repsController = useTextEditingController(
-      text: log.actualReps.toString(),
-    );
-    final weightController = useTextEditingController(
-      text: log.actualWeight.toString(),
-    );
-
-    useEffect(() {
-      if (int.tryParse(repsController.text) != log.actualReps) {
-        repsController.text = log.actualReps.toString();
-      }
-      if (int.tryParse(weightController.text) != log.actualWeight) {
-        weightController.text = log.actualWeight.toString();
-      }
-      return null;
-    }, [log]);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -662,6 +658,7 @@ class _SetRow extends HookWidget {
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -674,69 +671,84 @@ class _SetRow extends HookWidget {
                 child: Text('${index + 1}', style: const TextStyle(fontSize: 12)),
               ),
               const SizedBox(width: 12),
-              Text(
-                'Meta: ${series.repetitions} reps • ${series.weight} kg',
-                style: Theme.of(context).textTheme.bodySmall,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Meta: ${series.repetitions} reps • ${series.weight} kg',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  if (lastSet != null)
+                    Text(
+                      'Anterior: ${lastSet!.reps} reps • ${lastSet!.weight} kg',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
+                    ),
+                ],
               ),
               const Spacer(),
+              OneRepMaxDisplay(weight: log.actualWeight, reps: log.actualReps),
               if (log.isCompleted)
-                 const Icon(Icons.check_circle, color: Colors.green)
+                const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.check_circle, color: Colors.green),
+                )
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: TextFormField(
-                  controller: repsController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Reps',
-                    isDense: true,
-                    border: OutlineInputBorder(),
-                  ),
+                child: NumberInputControl(
+                  label: 'Reps',
+                  value: log.actualReps,
                   enabled: !log.isCompleted,
-                  onChanged: (v) {
-                    final val = int.tryParse(v);
-                    if (val != null) {
-                       onChanged(SetLogState(
-                        actualReps: val,
-                        actualWeight: log.actualWeight,
-                        rpe: log.rpe,
-                        isCompleted: log.isCompleted,
-                      ));
-                    }
+                  onChanged: (val) {
+                    onChanged(SetLogState(
+                      actualReps: val,
+                      actualWeight: log.actualWeight,
+                      rpe: log.rpe,
+                      isCompleted: log.isCompleted,
+                    ));
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: NumberInputControl(
+                  label: 'Carga (kg)',
+                  value: log.actualWeight,
+                  enabled: !log.isCompleted,
+                  step: 1, // Maybe 1 is better than 2.5 for quick adjustments
+                  onChanged: (val) {
+                    onChanged(SetLogState(
+                      actualReps: log.actualReps,
+                      actualWeight: val,
+                      rpe: log.rpe,
+                      isCompleted: log.isCompleted,
+                    ));
                   },
                 ),
               ),
               const SizedBox(width: 8),
-              Expanded(
-                child: TextFormField(
-                  controller: weightController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Carga (kg)',
-                    isDense: true,
-                    border: OutlineInputBorder(),
-                  ),
-                  enabled: !log.isCompleted,
-                  onChanged: (v) {
-                    final val = int.tryParse(v);
-                    if (val != null) {
-                      onChanged(SetLogState(
-                        actualReps: log.actualReps,
-                        actualWeight: val,
-                        rpe: log.rpe,
-                        isCompleted: log.isCompleted,
-                      ));
-                    }
-                  },
-                ),
+              IconButton(
+                icon: const Icon(Icons.calculate_outlined),
+                tooltip: 'Calculadora de Anilhas',
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => PlateCalculatorDialog(
+                      targetWeight: log.actualWeight.toDouble(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
           const SizedBox(height: 12),
-          // Improved RPE Selector
            Row(
             children: [
               const Text('RPE: '),
@@ -757,7 +769,14 @@ class _SetRow extends HookWidget {
                   },
                 ),
               ),
-              Text(log.rpe?.toString() ?? '-'),
+              SizedBox(
+                width: 30,
+                child: Text(
+                  log.rpe?.toString() ?? '-',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
 
