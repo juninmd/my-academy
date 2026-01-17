@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,9 +103,9 @@ class WorkoutCreatePage extends HookConsumerWidget {
                               if (exercise.image != null)
                                 SizedBox(
                                   height: 60,
-                                  child: Image.network(
-                                    exercise.image!,
-                                    errorBuilder:
+                                  child: CachedNetworkImage(
+                                    imageUrl: exercise.image!,
+                                    errorWidget:
                                         (_, __, ___) =>
                                             const Icon(Icons.fitness_center),
                                   ),

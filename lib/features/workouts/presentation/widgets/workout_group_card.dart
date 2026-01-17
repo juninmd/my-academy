@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/workout_group_entity.dart';
@@ -24,10 +25,10 @@ class WorkoutGroupCard extends StatelessWidget {
           // Image Background
           if (workoutGroup.image != null && workoutGroup.image!.isNotEmpty)
             workoutGroup.image!.startsWith('http')
-                ? Image.network(
-                  workoutGroup.image!,
+                ? CachedNetworkImage(
+                  imageUrl: workoutGroup.image!,
                   fit: BoxFit.cover,
-                  errorBuilder:
+                  errorWidget:
                       (context, error, stackTrace) =>
                           Container(color: Colors.grey[800]),
                 )

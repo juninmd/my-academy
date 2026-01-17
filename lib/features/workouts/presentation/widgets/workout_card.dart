@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/workout_entity.dart';
@@ -30,15 +31,15 @@ class WorkoutCard extends StatelessWidget {
           children: [
             // Background Image
             if (exercise?.image != null)
-              Image.network(
-                exercise!.image!,
+              CachedNetworkImage(
+                imageUrl: exercise!.image!,
                 fit: BoxFit.cover,
                 color:
                     isFinished
                         ? Colors.black.withValues(alpha: 0.7)
                         : Colors.black.withValues(alpha: 0.2),
                 colorBlendMode: BlendMode.darken,
-                errorBuilder: (c, e, s) => Container(color: Colors.grey[800]),
+                errorWidget: (c, e, s) => Container(color: Colors.grey[800]),
               )
             else
               Container(
