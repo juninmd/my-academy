@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../providers/settings_provider.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
@@ -12,6 +13,7 @@ class ProfilePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(authNotifierProvider);
     final user = userState.value;
+    final settings = ref.watch(settingsProvider);
 
     final nameController = useTextEditingController(text: user?.name ?? '');
     final emailController = useTextEditingController(text: user?.email ?? '');
@@ -76,6 +78,53 @@ class ProfilePage extends HookConsumerWidget {
                         border: OutlineInputBorder(),
                       ),
                       readOnly: true,
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    Text('Preferências', style: Theme.of(context).textTheme.titleLarge),
+                    const SizedBox(height: 16),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.fitness_center),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    'Peso da Barra',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                                Text(
+                                  '${settings.barWeight.toStringAsFixed(1)} kg',
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Slider(
+                              value: settings.barWeight,
+                              min: 0,
+                              max: 25,
+                              divisions: 50,
+                              label: settings.barWeight.toString(),
+                              onChanged: (value) {
+                                ref.read(settingsProvider.notifier).setBarWeight(value);
+                              },
+                            ),
+                            const Text(
+                              'Usado na calculadora de anilhas.',
+                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
 
                     const SizedBox(height: 32),
