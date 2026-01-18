@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../profile/presentation/providers/settings_provider.dart';
 
-class PlateCalculatorDialog extends StatefulWidget {
+class PlateCalculatorDialog extends ConsumerStatefulWidget {
   const PlateCalculatorDialog({
     required this.targetWeight,
-    this.barWeight = 20.0,
+    this.barWeight,
     super.key,
   });
 
   final double targetWeight;
-  final double barWeight;
+  final double? barWeight;
 
   @override
-  State<PlateCalculatorDialog> createState() => _PlateCalculatorDialogState();
+  ConsumerState<PlateCalculatorDialog> createState() => _PlateCalculatorDialogState();
 }
 
-class _PlateCalculatorDialogState extends State<PlateCalculatorDialog> {
+class _PlateCalculatorDialogState extends ConsumerState<PlateCalculatorDialog> {
   late TextEditingController _targetWeightController;
   late TextEditingController _barWeightController;
 
@@ -24,7 +26,10 @@ class _PlateCalculatorDialogState extends State<PlateCalculatorDialog> {
   void initState() {
     super.initState();
     _targetWeightController = TextEditingController(text: widget.targetWeight.toString());
-    _barWeightController = TextEditingController(text: widget.barWeight.toString());
+
+    // Use provided weight, or fetch from settings
+    final defaultBarWeight = ref.read(settingsProvider).barWeight;
+    _barWeightController = TextEditingController(text: (widget.barWeight ?? defaultBarWeight).toString());
   }
 
   @override

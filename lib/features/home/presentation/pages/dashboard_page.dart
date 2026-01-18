@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/home_provider.dart';
+import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
+import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 
 // Placeholder for now
 class DashboardPage extends ConsumerWidget {
@@ -115,6 +117,9 @@ class DashboardPage extends ConsumerWidget {
                           ),
                           const SizedBox(height: 24),
 
+                          _ToolsSection(),
+                          const SizedBox(height: 24),
+
                           // Workout Card
                           if (summary.hasWorkoutToday)
                             Container(
@@ -222,6 +227,103 @@ class DashboardPage extends ConsumerWidget {
                       () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Center(child: Text('Erro: $err')),
                 ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ToolsSection extends StatelessWidget {
+  const _ToolsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _ToolCard(
+                icon: Icons.calculate_outlined,
+                label: 'Anilhas',
+                color: Colors.blue,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ToolCard(
+                icon: Icons.fitness_center,
+                label: '1RM',
+                color: Colors.red,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const OneRepMaxCalculatorDialog(),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ToolCard(
+                icon: Icons.timer_outlined,
+                label: 'Descanso',
+                color: Colors.orange,
+                onTap: () {
+                   // Quick timer feature could be added here
+                   ScaffoldMessenger.of(context).showSnackBar(
+                       const SnackBar(content: Text('Cronômetro rápido em breve!'))
+                   );
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ToolCard extends StatelessWidget {
+  const _ToolCard({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.3)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 32),
+            const SizedBox(height: 8),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
       ),
