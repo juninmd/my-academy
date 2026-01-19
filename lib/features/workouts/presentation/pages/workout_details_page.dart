@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -47,12 +48,12 @@ class WorkoutDetailsPage extends ConsumerWidget {
                       title: Text(group.name),
                       background:
                           group.image != null
-                              ? Image.network(
-                                group.image!,
+                              ? CachedNetworkImage(
+                                imageUrl: group.image!,
                                 fit: BoxFit.cover,
                                 color: Colors.black45,
                                 colorBlendMode: BlendMode.darken,
-                                errorBuilder:
+                                errorWidget:
                                     (c, e, s) => Container(
                                       color:
                                           Theme.of(

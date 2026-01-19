@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/home_provider.dart';
 import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
+import '../widgets/quick_timer_dialog.dart';
 
 // Placeholder for now
 class DashboardPage extends ConsumerWidget {
@@ -47,7 +49,7 @@ class DashboardPage extends ConsumerWidget {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     backgroundImage:
                         user?.photoUrl != null
-                            ? NetworkImage(user!.photoUrl!)
+                            ? CachedNetworkImageProvider(user!.photoUrl!)
                             : null,
                     child:
                         user?.photoUrl == null
@@ -280,9 +282,9 @@ class _ToolsSection extends StatelessWidget {
                 label: 'Descanso',
                 color: Colors.orange,
                 onTap: () {
-                   // Quick timer feature could be added here
-                   ScaffoldMessenger.of(context).showSnackBar(
-                       const SnackBar(content: Text('Cronômetro rápido em breve!'))
+                   showDialog(
+                     context: context,
+                     builder: (context) => const QuickTimerDialog(),
                    );
                 },
               ),

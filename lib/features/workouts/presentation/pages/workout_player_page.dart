@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -17,6 +18,8 @@ import '../widgets/rest_timer_widget.dart';
 import '../widgets/number_input_control.dart';
 import '../widgets/one_rep_max_display.dart';
 import '../widgets/plate_calculator_dialog.dart';
+import '../../domain/entities/session_log_entity.dart';
+import 'workout_summary_page.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -36,6 +39,15 @@ class WorkoutPlayerPage extends HookConsumerWidget {
         final pageController = usePageController();
         final currentExerciseIndex = useState(0);
         final sessionLogs = useState<Map<int, ExerciseSessionLog>>({});
+
+        // Global Workout Timer (Total Duration)
+        final workoutDuration = useState(0);
+        useEffect(() {
+          final timer = Timer.periodic(const Duration(seconds: 1), (_) {
+             workoutDuration.value++;
+          });
+          return timer.cancel;
+        }, []);
 
         // Exercise Timer State
         final isExerciseTimerRunning = useState(false);
@@ -133,6 +145,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               Map<int, ExerciseSessionLog>.from(sessionLogs.value);
           newSessionLogs[currentExerciseIndex.value] = ExerciseSessionLog(
             exerciseId: currentWorkout.exerciseId,
+            exerciseName: currentWorkout.exercise?.name,
             setLogs: logs,
             notes: notes,
           );
@@ -144,42 +157,13 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               curve: Curves.easeInOut,
             );
           } else {
-            if (context.mounted) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => AlertDialog(
-                  title: const Text('Treino Concluído!'),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Resumo do treino:'),
-                        const SizedBox(height: 8),
-                        ...newSessionLogs.values.map((log) {
-                          final workout = activeWorkouts.firstWhere(
-                            (w) => w.exerciseId == log.exerciseId,
-                          );
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Text(
-                              '• ${workout.exercise?.name}: ${log.setLogs.length} séries',
-                            ),
-                          );
-                        }),
-                      ],
-                    ),
+             if (context.mounted) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => WorkoutSummaryPage(
+                    duration: Duration(seconds: workoutDuration.value),
+                    sessionLogs: newSessionLogs,
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        context.pop();
-                        context.pop();
-                      },
-                      child: const Text('Voltar'),
-                    ),
-                  ],
                 ),
               );
             }
@@ -398,10 +382,10 @@ class _ExercisePlayerView extends HookConsumerWidget {
         fit: StackFit.expand,
         children: [
           if (workout.exercise?.image != null)
-            Image.network(
-              workout.exercise!.image!,
+            CachedNetworkImage(
+              imageUrl: workout.exercise!.image!,
               fit: BoxFit.cover,
-              errorBuilder: (c, e, s) => Container(color: Colors.grey[800]),
+              errorWidget: (c, e, s) => Container(color: Colors.grey[800]),
             )
           else
             Container(
@@ -595,32 +579,6 @@ class _HistoryView extends HookConsumerWidget {
       error: (e, s) => Center(child: Text('Erro ao carregar histórico: $e')),
     );
   }
-}
-
-class SetLogState {
-  SetLogState({
-    required this.actualReps,
-    required this.actualWeight,
-    this.rpe,
-    this.isCompleted = false,
-  });
-
-  int actualReps;
-  int actualWeight;
-  int? rpe;
-  bool isCompleted;
-}
-
-class ExerciseSessionLog {
-  ExerciseSessionLog({
-    required this.exerciseId,
-    required this.setLogs,
-    this.notes,
-  });
-
-  final int exerciseId;
-  final Map<int, SetLogState> setLogs;
-  final String? notes;
 }
 
 class _SetRow extends HookWidget {
