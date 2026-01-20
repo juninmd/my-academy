@@ -26,9 +26,12 @@ class SettingsState {
   }
 }
 
-class SettingsNotifier extends StateNotifier<SettingsState> {
-  SettingsNotifier() : super(SettingsState()) {
+class SettingsNotifier extends Notifier<SettingsState> {
+  @override
+  SettingsState build() {
+    // Initial state
     _loadSettings();
+    return SettingsState();
   }
 
   Future<void> _loadSettings() async {
@@ -64,6 +67,4 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 }
 
-final settingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
-  return SettingsNotifier();
-});
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);

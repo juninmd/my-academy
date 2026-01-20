@@ -8,21 +8,6 @@ import '../../domain/entities/workout_group_entity.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/workout_card.dart';
 
-// Provider to fetch single group by ID
-final workoutGroupByIdProvider = FutureProvider.family
-    .autoDispose<WorkoutGroupEntity?, int>((ref, groupId) async {
-      final user = ref.watch(authNotifierProvider).value;
-      if (user == null) throw Exception('User not logged in');
-
-      // This could be optimized to fetch single from API
-      final allGroups = await ref.watch(workoutGroupsProvider(user.id).future);
-      try {
-        return allGroups.firstWhere((g) => g.id == groupId);
-      } catch (_) {
-        return null;
-      }
-    });
-
 class WorkoutDetailsPage extends ConsumerWidget {
   const WorkoutDetailsPage({required this.groupId, super.key});
   final int groupId;
