@@ -18,6 +18,7 @@ import '../widgets/rest_timer_widget.dart';
 import '../widgets/number_input_control.dart';
 import '../widgets/one_rep_max_display.dart';
 import '../widgets/plate_calculator_dialog.dart';
+import '../widgets/rpe_info_dialog.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
 
@@ -282,6 +283,10 @@ class _ExercisePlayerView extends HookConsumerWidget {
             ),
       ),
     );
+
+    // Warm-up sets state (List of pairs: [weight, reps])
+    final warmupSets = useState<List<Map<String, int>>>([]);
+
     final notesController = useTextEditingController();
     final tabController = useTabController(initialLength: 2);
     final historyLogsAsync = ref.watch(exerciseLogsProvider(workout.exerciseId));
@@ -290,6 +295,17 @@ class _ExercisePlayerView extends HookConsumerWidget {
         (logs.value.values.every((l) => l.isCompleted) &&
             logs.value.isNotEmpty &&
             logs.value.length == workout.series.length);
+
+    void generateWarmup() {
+      if (workout.series.isEmpty) return;
+      final workingWeight = workout.series.first.weight;
+      if (workingWeight == 0) return;
+
+      warmupSets.value = [
+        {'weight': (workingWeight * 0.5).round(), 'reps': 12},
+        {'weight': (workingWeight * 0.75).round(), 'reps': 8},
+      ];
+    }
 
     return Column(
       children: [
@@ -333,8 +349,23 @@ class _ExercisePlayerView extends HookConsumerWidget {
                       const SizedBox(height: 16),
                     ],
 
-                    Text('Séries', style: Theme.of(context).textTheme.titleLarge),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Séries', style: Theme.of(context).textTheme.titleLarge),
+                        if (warmupSets.value.isEmpty && (workout.series.firstOrNull?.weight ?? 0) > 0)
+                          TextButton.icon(
+                            onPressed: generateWarmup,
+                            icon: const Icon(Icons.fitness_center_outlined, size: 16),
+                            label: const Text('Gerar Aquecimento'),
+                          ),
+                      ],
+                    ),
                     const SizedBox(height: 8),
+                    if (warmupSets.value.isNotEmpty) ...[
+                      _buildWarmupList(context, warmupSets.value),
+                      const SizedBox(height: 16),
+                    ],
                     _buildSetsList(context, logs, historyLogsAsync.asData?.value.firstOrNull),
                     const SizedBox(height: 24),
                     TextField(
@@ -490,6 +521,44 @@ class _ExercisePlayerView extends HookConsumerWidget {
     );
   }
 
+
+  Widget _buildWarmupList(BuildContext context, List<Map<String, int>> sets) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Aquecimento Sugerido',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Colors.orange,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        ...sets.asMap().entries.map((e) {
+          final index = e.key;
+          final set = e.value;
+          return Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.orange.withOpacity(0.3)),
+            ),
+            child: Row(
+              children: [
+                 Text('Aquecimento ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange)),
+                 const Spacer(),
+                 Text('${set['reps']} reps @ ${set['weight']} kg'),
+                 const SizedBox(width: 16),
+                 const Icon(Icons.check_circle_outline, color: Colors.orange),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
+  }
 
   Widget _buildSetsList(
     BuildContext context,
@@ -709,7 +778,23 @@ class _SetRow extends HookWidget {
           const SizedBox(height: 12),
            Row(
             children: [
-              const Text('RPE: '),
+              Row(
+                children: [
+                  const Text('RPE'),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.info_outline, size: 16, color: Colors.grey),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const RpeInfoDialog(),
+                      );
+                    },
+                  ),
+                  const Text(': '),
+                ],
+              ),
               Expanded(
                 child: Slider(
                   value: (log.rpe ?? 5).toDouble(),

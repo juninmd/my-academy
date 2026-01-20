@@ -26,6 +26,9 @@ class ProfilePage extends HookConsumerWidget {
       return null;
     }, [user]);
 
+    // Local state to track editing mode
+    final isEditing = useState(false);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Perfil')),
       body:
@@ -68,7 +71,7 @@ class ProfilePage extends HookConsumerWidget {
                         prefixIcon: Icon(Icons.person_outline),
                         border: OutlineInputBorder(),
                       ),
-                      readOnly: true, // For now read-only as per legacy
+                      readOnly: !isEditing.value,
                     ),
                     const SizedBox(height: 16),
                     TextField(
@@ -123,6 +126,39 @@ class ProfilePage extends HookConsumerWidget {
                               'Usado na calculadora de anilhas.',
                               style: TextStyle(color: Colors.grey, fontSize: 12),
                             ),
+                            const Divider(height: 16),
+                            Row(
+                              children: [
+                                const Icon(Icons.monitor_weight_outlined),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    'Peso Corporal',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                                Text(
+                                  '${settings.bodyWeight.toStringAsFixed(1)} kg',
+                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Slider(
+                              value: settings.bodyWeight,
+                              min: 40,
+                              max: 150,
+                              divisions: 220,
+                              label: settings.bodyWeight.toString(),
+                              onChanged: (value) {
+                                ref.read(settingsProvider.notifier).setBodyWeight(value);
+                              },
+                            ),
+                             const Text(
+                              'Acompanhe sua evolução.',
+                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                            ),
                             const Divider(height: 32),
                             Text(
                               'Tema',
@@ -154,16 +190,45 @@ class ProfilePage extends HookConsumerWidget {
                     const SizedBox(height: 32),
 
                     // Actions
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Implement Edit functionality later
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Edição em breve')),
-                        );
-                      },
-                      icon: const Icon(Icons.edit_outlined),
-                      label: const Text('Editar Perfil'),
-                    ),
+                    if (isEditing.value)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: () {
+                                isEditing.value = false;
+                                nameController.text = user?.name ?? '';
+                              },
+                              child: const Text('Cancelar'),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                // Since we don't have a backend update method exposed yet,
+                                // we will just show a success message or mock it.
+                                // In a real app, we would call ref.read(authNotifierProvider.notifier).updateProfile(...)
+                                isEditing.value = false;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Perfil atualizado com sucesso! (Simulação)'),
+                                  ),
+                                );
+                              },
+                              child: const Text('Salvar'),
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          isEditing.value = true;
+                        },
+                        icon: const Icon(Icons.edit_outlined),
+                        label: const Text('Editar Perfil'),
+                      ),
 
                     const SizedBox(height: 16),
 
