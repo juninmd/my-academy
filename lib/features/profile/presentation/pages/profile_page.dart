@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +44,7 @@ class ProfilePage extends HookConsumerWidget {
                             Theme.of(context).colorScheme.primaryContainer,
                         backgroundImage:
                             user.photoUrl != null
-                                ? NetworkImage(user.photoUrl!)
+                                ? CachedNetworkImageProvider(user.photoUrl!)
                                 : null,
                         child:
                             user.photoUrl == null
@@ -121,6 +122,29 @@ class ProfilePage extends HookConsumerWidget {
                             const Text(
                               'Usado na calculadora de anilhas.',
                               style: TextStyle(color: Colors.grey, fontSize: 12),
+                            ),
+                            const Divider(height: 32),
+                            Text(
+                              'Tema',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Row(
+                              children: [
+                                const Text('Modo Escuro'),
+                                const Spacer(),
+                                Switch(
+                                  value: settings.themeMode == ThemeMode.dark,
+                                  onChanged: (val) {
+                                    ref
+                                        .read(settingsProvider.notifier)
+                                        .setThemeMode(
+                                          val
+                                              ? ThemeMode.dark
+                                              : ThemeMode.light,
+                                        );
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
