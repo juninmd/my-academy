@@ -10,6 +10,8 @@ import '../providers/home_provider.dart';
 import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 import '../widgets/quick_timer_dialog.dart';
+import '../widgets/weekly_goal_widget.dart';
+import '../widgets/body_weight_dialog.dart';
 
 // Placeholder for now
 class DashboardPage extends ConsumerWidget {
@@ -88,6 +90,9 @@ class DashboardPage extends ConsumerWidget {
                   data:
                       (summary) => Column(
                         children: [
+                          WeeklyGoalWidget(completedDays: summary.counter),
+                          const SizedBox(height: 24),
+
                           Row(
                             children: [
                               Expanded(
@@ -285,6 +290,20 @@ class _ToolsSection extends StatelessWidget {
                    showDialog(
                      context: context,
                      builder: (context) => const QuickTimerDialog(),
+                   );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ToolCard(
+                icon: Icons.monitor_weight_outlined,
+                label: 'Peso',
+                color: Colors.purple,
+                onTap: () {
+                   showDialog(
+                     context: context,
+                     builder: (context) => const BodyWeightDialog(),
                    );
                 },
               ),

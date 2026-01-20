@@ -4,36 +4,60 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsState {
   final double barWeight;
+  final double bodyWeight;
   final ThemeMode themeMode;
 
-  SettingsState({this.barWeight = 20.0, this.themeMode = ThemeMode.system});
+  SettingsState({
+    this.barWeight = 20.0,
+    this.bodyWeight = 70.0,
+    this.themeMode = ThemeMode.system,
+  });
 
-  SettingsState copyWith({double? barWeight, ThemeMode? themeMode}) {
+  SettingsState copyWith({
+    double? barWeight,
+    double? bodyWeight,
+    ThemeMode? themeMode,
+  }) {
     return SettingsState(
       barWeight: barWeight ?? this.barWeight,
+      bodyWeight: bodyWeight ?? this.bodyWeight,
       themeMode: themeMode ?? this.themeMode,
     );
   }
 }
 
-class SettingsNotifier extends StateNotifier<SettingsState> {
-  SettingsNotifier() : super(SettingsState()) {
+class SettingsNotifier extends Notifier<SettingsState> {
+  @override
+  SettingsState build() {
+    // Initial state
     _loadSettings();
+    return SettingsState();
   }
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     final barWeight = prefs.getDouble('bar_weight') ?? 20.0;
+    final bodyWeight = prefs.getDouble('body_weight') ?? 70.0;
     final themeIndex = prefs.getInt('theme_mode') ?? 0;
     final themeMode = ThemeMode.values[themeIndex];
 
-    state = state.copyWith(barWeight: barWeight, themeMode: themeMode);
+    state = state.copyWith(
+      barWeight: barWeight,
+      bodyWeight: bodyWeight,
+      themeMode: themeMode,
+    );
   }
 
   Future<void> setBarWeight(double weight) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('bar_weight', weight);
     state = state.copyWith(barWeight: weight);
+  }
+
+  Future<void> setBodyWeight(double weight) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('body_weight', weight);
+    state = state.copyWith(bodyWeight: weight);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
@@ -43,6 +67,4 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 }
 
-final settingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
-  return SettingsNotifier();
-});
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);

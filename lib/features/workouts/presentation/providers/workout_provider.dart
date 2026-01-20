@@ -42,3 +42,21 @@ Future<List<ExerciseLogEntity>> exerciseLogs(
     (logs) => logs,
   );
 }
+
+// Manually defined provider to avoid generation issues if present,
+// and to match the implementation expected by other files if generation is skipped.
+// Also moving the `workoutGroupByIdProvider` here to be shared.
+final workoutGroupByIdProvider = FutureProvider.family
+    .autoDispose<WorkoutGroupEntity?, int>((ref, groupId) async {
+  final user = ref.watch(authProvider).value;
+  if (user == null) throw Exception('User not logged in');
+
+  // This relies on the workoutGroups provider which fetches all groups.
+  // Ideally this should fetch a single group from API if possible.
+  final allGroups = await ref.watch(workoutGroupsProvider(user.id).future);
+  try {
+    return allGroups.firstWhere((g) => g.id == groupId);
+  } catch (_) {
+    return null;
+  }
+});
