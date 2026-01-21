@@ -7,6 +7,7 @@ import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/set_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
+import '../providers/exercise_stats_provider.dart';
 import '../providers/workout_provider.dart';
 
 class ExerciseStatsPage extends ConsumerWidget {
