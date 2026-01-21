@@ -88,7 +88,10 @@ class WorkoutDetailsPage extends ConsumerWidget {
                         return WorkoutCard(
                           workout: workout,
                           onTap: () {
-                            // Toggle finish or show details
+                            if (workout.exercise != null) {
+                              context.push('/exercise-details',
+                                  extra: workout.exercise);
+                            }
                           },
                           onLongPress: () {
                             // Show Details Dialog

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../utils/one_rep_max_calculator.dart';
+
 class OneRepMaxCalculatorDialog extends StatefulWidget {
   const OneRepMaxCalculatorDialog({super.key});
 
@@ -14,16 +16,11 @@ class _OneRepMaxCalculatorDialogState extends State<OneRepMaxCalculatorDialog> {
 
   void _calculate() {
     final weight = double.tryParse(_weightController.text) ?? 0;
-    final reps = double.tryParse(_repsController.text) ?? 0;
-    if (weight > 0 && reps > 0) {
-      setState(() {
-        _oneRepMax = weight * (1 + (reps / 30));
-      });
-    } else {
-        setState(() {
-            _oneRepMax = 0;
-        });
-    }
+    final reps = int.tryParse(_repsController.text) ?? 0;
+    setState(() {
+      _oneRepMax =
+          OneRepMaxCalculator.calculateEpley(weight, reps);
+    });
   }
 
   @override
