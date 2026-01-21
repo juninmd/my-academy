@@ -26,11 +26,8 @@ Future<List<WorkoutGroupEntity>> workoutGroups(
   );
 }
 
-@riverpod
-Future<List<ExerciseLogEntity>> exerciseLogs(
-  Ref ref,
-  int exerciseId,
-) async {
+// Manually defined to ensure availability without running build_runner
+final exerciseLogsProvider = FutureProvider.family.autoDispose<List<ExerciseLogEntity>, int>((ref, exerciseId) async {
   final userAsync = ref.watch(authProvider);
   final user = userAsync.value;
   if (user == null) {
@@ -42,7 +39,7 @@ Future<List<ExerciseLogEntity>> exerciseLogs(
     (failure) => throw Exception(failure.message),
     (logs) => logs,
   );
-}
+});
 
 // Manually defined provider to avoid generation issues if present,
 // and to match the implementation expected by other files if generation is skipped.

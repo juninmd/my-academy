@@ -8,6 +8,7 @@ import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/set_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
 import '../providers/exercise_stats_provider.dart';
+import '../providers/workout_provider.dart';
 
 class ExerciseStatsPage extends ConsumerWidget {
   const ExerciseStatsPage({required this.exercise, super.key});
@@ -16,7 +17,7 @@ class ExerciseStatsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final logsAsync = ref.watch(exerciseStatsProvider(exercise.id));
+    final logsAsync = ref.watch(exerciseLogsProvider(exercise.id));
 
     return Scaffold(
       body: CustomScrollView(
