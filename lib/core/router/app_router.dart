@@ -45,6 +45,11 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/exercise-details',
         builder: (context, state) {
+          if (state.extra is! ExerciseEntity) {
+            return const Scaffold(
+              body: Center(child: Text('Erro: Exercício não encontrado.')),
+            );
+          }
           final exercise = state.extra as ExerciseEntity;
           return ExerciseStatsPage(exercise: exercise);
         },

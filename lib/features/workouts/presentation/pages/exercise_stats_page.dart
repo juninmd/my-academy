@@ -133,7 +133,10 @@ class _LogCard extends StatelessWidget {
     double max1RM = 0;
 
     for (final set in log.sets) {
-      final rm = OneRepMaxCalculator.calculateEpley(set.weight, set.reps);
+      final rm = OneRepMaxCalculator.calculateEpley(
+        set.weight.toDouble(),
+        set.reps,
+      );
       if (rm > max1RM) {
         max1RM = rm;
         bestSet = set;
