@@ -104,7 +104,6 @@ class DashboardPage extends ConsumerWidget {
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              // Placeholder for minutes if not available
                               Expanded(
                                 child: _StatCard(
                                   icon: Icons.timer,
@@ -124,7 +123,8 @@ class DashboardPage extends ConsumerWidget {
                           ),
                           const SizedBox(height: 24),
 
-                          _ToolsSection(),
+                          // Tools Section
+                          const _ToolsSection(),
                           const SizedBox(height: 24),
 
                           // Workout Card
@@ -249,12 +249,20 @@ class _ToolsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 16),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: _ToolCard(
+            Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
+            // Optional: Add "See All" if list grows
+          ],
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              _ToolCard(
                 icon: Icons.calculate_outlined,
                 label: 'Anilhas',
                 color: Colors.blue,
@@ -265,10 +273,8 @@ class _ToolsSection extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _ToolCard(
+              const SizedBox(width: 12),
+              _ToolCard(
                 icon: Icons.fitness_center,
                 label: '1RM',
                 color: Colors.red,
@@ -279,10 +285,8 @@ class _ToolsSection extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _ToolCard(
+              const SizedBox(width: 12),
+              _ToolCard(
                 icon: Icons.timer_outlined,
                 label: 'Descanso',
                 color: Colors.orange,
@@ -293,10 +297,8 @@ class _ToolsSection extends StatelessWidget {
                    );
                 },
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _ToolCard(
+              const SizedBox(width: 12),
+              _ToolCard(
                 icon: Icons.monitor_weight_outlined,
                 label: 'Peso',
                 color: Colors.purple,
@@ -307,8 +309,17 @@ class _ToolsSection extends StatelessWidget {
                    );
                 },
               ),
-            ),
-          ],
+               const SizedBox(width: 12),
+              _ToolCard(
+                icon: Icons.bar_chart,
+                label: 'Análise',
+                color: Colors.teal,
+                onTap: () {
+                   context.push('/analytics');
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -334,6 +345,7 @@ class _ToolCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
+        width: 100,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
@@ -341,10 +353,15 @@ class _ToolCard extends StatelessWidget {
           border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: color, size: 32),
             const SizedBox(height: 8),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+                label,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
