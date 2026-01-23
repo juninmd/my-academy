@@ -18,7 +18,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     String userId,
   ) async {
     try {
-      final response = await _apiClient.get('workout-groups?userId=$userId');
+      final response = await _apiClient.get('workouts-groups/user/$userId');
       final List<dynamic> data = response;
 
       final groups = data.cast<Map<String, dynamic>>().map(_mapGroup).toList();
@@ -35,13 +35,9 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   ) async {
     try {
       final response = await _apiClient.get(
-        'workout-groups?id=$groupId&userId=$userId',
+        'workouts-groups/$groupId',
       );
-      final List<dynamic> data = response;
-      if (data.isEmpty) {
-        return const Left(ServerFailure('Group not found'));
-      }
-      return Right(_mapGroup(data.first));
+      return Right(_mapGroup(response));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

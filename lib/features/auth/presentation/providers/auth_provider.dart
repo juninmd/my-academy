@@ -18,7 +18,7 @@ FirebaseAuth firebaseAuth(Ref ref) => FirebaseAuth.instance;
 GoogleSignIn googleSignIn(Ref ref) => GoogleSignIn();
 
 @Riverpod(keepAlive: true)
-ApiClient apiClient(Ref ref) => ApiClient(baseUrl: 'http://localhost:9001/');
+ApiClient apiClient(Ref ref) => ApiClient(baseUrl: 'http://localhost:9000/');
 
 @Riverpod(keepAlive: true)
 AuthRemoteDataSource authRemoteDataSource(Ref ref) {
