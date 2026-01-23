@@ -15,6 +15,8 @@ import '../../domain/entities/set_log_entity.dart';
 import '../providers/workout_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/rest_timer_widget.dart';
+import '../widgets/workout_timer.dart';
+import '../widgets/timer_notifier.dart';
 import '../widgets/number_input_control.dart';
 import '../widgets/one_rep_max_display.dart';
 import '../widgets/plate_calculator_dialog.dart';
@@ -42,12 +44,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
         final sessionLogs = useState<Map<int, ExerciseSessionLog>>({});
 
         // Global Workout Timer (Total Duration)
-        final workoutDuration = useState(0);
+        final timerNotifier = useMemoized(() => TimerNotifier()..start(), []);
         useEffect(() {
-          final timer = Timer.periodic(const Duration(seconds: 1), (_) {
-             workoutDuration.value++;
-          });
-          return timer.cancel;
+          return timerNotifier.dispose;
         }, []);
 
         // Exercise Timer State
@@ -162,7 +161,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => WorkoutSummaryPage(
-                    duration: Duration(seconds: workoutDuration.value),
+                    duration: Duration(seconds: timerNotifier.value),
                     sessionLogs: newSessionLogs,
                   ),
                 ),
@@ -175,7 +174,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           appBar: AppBar(
             title: Text(group.name),
             centerTitle: true,
-            automaticallyImplyLeading: false,
+            leading: Center(
+              child: WorkoutTimer(notifier: timerNotifier),
+            ),
             actions: [
               IconButton(
                 onPressed: () => context.pop(),
