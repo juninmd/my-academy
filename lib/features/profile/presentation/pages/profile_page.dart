@@ -5,9 +5,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../workouts/domain/entities/exercise_log_entity.dart';
+import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
-import '../../home/presentation/providers/home_provider.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
@@ -94,8 +95,59 @@ class ProfilePage extends HookConsumerWidget {
                   const SizedBox(height: 32),
 
                   // Stats Summary
-                  ref.watch(workoutSummaryProvider).when(
-                    data: (summary) {
+                  ref.watch(allExerciseLogsProvider).when(
+                    data: (logs) {
+                      // Calculate Stats
+                      final uniqueDays = logs
+                          .map(
+                            (l) => DateTime(
+                              l.date.year,
+                              l.date.month,
+                              l.date.day,
+                            ),
+                          )
+                          .toSet();
+                      final totalWorkouts = uniqueDays.length;
+
+                      double totalVolume = 0;
+                      for (final log in logs) {
+                        for (final set in log.sets) {
+                          totalVolume += set.weight * set.reps;
+                        }
+                      }
+                      final volumeDisplay =
+                          totalVolume > 1000
+                              ? '${(totalVolume / 1000).toStringAsFixed(1)} ton'
+                              : '${totalVolume.toStringAsFixed(0)} kg';
+
+                      // Streak Calculation
+                      int streak = 0;
+                      if (uniqueDays.isNotEmpty) {
+                        final sortedDays = uniqueDays.toList()
+                          ..sort((a, b) => b.compareTo(a));
+                        final today = DateTime.now();
+                        final todayDate = DateTime(
+                          today.year,
+                          today.month,
+                          today.day,
+                        );
+
+                        // Check if trained today
+                        var currentDate = todayDate;
+                        if (!sortedDays.contains(currentDate)) {
+                          currentDate = currentDate.subtract(
+                            const Duration(days: 1),
+                          );
+                        }
+
+                        while (sortedDays.contains(currentDate)) {
+                          streak++;
+                          currentDate = currentDate.subtract(
+                            const Duration(days: 1),
+                          );
+                        }
+                      }
+
                       return Column(
                         children: [
                           Row(
@@ -103,7 +155,7 @@ class ProfilePage extends HookConsumerWidget {
                               Expanded(
                                 child: _StatCard(
                                   label: 'Treinos',
-                                  value: summary.counter.toString(),
+                                  value: totalWorkouts.toString(),
                                   icon: Icons.fitness_center,
                                   color: Colors.blue,
                                 ),
@@ -111,10 +163,35 @@ class ProfilePage extends HookConsumerWidget {
                               const SizedBox(width: 16),
                               Expanded(
                                 child: _StatCard(
+                                  label: 'Volume Total',
+                                  value: volumeDisplay,
+                                  icon: Icons.monitor_weight,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _StatCard(
+                                  label: 'Sequência',
+                                  value: '$streak dias',
+                                  icon: Icons.local_fire_department,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _StatCard(
                                   label: 'Último Treino',
-                                  value: summary.lastSessionDate != null
-                                      ? DateFormat('dd/MM').format(DateTime.parse(summary.lastSessionDate!))
-                                      : '-',
+                                  value:
+                                      logs.isNotEmpty
+                                          ? DateFormat(
+                                            'dd/MM',
+                                          ).format(logs.first.date)
+                                          : '-',
                                   icon: Icons.calendar_today,
                                   color: Colors.green,
                                 ),
@@ -124,7 +201,8 @@ class ProfilePage extends HookConsumerWidget {
                         ],
                       );
                     },
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading:
+                        () => const Center(child: CircularProgressIndicator()),
                     error: (_, __) => const SizedBox(),
                   ),
 

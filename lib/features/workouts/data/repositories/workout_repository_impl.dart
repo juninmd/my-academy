@@ -33,8 +33,18 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     String userId,
     int groupId,
   ) async {
-    // TODO: Implement specific fetching if needed, for now reused logic
-    return const Left(ServerFailure('Not implemented'));
+    try {
+      final response = await _apiClient.get(
+        'workout-groups?id=$groupId&userId=$userId',
+      );
+      final List<dynamic> data = response;
+      if (data.isEmpty) {
+        return const Left(ServerFailure('Group not found'));
+      }
+      return Right(_mapGroup(data.first));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
   }
 
   @override
@@ -78,6 +88,26 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     try {
       final response = await _apiClient.post('exercise-logs', data: log.toJson());
       return Right(ExerciseLogEntity.fromJson(response));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<ExerciseLogEntity>>> getAllExerciseLogs(
+    String userId,
+  ) async {
+    try {
+      final response = await _apiClient.get(
+        'exercise-logs?userId=$userId&_sort=date&_order=desc',
+      );
+      final List<dynamic> data = response;
+      return Right(
+        data
+            .cast<Map<String, dynamic>>()
+            .map(ExerciseLogEntity.fromJson)
+            .toList(),
+      );
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

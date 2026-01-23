@@ -41,6 +41,20 @@ final exerciseLogsProvider = FutureProvider.family.autoDispose<List<ExerciseLogE
   );
 });
 
+final allExerciseLogsProvider = FutureProvider.autoDispose<List<ExerciseLogEntity>>((ref) async {
+  final userAsync = ref.watch(authProvider);
+  final user = userAsync.value;
+  if (user == null) {
+    return [];
+  }
+  final repository = ref.watch(workoutRepositoryProvider);
+  final result = await repository.getAllExerciseLogs(user.id);
+  return result.fold(
+    (failure) => throw Exception(failure.message),
+    (logs) => logs,
+  );
+});
+
 // Manually defined provider to avoid generation issues if present,
 // and to match the implementation expected by other files if generation is skipped.
 // Also moving the `workoutGroupByIdProvider` here to be shared.
@@ -49,12 +63,12 @@ final workoutGroupByIdProvider = FutureProvider.family
   final user = ref.watch(authProvider).value;
   if (user == null) throw Exception('User not logged in');
 
-  // This relies on the workoutGroups provider which fetches all groups.
-  // Ideally this should fetch a single group from API if possible.
-  final allGroups = await ref.watch(workoutGroupsProvider(user.id).future);
-  try {
-    return allGroups.firstWhere((g) => g.id == groupId);
-  } catch (_) {
-    return null;
-  }
+  // Use the new repository method if possible, or fallback.
+  // Since we implemented getWorkoutGroup in the repo, let's use it.
+  final repository = ref.watch(workoutRepositoryProvider);
+  final result = await repository.getWorkoutGroup(user.id, groupId);
+  return result.fold(
+      (failure) => throw Exception(failure.message),
+      (group) => group
+  );
 });

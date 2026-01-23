@@ -22,4 +22,8 @@ abstract class WorkoutRepository {
   Future<Either<Failure, ExerciseLogEntity>> saveExerciseLog(
     ExerciseLogEntity log,
   );
+
+  Future<Either<Failure, List<ExerciseLogEntity>>> getAllExerciseLogs(
+    String userId,
+  );
 }

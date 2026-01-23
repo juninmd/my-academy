@@ -38,6 +38,7 @@ dependencies:
   dartz: ^0.10.1
   collection: any
   cached_network_image: ^3.3.0
+  fl_chart: ^1.1.1
 
 dev_dependencies:
   flutter_test:
