@@ -12,6 +12,13 @@ import 'package:my_academy/features/workouts/presentation/providers/workout_prov
 @GenerateNiceMocks([MockSpec<WorkoutRepository>()])
 import 'exercise_stats_provider_test.mocks.dart';
 
+class MockAuthNotifier extends AuthNotifier {
+  final UserEntity? _initial;
+  MockAuthNotifier(this._initial);
+  @override
+  Future<UserEntity?> build() async => _initial;
+}
+
 void main() {
   late MockWorkoutRepository mockRepository;
 
@@ -26,7 +33,7 @@ void main() {
 
     final container = ProviderContainer(
       overrides: [
-        authProvider.overrideWith((ref) => Stream.value(user)),
+        authProvider.overrideWith(() => MockAuthNotifier(user)),
         workoutRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );

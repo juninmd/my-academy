@@ -52,7 +52,7 @@ class WeeklyGoalWidget extends StatelessWidget {
             child: LinearProgressIndicator(
               value: (progress > 1.0 ? 1.0 : progress),
               minHeight: 12,
-              backgroundColor: Theme.of(context).disabledColor.withOpacity(0.1),
+              backgroundColor: Theme.of(context).disabledColor.withValues(alpha: 0.1),
               valueColor: AlwaysStoppedAnimation<Color>(progressColor),
             ),
           ),
@@ -62,7 +62,7 @@ class WeeklyGoalWidget extends StatelessWidget {
                 ? 'Parabéns! Meta alcançada! 🎉'
                 : 'Continue firme! Faltam ${targetDays - completedDays} treinos.',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
+              color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
             ),
           ),
         ],

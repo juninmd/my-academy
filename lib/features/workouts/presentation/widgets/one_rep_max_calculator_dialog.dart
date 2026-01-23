@@ -61,7 +61,7 @@ class _OneRepMaxCalculatorDialogState extends State<OneRepMaxCalculatorDialog> {
                       const SizedBox(height: 16),
                        // Percentages table
                        Table(
-                          border: TableBorder.all(color: Colors.grey.withOpacity(0.3)),
+                          border: TableBorder.all(color: Colors.grey.withValues(alpha: 0.3)),
                           children: [
                               _buildPercentageRow('95%', 0.95),
                               _buildPercentageRow('90%', 0.90),

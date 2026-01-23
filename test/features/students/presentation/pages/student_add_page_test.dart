@@ -13,7 +13,7 @@ import 'package:my_academy/features/students/presentation/pages/student_add_page
 @GenerateNiceMocks([MockSpec<StudentRepository>()])
 import 'student_add_page_test.mocks.dart';
 
-class FakeAuthNotifier extends AsyncNotifier<UserEntity?> {
+class FakeAuthNotifier extends AuthNotifier {
   final UserEntity? _initial;
   FakeAuthNotifier(this._initial);
   @override

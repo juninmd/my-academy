@@ -13,7 +13,7 @@ void main() {
     notifier.updateName('New Name');
     expect(container.read(workoutCreateNotifierProvider).name, 'New Name');
 
-    const exercise = ExerciseEntity(id: 1, name: 'Ex', bodyPart: 'Chest');
+    const exercise = ExerciseEntity(id: 1, name: 'Ex');
     notifier.addWorkout(exercise, 10, 20, 30);
 
     final state = container.read(workoutCreateNotifierProvider);

@@ -6,7 +6,7 @@ import 'package:my_academy/features/auth/presentation/providers/auth_provider.da
 import 'package:my_academy/features/workouts/presentation/pages/workout_groups_page.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
 
-class FakeAuthNotifier extends AsyncNotifier<UserEntity?> {
+class FakeAuthNotifier extends AuthNotifier {
   final UserEntity? _initial;
   FakeAuthNotifier(this._initial);
   @override

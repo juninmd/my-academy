@@ -184,7 +184,7 @@ class _LogCard extends StatelessWidget {
                       color: Theme.of(context)
                           .colorScheme
                           .secondaryContainer
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(
