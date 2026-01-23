@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../data/repositories/calendar_repository.dart';
 import '../../domain/entities/workout_session_entity.dart';
 
@@ -26,6 +27,9 @@ class CalendarPage extends HookConsumerWidget {
       ),
     );
 
+    // Fetch workout groups to resolve names
+    final workoutGroupsAsync = ref.watch(workoutGroupsProvider(user?.id ?? ''));
+
     return Scaffold(
       appBar: AppBar(title: const Text('Calendário')),
       body:
@@ -39,6 +43,11 @@ class CalendarPage extends HookConsumerWidget {
 
                   final eventsForSelectedDay = getEventsForDay(
                     selectedDay.value,
+                  );
+
+                  final groupNames = workoutGroupsAsync.maybeWhen(
+                    data: (groups) => {for (var g in groups) g.id: g.name},
+                    orElse: () => <int, String>{},
                   );
 
                   return Column(
@@ -126,14 +135,18 @@ class CalendarPage extends HookConsumerWidget {
                                 (e) => Card(
                                   child: ListTile(
                                     leading: const Icon(Icons.fitness_center),
-                                    title: const Text(
-                                      'Treino realizado',
-                                    ), // We would need Group Name here but only ID is stored in session usually.
+                                    title: Text(
+                                      groupNames[e.workoutGroupId] ??
+                                          'Treino (ID: ${e.workoutGroupId})',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                     subtitle: Text(
-                                      'ID do Grupo: ${e.workoutGroupId}',
+                                      'Realizado às ${e.date.hour.toString().padLeft(2, '0')}:${e.date.minute.toString().padLeft(2, '0')}',
                                     ),
                                     trailing: const Icon(
-                                      Icons.check,
+                                      Icons.check_circle,
                                       color: Colors.green,
                                     ),
                                   ),
