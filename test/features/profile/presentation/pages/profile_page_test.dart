@@ -8,13 +8,14 @@ import 'package:my_academy/features/home/presentation/providers/home_provider.da
 import 'package:my_academy/features/profile/presentation/pages/profile_page.dart';
 import 'package:my_academy/features/profile/presentation/providers/settings_provider.dart';
 
-class FakeAuthNotifier extends AsyncNotifier<UserEntity?> {
+class FakeAuthNotifier extends AuthNotifier {
   final UserEntity? _initial;
   FakeAuthNotifier(this._initial);
   @override
   Future<UserEntity?> build() async => _initial;
 
   // Need to implement signOut for button test
+  @override
   Future<void> signOut() async {
      state = const AsyncValue.data(null);
   }

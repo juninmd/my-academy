@@ -8,7 +8,7 @@ import 'package:my_academy/features/workouts/presentation/providers/workout_crea
 
 class FakeWorkoutCreateNotifier extends WorkoutCreateNotifier {
   @override
-  WorkoutGroupEntity build() => const WorkoutGroupEntity(name: '', userId: '', workouts: []);
+  WorkoutGroupEntity build() => const WorkoutGroupEntity(name: '', userId: 'u1', workouts: []);
 
   @override
   void updateName(String name) {

@@ -27,7 +27,7 @@ class RestTimerWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -40,7 +40,7 @@ class RestTimerWidget extends StatelessWidget {
             children: [
               CircularProgressIndicator(
                 value: progress,
-                backgroundColor: colorScheme.onSurface.withOpacity(0.1),
+                backgroundColor: colorScheme.onSurface.withValues(alpha: 0.1),
                 color: colorScheme.primary,
               ),
               const SizedBox(width: 16),

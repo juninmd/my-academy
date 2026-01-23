@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_academy/core/theme/app_theme.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('AppTheme', () {
     test('premiumTheme should return a valid ThemeData', () {
       final theme = AppTheme.premiumTheme;

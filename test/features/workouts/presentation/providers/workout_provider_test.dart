@@ -12,6 +12,13 @@ import 'package:my_academy/features/workouts/presentation/providers/workout_prov
 @GenerateNiceMocks([MockSpec<WorkoutRepository>()])
 import 'workout_provider_test.mocks.dart';
 
+class MockAuthNotifier extends AuthNotifier {
+  final UserEntity? _initial;
+  MockAuthNotifier(this._initial);
+  @override
+  Future<UserEntity?> build() async => _initial;
+}
+
 void main() {
   late MockWorkoutRepository mockRepository;
 
@@ -22,7 +29,7 @@ void main() {
   const user = UserEntity(id: 'u1', email: 'e', name: 'n');
 
   test('workoutGroups provider returns groups when success', () async {
-    final groups = [const WorkoutGroupEntity(id: 1, name: 'g1', workouts: [])];
+    final groups = [const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: [])];
     when(mockRepository.getWorkoutGroups('u1')).thenAnswer((_) async => Right(groups));
 
     final container = ProviderContainer(
@@ -39,12 +46,12 @@ void main() {
   });
 
   test('workoutGroupByIdProvider returns group when found', () async {
-    final groups = [const WorkoutGroupEntity(id: 1, name: 'g1', workouts: [])];
+    final groups = [const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: [])];
     when(mockRepository.getWorkoutGroups('u1')).thenAnswer((_) async => Right(groups));
 
     final container = ProviderContainer(
       overrides: [
-         authProvider.overrideWith((ref) => Stream.value(user)),
+         authProvider.overrideWith(() => MockAuthNotifier(user)),
          workoutRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );

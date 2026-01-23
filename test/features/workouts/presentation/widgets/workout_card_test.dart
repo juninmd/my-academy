@@ -8,6 +8,7 @@ void main() {
   testWidgets('WorkoutCard displays info', (tester) async {
     const workout = WorkoutEntity(
       id: 1,
+      exerciseId: 1,
       exercise: ExerciseEntity(id: 1, name: 'Bench Press', image: null),
       series: [],
     );

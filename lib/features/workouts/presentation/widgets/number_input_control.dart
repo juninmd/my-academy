@@ -50,9 +50,9 @@ class NumberInputControl extends HookWidget {
         Container(
           height: 50,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.withOpacity(0.5)),
+            border: Border.all(color: Colors.grey.withValues(alpha: 0.5)),
             borderRadius: BorderRadius.circular(8),
-            color: enabled ? null : Theme.of(context).disabledColor.withOpacity(0.1),
+            color: enabled ? null : Theme.of(context).disabledColor.withValues(alpha: 0.1),
           ),
           child: Row(
             children: [
