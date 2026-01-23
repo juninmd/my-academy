@@ -3,15 +3,20 @@ import '../utils/logger.dart';
 import '../exceptions/failure.dart';
 
 class ApiClient {
-  ApiClient({required String baseUrl, String? authToken}) {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: baseUrl,
-        connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 15),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      ),
-    );
+  ApiClient({
+    required String baseUrl,
+    String? authToken,
+    Dio? dio,
+  }) {
+    _dio = dio ??
+        Dio(
+          BaseOptions(
+            baseUrl: baseUrl,
+            connectTimeout: const Duration(seconds: 15),
+            receiveTimeout: const Duration(seconds: 15),
+            headers: {'Content-Type': 'application/json; charset=UTF-8'},
+          ),
+        );
 
     if (authToken != null) {
       setAuthToken(authToken);
