@@ -285,8 +285,8 @@ class _ExercisePlayerView extends HookConsumerWidget {
       ),
     );
 
-    // Warm-up sets state (List of pairs: [weight, reps])
-    final warmupSets = useState<List<Map<String, int>>>([]);
+    // Warm-up sets state (List of pairs: [weight, reps, completed])
+    final warmupSets = useState<List<Map<String, dynamic>>>([]);
 
     final notesController = useTextEditingController();
     final tabController = useTabController(initialLength: 2);
@@ -303,8 +303,8 @@ class _ExercisePlayerView extends HookConsumerWidget {
       if (workingWeight == 0) return;
 
       warmupSets.value = [
-        {'weight': (workingWeight * 0.5).round(), 'reps': 12},
-        {'weight': (workingWeight * 0.75).round(), 'reps': 8},
+        {'weight': (workingWeight * 0.5).round(), 'reps': 12, 'completed': false},
+        {'weight': (workingWeight * 0.75).round(), 'reps': 8, 'completed': false},
       ];
     }
 
@@ -364,7 +364,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     if (warmupSets.value.isNotEmpty) ...[
-                      _buildWarmupList(context, warmupSets.value),
+                      _buildWarmupList(context, warmupSets),
                       const SizedBox(height: 16),
                     ],
                     _buildSetsList(context, logs, historyLogsAsync.asData?.value.firstOrNull),
@@ -523,7 +523,8 @@ class _ExercisePlayerView extends HookConsumerWidget {
   }
 
 
-  Widget _buildWarmupList(BuildContext context, List<Map<String, int>> sets) {
+  Widget _buildWarmupList(BuildContext context, ValueNotifier<List<Map<String, dynamic>>> warmupSetsNotifier) {
+    final sets = warmupSetsNotifier.value;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -535,28 +536,37 @@ class _ExercisePlayerView extends HookConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        ...sets.asMap().entries.map((e) {
-          final index = e.key;
-          final set = e.value;
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.orange.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
-            ),
-            child: Row(
-              children: [
-                 Text('Aquecimento ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange)),
-                 const Spacer(),
-                 Text('${set['reps']} reps @ ${set['weight']} kg'),
-                 const SizedBox(width: 16),
-                 const Icon(Icons.check_circle_outline, color: Colors.orange),
-              ],
-            ),
-          );
-        }),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: sets.asMap().entries.map((e) {
+            final index = e.key;
+            final set = e.value;
+            final isCompleted = set['completed'] as bool;
+
+            return FilterChip(
+              label: Text(
+                '${set['reps']} reps @ ${set['weight']} kg',
+                style: TextStyle(
+                  color: isCompleted ? Colors.white : Colors.orange,
+                  fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              selected: isCompleted,
+              onSelected: (selected) {
+                final newSets = List<Map<String, dynamic>>.from(sets);
+                newSets[index] = {...set, 'completed': selected};
+                warmupSetsNotifier.value = newSets;
+              },
+              checkmarkColor: Colors.white,
+              selectedColor: Colors.orange,
+              backgroundColor: Colors.orange.withValues(alpha: 0.1),
+              side: BorderSide(
+                color: isCompleted ? Colors.transparent : Colors.orange.withValues(alpha: 0.5),
+              ),
+            );
+          }).toList(),
+        ),
       ],
     );
   }
@@ -707,12 +717,25 @@ class _SetRow extends HookWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   if (lastSet != null)
-                    Text(
-                      'Anterior: ${lastSet!.reps} reps • ${lastSet!.weight} kg',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey,
-                            fontStyle: FontStyle.italic,
-                          ),
+                    ActionChip(
+                      visualDensity: VisualDensity.compact,
+                      avatar: const Icon(Icons.copy_all, size: 14),
+                      label: Text(
+                        'Último: ${lastSet!.reps}x ${lastSet!.weight}kg',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      tooltip: 'Copiar do histórico',
+                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      onPressed: !log.isCompleted
+                          ? () {
+                              onChanged(SetLogState(
+                                actualReps: lastSet!.reps,
+                                actualWeight: lastSet!.weight,
+                                rpe: log.rpe,
+                                isCompleted: log.isCompleted,
+                              ));
+                            }
+                          : null,
                     ),
                 ],
               ),
