@@ -32,7 +32,7 @@ void main() {
         }
       ];
 
-      when(mockApiClient.get('workout-groups?userId=user1'))
+      when(mockApiClient.get('workouts-groups/user/user1'))
           .thenAnswer((_) async => mockData);
 
       final result = await repository.getWorkoutGroups('user1');
