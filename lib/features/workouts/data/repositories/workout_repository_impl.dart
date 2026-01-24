@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../utils/constants.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/exercise_entity.dart';
@@ -86,7 +85,10 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     ExerciseLogEntity log,
   ) async {
     try {
-      final response = await _apiClient.post('exercise-logs', data: log.toJson());
+      final response = await _apiClient.post(
+        'exercise-logs',
+        data: log.toJson(),
+      );
       return Right(ExerciseLogEntity.fromJson(response));
     } catch (e) {
       return Left(ServerFailure(e.toString()));

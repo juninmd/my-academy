@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../utils/constants.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/student_entity.dart';
 
@@ -10,7 +9,10 @@ part 'student_repository.g.dart';
 
 abstract class StudentRepository {
   Future<Either<Failure, List<StudentEntity>>> getStudents(String userId);
-  Future<Either<Failure, StudentEntity>> addStudent(StudentEntity student, String personalId);
+  Future<Either<Failure, StudentEntity>> addStudent(
+    StudentEntity student,
+    String personalId,
+  );
   Future<Either<Failure, StudentEntity?>> checkStudentExists(String email);
   Future<bool> isPersonal(String userId);
 }
@@ -44,7 +46,10 @@ class StudentRepositoryImpl implements StudentRepository {
   }
 
   @override
-  Future<Either<Failure, StudentEntity>> addStudent(StudentEntity student, String personalId) async {
+  Future<Either<Failure, StudentEntity>> addStudent(
+    StudentEntity student,
+    String personalId,
+  ) async {
     try {
       final data = {
         'name': student.name,
@@ -56,30 +61,36 @@ class StudentRepositoryImpl implements StudentRepository {
       // Post to /students to create a new record
       final response = await _apiClient.post('students', data: data);
 
-      return Right(StudentEntity(
-        id: response['id'] ?? '',
-        name: response['name'] ?? '',
-        email: response['email'] ?? '',
-        photoUrl: response['photoUrl'],
-      ));
+      return Right(
+        StudentEntity(
+          id: response['id'] ?? '',
+          name: response['name'] ?? '',
+          email: response['email'] ?? '',
+          photoUrl: response['photoUrl'],
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
 
   @override
-  Future<Either<Failure, StudentEntity?>> checkStudentExists(String email) async {
+  Future<Either<Failure, StudentEntity?>> checkStudentExists(
+    String email,
+  ) async {
     try {
       final response = await _apiClient.get('students?email=$email');
       final List<dynamic> data = response;
       if (data.isNotEmpty) {
         final json = data.first;
-        return Right(StudentEntity(
-          id: json['id'] ?? '',
-          name: json['name'] ?? '',
-          email: json['email'] ?? '',
-          photoUrl: json['photoUrl'],
-        ));
+        return Right(
+          StudentEntity(
+            id: json['id'] ?? '',
+            name: json['name'] ?? '',
+            email: json['email'] ?? '',
+            photoUrl: json['photoUrl'],
+          ),
+        );
       }
       return const Right(null);
     } catch (e) {

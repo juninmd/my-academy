@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../utils/constants.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/workout_session_entity.dart';
 

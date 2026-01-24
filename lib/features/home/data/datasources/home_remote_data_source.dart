@@ -1,6 +1,5 @@
 import '../../../../core/network/api_client.dart';
 import '../../../../features/auth/data/datasources/auth_remote_data_source.dart';
-import '../../../../utils/constants.dart';
 import '../../domain/entities/workout_summary_entity.dart';
 
 abstract class HomeRemoteDataSource {
@@ -44,7 +43,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       lastSessionDate: lastDate,
       workoutName: wName,
       personalName: personal != null ? personal['name'] : null,
-      workoutGroupId: workoutGroupOfDay != null ? workoutGroupOfDay['id'] : null,
+      workoutGroupId:
+          workoutGroupOfDay != null ? workoutGroupOfDay['id'] : null,
       hasWorkoutToday: workoutGroupOfDay != null,
     );
   }
