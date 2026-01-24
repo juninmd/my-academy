@@ -34,13 +34,14 @@ class ExerciseLogEntity extends Equatable {
 
   factory ExerciseLogEntity.fromJson(Map<String, dynamic> json) {
     return ExerciseLogEntity(
-      id: json['id'] as String?,
+      id: (json['id'] as num?)?.toString(),
       userId: json['userId'] as String,
       exerciseId: json['exerciseId'] as int,
       date: DateTime.parse(json['date'] as String),
-      sets: (json['sets'] as List)
-          .map((e) => SetLogEntity.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      sets:
+          (json['sets'] as List)
+              .map((e) => SetLogEntity.fromJson(e as Map<String, dynamic>))
+              .toList(),
       notes: json['notes'] as String?,
     );
   }

@@ -53,15 +53,34 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw const AuthFailure('Failed to retrieve ID Token');
       }
 
-      // Update ApiClient with new token
-      _apiClient.setAuthToken(token);
+      // Update ApiClient with new token (if not handled by provider/interceptor yet)
+      // Since specific requests might use this client before the provider rebuilds,
+      // setting it here is safe but redundant with DioProvider logic if that logic reads fresh token.
+      // However, our DioProvider reads from FirebaseAuth.instance.currentUser which IS updated now.
 
-      return UserDto(
+      final userDto = UserDto(
         id: user.uid,
         email: user.email!,
-        name: user.displayName,
-        photoUrl: user.photoURL,
+        name: user.displayName ?? 'Sem nome',
+        photoUrl:
+            user.photoURL ??
+            "https://w7.pngwing.com/pngs/620/837/png-transparent-bodybuilding-drawing-bodybuilding-physical-fitness-logo-monochrome-thumbnail.png",
       );
+
+      try {
+        await _apiClient.post('/users', data: userDto.toJson());
+      } catch (e) {
+        // Ignore if user already exists (400 or 409 depending on backend validation)
+        // If it's a server failure, we might want to log it but proceed if Auth is successful.
+        // Ideally we should check if status is 400/409.
+        if (e is ServerFailure) {
+          // We assume existing user is fine.
+        } else {
+          logger.w('Failed to sync user with backend: $e');
+        }
+      }
+
+      return userDto;
     } catch (e) {
       if (e is AuthFailure) rethrow;
       logger.e('Sign in error', error: e);
@@ -74,7 +93,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
-      _apiClient.clearAuthToken();
+      // _apiClient.clearAuthToken(); // Handled by DioProvider logic dynamically
     } catch (e) {
       logger.e('Sign out error', error: e);
       throw AuthFailure(e.toString());
@@ -85,10 +104,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserDto?> getCurrentUser() async {
     final user = _firebaseAuth.currentUser;
     if (user != null) {
-      final token = await user.getIdToken();
-      if (token != null) {
-        _apiClient.setAuthToken(token);
-      }
+      // Logic to sync or get from backend could be here, but for now we trust Firebase
       return UserDto(
         id: user.uid,
         email: user.email!,

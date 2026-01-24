@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../../../../core/network/dio_provider.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../utils/constants.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
-import '../../data/datasources/mock_auth_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -18,16 +17,10 @@ FirebaseAuth firebaseAuth(Ref ref) => FirebaseAuth.instance;
 GoogleSignIn googleSignIn(Ref ref) => GoogleSignIn();
 
 @Riverpod(keepAlive: true)
-ApiClient apiClient(Ref ref) => ApiClient(baseUrl: 'http://localhost:9001/');
+ApiClient apiClient(Ref ref) => ref.watch(apiClientProvider);
 
 @Riverpod(keepAlive: true)
 AuthRemoteDataSource authRemoteDataSource(Ref ref) {
-  // Use mock implementation when useMockAuth is enabled for testing
-  if (useMockAuth) {
-    return MockAuthRemoteDataSourceImpl(
-      apiClient: ref.watch(apiClientProvider),
-    );
-  }
   return AuthRemoteDataSourceImpl(
     firebaseAuth: ref.watch(firebaseAuthProvider),
     googleSignIn: ref.watch(googleSignInProvider),
