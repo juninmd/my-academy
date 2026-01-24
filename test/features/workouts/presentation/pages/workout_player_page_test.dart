@@ -12,6 +12,7 @@ void main() {
      const group = WorkoutGroupEntity(
       id: 1,
       name: 'Leg Day',
+      userId: 'u1',
       workouts: [
         WorkoutEntity(
             id: 1,

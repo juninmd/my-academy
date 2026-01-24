@@ -84,7 +84,7 @@ void main() {
 }
 
 // Mock Auth Notifier
-class MockAuthNotifier extends AsyncNotifier<UserEntity?> {
+class MockAuthNotifier extends AuthNotifier {
   final UserEntity? _initialUser;
 
   MockAuthNotifier(this._initialUser);

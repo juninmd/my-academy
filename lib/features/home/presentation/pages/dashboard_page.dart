@@ -143,7 +143,7 @@ class DashboardPage extends ConsumerWidget {
                                   BoxShadow(
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.primary.withOpacity(0.4),
+                                    ).colorScheme.primary.withValues(alpha: 0.4),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
@@ -213,7 +213,7 @@ class DashboardPage extends ConsumerWidget {
                                     size: 48,
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.onSurface.withOpacity(0.5),
+                                    ).colorScheme.onSurface.withValues(alpha: 0.5),
                                   ),
                                   const SizedBox(height: 16),
                                   Text(
@@ -350,7 +350,7 @@ class _ToolCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

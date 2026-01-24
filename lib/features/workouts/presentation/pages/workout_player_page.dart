@@ -459,8 +459,8 @@ class _ExercisePlayerView extends HookConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
           color: isTimerRunning
-              ? Colors.redAccent.withOpacity(0.1)
-              : Colors.greenAccent.withOpacity(0.1),
+              ? Colors.redAccent.withValues(alpha: 0.1)
+              : Colors.greenAccent.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isTimerRunning ? Colors.redAccent : Colors.greenAccent,
@@ -542,9 +542,9 @@ class _ExercisePlayerView extends HookConsumerWidget {
             margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.1),
+              color: Colors.orange.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.orange.withOpacity(0.3)),
+              border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
@@ -676,12 +676,12 @@ class _SetRow extends HookWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: log.isCompleted
-            ? Colors.green.withOpacity(0.1)
+            ? Colors.green.withValues(alpha: 0.1)
             : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: log.isCompleted
-              ? Colors.green.withOpacity(0.5)
+              ? Colors.green.withValues(alpha: 0.5)
               : Colors.transparent,
         ),
       ),
@@ -693,7 +693,7 @@ class _SetRow extends HookWidget {
               CircleAvatar(
                 backgroundColor: log.isCompleted
                     ? Colors.green
-                    : Colors.grey.withOpacity(0.3),
+                    : Colors.grey.withValues(alpha: 0.3),
                 foregroundColor: Colors.white,
                 radius: 12,
                 child: Text('${index + 1}', style: const TextStyle(fontSize: 12)),
@@ -830,7 +830,7 @@ class _SetRow extends HookWidget {
             child: TextButton(
               onPressed: onCompleted,
               style: TextButton.styleFrom(
-                backgroundColor: log.isCompleted ? Colors.transparent : Theme.of(context).primaryColor.withOpacity(0.1),
+                backgroundColor: log.isCompleted ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: 0.1),
               ),
               child: Text(log.isCompleted ? 'Desmarcar' : 'Concluir Série'),
             ),
