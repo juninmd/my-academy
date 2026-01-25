@@ -23,7 +23,7 @@ class FakeWorkoutCreateNotifier extends WorkoutCreateNotifier {
 }
 
 void main() {
-  testWidgets('WorkoutCreatePage displays exercises', (tester) async {
+  testWidgets('WorkoutCreatePage displays exercises in picker', (tester) async {
     const exercise = ExerciseEntity(id: 1, name: 'Bench Press', image: null);
 
     await tester.pumpWidget(ProviderScope(
@@ -35,9 +35,16 @@ void main() {
         home: WorkoutCreatePage(),
       ),
     ));
-    await tester.pump();
+    // Initial pump (exercisesProvider future needs to resolve? No, it's async value)
+    await tester.pumpAndSettle();
 
     expect(find.text('Novo Treino'), findsOneWidget);
+
+    // Tap Add button
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle(); // Wait for sheet animation
+
+    // Now check for exercise
     expect(find.text('Bench Press'), findsOneWidget);
   });
 }
