@@ -11,7 +11,9 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/students/presentation/pages/student_add_page.dart';
 import '../../features/students/presentation/pages/students_page.dart';
 import '../../features/workouts/domain/entities/exercise_entity.dart';
+import '../../features/workouts/domain/entities/workout_group_entity.dart';
 import '../../features/workouts/presentation/pages/analytics_page.dart';
+import '../../features/workouts/presentation/pages/exercise_library_page.dart';
 import '../../features/workouts/presentation/pages/exercise_stats_page.dart';
 import '../../features/workouts/presentation/pages/workout_create_page.dart';
 import '../../features/workouts/presentation/pages/workout_details_page.dart';
@@ -70,6 +72,12 @@ GoRouter router(Ref ref) {
               GoRoute(
                 path: '/home',
                 builder: (context, state) => const DashboardPage(),
+                routes: [
+                  GoRoute(
+                    path: 'exercises',
+                    builder: (context, state) => const ExerciseLibraryPage(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -82,7 +90,10 @@ GoRouter router(Ref ref) {
                 routes: [
                   GoRoute(
                     path: 'create',
-                    builder: (context, state) => const WorkoutCreatePage(),
+                    builder: (context, state) {
+                      final group = state.extra as WorkoutGroupEntity?;
+                      return WorkoutCreatePage(initialGroup: group);
+                    },
                   ),
                   GoRoute(
                     path: ':id',

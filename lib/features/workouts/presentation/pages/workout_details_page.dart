@@ -63,8 +63,51 @@ class WorkoutDetailsPage extends ConsumerWidget {
                                 child: Text('Deletar'),
                               ),
                             ],
-                        onSelected: (value) {
-                          // Handle actions
+                        onSelected: (value) async {
+                          if (value == 'edit') {
+                            context.go('/workouts/create', extra: group);
+                          } else if (value == 'delete') {
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: const Text('Deletar Treino'),
+                                    content: const Text(
+                                      'Tem certeza que deseja deletar este treino?',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.pop(context, false),
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.pop(context, true),
+                                        child: const Text(
+                                          'Deletar',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            );
+
+                            if (confirm == true && context.mounted) {
+                              final repo = ref.read(workoutRepositoryProvider);
+                              await repo.deleteWorkoutGroup(groupId);
+
+                              final user =
+                                  ref.read(authNotifierProvider).value;
+                              if (user != null) {
+                                ref.invalidate(
+                                  workoutGroupsProvider(user.id),
+                                );
+                              }
+
+                              if (context.mounted) context.pop();
+                            }
+                          }
                         },
                       ),
                     ],

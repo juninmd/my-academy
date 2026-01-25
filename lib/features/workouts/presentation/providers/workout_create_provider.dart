@@ -13,14 +13,12 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
   WorkoutGroupEntity build() =>
       const WorkoutGroupEntity(name: '', userId: '', workouts: []);
 
+  void loadGroup(WorkoutGroupEntity group) {
+    state = group;
+  }
+
   void updateName(String name) {
-    state = WorkoutGroupEntity(
-      id: state.id,
-      name: name,
-      image: state.image,
-      userId: state.userId,
-      workouts: state.workouts,
-    );
+    state = state.copyWith(name: name);
   }
 
   void addWorkout(ExerciseEntity exercise, int reps, int weight, int rest) {
@@ -47,13 +45,7 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
 
       final newWorkouts = [...state.workouts];
       newWorkouts[existingIndex] = updatedWorkout;
-      state = WorkoutGroupEntity(
-        id: state.id,
-        name: state.name,
-        image: state.image,
-        userId: state.userId,
-        workouts: newWorkouts,
-      );
+      state = state.copyWith(workouts: newWorkouts);
     } else {
       // Create new
       final newWorkout = WorkoutEntity(
@@ -62,19 +54,36 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
         series: [newSeries],
       );
 
-      state = WorkoutGroupEntity(
-        id: state.id,
-        name: state.name,
-        image: state.image,
-        userId: state.userId,
-        workouts: [...state.workouts, newWorkout],
-      );
+      state = state.copyWith(workouts: [...state.workouts, newWorkout]);
     }
   }
 
+  void removeWorkout(int index) {
+    final newWorkouts = [...state.workouts];
+    newWorkouts.removeAt(index);
+    state = state.copyWith(workouts: newWorkouts);
+  }
+
+  void reorderWorkouts(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final newWorkouts = [...state.workouts];
+    final item = newWorkouts.removeAt(oldIndex);
+    newWorkouts.insert(newIndex, item);
+    state = state.copyWith(workouts: newWorkouts);
+  }
+
   Future<void> saveGroup(String userId) async {
-    // TODO: Call Repository create
-    print('Saving Group: ${state.name} with ${state.workouts.length} workouts');
+    final repository = ref.read(workoutRepositoryProvider);
+    final groupToSave = state.copyWith(userId: userId);
+
+    if (state.id != null) {
+      await repository.updateWorkoutGroup(groupToSave);
+    } else {
+      await repository.createWorkoutGroup(groupToSave);
+    }
+    ref.invalidate(workoutGroupsProvider(userId));
   }
 }
 

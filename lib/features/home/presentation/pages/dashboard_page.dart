@@ -263,6 +263,15 @@ class _ToolsSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: [
               _ToolCard(
+                icon: Icons.menu_book_outlined,
+                label: 'Exercícios',
+                color: Colors.indigo,
+                onTap: () {
+                  context.go('/home/exercises');
+                },
+              ),
+              const SizedBox(width: 12),
+              _ToolCard(
                 icon: Icons.calculate_outlined,
                 label: 'Anilhas',
                 color: Colors.blue,
