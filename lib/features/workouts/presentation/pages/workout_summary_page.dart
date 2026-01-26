@@ -29,14 +29,12 @@ class WorkoutSummaryPage extends HookWidget {
   Widget build(BuildContext context) {
     final intensity = useState(3.0);
     int totalSets = 0;
-    int totalReps = 0;
     int totalWeight = 0;
 
     for (final log in sessionLogs.values) {
       for (final set in log.setLogs.values) {
         if (set.isCompleted) {
           totalSets++;
-          totalReps += set.actualReps;
           totalWeight += set.actualWeight * set.actualReps;
         }
       }
