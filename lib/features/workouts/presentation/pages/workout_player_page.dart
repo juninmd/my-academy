@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -67,6 +68,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
 
         // Exercise Timer Logic
         void startExerciseTimer() {
+          HapticFeedback.mediumImpact();
           isExerciseTimerRunning.value = true;
           exerciseTimer.value = Timer.periodic(const Duration(seconds: 1), (t) {
             exerciseTimerValue.value++;
@@ -74,6 +76,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
         }
 
         void stopExerciseTimer() {
+          HapticFeedback.mediumImpact();
           isExerciseTimerRunning.value = false;
           exerciseTimer.value?.cancel();
         }
@@ -119,6 +122,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
         }
 
         Future<void> onExerciseFinished(Map<int, SetLogState> logs, String notes) async {
+          HapticFeedback.heavyImpact();
           stopRestTimer();
           final currentWorkout = activeWorkouts[currentExerciseIndex.value];
 
@@ -600,6 +604,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
             logs.value = newLogs;
           },
           onCompleted: () {
+            HapticFeedback.mediumImpact();
             final newLogs = Map<int, SetLogState>.from(logs.value);
             final wasCompleted = log.isCompleted;
             newLogs[index] = SetLogState(
