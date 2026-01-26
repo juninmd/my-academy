@@ -26,7 +26,7 @@ void main() {
         home: WorkoutGroupsPage(),
       ),
     ));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Nenhum treino encontrado'), findsOneWidget);
     expect(find.text('Criar Treino'), findsOneWidget);

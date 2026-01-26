@@ -198,32 +198,50 @@ class DashboardPage extends ConsumerWidget {
                             )
                           else
                             Container(
+                              width: double.infinity,
                               padding: const EdgeInsets.all(24),
                               decoration: BoxDecoration(
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).colorScheme.surfaceContainerHighest,
+                                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                                 borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                                ),
                               ),
                               child: Column(
                                 children: [
                                   Icon(
-                                    Icons.fitness_center,
+                                    Icons.nights_stay_outlined,
                                     size: 48,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withValues(alpha: 0.5),
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                   const SizedBox(height: 16),
                                   Text(
                                     'Descanso Merecido',
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                   const SizedBox(height: 8),
-                                  const Text(
-                                    'Nenhum treino programado para hoje.',
+                                  Text(
+                                    'Recupere-se para o próximo treino!',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  if (summary.lastSessionDate != null) ...[
+                                    const SizedBox(height: 16),
+                                    const Divider(),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'Último treino: ${DateFormat('dd/MM').format(DateTime.parse(summary.lastSessionDate!))}',
+                                      style: Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                  const SizedBox(height: 16),
+                                  OutlinedButton.icon(
+                                    onPressed: () {
+                                      context.go('/workouts/create');
+                                    },
+                                    icon: const Icon(Icons.add),
+                                    label: const Text('Criar Nova Rotina'),
                                   ),
                                 ],
                               ),
@@ -249,86 +267,85 @@ class _ToolsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
-            // Optional: Add "See All" if list grows
-          ],
-        ),
+        Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
-        SizedBox(
-          height: 100,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              _ToolCard(
-                icon: Icons.menu_book_outlined,
-                label: 'Exercícios',
-                color: Colors.indigo,
-                onTap: () {
-                  context.go('/home/exercises');
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.calculate_outlined,
-                label: 'Anilhas',
-                color: Colors.blue,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
-                  );
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.fitness_center,
-                label: '1RM',
-                color: Colors.red,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const OneRepMaxCalculatorDialog(),
-                  );
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.timer_outlined,
-                label: 'Descanso',
-                color: Colors.orange,
-                onTap: () {
-                   showDialog(
-                     context: context,
-                     builder: (context) => const QuickTimerDialog(),
-                   );
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.monitor_weight_outlined,
-                label: 'Peso',
-                color: Colors.purple,
-                onTap: () {
-                   showDialog(
-                     context: context,
-                     builder: (context) => const BodyWeightDialog(),
-                   );
-                },
-              ),
-               const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.bar_chart,
-                label: 'Análise',
-                color: Colors.teal,
-                onTap: () {
-                   context.push('/analytics');
-                },
-              ),
-            ],
-          ),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 1.1,
+          children: [
+            _ToolCard(
+              icon: Icons.add_circle_outline,
+              label: 'Novo Treino',
+              color: Theme.of(context).colorScheme.primary,
+              onTap: () {
+                context.go('/workouts/create');
+              },
+            ),
+            _ToolCard(
+              icon: Icons.menu_book_outlined,
+              label: 'Exercícios',
+              color: Colors.indigo,
+              onTap: () {
+                context.go('/home/exercises');
+              },
+            ),
+            _ToolCard(
+              icon: Icons.bar_chart,
+              label: 'Análise',
+              color: Colors.teal,
+              onTap: () {
+                 context.push('/analytics');
+              },
+            ),
+            _ToolCard(
+              icon: Icons.calculate_outlined,
+              label: 'Anilhas',
+              color: Colors.blue,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                );
+              },
+            ),
+            _ToolCard(
+              icon: Icons.fitness_center,
+              label: '1RM',
+              color: Colors.red,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const OneRepMaxCalculatorDialog(),
+                );
+              },
+            ),
+            _ToolCard(
+              icon: Icons.timer_outlined,
+              label: 'Timer',
+              color: Colors.orange,
+              onTap: () {
+                 showDialog(
+                   context: context,
+                   builder: (context) => const QuickTimerDialog(),
+                 );
+              },
+            ),
+            _ToolCard(
+              icon: Icons.monitor_weight_outlined,
+              label: 'Peso',
+              color: Colors.purple,
+              onTap: () {
+                 showDialog(
+                   context: context,
+                   builder: (context) => const BodyWeightDialog(),
+                 );
+              },
+            ),
+          ],
         ),
       ],
     );
@@ -350,28 +367,41 @@ class _ToolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    return Material(
+      color: Theme.of(context).cardTheme.color,
       borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 100,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 32),
-            const SizedBox(height: 8),
-            Text(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: color.withValues(alpha: 0.15)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 24),
+              ),
+              const SizedBox(height: 8),
+              Text(
                 label,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
                 textAlign: TextAlign.center,
-            ),
-          ],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );
