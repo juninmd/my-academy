@@ -6,8 +6,13 @@ import 'package:my_academy/features/auth/presentation/providers/auth_provider.da
 import 'package:my_academy/features/calendar/data/repositories/calendar_repository.dart';
 import 'package:my_academy/features/calendar/domain/entities/workout_session_entity.dart';
 import 'package:my_academy/features/calendar/presentation/pages/calendar_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
+  setUp(() async {
+    await initializeDateFormatting('pt_BR', null);
+  });
+
   testWidgets('CalendarPage renders correctly', (WidgetTester tester) async {
     // Mock user
     const user = UserEntity(

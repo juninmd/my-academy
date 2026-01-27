@@ -1,0 +1,977 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 85.0.0 (93.0.0 available)
+  analyzer 7.7.1 (10.0.1 available)
+  analyzer_buffer 0.1.10 (0.3.0 available)
+  build 3.1.0 (4.0.4 available)
+  build_resolvers 3.0.3 (3.0.4 available)
+  build_runner 2.7.1 (2.10.5 available)
+  build_runner_core 9.3.1 (9.3.2 available)
+  characters 1.4.0 (1.4.1 available)
+  dart_style 3.1.1 (3.1.4 available)
+  fl_chart 0.63.0 (1.1.1 available)
+  flutter_riverpod 3.1.0 (3.2.0 available)
+  go_router 17.0.0 (17.0.1 available)
+  google_fonts 6.3.2 (8.0.0 available)
+  google_sign_in 6.3.0 (7.2.0 available)
+  google_sign_in_android 6.2.1 (7.2.7 available)
+  google_sign_in_ios 5.9.0 (6.2.5 available)
+  google_sign_in_platform_interface 2.5.0 (3.1.0 available)
+  google_sign_in_web 0.12.4+4 (1.1.0 available)
+  hooks_riverpod 3.1.0 (3.2.0 available)
+  matcher 0.12.17 (0.12.18 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.17.0 (1.18.0 available)
+  mockito 5.5.0 (5.6.3 available)
+  path_provider_android 2.2.19 (2.2.22 available)
+  path_provider_foundation 2.4.2 (2.6.0 available)
+  riverpod 3.1.0 (3.2.0 available)
+  riverpod_analyzer_utils 1.0.0-dev.8 (1.0.0-dev.9 available)
+  riverpod_annotation 4.0.0 (4.0.1 available)
+  riverpod_generator 4.0.0+1 (4.0.2 available)
+  shared_preferences 2.5.3 (2.5.4 available)
+  shared_preferences_android 2.4.13 (2.4.20 available)
+  shared_preferences_foundation 2.5.4 (2.5.6 available)
+  source_gen 3.1.0 (4.2.0 available)
+  sqflite_android 2.4.1 (2.4.2+2 available)
+  test 1.26.3 (1.29.0 available)
+  test_api 0.7.7 (0.7.9 available)
+  test_core 0.6.12 (0.6.15 available)
+  timezone 0.10.1 (0.11.0 available)
+  vector_graphics_compiler 1.1.19 (1.1.20 available)
+! vector_math 2.2.0 (overridden)
+  vm_service 15.0.0 (15.0.2 available)
+Got dependencies!
+40 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /app/test/utils/body_composition_calculator_test.dart                                                                                                                                00:01 +0: loading /app/test/utils/body_composition_calculator_test.dart                                                                                                                                00:02 +0: loading /app/test/utils/body_composition_calculator_test.dart                                                                                                                                00:02 +0: /app/test/utils/body_composition_calculator_test.dart: BodyCompositionCalculator calculateBodyDensityMen should calculate correct body density for men                                       00:02 +1: /app/test/utils/body_composition_calculator_test.dart: BodyCompositionCalculator calculateBodyDensityMen should calculate correct body density for men                                       00:02 +1: /app/test/utils/body_composition_calculator_test.dart: BodyCompositionCalculator calculateBodyDensityWomen should calculate correct body density for women                                   00:02 +2: /app/test/utils/body_composition_calculator_test.dart: BodyCompositionCalculator calculateBodyDensityWomen should calculate correct body density for women                                   00:02 +2: /app/test/utils/body_composition_calculator_test.dart: BodyCompositionCalculator calculateBodyFatPercentage should calculate correct body fat percentage from density                        00:02 +3: /app/test/utils/body_composition_calculator_test.dart: BodyCompositionCalculator calculateBodyFatPercentage should calculate correct body fat percentage from density                        00:02 +3: loading /app/test/utils/constants_test.dart                                                                                                                                                  00:02 +3: /app/test/utils/constants_test.dart: constants should have correct values                                                                                                                    00:02 +4: /app/test/utils/constants_test.dart: constants should have correct values                                                                                                                    00:03 +4: /app/test/utils/constants_test.dart: constants should have correct values                                                                                                                    00:03 +4: loading /app/test/utils/one_rep_max_calculator_test.dart                                                                                                                                     00:03 +4: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley returns correct value for standard input                                                                00:03 +5: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley returns correct value for standard input                                                                00:03 +5: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley returns weight for 1 rep                                                                                00:03 +6: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley returns weight for 1 rep                                                                                00:03 +6: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley handles zero inputs                                                                                     00:03 +7: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley handles zero inputs                                                                                     00:04 +7: /app/test/utils/one_rep_max_calculator_test.dart: OneRepMaxCalculator calculateEpley handles zero inputs                                                                                     00:04 +7: loading /app/test/features/home/data/repositories/home_repository_impl_test.dart                                                                                                             00:04 +7: /app/test/features/home/data/repositories/home_repository_impl_test.dart: should return summary when successful                                                                              00:04 +8: /app/test/features/home/data/repositories/home_repository_impl_test.dart: should return summary when successful                                                                              00:04 +8: /app/test/features/home/data/repositories/home_repository_impl_test.dart: should return failure when exception                                                                               00:04 +9: /app/test/features/home/data/repositories/home_repository_impl_test.dart: should return failure when exception                                                                               00:05 +9: /app/test/features/home/data/repositories/home_repository_impl_test.dart: should return failure when exception                                                                               00:05 +9: loading /app/test/features/home/domain/entities/workout_summary_entity_test.dart                                                                                                             00:05 +9: /app/test/features/home/domain/entities/workout_summary_entity_test.dart: WorkoutSummaryEntity supports value equality                                                                       00:05 +10: /app/test/features/home/domain/entities/workout_summary_entity_test.dart: WorkoutSummaryEntity supports value equality                                                                      00:06 +10: /app/test/features/home/domain/entities/workout_summary_entity_test.dart: WorkoutSummaryEntity supports value equality                                                                      00:06 +10: loading /app/test/features/home/presentation/providers/home_provider_test.dart                                                                                                              00:06 +10: /app/test/features/home/presentation/providers/home_provider_test.dart: workoutSummary provider returns entity when success                                                                 00:06 +11: /app/test/features/home/presentation/providers/home_provider_test.dart: workoutSummary provider returns entity when success                                                                 00:06 +11: /app/test/features/home/presentation/providers/home_provider_test.dart: workoutSummary provider throws when failure                                                                         00:06 +11 -1: /app/test/features/home/presentation/providers/home_provider_test.dart: workoutSummary provider throws when failure [E]
+  Expected: throws <Instance of 'Exception'>
+    Actual: <Closure: () => Future<WorkoutSummaryEntity>>
+     Which: threw StateError:<Bad state: The provider workoutSummaryProvider was disposed during loading state, yet no value could be emitted.>
+            stack package:riverpod/src/core/element.dart 329:70                            ElementWithFuture.dispose
+                  package:riverpod/src/core/provider_container.dart 1023:22                ProviderContainer._disposeProvider
+                  package:riverpod/src/core/scheduler.dart 172:27                          ProviderScheduler._performDispose
+                  package:riverpod/src/core/scheduler.dart 107:5                           ProviderScheduler._task
+                  package:riverpod/src/core/scheduler.dart 14:16                           Task.call
+                  ===== asynchronous gap ===========================
+                  dart:async                                                               _Completer.completeError
+                  package:riverpod/src/core/element.dart 329:19                            ElementWithFuture.dispose
+                  package:riverpod/src/core/provider_container.dart 1023:22                ProviderContainer._disposeProvider
+                  package:riverpod/src/core/scheduler.dart 172:27                          ProviderScheduler._performDispose
+                  package:riverpod/src/core/scheduler.dart 107:5                           ProviderScheduler._task
+                  package:riverpod/src/core/scheduler.dart 14:16                           Task.call
+                  ===== asynchronous gap ===========================
+                  dart:async                                                               new Timer
+                  package:riverpod/src/core/scheduler.dart 24:17                           _defaultVsync
+                  package:riverpod/src/core/scheduler.dart 97:20                           ProviderScheduler._scheduleTask
+                  package:riverpod/src/core/scheduler.dart 152:5                           ProviderScheduler.scheduleProviderDispose
+                  package:riverpod/src/core/element.dart 1137:29                           ProviderElement.mayNeedDispose
+                  package:riverpod/src/core/element.dart 1115:7                            ProviderElement._onChangeSubscription
+                  package:riverpod/src/core/element.dart 966:5                             ProviderElement.removeDependentSubscription
+                  package:riverpod/src/core/provider_subscription.dart 207:22              ProviderSubscriptionImpl.close
+                  package:riverpod/src/core/provider_subscription.dart 332:11              ExternalProviderSubscription.close
+                  package:riverpod/src/core/provider_container.dart 922:11                 ProviderContainer.read
+                  test/features/home/presentation/providers/home_provider_test.dart 49:23  main.<fn>.<fn>
+                  package:matcher                                                          expect
+                  package:flutter_test/src/widget_tester.dart 473:18                       expect
+                  test/features/home/presentation/providers/home_provider_test.dart 48:5   main.<fn>
+
+            which is not an instance of 'Exception'
+
+  package:matcher                                                         expect
+  package:flutter_test/src/widget_tester.dart 473:18                      expect
+  test/features/home/presentation/providers/home_provider_test.dart 48:5  main.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/home/presentation/providers/home_provider_test.dart -p vm --plain-name 'workoutSummary provider throws when failure'
+00:06 +11 -1: loading /app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart                                                                                                        00:06 +11 -1: /app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart: WeeklyGoalWidget displays correct info                                                                        00:07 +11 -1: /app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart: WeeklyGoalWidget displays correct info                                                                        00:07 +12 -1: /app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart: WeeklyGoalWidget displays correct info                                                                        00:07 +12 -1: loading /app/test/features/home/presentation/widgets/quick_timer_dialog_test.dart                                                                                                        00:07 +12 -1: /app/test/features/home/presentation/widgets/quick_timer_dialog_test.dart: QuickTimerDialog starts timer                                                                                 00:08 +12 -1: /app/test/features/home/presentation/widgets/quick_timer_dialog_test.dart: QuickTimerDialog starts timer                                                                                 00:08 +13 -1: /app/test/features/home/presentation/widgets/body_weight_dialog_test.dart: BodyWeightDialog updates weight                                                                               00:09 +13 -1: /app/test/features/home/presentation/widgets/body_weight_dialog_test.dart: BodyWeightDialog updates weight                                                                               00:09 +14 -1: /app/test/features/home/presentation/widgets/body_weight_dialog_test.dart: BodyWeightDialog updates weight                                                                               00:10 +14 -1: /app/test/features/home/presentation/widgets/body_weight_dialog_test.dart: BodyWeightDialog updates weight                                                                               00:10 +14 -1: loading /app/test/features/home/presentation/pages/dashboard_page_test.dart                                                                                                              00:10 +14 -1: /app/test/features/home/presentation/pages/dashboard_page_test.dart: DashboardPage renders static elements and Tools section                                                             00:11 +14 -1: /app/test/features/home/presentation/pages/dashboard_page_test.dart: DashboardPage renders static elements and Tools section                                                             00:11 +15 -1: /app/test/features/home/presentation/pages/home_shell_page_test.dart: HomeShellPage displays navigation bar                                                                              00:11 +15 -1: /app/test/features/home/presentation/pages/home_shell_page_test.dart: HomeShellPage displays navigation bar
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following NoSuchMethodError was thrown building KeyedSubtree-[GlobalKey#ea4a0]:
+Class '_FakeStatefulElement_4' has no instance getter '_parent'.
+Receiver: Instance of '_FakeStatefulElement_4'
+Tried calling: _parent
+
+The relevant error-causing widget was:
+  Scaffold Scaffold:file:///app/lib/features/home/presentation/pages/home_shell_page.dart:10:41
+
+When the exception was thrown, this was the stack:
+#0      _FakeStatefulElement_4._parent (file:///app/test/features/home/presentation/pages/home_shell_page_test.mocks.dart:61:7)
+#1      Element._debugCheckForCycles (package:flutter/src/widgets/framework.dart:4608:21)
+#2      Element.inflateWidget.<anonymous closure> (package:flutter/src/widgets/framework.dart:4579:9)
+...     Normal element mounting (25 frames)
+#27     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#28     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)
+#29     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)
+...     Normal element mounting (370 frames)
+#399    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#400    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)
+#401    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)
+...     Normal element mounting (465 frames)
+#866    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#867    Element.updateChild (package:flutter/src/widgets/framework.dart:4053:20)
+#868    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#869    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#870    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#871    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#872    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#873    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#874    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#875    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#876    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#877    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#878    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#879    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#880    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#881    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#882    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#883    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#884    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#885    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#886    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#887    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#888    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#889    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#890    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#891    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#892    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#893    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#894    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#895    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#896    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#897    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#898    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#899    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#900    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#901    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#902    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#903    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#904    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#905    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#906    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#907    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#908    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#909    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#910    _RawViewElement._updateChild (package:flutter/src/widgets/view.dart:481:16)
+#911    _RawViewElement.update (package:flutter/src/widgets/view.dart:568:5)
+#912    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#913    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#914    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#915    StatelessElement.update (package:flutter/src/widgets/framework.dart:5898:5)
+#916    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#917    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#918    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#919    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#920    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#921    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#922    RootElement._rebuild (package:flutter/src/widgets/binding.dart:1782:16)
+#923    RootElement.update (package:flutter/src/widgets/binding.dart:1760:5)
+#924    RootElement.performRebuild (package:flutter/src/widgets/binding.dart:1774:7)
+#925    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#926    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2750:15)
+#927    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2807:11)
+#928    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3111:18)
+#929    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#930    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#931    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#932    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#933    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#936    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#937    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#938    WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)
+#941    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#942    WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)
+#943    main.<anonymous closure> (file:///app/test/features/home/presentation/pages/home_shell_page_test.dart:21:18)
+#944    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#945    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:11 +15 -2: /app/test/features/home/presentation/pages/home_shell_page_test.dart: HomeShellPage displays navigation bar [E]
+  Test failed. See exception logs above.
+  The test description was: HomeShellPage displays navigation bar
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/home/presentation/pages/home_shell_page_test.dart -p vm --plain-name 'HomeShellPage displays navigation bar'
+00:12 +16 -2: /app/test/features/home/presentation/pages/dashboard_page_test.dart: DashboardPage opens Plate Calculator when tool tapped                                                               00:12 +16 -2: loading /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart                                                                                                       00:12 +16 -2: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: signInWithGoogle should return UserDto when successful                                                       00:12 +16 -3: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: signInWithGoogle should return UserDto when successful [E]
+  No matching calls. All calls: MockApiClient.post('/users', {data: {id: 1, email: email, name: name, photoUrl: url, role: null}, queryParameters: null})
+  (If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+  package:matcher                                                              fail
+  package:mockito/src/mock.dart 852:7                                          _VerifyCall._checkWith
+  package:mockito/src/mock.dart 1152:18                                        _makeVerify.<fn>
+  test/features/auth/data/datasources/auth_remote_data_source_test.dart 68:13  main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart -p vm --plain-name 'signInWithGoogle should return UserDto when successful'
+00:12 +16 -3: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: signInWithGoogle should throw AuthFailure when Google Sign In is canceled                                    00:12 +17 -3: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: signInWithGoogle should throw AuthFailure when Google Sign In is canceled                                    00:12 +17 -3: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: signOut should call signOut on dependencies                                                                  00:12 +17 -4: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: signOut should call signOut on dependencies [E]
+  No matching calls (actually, no calls at all).
+  (If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+  package:matcher                                                              fail
+  package:mockito/src/mock.dart 852:7                                          _VerifyCall._checkWith
+  package:mockito/src/mock.dart 1152:18                                        _makeVerify.<fn>
+  test/features/auth/data/datasources/auth_remote_data_source_test.dart 86:13  main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart -p vm --plain-name 'signOut should call signOut on dependencies'
+00:12 +17 -4: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: getCurrentUser should return UserDto when user is logged in                                                  00:12 +17 -5: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: getCurrentUser should return UserDto when user is logged in [E]
+  No matching calls (actually, no calls at all).
+  (If you called `verify(...).called(0);`, please instead use `verifyNever(...);`.)
+  package:matcher                                                               fail
+  package:mockito/src/mock.dart 852:7                                           _VerifyCall._checkWith
+  package:mockito/src/mock.dart 1152:18                                         _makeVerify.<fn>
+  test/features/auth/data/datasources/auth_remote_data_source_test.dart 101:13  main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart -p vm --plain-name 'getCurrentUser should return UserDto when user is logged in'
+00:12 +17 -5: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: getCurrentUser should return null when user is not logged in                                                 00:12 +18 -5: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: getCurrentUser should return null when user is not logged in                                                 00:13 +18 -5: /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart: getCurrentUser should return null when user is not logged in                                                 00:13 +18 -5: loading /app/test/features/auth/data/models/user_dto_test.dart                                                                                                                           00:13 +18 -5: /app/test/features/auth/data/models/user_dto_test.dart: fromJson should return a valid model                                                                                             00:13 +19 -5: /app/test/features/auth/data/models/user_dto_test.dart: fromJson should return a valid model                                                                                             00:13 +19 -5: /app/test/features/auth/data/models/user_dto_test.dart: toJson should return a JSON map                                                                                                  00:13 +20 -5: /app/test/features/auth/data/models/user_dto_test.dart: toJson should return a JSON map                                                                                                  00:13 +20 -5: /app/test/features/auth/data/models/user_dto_test.dart: fromEntity should return a valid UserDto                                                                                         00:13 +21 -5: /app/test/features/auth/data/models/user_dto_test.dart: fromEntity should return a valid UserDto                                                                                         00:13 +21 -5: loading /app/test/features/auth/data/repositories/auth_repository_impl_test.dart                                                                                                         00:13 +21 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signInWithGoogle should return user when successful                                                            00:13 +22 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signInWithGoogle should return user when successful                                                            00:13 +22 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signInWithGoogle should return failure when exception occurs                                                   00:13 +23 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signInWithGoogle should return failure when exception occurs                                                   00:13 +23 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signOut should return void when successful                                                                     00:13 +24 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signOut should return void when successful                                                                     00:13 +24 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signOut should return failure when exception occurs                                                            00:13 +25 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: signOut should return failure when exception occurs                                                            00:13 +25 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return user when successful                                                              00:13 +26 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return user when successful                                                              00:13 +26 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return null when no user                                                                 00:13 +27 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return null when no user                                                                 00:13 +27 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return failure when exception occurs                                                     00:13 +28 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return failure when exception occurs                                                     00:14 +28 -5: /app/test/features/auth/data/repositories/auth_repository_impl_test.dart: getCurrentUser should return failure when exception occurs                                                     00:14 +28 -5: loading /app/test/features/auth/domain/entities/user_entity_test.dart                                                                                                                    00:14 +28 -5: /app/test/features/auth/domain/entities/user_entity_test.dart: UserEntity should have correct props                                                                                      00:14 +29 -5: /app/test/features/auth/domain/entities/user_entity_test.dart: UserEntity should have correct props                                                                                      00:14 +29 -5: loading /app/test/features/auth/presentation/providers/auth_provider_test.dart                                                                                                           00:14 +29 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier build should return user when getCurrentUser is successful                                          00:14 +30 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier build should return user when getCurrentUser is successful                                          00:14 +30 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier build should return null when getCurrentUser fails                                                  00:14 +31 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier build should return null when getCurrentUser fails                                                  00:14 +31 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signInWithGoogle should update state with user on success                                           00:14 +32 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signInWithGoogle should update state with user on success                                           00:14 +32 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signInWithGoogle should update state with error on failure                                          00:14 +33 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signInWithGoogle should update state with error on failure                                          00:14 +33 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signOut should update state to null                                                                 00:14 +34 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signOut should update state to null                                                                 00:15 +34 -5: /app/test/features/auth/presentation/providers/auth_provider_test.dart: AuthNotifier signOut should update state to null                                                                 00:15 +34 -5: loading /app/test/features/auth/presentation/pages/login_page_test.dart                                                                                                                  00:15 +34 -5: /app/test/features/auth/presentation/pages/login_page_test.dart: LoginPage renders correctly                                                                                             00:15 +34 -6: /app/test/features/calendar/data/repositories/calendar_repository_test.dart: getSessions should return list of sessions when successful [E]
+  Expected: <true>
+    Actual: <false>
+
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/features/calendar/data/repositories/calendar_repository_test.dart 36:7  main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/calendar/data/repositories/calendar_repository_test.dart -p vm --plain-name 'getSessions should return list of sessions when successful'
+00:15 +35 -6: /app/test/features/auth/presentation/pages/login_page_test.dart: LoginPage renders correctly                                                                                             00:16 +35 -6: /app/test/features/auth/presentation/pages/login_page_test.dart: LoginPage renders correctly                                                                                             00:16 +35 -6: /app/test/features/auth/presentation/pages/login_page_test.dart: LoginPage renders correctly
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Entrar com Google": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/auth/presentation/pages/login_page_test.dart:25:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/auth/presentation/pages/login_page_test.dart line 25
+The test description was:
+  LoginPage renders correctly
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:16 +35 -7: /app/test/features/auth/presentation/pages/login_page_test.dart: LoginPage renders correctly [E]
+  Test failed. See exception logs above.
+  The test description was: LoginPage renders correctly
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/auth/presentation/pages/login_page_test.dart -p vm --plain-name 'LoginPage renders correctly'
+00:16 +35 -7: loading /app/test/features/calendar/domain/entities/workout_session_entity_test.dart                                                                                                     00:16 +35 -7: /app/test/features/calendar/domain/entities/workout_session_entity_test.dart: WorkoutSessionEntity should have correct props                                                             00:16 +36 -7: /app/test/features/calendar/domain/entities/workout_session_entity_test.dart: WorkoutSessionEntity should have correct props                                                             00:17 +36 -7: /app/test/features/calendar/domain/entities/workout_session_entity_test.dart: WorkoutSessionEntity should have correct props                                                             00:17 +36 -7: loading /app/test/features/calendar/presentation/pages/calendar_page_test.dart                                                                                                           00:17 +36 -7: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly                                                                                   00:17 +37 -7: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly                                                                                   00:17 +38 -7: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly                                                                                   00:18 +38 -7: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly                                                                                   00:18 +39 -7: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly                                                                                   00:18 +39 -8: /app/test/features/workouts/data/repositories/workout_repository_test.dart: getExerciseLogs should return logs [E]
+  Expected: <true>
+    Actual: <false>
+
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/features/workouts/data/repositories/workout_repository_test.dart 100:7  main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/data/repositories/workout_repository_test.dart -p vm --plain-name 'getExerciseLogs should return logs'
+00:18 +39 -9: /app/test/features/workouts/data/repositories/workout_repository_test.dart: saveExerciseLog should return saved log [E]
+  Expected: <true>
+    Actual: <false>
+
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  test/features/workouts/data/repositories/workout_repository_test.dart 124:7  main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/data/repositories/workout_repository_test.dart -p vm --plain-name 'saveExerciseLog should return saved log'
+00:18 +39 -9: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following LocaleDataException was thrown building CalendarHeader(dirty):
+Locale data has not been initialized, call initializeDateFormatting(<locale>).
+
+The relevant error-causing widget was:
+  CalendarHeader
+  CalendarHeader:file:///home/jules/.pub-cache/hosted/pub.dev/table_calendar-3.2.0/lib/src/table_calendar.dart:467:22
+
+When the exception was thrown, this was the stack:
+#0      UninitializedLocaleData._throwException (package:intl/src/intl_helpers.dart:79:5)
+#1      UninitializedLocaleData.containsKey (package:intl/src/intl_helpers.dart:73:7)
+#2      DateFormat.localeExists (package:intl/src/intl/date_format.dart:902:28)
+#3      verifiedLocale (package:intl/src/intl_helpers.dart:184:19)
+#4      new DateFormat (package:intl/src/intl/date_format.dart:267:27)
+#5      new DateFormat.yMMMM (package:intl/src/intl/date_format.dart:550:32)
+#6      CalendarHeader.build (package:table_calendar/src/widgets/calendar_header.dart:43:20)
+#7      StatelessElement.build (package:flutter/src/widgets/framework.dart:5892:49)
+#8      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5820:15)
+#9      Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#10     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5802:5)
+#11     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5796:5)
+...     Normal element mounting (9 frames)
+#20     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#21     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)
+#22     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)
+...     Normal element mounting (75 frames)
+#97     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#98     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)
+#99     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)
+#100    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#101    Element.updateChild (package:flutter/src/widgets/framework.dart:4053:20)
+#102    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#103    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#104    StatelessElement.update (package:flutter/src/widgets/framework.dart:5898:5)
+#105    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#106    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#107    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#108    StatelessElement.update (package:flutter/src/widgets/framework.dart:5898:5)
+#109    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#110    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#111    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#112    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#113    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#114    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#115    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#116    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#117    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#118    Element.updateChildren (package:flutter/src/widgets/framework.dart:4194:32)
+#119    MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7302:17)
+#120    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#121    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#122    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#123    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#124    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#125    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#126    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#127    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#128    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#129    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#130    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#131    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#132    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#133    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#134    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#135    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#136    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#137    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#138    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#139    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#140    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#141    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#142    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#143    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#144    SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7125:14)
+#145    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#146    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#147    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#148    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#149    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#150    SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7125:14)
+#151    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#152    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#153    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#154    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#155    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#156    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#157    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#158    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#159    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#160    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#161    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#162    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#163    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#164    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#165    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#166    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#167    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#168    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#169    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#170    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#171    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#172    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#173    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#174    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#175    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#176    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#177    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#178    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#179    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#180    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#181    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#182    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#183    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#184    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#185    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#186    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#187    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#188    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#189    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#190    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#191    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2750:15)
+#192    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2807:11)
+#193    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3111:18)
+#194    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#195    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#196    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#197    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#198    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#201    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#202    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#203    WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#206    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#207    WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#208    main.<anonymous closure> (file:///app/test/features/calendar/presentation/pages/calendar_page_test.dart:50:18)
+<asynchronous suspension>
+#209    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#210    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following LocaleDataException was thrown building CalendarPage(dirty):
+Locale data has not been initialized, call initializeDateFormatting(<locale>).
+
+The relevant error-causing widget was:
+  CalendarPage
+  CalendarPage:file:///home/jules/.pub-cache/hosted/pub.dev/table_calendar-3.2.0/lib/src/widgets/calendar_core.dart:75:16
+
+When the exception was thrown, this was the stack:
+#0      UninitializedLocaleData._throwException (package:intl/src/intl_helpers.dart:79:5)
+#1      UninitializedLocaleData.containsKey (package:intl/src/intl_helpers.dart:73:7)
+#2      DateFormat.localeExists (package:intl/src/intl/date_format.dart:902:28)
+#3      verifiedLocale (package:intl/src/intl_helpers.dart:184:19)
+#4      new DateFormat (package:intl/src/intl/date_format.dart:267:27)
+#5      new DateFormat.E (package:intl/src/intl/date_format.dart:527:28)
+#6      _TableCalendarState.build.<anonymous closure> (package:table_calendar/src/table_calendar.dart:547:32)
+#7      CalendarCore.build.<anonymous closure>.<anonymous closure> (package:table_calendar/src/widgets/calendar_core.dart:85:34)
+#8      CalendarPage._buildDaysOfWeek.<anonymous closure> (package:table_calendar/src/widgets/calendar_page.dart:78:31)
+#9      new _GrowableList.generate (dart:core-patch/growable_array.dart:140:28)
+#10     CalendarPage._buildDaysOfWeek (package:table_calendar/src/widgets/calendar_page.dart:76:22)
+#11     CalendarPage.build (package:table_calendar/src/widgets/calendar_page.dart:47:33)
+#12     StatelessElement.build (package:flutter/src/widgets/framework.dart:5892:49)
+#13     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5820:15)
+#14     Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#15     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5802:5)
+#16     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5796:5)
+...     Normal element mounting (41 frames)
+#57     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#58     Element.updateChild (package:flutter/src/widgets/framework.dart:4059:18)
+#59     SliverMultiBoxAdaptorElement.updateChild (package:flutter/src/widgets/sliver.dart:1068:37)
+#60     SliverMultiBoxAdaptorElement.createChild.<anonymous closure> (package:flutter/src/widgets/sliver.dart:1052:20)
+#61     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3101:19)
+#62     SliverMultiBoxAdaptorElement.createChild (package:flutter/src/widgets/sliver.dart:1042:12)
+#63     RenderSliverMultiBoxAdaptor._createOrObtainChild.<anonymous closure> (package:flutter/src/rendering/sliver_multi_box_adaptor.dart:372:23)
+#64     RenderObject.invokeLayoutCallback.<anonymous closure> (package:flutter/src/rendering/object.dart:2894:17)
+#65     PipelineOwner._enableMutationsToDirtySubtrees (package:flutter/src/rendering/object.dart:1219:15)
+#66     RenderObject.invokeLayoutCallback (package:flutter/src/rendering/object.dart:2893:14)
+#67     RenderSliverMultiBoxAdaptor._createOrObtainChild (package:flutter/src/rendering/sliver_multi_box_adaptor.dart:360:5)
+#68     RenderSliverMultiBoxAdaptor.addInitialChild (package:flutter/src/rendering/sliver_multi_box_adaptor.dart:460:5)
+#69     RenderSliverFixedExtentBoxAdaptor.performLayout (package:flutter/src/rendering/sliver_fixed_extent_list.dart:319:12)
+#70     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#71     RenderSliverEdgeInsetsPadding.performLayout (package:flutter/src/rendering/sliver_padding.dart:133:12)
+#72     _RenderSliverFractionalPadding.performLayout (package:flutter/src/widgets/sliver_fill.dart:162:11)
+#73     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#74     RenderViewportBase.layoutChildSequence (package:flutter/src/rendering/viewport.dart:673:13)
+#75     RenderViewport._attemptLayout (package:flutter/src/rendering/viewport.dart:1684:12)
+#76     RenderViewport.performLayout (package:flutter/src/rendering/viewport.dart:1575:20)
+#77     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#78     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#79     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#80     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#81     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#82     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#83     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#84     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#85     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#86     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#87     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#88     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#89     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#90     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#91     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#92     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#93     _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1481:11)
+#94     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#95     RenderConstrainedBox.performLayout (package:flutter/src/rendering/proxy_box.dart:293:14)
+#96     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#97     RenderAnimatedSize.performLayout (package:flutter/src/rendering/animated_size.dart:258:12)
+#98     RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#99     RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#100    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#101    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#102    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#103    _RenderLayoutBuilder.performLayout (package:flutter/src/widgets/layout_builder.dart:450:14)
+#104    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#105    ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
+#106    RenderFlex._computeSizes (package:flutter/src/rendering/flex.dart:1161:28)
+#107    RenderFlex.performLayout (package:flutter/src/rendering/flex.dart:1257:32)
+#108    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#109    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#110    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#111    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#112    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#113    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#114    RenderCustomPaint.performLayout (package:flutter/src/rendering/custom_paint.dart:574:11)
+#115    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#116    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#117    _RenderCustomClip.performLayout (package:flutter/src/rendering/proxy_box.dart:1481:11)
+#118    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#119    RenderPadding.performLayout (package:flutter/src/rendering/shifted_box.dart:243:12)
+#120    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#121    RenderProxyBoxMixin.performLayout (package:flutter/src/rendering/proxy_box.dart:115:18)
+#122    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#123    ChildLayoutHelper.layoutChild (package:flutter/src/rendering/layout_helper.dart:62:11)
+#124    RenderFlex._computeSizes (package:flutter/src/rendering/flex.dart:1161:28)
+#125    RenderFlex.performLayout (package:flutter/src/rendering/flex.dart:1257:32)
+#126    RenderObject.layout (package:flutter/src/rendering/object.dart:2775:7)
+#127    MultiChildLayoutDelegate.layoutChild (package:flutter/src/rendering/custom_layout.dart:180:12)
+#128    _ScaffoldLayout.performLayout (package:flutter/src/material/scaffold.dart:1112:7)
+#129    MultiChildLayoutDelegate._callPerformLayout (package:flutter/src/rendering/custom_layout.dart:249:7)
+#130    RenderCustomMultiChildLayoutBox.performLayout (package:flutter/src/rendering/custom_layout.dart:420:14)
+#131    RenderObject._layoutWithoutResize (package:flutter/src/rendering/object.dart:2623:7)
+#132    PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1170:18)
+#133    PipelineOwner.flushLayout (package:flutter/src/rendering/object.dart:1183:15)
+#134    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1508:27)
+#135    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#136    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#137    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#138    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#141    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#142    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#143    WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#146    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#147    WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#148    main.<anonymous closure> (file:///app/test/features/calendar/presentation/pages/calendar_page_test.dart:50:18)
+<asynchronous suspension>
+#149    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#150    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY RENDERING LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 99764 pixels on the bottom.
+
+The relevant error-causing widget was:
+  Column Column:file:///app/lib/features/calendar/presentation/pages/calendar_page.dart:53:26
+
+The overflowing RenderFlex has an orientation of Axis.vertical.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
+black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the
+RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be
+seen. If the content is legitimately bigger than the available space, consider clipping it with a
+ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex,
+like a ListView.
+The specific RenderFlex in question is: RenderFlex#4a8ac relayoutBoundary=up1 OVERFLOWING:
+  needs compositing
+  creator: Column ← KeyedSubtree-[GlobalKey#0888f] ← _BodyBuilder ← MediaQuery ←
+    LayoutId-[<_ScaffoldSlot.body>] ← CustomMultiChildLayout ← _ActionsScope ← Actions ←
+    AnimatedBuilder ← DefaultTextStyle ← AnimatedDefaultTextStyle ← _InkFeatures-[GlobalKey#5b72b ink
+    renderer] ← ⋯
+  parentData: offset=Offset(0.0, 56.0); id=_ScaffoldSlot.body (can use size)
+  constraints: BoxConstraints(0.0<=w<=800.0, 0.0<=h<=544.0)
+  size: Size(800.0, 544.0)
+  direction: vertical
+  mainAxisAlignment: start
+  mainAxisSize: max
+  crossAxisAlignment: center
+  verticalDirection: down
+  spacing: 0.0
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (3) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:18 +39 -10: /app/test/features/calendar/presentation/pages/calendar_page_test.dart: CalendarPage renders correctly [E]
+  Test failed. See exception logs above.
+  The test description was: CalendarPage renders correctly
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/calendar/presentation/pages/calendar_page_test.dart -p vm --plain-name 'CalendarPage renders correctly'
+00:18 +39 -10: loading /app/test/features/workouts/domain/entities/set_log_entity_test.dart                                                                                                            00:18 +39 -10: /app/test/features/workouts/domain/entities/set_log_entity_test.dart: SetLogEntity should have correct props                                                                            00:19 +39 -10: /app/test/features/workouts/domain/entities/set_log_entity_test.dart: SetLogEntity should have correct props                                                                            00:19 +40 -10: /app/test/features/workouts/domain/entities/set_log_entity_test.dart: SetLogEntity should have correct props                                                                            00:19 +40 -10: /app/test/features/workouts/domain/entities/set_log_entity_test.dart: SetLogEntity toJson and fromJson should work correctly                                                            00:19 +41 -10: /app/test/features/workouts/domain/entities/set_log_entity_test.dart: SetLogEntity toJson and fromJson should work correctly                                                            00:19 +41 -10: loading /app/test/features/workouts/domain/entities/workout_group_entity_test.dart                                                                                                      00:19 +41 -10: /app/test/features/workouts/domain/entities/workout_group_entity_test.dart: WorkoutGroupEntity should have correct props                                                                00:19 +42 -10: /app/test/features/workouts/domain/entities/workout_group_entity_test.dart: WorkoutGroupEntity should have correct props                                                                00:20 +42 -10: /app/test/features/workouts/domain/entities/workout_group_entity_test.dart: WorkoutGroupEntity should have correct props                                                                00:20 +42 -10: loading /app/test/features/workouts/domain/entities/exercise_entity_test.dart                                                                                                           00:20 +42 -10: /app/test/features/workouts/domain/entities/exercise_entity_test.dart: ExerciseEntity should have correct props                                                                         00:20 +43 -10: /app/test/features/workouts/domain/entities/exercise_entity_test.dart: ExerciseEntity should have correct props                                                                         00:20 +43 -10: loading /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart                                                                                                       00:20 +43 -10: /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart: ExerciseLogEntity should have correct props                                                                  00:20 +44 -10: /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart: ExerciseLogEntity should have correct props                                                                  00:20 +44 -10: /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart: ExerciseLogEntity toJson and fromJson should work correctly                                                  00:20 +44 -11: /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart: ExerciseLogEntity toJson and fromJson should work correctly [E]
+  type 'String' is not a subtype of type 'num?' in type cast
+  package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart 37:23  new ExerciseLogEntity.fromJson
+  test/features/workouts/domain/entities/exercise_log_entity_test.dart 47:42           main.<fn>.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart -p vm --plain-name 'ExerciseLogEntity toJson and fromJson should work correctly'
+00:21 +44 -11: loading /app/test/features/workouts/domain/entities/workout_series_entity_test.dart                                                                                                     00:21 +44 -11: /app/test/features/workouts/domain/entities/workout_series_entity_test.dart: WorkoutSeriesEntity should have correct props                                                              00:21 +45 -11: /app/test/features/workouts/domain/entities/workout_series_entity_test.dart: WorkoutSeriesEntity should have correct props                                                              00:21 +45 -11: loading /app/test/features/workouts/domain/entities/session_log_entity_test.dart                                                                                                        00:21 +45 -11: /app/test/features/workouts/domain/entities/session_log_entity_test.dart: SetLogState should hold correct values                                                                        00:21 +46 -11: /app/test/features/workouts/domain/entities/session_log_entity_test.dart: SetLogState should hold correct values                                                                        00:21 +46 -11: /app/test/features/workouts/domain/entities/session_log_entity_test.dart: ExerciseSessionLog should hold correct values                                                                 00:21 +47 -11: /app/test/features/workouts/domain/entities/session_log_entity_test.dart: ExerciseSessionLog should hold correct values                                                                 00:21 +47 -11: loading /app/test/features/workouts/domain/entities/workout_entity_test.dart                                                                                                            00:21 +47 -11: /app/test/features/workouts/domain/entities/workout_entity_test.dart: WorkoutEntity should have correct props                                                                           00:21 +48 -11: /app/test/features/workouts/domain/entities/workout_entity_test.dart: WorkoutEntity should have correct props                                                                           00:22 +48 -11: /app/test/features/workouts/domain/entities/workout_entity_test.dart: WorkoutEntity should have correct props                                                                           00:22 +48 -11: loading /app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart                                                                                            00:22 +48 -11: /app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart: exerciseStatsProvider returns logs when success                                                   00:22 +48 -12: /app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart: exerciseStatsProvider returns logs when success [E]
+  Bad state: The provider FutureProvider<List<ExerciseLogEntity>>#cd4a3(1) was disposed during loading state, yet no value could be emitted.
+  package:riverpod/src/core/element.dart 329:70                                          ElementWithFuture.dispose
+  package:riverpod/src/core/provider_container.dart 1023:22                              ProviderContainer._disposeProvider
+  package:riverpod/src/core/scheduler.dart 172:27                                        ProviderScheduler._performDispose
+  package:riverpod/src/core/scheduler.dart 107:5                                         ProviderScheduler._task
+  package:riverpod/src/core/scheduler.dart 14:16                                         Task.call
+  ===== asynchronous gap ===========================
+  dart:async                                                                             _Completer.completeError
+  package:riverpod/src/core/element.dart 329:19                                          ElementWithFuture.dispose
+  package:riverpod/src/core/provider_container.dart 1023:22                              ProviderContainer._disposeProvider
+  package:riverpod/src/core/scheduler.dart 172:27                                        ProviderScheduler._performDispose
+  package:riverpod/src/core/scheduler.dart 107:5                                         ProviderScheduler._task
+  package:riverpod/src/core/scheduler.dart 14:16                                         Task.call
+  ===== asynchronous gap ===========================
+  dart:async                                                                             new Timer
+  package:riverpod/src/core/scheduler.dart 24:17                                         _defaultVsync
+  package:riverpod/src/core/scheduler.dart 97:20                                         ProviderScheduler._scheduleTask
+  package:riverpod/src/core/scheduler.dart 152:5                                         ProviderScheduler.scheduleProviderDispose
+  package:riverpod/src/core/element.dart 1137:29                                         ProviderElement.mayNeedDispose
+  package:riverpod/src/core/element.dart 1115:7                                          ProviderElement._onChangeSubscription
+  package:riverpod/src/core/element.dart 966:5                                           ProviderElement.removeDependentSubscription
+  package:riverpod/src/core/provider_subscription.dart 207:22                            ProviderSubscriptionImpl.close
+  package:riverpod/src/core/provider_subscription.dart 332:11                            ExternalProviderSubscription.close
+  package:riverpod/src/core/provider_container.dart 922:11                               ProviderContainer.read
+  test/features/workouts/presentation/providers/exercise_stats_provider_test.dart 43:23  main.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart -p vm --plain-name 'exerciseStatsProvider returns logs when success'
+00:22 +48 -12: loading /app/test/features/workouts/presentation/providers/workout_provider_test.dart                                                                                                   00:22 +48 -12: /app/test/features/workouts/presentation/providers/workout_provider_test.dart: workoutGroups provider returns groups when success                                                       00:22 +49 -12: /app/test/features/workouts/presentation/providers/workout_provider_test.dart: workoutGroups provider returns groups when success                                                       00:22 +49 -12: /app/test/features/workouts/presentation/providers/workout_provider_test.dart: workoutGroupByIdProvider returns group when found                                                        00:23 +49 -13: /app/test/features/workouts/presentation/providers/workout_provider_test.dart: workoutGroupByIdProvider returns group when found                                                        00:23 +49 -13: /app/test/features/workouts/presentation/providers/workout_provider_test.dart: workoutGroupByIdProvider returns group when found [E]
+  Bad state: The provider FutureProvider<WorkoutGroupEntity?>#970a0(1) was disposed during loading state, yet no value could be emitted.
+  package:riverpod/src/core/element.dart 329:70                                   ElementWithFuture.dispose
+  package:riverpod/src/core/provider_container.dart 1023:22                       ProviderContainer._disposeProvider
+  package:riverpod/src/core/scheduler.dart 172:27                                 ProviderScheduler._performDispose
+  package:riverpod/src/core/scheduler.dart 107:5                                  ProviderScheduler._task
+  package:riverpod/src/core/scheduler.dart 14:16                                  Task.call
+  ===== asynchronous gap ===========================
+  dart:async                                                                      _Completer.completeError
+  package:riverpod/src/core/element.dart 329:19                                   ElementWithFuture.dispose
+  package:riverpod/src/core/provider_container.dart 1023:22                       ProviderContainer._disposeProvider
+  package:riverpod/src/core/scheduler.dart 172:27                                 ProviderScheduler._performDispose
+  package:riverpod/src/core/scheduler.dart 107:5                                  ProviderScheduler._task
+  package:riverpod/src/core/scheduler.dart 14:16                                  Task.call
+  ===== asynchronous gap ===========================
+  dart:async                                                                      new Timer
+  package:riverpod/src/core/scheduler.dart 24:17                                  _defaultVsync
+  package:riverpod/src/core/scheduler.dart 97:20                                  ProviderScheduler._scheduleTask
+  package:riverpod/src/core/scheduler.dart 152:5                                  ProviderScheduler.scheduleProviderDispose
+  package:riverpod/src/core/element.dart 1137:29                                  ProviderElement.mayNeedDispose
+  package:riverpod/src/core/element.dart 1115:7                                   ProviderElement._onChangeSubscription
+  package:riverpod/src/core/element.dart 966:5                                    ProviderElement.removeDependentSubscription
+  package:riverpod/src/core/provider_subscription.dart 207:22                     ProviderSubscriptionImpl.close
+  package:riverpod/src/core/provider_subscription.dart 332:11                     ExternalProviderSubscription.close
+  package:riverpod/src/core/provider_container.dart 922:11                        ProviderContainer.read
+  test/features/workouts/presentation/providers/workout_provider_test.dart 61:23  main.<fn>
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/presentation/providers/workout_provider_test.dart -p vm --plain-name 'workoutGroupByIdProvider returns group when found'
+00:23 +49 -13: loading /app/test/features/workouts/presentation/providers/workout_create_provider_test.dart                                                                                            00:23 +49 -13: /app/test/features/workouts/presentation/providers/workout_create_provider_test.dart: WorkoutCreateNotifier updates state                                                               00:23 +50 -13: /app/test/features/workouts/presentation/providers/workout_create_provider_test.dart: WorkoutCreateNotifier updates state                                                               00:24 +50 -13: /app/test/features/workouts/presentation/providers/workout_create_provider_test.dart: WorkoutCreateNotifier updates state                                                               00:24 +50 -13: loading /app/test/features/workouts/presentation/widgets/workout_series_dialog_test.dart                                                                                                00:24 +50 -13: /app/test/features/workouts/presentation/widgets/workout_series_dialog_test.dart: WorkoutSeriesDialog collects data                                                                     00:25 +50 -13: /app/test/features/workouts/presentation/widgets/workout_series_dialog_test.dart: WorkoutSeriesDialog collects data                                                                     00:25 +51 -13: /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart: PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar                            00:26 +51 -13: /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart: PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar                            00:26 +51 -13: /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart: PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "10.0 kg": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart:37:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart line 37
+The test description was:
+  PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:26 +51 -14: /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart: PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar [E]
+  Test failed. See exception logs above.
+  The test description was: PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart -p vm --plain-name 'PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar'
+00:26 +51 -14: /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart: PlateCalculatorDialog updates calculation on input change                                           00:26 +52 -14: /app/test/features/workouts/presentation/widgets/rpe_info_dialog_test.dart: RpeInfoDialog displays scale                                                                                00:27 +52 -14: /app/test/features/workouts/presentation/widgets/rpe_info_dialog_test.dart: RpeInfoDialog displays scale                                                                                00:27 +53 -14: /app/test/features/workouts/presentation/widgets/rpe_info_dialog_test.dart: RpeInfoDialog displays scale                                                                                00:27 +53 -14: loading /app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart                                                                                                  00:27 +53 -14: /app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart: OneRepMaxDisplay shows estimated 1RM                                                                    00:28 +53 -14: /app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart: OneRepMaxDisplay shows estimated 1RM                                                                    00:28 +54 -14: /app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart: RestTimerWidget displays info and buttons                                                                 00:28 +55 -14: /app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart: RestTimerWidget displays info and buttons                                                                 00:29 +55 -14: /app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart: RestTimerWidget displays info and buttons                                                                 00:29 +56 -14: /app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart: RestTimerWidget displays info and buttons                                                                 00:29 +56 -14: loading /app/test/features/workouts/presentation/widgets/workout_timer_test.dart                                                                                                        00:29 +56 -14: /app/test/features/workouts/presentation/widgets/workout_timer_test.dart: WorkoutTimer updates UI when notifier changes                                                                 00:30 +56 -14: /app/test/features/workouts/presentation/widgets/workout_timer_test.dart: WorkoutTimer updates UI when notifier changes                                                                 00:30 +57 -14: /app/test/features/workouts/presentation/widgets/workout_timer_test.dart: WorkoutTimer updates UI when notifier changes                                                                 00:30 +57 -14: loading /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart                                                                                                       00:30 +57 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier initial value is 0                                                                             00:30 +58 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier initial value is 0                                                                             00:30 +58 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier start increments value over time                                                               00:30 +59 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier start increments value over time                                                               00:30 +59 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier stop pauses the timer                                                                          00:30 +60 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier stop pauses the timer                                                                          00:31 +60 -14: /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart: TimerNotifier stop pauses the timer                                                                          00:31 +60 -14: loading /app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart                                                                                        00:31 +60 -14: /app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart: OneRepMaxCalculatorDialog calculates 1RM correctly using Epley formula                        00:32 +60 -14: /app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart: OneRepMaxCalculatorDialog calculates 1RM correctly using Epley formula                        00:32 +61 -14: /app/test/features/workouts/presentation/widgets/number_input_control_test.dart: NumberInputControl updates value                                                                       00:32 +62 -14: /app/test/features/workouts/presentation/widgets/number_input_control_test.dart: NumberInputControl updates value                                                                       00:32 +63 -14: /app/test/features/workouts/presentation/widgets/number_input_control_test.dart: NumberInputControl updates value                                                                       00:33 +63 -14: /app/test/features/workouts/presentation/widgets/number_input_control_test.dart: NumberInputControl updates value                                                                       00:33 +63 -14: loading /app/test/features/workouts/presentation/widgets/workout_card_test.dart                                                                                                         00:33 +63 -14: /app/test/features/workouts/presentation/widgets/workout_card_test.dart: WorkoutCard displays info                                                                                      00:34 +63 -14: /app/test/features/workouts/presentation/widgets/workout_card_test.dart: WorkoutCard displays info                                                                                      00:34 +64 -14: /app/test/features/workouts/presentation/widgets/workout_group_card_test.dart: WorkoutGroupCard displays info                                                                           00:34 +65 -14: /app/test/features/workouts/presentation/widgets/workout_group_card_test.dart: WorkoutGroupCard displays info                                                                           00:35 +65 -14: /app/test/features/workouts/presentation/widgets/workout_group_card_test.dart: WorkoutGroupCard displays info                                                                           00:35 +65 -14: loading /app/test/features/workouts/presentation/pages/workout_details_page_test.dart                                                                                                   00:35 +65 -14: /app/test/features/workouts/presentation/pages/workout_details_page_test.dart: WorkoutDetailsPage displays group info                                                                   00:36 +65 -14: /app/test/features/workouts/presentation/pages/workout_details_page_test.dart: WorkoutDetailsPage displays group info                                                                   00:37 +65 -14: /app/test/features/workouts/presentation/pages/workout_details_page_test.dart: WorkoutDetailsPage displays group info                                                                   00:37 +66 -14: /app/test/features/workouts/presentation/pages/workout_groups_page_test.dart: WorkoutGroupsPage displays empty state                                                                    00:37 +67 -14: /app/test/features/workouts/presentation/pages/workout_groups_page_test.dart: WorkoutGroupsPage displays empty state                                                                    00:38 +67 -14: /app/test/features/workouts/presentation/pages/workout_groups_page_test.dart: WorkoutGroupsPage displays empty state                                                                    00:38 +67 -14: loading /app/test/features/workouts/presentation/pages/analytics_page_test.dart                                                                                                         00:38 +67 -14: /app/test/features/workouts/presentation/pages/analytics_page_test.dart: AnalyticsPage displays charts                                                                                  00:39 +67 -14: /app/test/features/workouts/presentation/pages/analytics_page_test.dart: AnalyticsPage displays charts                                                                                  00:39 +67 -14: /app/test/features/workouts/presentation/pages/analytics_page_test.dart: AnalyticsPage displays charts
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following StateError was thrown building AnalyticsPage(dirty, dependencies:
+[_EffectiveTickerMode], state: _ConsumerState#ed51b, useEffect):
+Bad state: No ProviderScope found
+
+The relevant error-causing widget was:
+  AnalyticsPage
+  AnalyticsPage:file:///app/test/features/workouts/presentation/pages/analytics_page_test.dart:8:13
+
+When the exception was thrown, this was the stack:
+#0      ProviderScope.containerOf (package:flutter_riverpod/src/core/provider_scope.dart:105:7)
+#1      ConsumerStatefulElement.container (package:flutter_riverpod/src/core/consumer.dart:374:52)
+#2      ConsumerStatefulElement.container (package:flutter_riverpod/src/core/consumer.dart)
+#3      ConsumerStatefulElement.watch.<anonymous closure> (package:flutter_riverpod/src/core/consumer.dart:451:27)
+#4      _LinkedHashMapMixin.putIfAbsent (dart:_compact_hash:675:23)
+#5      ConsumerStatefulElement.watch (package:flutter_riverpod/src/core/consumer.dart:444:14)
+#6      AnalyticsPage.build (package:my_academy/features/workouts/presentation/pages/analytics_page.dart:21:27)
+#7      _ConsumerState.build (package:flutter_riverpod/src/core/consumer.dart:283:48)
+#8      StatefulElement.build (package:flutter/src/widgets/framework.dart:5934:27)
+#9      ConsumerStatefulElement.build (package:flutter_riverpod/src/core/consumer.dart:421:20)
+#10     HookElement.build (package:flutter_hooks/src/framework.dart:438:27)
+#11     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5820:15)
+#12     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#13     Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#14     ComponentElement._firstBuild (package:flutter/src/widgets/framework.dart:5802:5)
+#15     StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5976:11)
+#16     ComponentElement.mount (package:flutter/src/widgets/framework.dart:5796:5)
+...     Normal element mounting (260 frames)
+#276    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#277    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)
+#278    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)
+...     Normal element mounting (465 frames)
+#743    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)
+#744    Element.updateChild (package:flutter/src/widgets/framework.dart:4053:20)
+#745    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#746    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#747    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#748    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#749    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#750    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#751    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#752    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#753    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#754    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#755    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#756    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#757    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#758    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#759    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#760    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#761    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#762    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#763    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#764    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#765    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#766    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#767    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#768    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#769    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#770    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#771    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#772    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#773    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#774    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#775    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#776    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#777    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#778    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#779    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#780    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#781    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#782    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#783    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#784    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#785    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)
+#786    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#787    _RawViewElement._updateChild (package:flutter/src/widgets/view.dart:481:16)
+#788    _RawViewElement.update (package:flutter/src/widgets/view.dart:568:5)
+#789    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#790    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#791    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#792    StatelessElement.update (package:flutter/src/widgets/framework.dart:5898:5)
+#793    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#794    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)
+#795    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)
+#796    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#797    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)
+#798    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)
+#799    RootElement._rebuild (package:flutter/src/widgets/binding.dart:1782:16)
+#800    RootElement.update (package:flutter/src/widgets/binding.dart:1760:5)
+#801    RootElement.performRebuild (package:flutter/src/widgets/binding.dart:1774:7)
+#802    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)
+#803    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2750:15)
+#804    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2807:11)
+#805    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3111:18)
+#806    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#807    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#808    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#809    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#810    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#813    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#814    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#815    WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)
+#818    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#819    WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)
+#820    main.<anonymous closure> (file:///app/test/features/workouts/presentation/pages/analytics_page_test.dart:7:18)
+#821    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#822    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Análise de Progresso": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/workouts/presentation/pages/analytics_page_test.dart:11:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/workouts/presentation/pages/analytics_page_test.dart line 11
+The test description was:
+  AnalyticsPage displays charts
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (2) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:39 +67 -15: /app/test/features/workouts/presentation/pages/analytics_page_test.dart: AnalyticsPage displays charts [E]
+  Test failed. See exception logs above.
+  The test description was: AnalyticsPage displays charts
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/workouts/presentation/pages/analytics_page_test.dart -p vm --plain-name 'AnalyticsPage displays charts'
+00:40 +68 -15: /app/test/features/workouts/presentation/pages/exercise_library_page_test.dart: ExerciseLibraryPage shows loading state                                                                 00:40 +68 -15: /app/test/features/workouts/presentation/pages/exercise_library_page_test.dart: ExerciseLibraryPage shows list of exercises                                                             00:41 +68 -15: /app/test/features/workouts/presentation/pages/exercise_library_page_test.dart: ExerciseLibraryPage shows list of exercises                                                             00:41 +69 -15: /app/test/features/workouts/presentation/pages/exercise_stats_page_test.dart: ExerciseStatsPage displays exercise info                                                                  00:41 +70 -15: /app/test/features/workouts/presentation/pages/exercise_stats_page_test.dart: ExerciseStatsPage displays exercise info                                                                  00:41 +71 -15: /app/test/features/workouts/presentation/pages/exercise_stats_page_test.dart: ExerciseStatsPage displays exercise info                                                                  00:42 +71 -15: /app/test/features/workouts/presentation/pages/exercise_stats_page_test.dart: ExerciseStatsPage displays exercise info                                                                  00:42 +72 -15: /app/test/features/workouts/presentation/pages/exercise_stats_page_test.dart: ExerciseStatsPage displays exercise info                                                                  00:42 +72 -15: loading /app/test/features/workouts/presentation/pages/workout_create_page_test.dart                                                                                                    00:42 +72 -15: /app/test/features/workouts/presentation/pages/workout_create_page_test.dart: WorkoutCreatePage displays exercises in picker                                                            00:43 +72 -15: /app/test/features/workouts/presentation/pages/workout_create_page_test.dart: WorkoutCreatePage displays exercises in picker                                                            00:44 +72 -15: /app/test/features/workouts/presentation/pages/workout_create_page_test.dart: WorkoutCreatePage displays exercises in picker                                                            00:44 +73 -15: /app/test/features/workouts/presentation/pages/workout_player_page_test.dart: WorkoutPlayerPage displays player with exercise                                                           00:45 +73 -15: /app/test/features/workouts/presentation/pages/workout_player_page_test.dart: WorkoutPlayerPage displays player with exercise                                                           00:45 +74 -15: /app/test/features/workouts/presentation/pages/workout_player_page_test.dart: WorkoutPlayerPage displays player with exercise                                                           00:45 +74 -15: loading /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart                                                                                                   00:45 +74 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +74 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +75 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +76 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +77 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +78 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +79 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +80 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +81 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:46 +82 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:47 +82 -15: /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart: WorkoutSummaryPage displays summary                                                                      00:47 +82 -15: loading /app/test/features/students/domain/entities/student_entity_test.dart                                                                                                            00:47 +82 -15: /app/test/features/students/domain/entities/student_entity_test.dart: StudentEntity should have correct props                                                                           00:47 +83 -15: /app/test/features/students/domain/entities/student_entity_test.dart: StudentEntity should have correct props                                                                           00:47 +83 -15: loading /app/test/features/students/presentation/pages/students_page_test.dart                                                                                                          00:47 +83 -15: /app/test/features/students/presentation/pages/students_page_test.dart: StudentsPage renders correctly with data                                                                        00:48 +83 -15: /app/test/features/students/presentation/pages/students_page_test.dart: StudentsPage renders correctly with data                                                                        00:48 +84 -15: /app/test/features/students/presentation/pages/student_add_page_test.dart: StudentAddPage adds student                                                                                  00:48 +85 -15: /app/test/features/students/presentation/pages/student_add_page_test.dart: StudentAddPage adds student                                                                                  00:49 +85 -15: /app/test/features/students/presentation/pages/student_add_page_test.dart: StudentAddPage adds student                                                                                  00:50 +85 -15: /app/test/features/students/presentation/pages/student_add_page_test.dart: StudentAddPage adds student                                                                                  00:50 +85 -15: /app/test/features/students/presentation/pages/student_add_page_test.dart: StudentAddPage adds student
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 2 widgets with text "Adicionar Aluno": [
+            Text("Adicionar Aluno", dependencies: [DefaultSelectionStyle, DefaultTextStyle,
+MediaQuery]),
+            Text("Adicionar Aluno", dependencies: [DefaultSelectionStyle, DefaultTextStyle,
+MediaQuery]),
+          ]>
+   Which: is too many
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/students/presentation/pages/student_add_page_test.dart:43:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/students/presentation/pages/student_add_page_test.dart line 43
+The test description was:
+  StudentAddPage adds student
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:50 +85 -16: /app/test/features/students/presentation/pages/student_add_page_test.dart: StudentAddPage adds student [E]
+  Test failed. See exception logs above.
+  The test description was: StudentAddPage adds student
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/students/presentation/pages/student_add_page_test.dart -p vm --plain-name 'StudentAddPage adds student'
+00:51 +85 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:51 +86 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:51 +87 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:51 +88 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:51 +89 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:51 +90 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:52 +90 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info                                                                         00:52 +90 -16: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Email": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/students/presentation/pages/student_details_page_test.dart:22:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/students/presentation/pages/student_details_page_test.dart line 22
+The test description was:
+  StudentDetailsPage displays info
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:52 +90 -17: /app/test/features/students/presentation/pages/student_details_page_test.dart: StudentDetailsPage displays info [E]
+  Test failed. See exception logs above.
+  The test description was: StudentDetailsPage displays info
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/students/presentation/pages/student_details_page_test.dart -p vm --plain-name 'StudentDetailsPage displays info'
+00:53 +90 -17: loading /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart                                                                                               00:53 +90 -17: /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart: BodyCompositionDialog calculates                                                                     00:54 +90 -17: /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart: BodyCompositionDialog calculates                                                                     00:54 +90 -17: /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart: BodyCompositionDialog calculates
+
+Warning: A call to tap() with finder "Found 1 widget with text "Calcular": [
+  Text("Calcular", dependencies: [DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+]" derived an Offset (Offset(400.0, 824.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+Indeed, Offset(400.0, 824.0) is outside the bounds of the root of the render tree, Size(800.0, 600.0).
+The finder corresponds to this RenderBox: RenderParagraph#a2297 relayoutBoundary=up28
+The hit test result at that offset is: HitTestResult(HitTestEntry<HitTestTarget>#17bef(_ReusableRenderView#c5caa), HitTestEntry<HitTestTarget>#75098(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2081:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1865:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1045:7)
+#3      main.<anonymous closure> (file:///app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart:18:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Gordura Corporal": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart:22:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart line 22
+The test description was:
+  BodyCompositionDialog calculates
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:55 +90 -18: /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart: BodyCompositionDialog calculates [E]
+  Test failed. See exception logs above.
+  The test description was: BodyCompositionDialog calculates
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart -p vm --plain-name 'BodyCompositionDialog calculates'
+00:55 +90 -18: /app/test/features/profile/presentation/pages/profile_page_test.dart: ProfilePage displays info
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Treinos": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///app/test/features/profile/presentation/pages/profile_page_test.dart:52:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///app/test/features/profile/presentation/pages/profile_page_test.dart line 52
+The test description was:
+  ProfilePage displays info
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:55 +90 -19: /app/test/features/profile/presentation/pages/profile_page_test.dart: ProfilePage displays info [E]
+  Test failed. See exception logs above.
+  The test description was: ProfilePage displays info
+
+
+To run this test again: /opt/flutter/bin/cache/dart-sdk/bin/dart test /app/test/features/profile/presentation/pages/profile_page_test.dart -p vm --plain-name 'ProfilePage displays info'
+00:56 +90 -19: loading /app/test/core/utils/logger_test.dart                                                                                                                                           00:56 +90 -19: /app/test/core/utils/logger_test.dart: logger should be initialized                                                                                                                     00:56 +91 -19: /app/test/core/utils/logger_test.dart: logger should be initialized                                                                                                                     00:57 +91 -19: /app/test/core/utils/logger_test.dart: logger should be initialized                                                                                                                     00:57 +91 -19: loading /app/test/core/exceptions/failure_test.dart                                                                                                                                     00:57 +91 -19: /app/test/core/exceptions/failure_test.dart: Failure ServerFailure should have correct props                                                                                            00:57 +92 -19: /app/test/core/exceptions/failure_test.dart: Failure ServerFailure should have correct props                                                                                            00:57 +92 -19: /app/test/core/exceptions/failure_test.dart: Failure NetworkFailure should have correct props                                                                                           00:57 +93 -19: /app/test/core/exceptions/failure_test.dart: Failure NetworkFailure should have correct props                                                                                           00:57 +93 -19: /app/test/core/exceptions/failure_test.dart: Failure CacheFailure should have correct props                                                                                             00:57 +94 -19: /app/test/core/exceptions/failure_test.dart: Failure CacheFailure should have correct props                                                                                             00:57 +94 -19: /app/test/core/exceptions/failure_test.dart: Failure AuthFailure should have correct props                                                                                              00:57 +95 -19: /app/test/core/exceptions/failure_test.dart: Failure AuthFailure should have correct props                                                                                              00:57 +95 -19: loading /app/test/core/network/api_client_test.dart                                                                                                                                     00:57 +95 -19: /app/test/core/network/api_client_test.dart: ApiClient get call should return data when successful                                                                                      00:57 +96 -19: /app/test/core/network/api_client_test.dart: ApiClient get call should return data when successful                                                                                      00:57 +96 -19: /app/test/core/network/api_client_test.dart: ApiClient get call should throw ServerFailure on DioException                                                                              00:57 +97 -19: /app/test/core/network/api_client_test.dart: ApiClient get call should throw ServerFailure on DioException                                                                              00:57 +97 -19: /app/test/core/network/api_client_test.dart: ApiClient post call should return data when successful                                                                                     00:57 +98 -19: /app/test/core/network/api_client_test.dart: ApiClient post call should return data when successful                                                                                     00:57 +98 -19: /app/test/core/network/api_client_test.dart: ApiClient put call should return data when successful                                                                                      00:57 +99 -19: /app/test/core/network/api_client_test.dart: ApiClient put call should return data when successful                                                                                      00:57 +99 -19: /app/test/core/network/api_client_test.dart: ApiClient delete call should return data when successful                                                                                   00:57 +100 -19: /app/test/core/network/api_client_test.dart: ApiClient delete call should return data when successful                                                                                  00:57 +100 -19: /app/test/core/network/api_client_test.dart: ApiClient setAuthToken should set Authorization header                                                                                    00:57 +101 -19: /app/test/core/network/api_client_test.dart: ApiClient setAuthToken should set Authorization header                                                                                    00:57 +101 -19: /app/test/core/network/api_client_test.dart: ApiClient clearAuthToken should remove Authorization header                                                                               00:57 +102 -19: /app/test/core/network/api_client_test.dart: ApiClient clearAuthToken should remove Authorization header                                                                               00:58 +102 -19: /app/test/core/network/api_client_test.dart: ApiClient clearAuthToken should remove Authorization header                                                                               00:59 +102 -19: /app/test/core/network/api_client_test.dart: ApiClient clearAuthToken should remove Authorization header                                                                               01:00 +102 -19: /app/test/core/network/api_client_test.dart: ApiClient clearAuthToken should remove Authorization header                                                                               01:01 +102 -19: /app/test/core/network/api_client_test.dart: ApiClient clearAuthToken should remove Authorization header                                                                               01:01 +102 -19: loading /app/test/core/theme/app_theme_test.dart                                                                                                                                       01:01 +102 -19: /app/test/core/theme/app_theme_test.dart: AppTheme colors should be correct                                                                                                            01:01 +103 -19: /app/test/core/theme/app_theme_test.dart: AppTheme colors should be correct                                                                                                            01:01 +103 -19: loading /app/test/core/widgets/common_empty_state_test.dart                                                                                                                            01:01 +103 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays title and message                                                                                       01:01 +103 ~1 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays title and message                                                                                    01:01 +103 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays title and message                                                                                    01:02 +103 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays title and message                                                                                    01:02 +104 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays title and message                                                                                    01:02 +104 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays icon when provided                                                                                   01:02 +105 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays icon when provided                                                                                   01:02 +105 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays action button when provided                                                                          01:02 +106 ~2 -19: /app/test/core/widgets/common_empty_state_test.dart: CommonEmptyState displays action button when provided                                                                          01:02 +106 ~2 -19: loading /app/test/widget_test.dart                                                                                                                                                  01:02 +106 ~2 -19: /app/test/widget_test.dart: Basic smoke test                                                                                                                                        01:03 +106 ~2 -19: /app/test/widget_test.dart: Basic smoke test                                                                                                                                        01:03 +107 ~2 -19: /app/test/widget_test.dart: Basic smoke test                                                                                                                                        01:03 +107 ~2 -19: Some tests failed.

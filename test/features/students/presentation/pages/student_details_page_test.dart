@@ -18,7 +18,17 @@ void main() {
       ),
     ));
 
+    await tester.pumpAndSettle();
+
     expect(find.text('John Doe'), findsOneWidget);
+
+    // Scroll to find elements at bottom
+    await tester.dragUntilVisible(
+      find.text('Email'),
+      find.byType(CustomScrollView),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
     expect(find.text('Email'), findsOneWidget);
     expect(find.text('john@example.com'), findsOneWidget);
   });
