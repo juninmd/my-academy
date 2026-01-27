@@ -19,6 +19,7 @@ import '../../features/workouts/presentation/pages/workout_create_page.dart';
 import '../../features/workouts/presentation/pages/workout_details_page.dart';
 import '../../features/workouts/presentation/pages/workout_groups_page.dart';
 import '../../features/workouts/presentation/pages/workout_player_page.dart';
+import '../../features/workouts/presentation/pages/workout_history_page.dart';
 
 part 'app_router.g.dart';
 
@@ -48,6 +49,10 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/analytics',
         builder: (context, state) => const AnalyticsPage(),
+      ),
+      GoRoute(
+        path: '/history',
+        builder: (context, state) => const WorkoutHistoryPage(),
       ),
       GoRoute(
         path: '/exercise-details',

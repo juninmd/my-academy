@@ -722,13 +722,24 @@ class _SetRow extends HookWidget {
                   if (lastSet != null)
                     ActionChip(
                       visualDensity: VisualDensity.compact,
-                      avatar: const Icon(Icons.copy_all, size: 14),
+                      avatar: Icon(
+                        Icons.copy_all,
+                        size: 14,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                       label: Text(
                         'Último: ${lastSet!.reps}x ${lastSet!.weight}kg',
-                        style: const TextStyle(fontSize: 12),
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       tooltip: 'Copiar do histórico',
-                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                      ),
                       onPressed: !log.isCompleted
                           ? () {
                               onChanged(SetLogState(

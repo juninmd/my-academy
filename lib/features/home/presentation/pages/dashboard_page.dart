@@ -10,7 +10,7 @@ import '../providers/home_provider.dart';
 import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 import '../widgets/quick_timer_dialog.dart';
-import '../widgets/weekly_goal_widget.dart';
+import '../widgets/weekly_calendar_strip.dart';
 import '../widgets/body_weight_dialog.dart';
 
 // Placeholder for now
@@ -31,6 +31,11 @@ class DashboardPage extends ConsumerWidget {
             onPressed: () {},
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/workouts/create'),
+        icon: const Icon(Icons.fitness_center),
+        label: const Text('Treino Rápido'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -89,8 +94,9 @@ class DashboardPage extends ConsumerWidget {
                 .when(
                   data:
                       (summary) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          WeeklyGoalWidget(completedDays: summary.counter),
+                          const WeeklyCalendarStrip(),
                           const SizedBox(height: 24),
 
                           Row(
@@ -246,6 +252,8 @@ class DashboardPage extends ConsumerWidget {
                                 ],
                               ),
                             ),
+                            // Space for FAB
+                            const SizedBox(height: 80),
                         ],
                       ),
                   loading:
@@ -269,83 +277,116 @@ class _ToolsSection extends StatelessWidget {
       children: [
         Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.1,
-          children: [
-            _ToolCard(
-              icon: Icons.add_circle_outline,
-              label: 'Novo Treino',
-              color: Theme.of(context).colorScheme.primary,
-              onTap: () {
-                context.go('/workouts/create');
-              },
-            ),
-            _ToolCard(
-              icon: Icons.menu_book_outlined,
-              label: 'Exercícios',
-              color: Colors.indigo,
-              onTap: () {
-                context.go('/home/exercises');
-              },
-            ),
-            _ToolCard(
-              icon: Icons.bar_chart,
-              label: 'Análise',
-              color: Colors.teal,
-              onTap: () {
-                 context.push('/analytics');
-              },
-            ),
-            _ToolCard(
-              icon: Icons.calculate_outlined,
-              label: 'Anilhas',
-              color: Colors.blue,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
-                );
-              },
-            ),
-            _ToolCard(
-              icon: Icons.fitness_center,
-              label: '1RM',
-              color: Colors.red,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const OneRepMaxCalculatorDialog(),
-                );
-              },
-            ),
-            _ToolCard(
-              icon: Icons.timer_outlined,
-              label: 'Timer',
-              color: Colors.orange,
-              onTap: () {
-                 showDialog(
-                   context: context,
-                   builder: (context) => const QuickTimerDialog(),
-                 );
-              },
-            ),
-            _ToolCard(
-              icon: Icons.monitor_weight_outlined,
-              label: 'Peso',
-              color: Colors.purple,
-              onTap: () {
-                 showDialog(
-                   context: context,
-                   builder: (context) => const BodyWeightDialog(),
-                 );
-              },
-            ),
-          ],
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final double itemWidth = (constraints.maxWidth - 24) / 3;
+            return Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.add_circle_outline,
+                    label: 'Criar',
+                    color: Theme.of(context).colorScheme.primary,
+                    onTap: () {
+                      context.push('/workouts/create');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.history,
+                    label: 'Histórico',
+                    color: Colors.deepPurple,
+                    onTap: () {
+                      context.push('/history');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.menu_book_outlined,
+                    label: 'Exercícios',
+                    color: Colors.indigo,
+                    onTap: () {
+                      context.go('/home/exercises');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.bar_chart,
+                    label: 'Análise',
+                    color: Colors.teal,
+                    onTap: () {
+                       context.push('/analytics');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.calculate_outlined,
+                    label: 'Anilhas',
+                    color: Colors.blue,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.fitness_center,
+                    label: '1RM',
+                    color: Colors.red,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const OneRepMaxCalculatorDialog(),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.timer_outlined,
+                    label: 'Timer',
+                    color: Colors.orange,
+                    onTap: () {
+                       showDialog(
+                         context: context,
+                         builder: (context) => const QuickTimerDialog(),
+                       );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.monitor_weight_outlined,
+                    label: 'Peso',
+                    color: Colors.purple,
+                    onTap: () {
+                       showDialog(
+                         context: context,
+                         builder: (context) => const BodyWeightDialog(),
+                       );
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
         ),
       ],
     );
@@ -374,6 +415,7 @@ class _ToolCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: color.withValues(alpha: 0.15)),
