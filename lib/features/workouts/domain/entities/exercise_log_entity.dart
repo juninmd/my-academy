@@ -34,7 +34,7 @@ class ExerciseLogEntity extends Equatable {
 
   factory ExerciseLogEntity.fromJson(Map<String, dynamic> json) {
     return ExerciseLogEntity(
-      id: (json['id'] as num?)?.toString(),
+      id: json['id']?.toString(),
       userId: json['userId'] as String,
       exerciseId: json['exerciseId'] as int,
       date: DateTime.parse(json['date'] as String),
