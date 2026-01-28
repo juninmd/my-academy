@@ -10,6 +10,7 @@ import '../../domain/entities/set_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
 import '../providers/exercise_stats_provider.dart';
 import '../providers/workout_provider.dart';
+import '../widgets/progress_chart.dart';
 
 class ExerciseStatsPage extends ConsumerWidget {
   const ExerciseStatsPage({required this.exercise, super.key});
@@ -106,7 +107,7 @@ class ExerciseStatsPage extends ConsumerWidget {
                       const SizedBox(height: 16),
                       SizedBox(
                         height: 200,
-                        child: _OneRepMaxChart(logs: logs),
+                        child: ProgressChart(logs: logs),
                       ),
                       const SizedBox(height: 24),
                     ],
@@ -160,98 +161,6 @@ class ExerciseStatsPage extends ConsumerWidget {
   }
 }
 
-class _OneRepMaxChart extends StatelessWidget {
-  const _OneRepMaxChart({required this.logs});
-  final List<ExerciseLogEntity> logs;
-
-  @override
-  Widget build(BuildContext context) {
-    // Process data
-    final points = <FlSpot>[];
-    // Sort logs by date ascending
-    final sortedLogs = List<ExerciseLogEntity>.from(logs)
-      ..sort((a, b) => a.date.compareTo(b.date));
-
-    for (int i = 0; i < sortedLogs.length; i++) {
-      final log = sortedLogs[i];
-      double max1RM = 0;
-      for (final set in log.sets) {
-        final rm = OneRepMaxCalculator.calculateEpley(set.weight.toDouble(), set.reps);
-        if (rm > max1RM) max1RM = rm;
-      }
-      if (max1RM > 0) {
-        points.add(FlSpot(i.toDouble(), max1RM));
-      }
-    }
-
-    if (points.isEmpty) return const SizedBox.shrink();
-
-    final color = Theme.of(context).colorScheme.primary;
-
-    return LineChart(
-      LineChartData(
-        gridData: const FlGridData(show: false),
-        titlesData: FlTitlesData(
-          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (value, meta) {
-                final index = value.toInt();
-                if (index >= 0 && index < sortedLogs.length) {
-                   // Show date for first, last, and maybe middle?
-                   // Or just clean dates.
-                   // If too many points, skip some.
-                   if (sortedLogs.length > 5 && index % (sortedLogs.length ~/ 4) != 0) {
-                     return const SizedBox.shrink();
-                   }
-                   final date = sortedLogs[index].date;
-                   return Padding(
-                     padding: const EdgeInsets.only(top: 8.0),
-                     child: Text(
-                       DateFormat('dd/MM').format(date),
-                       style: const TextStyle(fontSize: 10),
-                     ),
-                   );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ),
-        ),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: points,
-            isCurved: true,
-            color: color,
-            barWidth: 3,
-            isStrokeCapRound: true,
-            dotData: const FlDotData(show: true),
-            belowBarData: BarAreaData(
-              show: true,
-              color: color.withValues(alpha: 0.1),
-            ),
-          ),
-        ],
-        lineTouchData: LineTouchData(
-          touchTooltipData: LineTouchTooltipData(
-             getTooltipItems: (touchedSpots) {
-               return touchedSpots.map((spot) {
-                 return LineTooltipItem(
-                   '${spot.y.toStringAsFixed(1)} kg',
-                   const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                 );
-               }).toList();
-             }
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _LogCard extends StatelessWidget {
   const _LogCard({required this.log});

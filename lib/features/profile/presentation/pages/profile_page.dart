@@ -9,6 +9,7 @@ import '../../../workouts/domain/entities/exercise_log_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
+import '../widgets/consistency_heatmap.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
@@ -203,6 +204,15 @@ class ProfilePage extends HookConsumerWidget {
                     },
                     loading:
                         () => const Center(child: CircularProgressIndicator()),
+                    error: (_, __) => const SizedBox(),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Consistency Heatmap
+                  ref.watch(allExerciseLogsProvider).when(
+                    data: (logs) => ConsistencyHeatmap(logs: logs),
+                    loading: () => const SizedBox(),
                     error: (_, __) => const SizedBox(),
                   ),
 
