@@ -23,6 +23,7 @@ import '../widgets/plate_calculator_dialog.dart';
 import '../widgets/rpe_info_dialog.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
+import '../widgets/progress_chart.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -637,26 +638,37 @@ class _HistoryView extends HookConsumerWidget {
         if (logs.isEmpty) {
           return const Center(child: Text('Nenhum histórico encontrado'));
         }
-        return ListView.separated(
-          padding: const EdgeInsets.only(bottom: 100, top: 16),
-          itemCount: logs.length,
-          separatorBuilder: (c, i) => const Divider(),
-          itemBuilder: (context, index) {
-            final log = logs[index];
-            return ListTile(
-              title: Text(DateFormat('dd/MM/yyyy HH:mm').format(log.date)),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...log.sets.asMap().entries.map((e) => Text(
-                    'Série ${e.key + 1}: ${e.value.reps} reps @ ${e.value.weight}kg (RPE: ${e.value.rpe ?? "-"})',
-                  )),
-                  if (log.notes != null && log.notes!.isNotEmpty)
-                     Text('Notas: ${log.notes}', style: const TextStyle(fontStyle: FontStyle.italic)),
-                ],
+        return Column(
+          children: [
+            if (logs.length >= 2)
+              SizedBox(
+                height: 200,
+                child: ProgressChart(logs: logs),
               ),
-            );
-          },
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.only(bottom: 100, top: 16),
+                itemCount: logs.length,
+                separatorBuilder: (c, i) => const Divider(),
+                itemBuilder: (context, index) {
+                  final log = logs[index];
+                  return ListTile(
+                    title: Text(DateFormat('dd/MM/yyyy HH:mm').format(log.date)),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...log.sets.asMap().entries.map((e) => Text(
+                          'Série ${e.key + 1}: ${e.value.reps} reps @ ${e.value.weight}kg (RPE: ${e.value.rpe ?? "-"})',
+                        )),
+                        if (log.notes != null && log.notes!.isNotEmpty)
+                           Text('Notas: ${log.notes}', style: const TextStyle(fontStyle: FontStyle.italic)),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
