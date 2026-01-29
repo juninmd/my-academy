@@ -17,7 +17,7 @@ class WeeklyCalendarStrip extends ConsumerWidget {
     // But usually calendar strips start Sunday or Monday.
     // Let's stick to Local defaults.
 
-    final currentWeekday = now.weekday; // 1(Mon)..7(Sun)
+    // final currentWeekday = now.weekday; // 1(Mon)..7(Sun)
     // Let's Center the strip on "Today" or just show the current week "Sunday to Saturday"?
     // "Sunday to Saturday" is common in calendars.
 

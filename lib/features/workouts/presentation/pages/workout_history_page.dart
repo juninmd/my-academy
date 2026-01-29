@@ -23,8 +23,11 @@ class WorkoutHistoryPage extends ConsumerWidget {
           // Create exercise map for lookup
           final exerciseMap = <int, String>{};
           if (exercisesAsync.hasValue) {
-            for (final ex in exercisesAsync.value!) {
-              if (ex.id != null) exerciseMap[ex.id!] = ex.name;
+            final exercises = exercisesAsync.value;
+            if (exercises != null) {
+              for (final ex in exercises) {
+                exerciseMap[ex.id] = ex.name;
+              }
             }
           }
           if (logs.isEmpty) {
