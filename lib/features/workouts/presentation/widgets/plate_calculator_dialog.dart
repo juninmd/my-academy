@@ -20,8 +20,6 @@ class _PlateCalculatorDialogState extends ConsumerState<PlateCalculatorDialog> {
   late TextEditingController _targetWeightController;
   late TextEditingController _barWeightController;
 
-  final List<double> _availablePlates = [25, 20, 15, 10, 5, 2.5, 1.25];
-
   @override
   void initState() {
     super.initState();
@@ -39,7 +37,7 @@ class _PlateCalculatorDialogState extends ConsumerState<PlateCalculatorDialog> {
     super.dispose();
   }
 
-  Map<double, int> _calculatePlates() {
+  Map<double, int> _calculatePlates(List<double> availablePlates) {
     final target = double.tryParse(_targetWeightController.text) ?? 0;
     final bar = double.tryParse(_barWeightController.text) ?? 0;
 
@@ -48,7 +46,7 @@ class _PlateCalculatorDialogState extends ConsumerState<PlateCalculatorDialog> {
 
     if (remaining <= 0) return plates;
 
-    for (final plate in _availablePlates) {
+    for (final plate in availablePlates) {
       final count = (remaining / plate).floor();
       if (count > 0) {
         plates[plate] = count;
@@ -64,11 +62,13 @@ class _PlateCalculatorDialogState extends ConsumerState<PlateCalculatorDialog> {
     // we can wrap the calculation part in an AnimatedBuilder listening to controllers,
     // or just setState on change. Here, setState on change is simpler.
 
+    final availablePlates = ref.watch(settingsProvider).availablePlates;
+
     // We can pull values from controllers directly for calculation display.
     final target = double.tryParse(_targetWeightController.text) ?? 0;
     final bar = double.tryParse(_barWeightController.text) ?? 0;
     final weightOnSide = (target - bar) / 2;
-    final plates = _calculatePlates();
+    final plates = _calculatePlates(availablePlates);
 
     return AlertDialog(
       title: const Text('Calculadora de Anilhas'),

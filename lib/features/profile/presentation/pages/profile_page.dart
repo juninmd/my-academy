@@ -364,6 +364,55 @@ class ProfilePage extends HookConsumerWidget {
                   const SizedBox(height: 32),
 
                   Text(
+                    'Inventário de Anilhas',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Selecione as anilhas disponíveis na sua academia:',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              25.0,
+                              20.0,
+                              15.0,
+                              10.0,
+                              5.0,
+                              2.5,
+                              1.25,
+                              1.0,
+                              0.5
+                            ].map((plate) {
+                              final isAvailable = settings.availablePlates.contains(plate);
+                              return FilterChip(
+                                label: Text('${plate}kg'),
+                                selected: isAvailable,
+                                onSelected: (_) {
+                                  ref
+                                      .read(settingsProvider.notifier)
+                                      .togglePlateAvailability(plate);
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  Text(
                     'Aparência',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
