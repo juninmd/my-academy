@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../workouts/domain/entities/exercise_log_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
@@ -36,6 +35,10 @@ class ProfilePage extends HookConsumerWidget {
         body: Center(child: CircularProgressIndicator()),
       );
     }
+
+    // Extract name logic to avoid complex expressions in widget tree
+    final userName = user.name;
+    final displayName = (userName != null && userName.isNotEmpty) ? userName[0].toUpperCase() : '?';
 
     return DefaultTabController(
       length: 2,
@@ -72,9 +75,7 @@ class ProfilePage extends HookConsumerWidget {
                           child:
                               user.photoUrl == null
                                   ? Text(
-                                    user.name?.isNotEmpty == true
-                                        ? user.name![0].toUpperCase()
-                                        : '?',
+                                    displayName,
                                     style: Theme.of(
                                       context,
                                     ).textTheme.headlineLarge,
@@ -87,7 +88,7 @@ class ProfilePage extends HookConsumerWidget {
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
-                          user.email ?? '',
+                          user.email,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
