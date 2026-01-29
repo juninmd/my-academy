@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +7,6 @@ import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/set_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
-import '../providers/exercise_stats_provider.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/progress_chart.dart';
 
