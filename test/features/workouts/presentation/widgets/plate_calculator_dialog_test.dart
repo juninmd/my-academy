@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_academy/features/profile/presentation/providers/settings_provider.dart';
 import 'package:my_academy/features/workouts/presentation/widgets/plate_calculator_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

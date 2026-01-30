@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../../workouts/domain/entities/exercise_log_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
@@ -36,6 +35,10 @@ class ProfilePage extends HookConsumerWidget {
         body: Center(child: CircularProgressIndicator()),
       );
     }
+
+    // Extract name logic to avoid complex expressions in widget tree
+    final userName = user.name;
+    final displayName = (userName != null && userName.isNotEmpty) ? userName[0].toUpperCase() : '?';
 
     return DefaultTabController(
       length: 2,
@@ -72,9 +75,7 @@ class ProfilePage extends HookConsumerWidget {
                           child:
                               user.photoUrl == null
                                   ? Text(
-                                    user.name?.isNotEmpty == true
-                                        ? user.name![0].toUpperCase()
-                                        : '?',
+                                    displayName,
                                     style: Theme.of(
                                       context,
                                     ).textTheme.headlineLarge,
@@ -87,7 +88,7 @@ class ProfilePage extends HookConsumerWidget {
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
-                          user.email ?? '',
+                          user.email,
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
@@ -355,6 +356,55 @@ class ProfilePage extends HookConsumerWidget {
                           const Text(
                             'Acompanhe sua evolução.',
                             style: TextStyle(color: Colors.grey, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  Text(
+                    'Inventário de Anilhas',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Selecione as anilhas disponíveis na sua academia:',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              25.0,
+                              20.0,
+                              15.0,
+                              10.0,
+                              5.0,
+                              2.5,
+                              1.25,
+                              1.0,
+                              0.5
+                            ].map((plate) {
+                              final isAvailable = settings.availablePlates.contains(plate);
+                              return FilterChip(
+                                label: Text('${plate}kg'),
+                                selected: isAvailable,
+                                onSelected: (_) {
+                                  ref
+                                      .read(settingsProvider.notifier)
+                                      .togglePlateAvailability(plate);
+                                },
+                              );
+                            }).toList(),
                           ),
                         ],
                       ),

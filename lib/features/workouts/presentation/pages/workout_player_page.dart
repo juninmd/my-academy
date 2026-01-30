@@ -24,6 +24,7 @@ import '../widgets/rpe_info_dialog.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
 import '../widgets/progress_chart.dart';
+import '../../../../utils/one_rep_max_calculator.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -373,6 +374,48 @@ class _ExercisePlayerView extends HookConsumerWidget {
                     ],
                     _buildSetsList(context, logs, historyLogsAsync.asData?.value.firstOrNull),
                     const SizedBox(height: 24),
+                    if (historyLogsAsync.asData?.value != null)
+                      Builder(
+                        builder: (context) {
+                          final lastNoteLog = historyLogsAsync.asData!.value
+                              .where((l) => l.notes != null && l.notes!.isNotEmpty)
+                              .firstOrNull;
+
+                          if (lastNoteLog == null) return const SizedBox.shrink();
+
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.amber.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Colors.amber.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.sticky_note_2_outlined, size: 16, color: Colors.amber),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Nota Anterior (${DateFormat('dd/MM').format(lastNoteLog.date)})',
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: Colors.amber,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(lastNoteLog.notes!),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     TextField(
                       controller: notesController,
                       decoration: const InputDecoration(
@@ -387,7 +430,57 @@ class _ExercisePlayerView extends HookConsumerWidget {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: allSetsCompleted
-                            ? () => onFinished(logs.value, notesController.text)
+                            ? () {
+                                // PR Check
+                                final historyLogs = historyLogsAsync.asData?.value ?? [];
+                                if (historyLogs.isNotEmpty) {
+                                  double currentMax1RM = 0;
+                                  for (final log in logs.value.values) {
+                                    final oneRM = OneRepMaxCalculator.calculateEpley(
+                                        log.actualWeight.toDouble(), log.actualReps);
+                                    if (oneRM > currentMax1RM) currentMax1RM = oneRM;
+                                  }
+
+                                  double historyMax1RM = 0;
+                                  for (final log in historyLogs) {
+                                    for (final set in log.sets) {
+                                      final oneRM = OneRepMaxCalculator.calculateEpley(
+                                          set.weight.toDouble(), set.reps);
+                                      if (oneRM > historyMax1RM) historyMax1RM = oneRM;
+                                    }
+                                  }
+
+                                  if (currentMax1RM > historyMax1RM && historyMax1RM > 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Row(
+                                          children: [
+                                            const Icon(Icons.emoji_events, color: Colors.white),
+                                            const SizedBox(width: 12),
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    'Novo Recorde Pessoal!',
+                                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                                  ),
+                                                  Text('1RM estimado: ${currentMax1RM.toStringAsFixed(1)} kg'),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        backgroundColor: Colors.orange,
+                                        duration: const Duration(seconds: 4),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  }
+                                }
+                                onFinished(logs.value, notesController.text);
+                              }
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Theme.of(context).colorScheme.primary,

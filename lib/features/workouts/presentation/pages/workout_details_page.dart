@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
-import '../../domain/entities/workout_group_entity.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/workout_card.dart';
 
