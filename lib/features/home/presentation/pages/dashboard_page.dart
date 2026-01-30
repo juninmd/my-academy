@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -100,7 +99,7 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ],
               ),
-            ).animate().fade().slideY(curve: Curves.easeOut),
+            ),
             const SizedBox(height: 24),
 
             // Stats Section
@@ -141,17 +140,11 @@ class DashboardPage extends ConsumerWidget {
                                 ),
                               ),
                             ],
-                          ).animate().fade(delay: 100.ms).slideY(
-                            begin: 0.2,
-                            curve: Curves.easeOut,
                           ),
                           const SizedBox(height: 24),
 
                           // Tools Section
-                          const _ToolsSection().animate().fade(delay: 200.ms).slideY(
-                            begin: 0.2,
-                            curve: Curves.easeOut,
-                          ),
+                          const _ToolsSection(),
                           const SizedBox(height: 24),
 
                           // Workout Card

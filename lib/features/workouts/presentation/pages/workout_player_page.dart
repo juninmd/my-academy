@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -367,7 +366,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
                             onPressed: generateWarmup,
                             backgroundColor: Colors.orange.withValues(alpha: 0.1),
                             side: BorderSide(color: Colors.orange.withValues(alpha: 0.5)),
-                          ).animate().fade().scale(),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 8),
