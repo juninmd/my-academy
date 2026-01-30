@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
 import 'package:my_academy/features/home/domain/entities/workout_summary_entity.dart';
@@ -15,6 +16,10 @@ class FakeAuthNotifier extends AuthNotifier {
 }
 
 void main() {
+  setUpAll(() async {
+    await initializeDateFormatting('pt_BR', null);
+  });
+
   testWidgets('DashboardPage renders static elements and Tools section', (WidgetTester tester) async {
     await tester.pumpWidget(
       ProviderScope(

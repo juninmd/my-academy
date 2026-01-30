@@ -37,9 +37,64 @@ class ExerciseStatsPage extends ConsumerWidget {
                   : Container(color: Theme.of(context).primaryColor),
             ),
           ),
+          // Personal Records Section
+          SliverToBoxAdapter(
+            child: logsAsync.when(
+              data: (logs) {
+                if (logs.isEmpty) return const SizedBox.shrink();
+
+                double allTimeMax1RM = 0;
+                double maxVolume = 0;
+
+                for (final log in logs) {
+                  double sessionVolume = 0;
+                  for (final set in log.sets) {
+                    // 1RM
+                    final oneRM = OneRepMaxCalculator.calculateEpley(
+                      set.weight.toDouble(),
+                      set.reps,
+                    );
+                    if (oneRM > allTimeMax1RM) allTimeMax1RM = oneRM;
+
+                    // Volume
+                    sessionVolume += set.weight * set.reps;
+                  }
+                  if (sessionVolume > maxVolume) maxVolume = sessionVolume;
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _StatHighlightCard(
+                          label: 'Recorde 1RM',
+                          value: '${allTimeMax1RM.toStringAsFixed(1)} kg',
+                          icon: Icons.emoji_events,
+                          color: Colors.amber,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _StatHighlightCard(
+                          label: 'Maior Volume',
+                          value: '${maxVolume.toStringAsFixed(0)} kg',
+                          icon: Icons.fitness_center,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
+            ),
+          ),
+
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -159,6 +214,50 @@ class ExerciseStatsPage extends ConsumerWidget {
   }
 }
 
+
+class _StatHighlightCard extends StatelessWidget {
+  const _StatHighlightCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 32),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class _LogCard extends StatelessWidget {
   const _LogCard({required this.log});
