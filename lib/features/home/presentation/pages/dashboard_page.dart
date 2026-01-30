@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -46,8 +47,22 @@ class DashboardPage extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color,
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primaryContainer,
+                    Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
@@ -85,7 +100,7 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
+            ).animate().fade().slideY(curve: Curves.easeOut),
             const SizedBox(height: 24),
 
             // Stats Section
@@ -126,11 +141,17 @@ class DashboardPage extends ConsumerWidget {
                                 ),
                               ),
                             ],
+                          ).animate().fade(delay: 100.ms).slideY(
+                            begin: 0.2,
+                            curve: Curves.easeOut,
                           ),
                           const SizedBox(height: 24),
 
                           // Tools Section
-                          const _ToolsSection(),
+                          const _ToolsSection().animate().fade(delay: 200.ms).slideY(
+                            begin: 0.2,
+                            curve: Curves.easeOut,
+                          ),
                           const SizedBox(height: 24),
 
                           // Workout Card

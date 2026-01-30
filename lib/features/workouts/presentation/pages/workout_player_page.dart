@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -360,11 +361,13 @@ class _ExercisePlayerView extends HookConsumerWidget {
                       children: [
                         Text('Séries', style: Theme.of(context).textTheme.titleLarge),
                         if (warmupSets.value.isEmpty && (workout.series.firstOrNull?.weight ?? 0) > 0)
-                          TextButton.icon(
+                          ActionChip(
+                            avatar: const Icon(Icons.fitness_center, size: 16, color: Colors.orange),
+                            label: const Text('Aquecer'),
                             onPressed: generateWarmup,
-                            icon: const Icon(Icons.fitness_center_outlined, size: 16),
-                            label: const Text('Gerar Aquecimento'),
-                          ),
+                            backgroundColor: Colors.orange.withValues(alpha: 0.1),
+                            side: BorderSide(color: Colors.orange.withValues(alpha: 0.5)),
+                          ).animate().fade().scale(),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -908,10 +911,14 @@ class _SetRow extends HookWidget {
                 icon: const Icon(Icons.calculate_outlined),
                 tooltip: 'Calculadora de Anilhas',
                 onPressed: () {
-                  showDialog(
+                  showModalBottomSheet(
                     context: context,
-                    builder: (context) => PlateCalculatorDialog(
-                      targetWeight: log.actualWeight.toDouble(),
+                    showDragHandle: true,
+                    builder: (context) => Padding(
+                      padding: const EdgeInsets.only(bottom: 24.0),
+                      child: PlateCalculatorContent(
+                        targetWeight: log.actualWeight.toDouble(),
+                      ),
                     ),
                   );
                 },
