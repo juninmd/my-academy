@@ -69,6 +69,56 @@ void main() {
       });
     });
 
+    group('calculateBodyDensityMen3Site', () {
+      test('should calculate correct body density for men (3 site)', () {
+        // Example data
+        // Sum of skinfolds = 60
+        // Age = 30
+        const double chest = 20.0;
+        const double abdominal = 20.0;
+        const double thigh = 20.0;
+        const int age = 30;
+
+        // Formula: 1.10938 - (0.0008267 * sum) + (0.0000016 * sum * sum) - (0.0002574 * age)
+        // Sum = 60
+        // 1.10938 - 0.049602 + 0.00576 - 0.007722 = 1.057816
+
+        final result = BodyCompositionCalculator.calculateBodyDensityMen3Site(
+          chest: chest,
+          abdominal: abdominal,
+          thigh: thigh,
+          age: age,
+        );
+
+        expect(result, closeTo(1.057816, 0.000001));
+      });
+    });
+
+    group('calculateBodyDensityWomen3Site', () {
+      test('should calculate correct body density for women (3 site)', () {
+        // Example data
+        // Sum of skinfolds = 60
+        // Age = 30
+        const double triceps = 20.0;
+        const double suprailiac = 20.0;
+        const double thigh = 20.0;
+        const int age = 30;
+
+        // Formula: 1.0994921 - (0.0009929 * sum) + (0.0000023 * sum * sum) - (0.0001392 * age)
+        // Sum = 60
+        // 1.0994921 - 0.059574 + 0.00828 - 0.004176 = 1.0440221
+
+        final result = BodyCompositionCalculator.calculateBodyDensityWomen3Site(
+          triceps: triceps,
+          suprailiac: suprailiac,
+          thigh: thigh,
+          age: age,
+        );
+
+        expect(result, closeTo(1.0440221, 0.000001));
+      });
+    });
+
     group('calculateBodyFatPercentage', () {
       test('should calculate correct body fat percentage from density', () {
         const double density = 1.0653532;
