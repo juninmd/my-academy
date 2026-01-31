@@ -205,7 +205,7 @@ class ProfilePage extends HookConsumerWidget {
                     },
                     loading:
                         () => const Center(child: CircularProgressIndicator()),
-                    error: (_, __) => const SizedBox(),
+                    error: (_, _) => const SizedBox(),
                   ),
 
                   const SizedBox(height: 16),
@@ -214,7 +214,7 @@ class ProfilePage extends HookConsumerWidget {
                   ref.watch(allExerciseLogsProvider).when(
                     data: (logs) => ConsistencyHeatmap(logs: logs),
                     loading: () => const SizedBox(),
-                    error: (_, __) => const SizedBox(),
+                    error: (_, _) => const SizedBox(),
                   ),
 
                   const SizedBox(height: 16),

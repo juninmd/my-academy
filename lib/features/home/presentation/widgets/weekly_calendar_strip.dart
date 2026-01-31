@@ -60,7 +60,7 @@ class WeeklyCalendarStrip extends ConsumerWidget {
                    return _DayCell(date: date, isToday: isToday, hasWorkout: hasLog);
                 },
                 loading: () => _DayCell(date: date, isToday: isToday, hasWorkout: false, isLoading: true),
-                error: (_, __) => _DayCell(date: date, isToday: isToday, hasWorkout: false),
+                error: (_, _) => _DayCell(date: date, isToday: isToday, hasWorkout: false),
               );
             }).toList(),
           ),

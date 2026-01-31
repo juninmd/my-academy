@@ -104,7 +104,7 @@ class WorkoutCreatePage extends HookConsumerWidget {
                                 ? CachedNetworkImage(
                                     imageUrl: workout.exercise!.image!,
                                     fit: BoxFit.cover,
-                                    errorWidget: (_, __, ___) => const Icon(Icons.fitness_center),
+                                    errorWidget: (_, _, _) => const Icon(Icons.fitness_center),
                                   )
                                 : const Icon(Icons.fitness_center),
                           ),
@@ -276,7 +276,7 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                                     ? CachedNetworkImage(
                                         imageUrl: exercise.image!,
                                         fit: BoxFit.cover,
-                                        errorWidget: (_, __, ___) =>
+                                        errorWidget: (_, _, _) =>
                                             Container(
                                           color: Colors.grey[200],
                                           child: const Icon(

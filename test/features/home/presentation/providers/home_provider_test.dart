@@ -32,7 +32,7 @@ void main() {
     );
 
     // Keep provider alive
-    final sub = container.listen(workoutSummaryProvider.future, (_, __) {});
+    final sub = container.listen(workoutSummaryProvider.future, (_, _) {});
 
     expect(
       await container.read(workoutSummaryProvider.future),
@@ -53,7 +53,7 @@ void main() {
     );
 
     // Keep provider alive
-    final sub = container.listen(workoutSummaryProvider.future, (_, __) {});
+    final sub = container.listen(workoutSummaryProvider.future, (_, _) {});
 
     try {
       await container.read(workoutSummaryProvider.future);

@@ -38,7 +38,7 @@ void main() {
       ],
     );
 
-    final sub = container.listen(exerciseStatsProvider(1).future, (_, __) {});
+    final sub = container.listen(exerciseStatsProvider(1).future, (_, _) {});
 
     expect(
       await container.read(exerciseStatsProvider(1).future),
