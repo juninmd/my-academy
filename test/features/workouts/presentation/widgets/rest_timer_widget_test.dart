@@ -16,14 +16,15 @@ void main() {
         ),
       ),
     ));
+    await tester.pumpAndSettle();
 
     expect(find.text('30s'), findsOneWidget);
-    expect(find.text('Pular'), findsOneWidget);
+    expect(find.text('Vamos!'), findsOneWidget);
 
-    await tester.tap(find.text('Pular'));
+    await tester.tap(find.text('Vamos!'));
     expect(skipped, true);
 
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byIcon(Icons.add_circle_outline));
     expect(added, true);
   });
 }

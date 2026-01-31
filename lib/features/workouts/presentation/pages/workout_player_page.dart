@@ -21,6 +21,7 @@ import '../widgets/number_input_control.dart';
 import '../widgets/one_rep_max_display.dart';
 import '../widgets/plate_calculator_dialog.dart';
 import '../widgets/rpe_info_dialog.dart';
+import '../widgets/celebration_widget.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
 import '../widgets/progress_chart.dart';
@@ -453,30 +454,11 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                   }
 
                                   if (currentMax1RM > historyMax1RM && historyMax1RM > 0) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Row(
-                                          children: [
-                                            const Icon(Icons.emoji_events, color: Colors.white),
-                                            const SizedBox(width: 12),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                    'Novo Recorde Pessoal!',
-                                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Text('1RM estimado: ${currentMax1RM.toStringAsFixed(1)} kg'),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        backgroundColor: Colors.orange,
-                                        duration: const Duration(seconds: 4),
-                                        behavior: SnackBarBehavior.floating,
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => CelebrationWidget(
+                                        title: 'Novo Recorde!',
+                                        subtitle: '1RM: ${currentMax1RM.toStringAsFixed(1)} kg\n(Anterior: ${historyMax1RM.toStringAsFixed(1)} kg)',
                                       ),
                                     );
                                   }
