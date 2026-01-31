@@ -53,10 +53,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw const AuthFailure('Failed to retrieve ID Token');
       }
 
-      // Update ApiClient with new token (if not handled by provider/interceptor yet)
-      // Since specific requests might use this client before the provider rebuilds,
-      // setting it here is safe but redundant with DioProvider logic if that logic reads fresh token.
-      // However, our DioProvider reads from FirebaseAuth.instance.currentUser which IS updated now.
+      // Update ApiClient with new token
+      _apiClient.setAuthToken(token);
 
       final userDto = UserDto(
         id: user.uid,
@@ -93,7 +91,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       await _googleSignIn.signOut();
       await _firebaseAuth.signOut();
-      // _apiClient.clearAuthToken(); // Handled by DioProvider logic dynamically
+      _apiClient.clearAuthToken();
     } catch (e) {
       logger.e('Sign out error', error: e);
       throw AuthFailure(e.toString());
@@ -104,6 +102,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserDto?> getCurrentUser() async {
     final user = _firebaseAuth.currentUser;
     if (user != null) {
+      final token = await user.getIdToken();
+      if (token != null) {
+        _apiClient.setAuthToken(token);
+      }
       // Logic to sync or get from backend could be here, but for now we trust Firebase
       return UserDto(
         id: user.uid,
