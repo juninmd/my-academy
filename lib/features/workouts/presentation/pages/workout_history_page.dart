@@ -109,9 +109,7 @@ class WorkoutHistoryPage extends ConsumerWidget {
                     // For now, let's show detailed stats.
 
                     double logVolume = 0;
-                    for (var s in log.sets) {
-                      logVolume += s.weight * s.reps;
-                    }
+                    for (var s in log.sets) logVolume += s.weight * s.reps;
 
                     final exerciseName = exerciseMap[log.exerciseId] ?? 'Exercício #${log.exerciseId}';
 

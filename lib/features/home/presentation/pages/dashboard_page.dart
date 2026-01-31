@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +34,8 @@ class DashboardPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/workouts/create'),
-        icon: const Icon(Icons.play_arrow_rounded),
-        label: const Text('Treinar Agora'),
+        icon: const Icon(Icons.fitness_center),
+        label: const Text('Treino Rápido'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -83,24 +84,18 @@ class DashboardPage extends ConsumerWidget {
                             : null,
                   ),
                   const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Olá,',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        Text(
-                          user?.name?.split(' ').first ?? 'Atleta',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Olá,',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      Text(
+                        user?.name?.split(' ').first ?? 'Atleta',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -118,13 +113,35 @@ class DashboardPage extends ConsumerWidget {
                           const WeeklyCalendarStrip(),
                           const SizedBox(height: 24),
 
-                          if (summary.lastSessionDate != null) ...[
-                            _RecentActivityCard(
-                              lastDate: DateTime.parse(summary.lastSessionDate!),
-                              streak: summary.counter,
-                            ),
-                            const SizedBox(height: 24),
-                          ],
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _StatCard(
+                                  icon: Icons.local_fire_department,
+                                  label: 'Frequência',
+                                  value: '${summary.counter} dias',
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: _StatCard(
+                                  icon: Icons.timer,
+                                  label: 'Último',
+                                  value:
+                                      summary.lastSessionDate != null
+                                          ? DateFormat('dd/MM').format(
+                                            DateTime.parse(
+                                              summary.lastSessionDate!,
+                                            ),
+                                          )
+                                          : '-',
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
 
                           // Tools Section
                           const _ToolsSection(),
@@ -276,15 +293,15 @@ class _ToolsSection extends StatelessWidget {
         const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, constraints) {
-            final double itemWidth = (constraints.maxWidth - 24) / 4;
+            final double itemWidth = (constraints.maxWidth - 24) / 3;
             return Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 12,
+              runSpacing: 12,
               children: [
                 SizedBox(
                   width: itemWidth,
                   child: _ToolCard(
-                    icon: Icons.add,
+                    icon: Icons.add_circle_outline,
                     label: 'Criar',
                     color: Theme.of(context).colorScheme.primary,
                     onTap: () {
@@ -306,7 +323,7 @@ class _ToolsSection extends StatelessWidget {
                 SizedBox(
                   width: itemWidth,
                   child: _ToolCard(
-                    icon: Icons.menu_book,
+                    icon: Icons.menu_book_outlined,
                     label: 'Exercícios',
                     color: Colors.indigo,
                     onTap: () {
@@ -356,7 +373,7 @@ class _ToolsSection extends StatelessWidget {
                 SizedBox(
                   width: itemWidth,
                   child: _ToolCard(
-                    icon: Icons.timer,
+                    icon: Icons.timer_outlined,
                     label: 'Timer',
                     color: Colors.orange,
                     onTap: () {
@@ -386,61 +403,6 @@ class _ToolsSection extends StatelessWidget {
           }
         ),
       ],
-    );
-  }
-}
-
-class _RecentActivityCard extends StatelessWidget {
-  const _RecentActivityCard({required this.lastDate, required this.streak});
-
-  final DateTime lastDate;
-  final int streak;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Row(
-        children: [
-           Container(
-             padding: const EdgeInsets.all(12),
-             decoration: BoxDecoration(
-               color: Colors.orange.withValues(alpha: 0.1),
-               shape: BoxShape.circle,
-             ),
-             child: const Icon(Icons.local_fire_department, color: Colors.orange),
-           ),
-           const SizedBox(width: 16),
-           Expanded(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 const Text(
-                   'Atividade Recente',
-                   style: TextStyle(fontWeight: FontWeight.bold),
-                 ),
-                 Text(
-                   'Último treino em ${DateFormat('dd/MM').format(lastDate)}',
-                   style: Theme.of(context).textTheme.bodySmall,
-                 ),
-               ],
-             ),
-           ),
-           Column(
-             children: [
-               Text(
-                 '$streak',
-                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-               ),
-               const Text('dias', style: TextStyle(fontSize: 10)),
-             ],
-           ),
-        ],
-      ),
     );
   }
 }
@@ -499,5 +461,45 @@ class _ToolCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  const _StatCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Theme.of(context).cardTheme.color,
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: color),
+        const SizedBox(height: 12),
+        Text(value, style: Theme.of(context).textTheme.titleLarge),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
+      ],
+    ),
+  );
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<IconData>('icon', icon));
+    properties.add(StringProperty('label', label));
+    properties.add(StringProperty('value', value));
+    properties.add(ColorProperty('color', color));
   }
 }

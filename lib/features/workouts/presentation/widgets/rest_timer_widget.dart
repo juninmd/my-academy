@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 class RestTimerWidget extends StatelessWidget {
   const RestTimerWidget({
@@ -19,89 +18,71 @@ class RestTimerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final progress = totalSeconds > 0 ? remainingSeconds / totalSeconds : 0.0;
     final colorScheme = Theme.of(context).colorScheme;
-    final isUrgent = remainingSeconds <= 10 && remainingSeconds > 0;
 
     return Container(
       margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Circular Timer
-          Stack(
-            alignment: Alignment.center,
+          Row(
             children: [
-              SizedBox(
-                width: 80,
-                height: 80,
-                child: CircularProgressIndicator(
-                  value: progress,
-                  backgroundColor: colorScheme.onSurface.withValues(alpha: 0.1),
-                  color: isUrgent ? Colors.redAccent : colorScheme.primary,
-                  strokeWidth: 8,
-                  strokeCap: StrokeCap.round,
-                ),
+              CircularProgressIndicator(
+                value: progress,
+                backgroundColor: colorScheme.onSurface.withValues(alpha: 0.1),
+                color: colorScheme.primary,
               ),
+              const SizedBox(width: 16),
               Column(
-                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${remainingSeconds}s',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'monospace',
-                      color: isUrgent ? Colors.redAccent : colorScheme.onSurface,
-                    ),
-                  )
-                  .animate(target: isUrgent ? 1 : 0)
-                  .shake(hz: 4, curve: Curves.easeInOut),
                   const Text(
                     'Descanso',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '${remainingSeconds}s',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'monospace',
+                    ),
                   ),
                 ],
               ),
+              const Spacer(),
+              IconButton(
+                onPressed: onAdd10Seconds,
+                icon: const Icon(Icons.add),
+                tooltip: '+10s',
+                style: IconButton.styleFrom(
+                  backgroundColor: colorScheme.surface,
+                ),
+              ),
+              const SizedBox(width: 8),
+              FilledButton.icon(
+                onPressed: onSkip,
+                icon: const Icon(Icons.skip_next),
+                label: const Text('Pular'),
+                style: FilledButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                ),
+              ),
             ],
-          ),
-          const SizedBox(width: 24),
-
-          // Controls
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FilledButton.icon(
-                  onPressed: onSkip,
-                  icon: const Icon(Icons.skip_next_rounded),
-                  label: const Text('Vamos!'),
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton.icon(
-                  onPressed: onAdd10Seconds,
-                  icon: const Icon(Icons.add_circle_outline),
-                  label: const Text('+10 segundos'),
-                ),
-              ],
-            ),
           ),
         ],
       ),
-    ).animate().slideY(begin: 1.0, end: 0.0, curve: Curves.easeOutBack, duration: 400.ms);
+    );
   }
 }

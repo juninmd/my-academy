@@ -48,30 +48,9 @@ class WorkoutSummaryPage extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 40),
-              Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  const Icon(Icons.emoji_events, size: 100, color: Colors.amber)
-                      .animate()
-                      .scale(duration: 800.ms, curve: Curves.elasticOut)
-                      .shimmer(delay: 1500.ms, duration: 1500.ms),
-                  Positioned(
-                    right: -20,
-                    top: -10,
-                    child: const Icon(Icons.star, color: Colors.orangeAccent, size: 30)
-                        .animate(delay: 600.ms)
-                        .scale(duration: 400.ms, curve: Curves.elasticOut),
-                  ),
-                   Positioned(
-                    left: -20,
-                    bottom: 10,
-                    child: const Icon(Icons.star, color: Colors.orangeAccent, size: 24)
-                        .animate(delay: 800.ms)
-                        .scale(duration: 400.ms, curve: Curves.elasticOut),
-                  ),
-                ],
-              ),
+              const Icon(Icons.emoji_events, size: 80, color: Colors.amber)
+                  .animate()
+                  .scale(duration: 600.ms, curve: Curves.elasticOut),
               const SizedBox(height: 24),
               Text(
                 'Treino Concluído!',
@@ -79,7 +58,7 @@ class WorkoutSummaryPage extends HookWidget {
                       fontWeight: FontWeight.bold,
                     ),
                 textAlign: TextAlign.center,
-              ).animate().fadeIn(delay: 300.ms).slideY(begin: 0.2, end: 0),
+              ).animate().fadeIn(delay: 300.ms),
               const SizedBox(height: 8),
               Text(
                 'Ótimo trabalho hoje.',
@@ -88,19 +67,6 @@ class WorkoutSummaryPage extends HookWidget {
                     ),
                 textAlign: TextAlign.center,
               ).animate().fadeIn(delay: 400.ms),
-              const SizedBox(height: 16),
-              Center(
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    // Placeholder for sharing
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Compartilhamento em breve!')),
-                    );
-                  },
-                  icon: const Icon(Icons.share_outlined),
-                  label: const Text('Compartilhar'),
-                ).animate().fadeIn(delay: 600.ms),
-              ),
               const SizedBox(height: 32),
               Container(
                 padding: const EdgeInsets.all(16),
