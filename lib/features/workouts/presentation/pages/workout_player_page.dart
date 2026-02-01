@@ -302,6 +302,11 @@ class _ExercisePlayerView extends HookConsumerWidget {
             logs.value.isNotEmpty &&
             logs.value.length == workout.series.length);
 
+    // Calculate current session volume
+    final currentVolume = logs.value.values
+        .where((l) => l.isCompleted)
+        .fold(0.0, (sum, l) => sum + (l.actualWeight * l.actualReps));
+
     void generateWarmup() {
       if (workout.series.isEmpty) return;
       final workingWeight = workout.series.first.weight;
@@ -351,6 +356,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
                         workout.exercise!.tips,
                         Icons.lightbulb_outline,
                         Colors.amber,
+                        initiallyExpanded: historyLogsAsync.asData?.value.isEmpty ?? false,
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -358,7 +364,27 @@ class _ExercisePlayerView extends HookConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Séries', style: Theme.of(context).textTheme.titleLarge),
+                        Row(
+                          children: [
+                            Text('Séries', style: Theme.of(context).textTheme.titleLarge),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Vol: ${currentVolume.toStringAsFixed(0)}kg',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         if (warmupSets.value.isEmpty && (workout.series.firstOrNull?.weight ?? 0) > 0)
                           ActionChip(
                             avatar: const Icon(Icons.fitness_center, size: 16, color: Colors.orange),
@@ -607,9 +633,10 @@ class _ExercisePlayerView extends HookConsumerWidget {
     );
   }
 
-  Widget _buildExpandableSection(BuildContext context, String title, List<String> items, IconData icon, Color iconColor) {
+  Widget _buildExpandableSection(BuildContext context, String title, List<String> items, IconData icon, Color iconColor, {bool initiallyExpanded = false}) {
     return Card(
       child: ExpansionTile(
+        initiallyExpanded: initiallyExpanded,
         leading: Icon(icon, color: iconColor),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         children: items.map((item) => ListTile(
@@ -669,7 +696,9 @@ class _ExercisePlayerView extends HookConsumerWidget {
       ],
     );
   }
-
+// ...
+// Keeping _buildSetsList and _HistoryView and _SetRow same as before (verified by previous read)
+// ...
   Widget _buildSetsList(
     BuildContext context,
     ValueNotifier<Map<int, SetLogState>> logs,
