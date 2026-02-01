@@ -12,6 +12,8 @@ import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dar
 import '../widgets/quick_timer_dialog.dart';
 import '../widgets/weekly_calendar_strip.dart';
 import '../widgets/body_weight_dialog.dart';
+import '../../../workouts/domain/entities/workout_group_entity.dart';
+import '../../../workouts/presentation/providers/workout_provider.dart';
 
 // Placeholder for now
 class DashboardPage extends ConsumerWidget {
@@ -21,6 +23,9 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(authNotifierProvider);
     final user = userState.value;
+    final groupsAsync = user != null
+        ? ref.watch(workoutGroupsProvider(user.id))
+        : const AsyncValue<List<WorkoutGroupEntity>>.data([]);
 
     return Scaffold(
       appBar: AppBar(
@@ -217,55 +222,155 @@ class DashboardPage extends ConsumerWidget {
                               ),
                             )
                           else
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(24),
-                                border: Border.all(
-                                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(24),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                                    borderRadius: BorderRadius.circular(24),
+                                    border: Border.all(
+                                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.nights_stay_outlined,
+                                        size: 48,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        'Descanso Merecido',
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Recupere-se para o próximo treino!',
+                                        style: Theme.of(context).textTheme.bodyMedium,
+                                      ),
+                                      if (summary.lastSessionDate != null) ...[
+                                        const SizedBox(height: 16),
+                                        const Divider(),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'Último treino: ${DateFormat('dd/MM').format(DateTime.parse(summary.lastSessionDate!))}',
+                                          style: Theme.of(context).textTheme.bodySmall,
+                                        ),
+                                      ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.nights_stay_outlined,
-                                    size: 48,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'Descanso Merecido',
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    'Recupere-se para o próximo treino!',
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  if (summary.lastSessionDate != null) ...[
-                                    const SizedBox(height: 16),
-                                    const Divider(),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      'Último treino: ${DateFormat('dd/MM').format(DateTime.parse(summary.lastSessionDate!))}',
-                                      style: Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                  ],
-                                  const SizedBox(height: 16),
-                                  OutlinedButton.icon(
-                                    onPressed: () {
-                                      context.go('/workouts/create');
+                                const SizedBox(height: 24),
+                                Text(
+                                  'Seus Planos',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  height: 140,
+                                  child: groupsAsync.when(
+                                    data: (groups) {
+                                      if (groups.isEmpty) {
+                                        return Center(
+                                          child: OutlinedButton.icon(
+                                            onPressed: () => context.push('/workouts/create'),
+                                            icon: const Icon(Icons.add),
+                                            label: const Text('Criar Novo Plano'),
+                                          ),
+                                        );
+                                      }
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: groups.length + 1,
+                                        itemBuilder: (context, index) {
+                                          if (index == groups.length) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(right: 16),
+                                              child: AspectRatio(
+                                                aspectRatio: 1,
+                                                child: Card(
+                                                  clipBehavior: Clip.antiAlias,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                  child: InkWell(
+                                                    onTap: () => context.push('/workouts/create'),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(Icons.add, size: 32, color: Theme.of(context).colorScheme.primary),
+                                                        const SizedBox(height: 8),
+                                                        const Text('Criar'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final group = groups[index];
+                                          return Padding(
+                                            padding: const EdgeInsets.only(right: 12),
+                                            child: AspectRatio(
+                                              aspectRatio: 1.2,
+                                              child: Card(
+                                                elevation: 2,
+                                                clipBehavior: Clip.antiAlias,
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                child: InkWell(
+                                                  onTap: () => context.go('/workouts/${group.id}'),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(12),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                          padding: const EdgeInsets.all(8),
+                                                          decoration: BoxDecoration(
+                                                            color: Theme.of(context).colorScheme.primaryContainer,
+                                                            shape: BoxShape.circle,
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.fitness_center,
+                                                            size: 20,
+                                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                                          ),
+                                                        ),
+                                                        const Spacer(),
+                                                        Text(
+                                                          group.name,
+                                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                        const SizedBox(height: 4),
+                                                        Text(
+                                                          '${group.workouts.length} treinos',
+                                                          style: Theme.of(context).textTheme.bodySmall,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
                                     },
-                                    icon: const Icon(Icons.add),
-                                    label: const Text('Criar Nova Rotina'),
+                                    loading: () => const Center(child: CircularProgressIndicator()),
+                                    error: (e, s) => Center(child: Text('Erro: $e')),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
+
                             // Space for FAB
                             const SizedBox(height: 80),
                         ],
@@ -422,9 +527,10 @@ class _ToolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).cardTheme.color,
-      borderRadius: BorderRadius.circular(16),
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
@@ -432,7 +538,8 @@ class _ToolCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withValues(alpha: 0.15)),
+             // Removed border as elevation provides separation
+             // border: Border.all(color: color.withValues(alpha: 0.15)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -482,6 +589,13 @@ class _StatCard extends StatelessWidget {
     decoration: BoxDecoration(
       color: Theme.of(context).cardTheme.color,
       borderRadius: BorderRadius.circular(20),
+      boxShadow: [
+         BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+         ),
+      ],
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,

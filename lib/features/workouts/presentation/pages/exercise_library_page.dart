@@ -6,6 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/widgets/common_empty_state.dart';
 import '../providers/workout_create_provider.dart';
+import '../providers/workout_provider.dart';
+
+enum FilterType { all, recent }
 
 class ExerciseLibraryPage extends HookConsumerWidget {
   const ExerciseLibraryPage({super.key});
@@ -14,11 +17,15 @@ class ExerciseLibraryPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
     final searchTerm = useState('');
+    final filterType = useState(FilterType.all);
+
     final exercisesAsync = ref.watch(exercisesProvider);
+    final logsAsync = ref.watch(allExerciseLogsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Biblioteca de Exercícios')),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
@@ -32,19 +39,47 @@ class ExerciseLibraryPage extends HookConsumerWidget {
               onChanged: (val) => searchTerm.value = val,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(
+              spacing: 8,
+              children: [
+                FilterChip(
+                  label: const Text('Todos'),
+                  selected: filterType.value == FilterType.all,
+                  onSelected: (selected) {
+                    if (selected) filterType.value = FilterType.all;
+                  },
+                ),
+                FilterChip(
+                  label: const Text('Recentes'),
+                  selected: filterType.value == FilterType.recent,
+                  onSelected: (selected) {
+                    if (selected) filterType.value = FilterType.recent;
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
           Expanded(
             child: exercisesAsync.when(
               data: (exercises) {
-                final filtered = exercises
+                var filtered = exercises
                     .where((e) => e.name
                         .toLowerCase()
                         .contains(searchTerm.value.toLowerCase()))
                     .toList();
 
+                if (filterType.value == FilterType.recent) {
+                   final recentIds = logsAsync.value?.map((l) => l.exerciseId).toSet() ?? {};
+                   filtered = filtered.where((e) => recentIds.contains(e.id)).toList();
+                }
+
                 if (filtered.isEmpty) {
                   return const CommonEmptyState(
                     title: 'Nenhum exercício encontrado',
-                    message: 'Tente buscar com outro termo.',
+                    message: 'Tente buscar com outro termo ou alterar o filtro.',
                     icon: Icons.search_off,
                   );
                 }
