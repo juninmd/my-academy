@@ -3,9 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_academy/features/home/presentation/widgets/weekly_progress_card.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
-import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
-import 'package:my_academy/features/profile/presentation/providers/settings_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
