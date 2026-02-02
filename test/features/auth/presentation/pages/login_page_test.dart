@@ -12,6 +12,14 @@ class FakeAuthNotifier extends AuthNotifier {
 
 void main() {
   testWidgets('LoginPage renders correctly', (WidgetTester tester) async {
+    // Set a larger surface size to ensure all widgets are rendered
+    tester.view.physicalSize = const Size(1080, 1920);
+    tester.view.devicePixelRatio = 1.0;
+
+    // Cleanup on tearDown
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -22,7 +30,9 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+
+    // Use pump with duration instead of pumpAndSettle because Swiper has infinite animation
+    await tester.pump(const Duration(seconds: 1));
 
     // Verify Title
     expect(find.text('MY ACADEMY'), findsOneWidget);
