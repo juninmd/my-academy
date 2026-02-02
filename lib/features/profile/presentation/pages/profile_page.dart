@@ -286,6 +286,42 @@ class ProfilePage extends HookConsumerWidget {
                         children: [
                           Row(
                             children: [
+                              const Icon(Icons.calendar_today),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Meta Semanal',
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                              Text(
+                                '${settings.weeklyWorkoutGoal} treinos',
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          Slider(
+                            value: settings.weeklyWorkoutGoal.toDouble(),
+                            min: 1,
+                            max: 7,
+                            divisions: 6,
+                            label: settings.weeklyWorkoutGoal.toString(),
+                            onChanged: (value) {
+                              ref
+                                  .read(settingsProvider.notifier)
+                                  .setWeeklyGoal(value.round());
+                            },
+                          ),
+                          const Text(
+                            'Defina quantos treinos deseja fazer por semana.',
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          ),
+                          const Divider(height: 32),
+                          Row(
+                            children: [
                               const Icon(Icons.fitness_center),
                               const SizedBox(width: 12),
                               Expanded(
