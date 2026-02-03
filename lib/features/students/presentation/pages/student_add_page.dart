@@ -317,7 +317,7 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _ScheduleSelector extends HookWidget {
-  _ScheduleSelector();
+  const _ScheduleSelector();
 
   static const List<String> _days = [
     'Seg',
