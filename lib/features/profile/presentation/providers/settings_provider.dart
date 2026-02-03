@@ -7,12 +7,14 @@ class SettingsState {
   final double bodyWeight;
   final ThemeMode themeMode;
   final List<double> availablePlates;
+  final int weeklyWorkoutGoal;
 
   SettingsState({
     this.barWeight = 20.0,
     this.bodyWeight = 70.0,
     this.themeMode = ThemeMode.system,
     this.availablePlates = const [25, 20, 15, 10, 5, 2.5, 1.25],
+    this.weeklyWorkoutGoal = 4,
   });
 
   SettingsState copyWith({
@@ -20,12 +22,14 @@ class SettingsState {
     double? bodyWeight,
     ThemeMode? themeMode,
     List<double>? availablePlates,
+    int? weeklyWorkoutGoal,
   }) {
     return SettingsState(
       barWeight: barWeight ?? this.barWeight,
       bodyWeight: bodyWeight ?? this.bodyWeight,
       themeMode: themeMode ?? this.themeMode,
       availablePlates: availablePlates ?? this.availablePlates,
+      weeklyWorkoutGoal: weeklyWorkoutGoal ?? this.weeklyWorkoutGoal,
     );
   }
 }
@@ -44,6 +48,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final bodyWeight = prefs.getDouble('body_weight') ?? 70.0;
     final themeIndex = prefs.getInt('theme_mode') ?? 0;
     final themeMode = ThemeMode.values[themeIndex];
+    final weeklyWorkoutGoal = prefs.getInt('weekly_workout_goal') ?? 4;
 
     final platesStrings = prefs.getStringList('available_plates');
     List<double> availablePlates;
@@ -65,6 +70,7 @@ class SettingsNotifier extends Notifier<SettingsState> {
       bodyWeight: bodyWeight,
       themeMode: themeMode,
       availablePlates: availablePlates,
+      weeklyWorkoutGoal: weeklyWorkoutGoal,
     );
   }
 
@@ -78,6 +84,12 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('body_weight', weight);
     state = state.copyWith(bodyWeight: weight);
+  }
+
+  Future<void> setWeeklyGoal(int goal) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('weekly_workout_goal', goal);
+    state = state.copyWith(weeklyWorkoutGoal: goal);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
