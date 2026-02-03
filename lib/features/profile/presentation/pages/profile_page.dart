@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
+import '../../../workouts/presentation/providers/workout_create_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
 import '../widgets/consistency_heatmap.dart';
+import '../widgets/personal_best_widget.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
@@ -18,6 +20,7 @@ class ProfilePage extends HookConsumerWidget {
     final userState = ref.watch(authNotifierProvider);
     final user = userState.value;
     final settings = ref.watch(settingsProvider);
+    final exercisesAsync = ref.watch(exercisesProvider);
     final isEditing = useState(false);
 
     final nameController = useTextEditingController(text: user?.name ?? '');
@@ -209,6 +212,24 @@ class ProfilePage extends HookConsumerWidget {
                   ),
 
                   const SizedBox(height: 16),
+
+                  // Personal Records
+                  ref.watch(allExerciseLogsProvider).when(
+                    data: (logs) {
+                      return exercisesAsync.maybeWhen(
+                        data: (exercises) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: PersonalBestWidget(
+                            logs: logs,
+                            exercises: exercises,
+                          ),
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      );
+                    },
+                    loading: () => const SizedBox(),
+                    error: (e, s) => const SizedBox(),
+                  ),
 
                   // Consistency Heatmap
                   ref.watch(allExerciseLogsProvider).when(

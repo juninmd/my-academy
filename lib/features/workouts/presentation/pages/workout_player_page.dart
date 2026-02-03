@@ -654,45 +654,62 @@ class _ExercisePlayerView extends HookConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Aquecimento Sugerido',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.orange,
-            fontWeight: FontWeight.bold,
-          ),
+        Row(
+          children: [
+            const Icon(Icons.whatshot, size: 16, color: Colors.orange),
+            const SizedBox(width: 8),
+            Text(
+              'Aquecimento',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Colors.orange,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: sets.asMap().entries.map((e) {
-            final index = e.key;
-            final set = e.value;
-            final isCompleted = set['completed'] as bool;
+        ...sets.asMap().entries.map((e) {
+          final index = e.key;
+          final set = e.value;
+          final isCompleted = set['completed'] as bool;
 
-            return FilterChip(
-              label: Text(
-                '${set['reps']} reps @ ${set['weight']} kg',
-                style: TextStyle(
-                  color: isCompleted ? Colors.white : Colors.orange,
-                  fontWeight: isCompleted ? FontWeight.bold : FontWeight.normal,
+          return GestureDetector(
+            onTap: () {
+               final newSets = List<Map<String, dynamic>>.from(sets);
+               newSets[index] = {...set, 'completed': !isCompleted};
+               warmupSetsNotifier.value = newSets;
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              decoration: BoxDecoration(
+                color: isCompleted
+                  ? Colors.orange.withValues(alpha: 0.2)
+                  : Theme.of(context).cardTheme.color,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: isCompleted ? Colors.orange : Theme.of(context).dividerColor.withValues(alpha: 0.1),
                 ),
               ),
-              selected: isCompleted,
-              onSelected: (selected) {
-                final newSets = List<Map<String, dynamic>>.from(sets);
-                newSets[index] = {...set, 'completed': selected};
-                warmupSetsNotifier.value = newSets;
-              },
-              checkmarkColor: Colors.white,
-              selectedColor: Colors.orange,
-              backgroundColor: Colors.orange.withValues(alpha: 0.1),
-              side: BorderSide(
-                color: isCompleted ? Colors.transparent : Colors.orange.withValues(alpha: 0.5),
+              child: Row(
+                children: [
+                  Text(
+                    '${set['reps']} reps',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text('x', style: TextStyle(color: Colors.grey)),
+                  ),
+                  Text('${set['weight']} kg'),
+                  const Spacer(),
+                  if (isCompleted)
+                    const Icon(Icons.check, size: 16, color: Colors.orange),
+                ],
               ),
-            );
-          }).toList(),
-        ),
+            ),
+          );
+        }),
       ],
     );
   }
@@ -821,88 +838,77 @@ class _SetRow extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: log.isCompleted
-            ? Colors.green.withValues(alpha: 0.1)
+            ? Colors.green.withValues(alpha: 0.05)
             : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: log.isCompleted
-              ? Colors.green.withValues(alpha: 0.5)
-              : Colors.transparent,
+              ? Colors.green.withValues(alpha: 0.3)
+              : Theme.of(context).dividerColor.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header: Set Info & History
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircleAvatar(
-                backgroundColor: log.isCompleted
-                    ? Colors.green
-                    : Colors.grey.withValues(alpha: 0.3),
-                foregroundColor: Colors.white,
-                radius: 12,
-                child: Text('${index + 1}', style: const TextStyle(fontSize: 12)),
+              Text(
+                'SÉRIE ${index + 1}',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                  color: Colors.grey,
+                ),
               ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Meta: ${series.repetitions} reps • ${series.weight} kg',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  if (lastSet != null)
-                    ActionChip(
-                      visualDensity: VisualDensity.compact,
-                      avatar: Icon(
-                        Icons.copy_all,
-                        size: 14,
+              if (lastSet != null)
+                GestureDetector(
+                  onTap: !log.isCompleted
+                      ? () {
+                          onChanged(SetLogState(
+                            actualReps: lastSet!.reps,
+                            actualWeight: lastSet!.weight,
+                            rpe: log.rpe,
+                            isCompleted: log.isCompleted,
+                          ));
+                        }
+                      : null,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.history,
+                        size: 12,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      label: Text(
-                        'Último: ${lastSet!.reps}x ${lastSet!.weight}kg',
+                      const SizedBox(width: 4),
+                      Text(
+                        '${lastSet!.reps}x ${lastSet!.weight}kg',
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      tooltip: 'Copiar do histórico',
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
-                      ),
-                      onPressed: !log.isCompleted
-                          ? () {
-                              onChanged(SetLogState(
-                                actualReps: lastSet!.reps,
-                                actualWeight: lastSet!.weight,
-                                rpe: log.rpe,
-                                isCompleted: log.isCompleted,
-                              ));
-                            }
-                          : null,
-                    ),
-                ],
-              ),
-              const Spacer(),
-              OneRepMaxDisplay(weight: log.actualWeight, reps: log.actualReps),
-              if (log.isCompleted)
-                const Padding(
-                  padding: EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.check_circle, color: Colors.green),
-                )
+                    ],
+                  ),
+                ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
+
+          // Main Input Row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Reps Input
               Expanded(
+                flex: 2,
                 child: NumberInputControl(
                   label: 'Reps',
                   value: log.actualReps,
@@ -917,13 +923,15 @@ class _SetRow extends HookWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
+              // Weight Input
               Expanded(
-                child: NumberInputControl(
-                  label: 'Carga (kg)',
+                 flex: 2,
+                 child: NumberInputControl(
+                  label: 'kg',
                   value: log.actualWeight,
                   enabled: !log.isCompleted,
-                  step: 1, // Maybe 1 is better than 2.5 for quick adjustments
+                  step: 1,
                   onChanged: (val) {
                     onChanged(SetLogState(
                       actualReps: log.actualReps,
@@ -935,82 +943,87 @@ class _SetRow extends HookWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              IconButton(
-                icon: const Icon(Icons.calculate_outlined),
-                tooltip: 'Calculadora de Anilhas',
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    showDragHandle: true,
-                    builder: (context) => Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: PlateCalculatorContent(
-                        targetWeight: log.actualWeight.toDouble(),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-           Row(
-            children: [
-              Row(
+
+              // Tools (RPE & Calc)
+              Column(
                 children: [
-                  const Text('RPE'),
-                  IconButton(
-                    padding: EdgeInsets.zero,
+                   IconButton(
+                    icon: const Icon(Icons.calculate_outlined, size: 20),
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.info_outline, size: 16, color: Colors.grey),
+                    padding: const EdgeInsets.all(8),
+                    tooltip: 'Calculadora',
                     onPressed: () {
-                      showDialog(
+                      showModalBottomSheet(
                         context: context,
-                        builder: (context) => const RpeInfoDialog(),
+                        showDragHandle: true,
+                        builder: (context) => Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: PlateCalculatorContent(
+                            targetWeight: log.actualWeight.toDouble(),
+                          ),
+                        ),
                       );
                     },
                   ),
-                  const Text(': '),
+                  InkWell(
+                    onTap: log.isCompleted ? null : () {
+                       // Simple RPE Picker Dialog
+                       showDialog(
+                        context: context,
+                        builder: (context) => SimpleDialog(
+                          title: const Text('Selecionar RPE'),
+                          children: List.generate(10, (i) => 10 - i).map((rpe) {
+                            return SimpleDialogOption(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                onChanged(SetLogState(
+                                  actualReps: log.actualReps,
+                                  actualWeight: log.actualWeight,
+                                  rpe: rpe,
+                                  isCompleted: log.isCompleted,
+                                ));
+                              },
+                              child: Text('RPE $rpe', textAlign: TextAlign.center),
+                            );
+                          }).toList(),
+                        ),
+                       );
+                    },
+                    borderRadius: BorderRadius.circular(4),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                      child: Text(
+                        'RPE ${log.rpe ?? '-'}',
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              Expanded(
-                child: Slider(
-                  value: (log.rpe ?? 5).toDouble(),
-                  min: 1,
-                  max: 10,
-                  divisions: 9,
-                  label: log.rpe?.toString() ?? '-',
-                  onChanged: log.isCompleted ? null : (v) {
-                    onChanged(SetLogState(
-                      actualReps: log.actualReps,
-                      actualWeight: log.actualWeight,
-                      rpe: v.round(),
-                      isCompleted: log.isCompleted,
-                    ));
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 30,
-                child: Text(
-                  log.rpe?.toString() ?? '-',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+
+              const SizedBox(width: 12),
+
+              // Completion Button
+              InkWell(
+                onTap: onCompleted,
+                borderRadius: BorderRadius.circular(8),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: log.isCompleted
+                        ? Colors.green
+                        : Colors.grey.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.check,
+                    color: log.isCompleted ? Colors.white : Colors.grey,
+                  ),
                 ),
               ),
             ],
-          ),
-
-          const SizedBox(height: 8),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: onCompleted,
-              style: TextButton.styleFrom(
-                backgroundColor: log.isCompleted ? Colors.transparent : Theme.of(context).primaryColor.withValues(alpha: 0.1),
-              ),
-              child: Text(log.isCompleted ? 'Desmarcar' : 'Concluir Série'),
-            ),
           ),
         ],
       ),
