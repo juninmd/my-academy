@@ -88,7 +88,7 @@ class ExerciseStatsPage extends ConsumerWidget {
                 );
               },
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (e, s) => const SizedBox.shrink(),
             ),
           ),
 
@@ -168,7 +168,7 @@ class ExerciseStatsPage extends ConsumerWidget {
                 );
               },
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (e, s) => const SizedBox.shrink(),
             ),
           ),
 

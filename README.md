@@ -1,36 +1,75 @@
-# my_academy
+# My Academy (Minha Academia)
 
-Minha Academia na palma da mão.
+A Flutter application for managing and tracking your workout progress, built with clean architecture and Riverpod.
+
+## Features
+
+*   **Workout Management:** Create, edit, and delete workouts.
+*   **Exercise Library:** Searchable database of exercises with detailed instructions.
+*   **Progress Tracking:** Visualize your 1RM progression and volume trends.
+*   **Calendar:** View workout history and schedule.
+*   **Body Composition:** Track body measurements and calculate fat percentage.
+*   **Social:** Connect with students or coaches (feature in progress).
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+*   Flutter SDK (version >= 3.7.0 < 4.0.0)
+*   Dart SDK (version >= 3.0.0 < 4.0.0)
+*   Firebase Project (setup `google-services.json` and `GoogleService-Info.plist`)
+*   NestJS Backend (optional for local dev, see `backend/README.md`)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/my-academy.git
+    cd my-academy
+    ```
 
-```sh
-flutter build apk --debug
+2.  **Install dependencies:**
+    ```bash
+    flutter pub get
+    ```
+
+3.  **Run the application:**
+    ```bash
+    flutter run
+    ```
+
+## Testing
+
+To run the tests:
+
+```bash
+flutter test
 ```
 
-- https://redketchup.io/gif-resizer
-- https://fisiculturismo.com.br/exerc%C3%ADcios/coxa/agachamento-hack-r107/
-- https://flutterawesome.com/tag/templates/
-- https://github.com/anasfik/work-out-mobile-app?ref=flutterawesome.com
-- https://flutterawesome.com/fitness-tracking-app-ui-with-flutter/
-- https://flutterawesome.com/a-workout-planner-that-help-you-logging-and-tracking-your-workouts-progress/
-- https://flutterawesome.com/a-flutter-package-for-creating-customizable-selector-wheel-widgets/
-- https://flutterawesome.com/a-mental-health-app-ui-using-flutter/
-- git@github.com:abbasdezak/BuilderWorkoutPlanner.git
-- https://flutterawesome.com/a-flutter-plugin-to-use-the-flutter-widgets-in-the-native-home-widgets/
+To run integration tests:
 
+```bash
+flutter test integration_test
+```
 
-- https://bodyshape.netlify.app/#/
+## Architecture
 
- flutter run -d web-server --web-hostname localhost --web-port 3000
+This project follows a Clean Architecture approach with Feature-First organization:
+
+*   **lib/core:** Core utilities, widgets, and base classes.
+*   **lib/features:** Feature modules (auth, workouts, profile, etc.). Each feature contains:
+    *   **domain:** Entities, use cases, repository interfaces.
+    *   **data:** Data sources (remote/local), repository implementations, DTOs.
+    *   **presentation:** Pages, widgets, providers (Riverpod), state management.
+
+## State Management
+
+We use [Riverpod](https://riverpod.dev/) for state management and dependency injection. [flutter_hooks](https://pub.dev/packages/flutter_hooks) is used for ephemeral UI state.
+
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

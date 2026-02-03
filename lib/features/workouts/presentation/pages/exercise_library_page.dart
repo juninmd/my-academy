@@ -112,7 +112,7 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                               ? CachedNetworkImage(
                                   imageUrl: exercise.image!,
                                   fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) =>
+                                  errorWidget: (context, url, error) =>
                                       const Icon(Icons.fitness_center),
                                 )
                               : const Icon(Icons.fitness_center),

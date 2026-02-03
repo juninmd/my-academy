@@ -154,7 +154,7 @@ class WeeklyProgressCard extends ConsumerWidget {
           child: Center(child: CircularProgressIndicator()),
         ),
       ),
-      error: (_, __) => const SizedBox(),
+      error: (e, s) => const SizedBox(),
     );
   }
 }
