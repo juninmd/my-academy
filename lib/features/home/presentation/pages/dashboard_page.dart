@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +9,7 @@ import '../providers/home_provider.dart';
 import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 import '../widgets/quick_timer_dialog.dart';
-import '../widgets/weekly_calendar_strip.dart';
+import '../widgets/weekly_progress_card.dart';
 import '../widgets/body_weight_dialog.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
@@ -115,37 +114,7 @@ class DashboardPage extends ConsumerWidget {
                       (summary) => Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const WeeklyCalendarStrip(),
-                          const SizedBox(height: 24),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _StatCard(
-                                  icon: Icons.local_fire_department,
-                                  label: 'Frequência',
-                                  value: '${summary.counter} dias',
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _StatCard(
-                                  icon: Icons.timer,
-                                  label: 'Último',
-                                  value:
-                                      summary.lastSessionDate != null
-                                          ? DateFormat('dd/MM').format(
-                                            DateTime.parse(
-                                              summary.lastSessionDate!,
-                                            ),
-                                          )
-                                          : '-',
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ],
-                          ),
+                          const WeeklyProgressCard(),
                           const SizedBox(height: 24),
 
                           // Tools Section
@@ -568,52 +537,5 @@ class _ToolCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Theme.of(context).cardTheme.color,
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: [
-         BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-         ),
-      ],
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 12),
-        Text(value, style: Theme.of(context).textTheme.titleLarge),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
-      ],
-    ),
-  );
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<IconData>('icon', icon));
-    properties.add(StringProperty('label', label));
-    properties.add(StringProperty('value', value));
-    properties.add(ColorProperty('color', color));
   }
 }
