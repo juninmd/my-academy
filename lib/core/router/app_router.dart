@@ -14,7 +14,7 @@ import '../../features/workouts/domain/entities/exercise_entity.dart';
 import '../../features/workouts/domain/entities/workout_group_entity.dart';
 import '../../features/workouts/presentation/pages/analytics_page.dart';
 import '../../features/workouts/presentation/pages/exercise_library_page.dart';
-import '../../features/workouts/presentation/pages/exercise_stats_page.dart';
+import '../../features/workouts/presentation/pages/exercise_details_page.dart';
 import '../../features/workouts/presentation/pages/workout_create_page.dart';
 import '../../features/workouts/presentation/pages/workout_details_page.dart';
 import '../../features/workouts/presentation/pages/workout_groups_page.dart';
@@ -63,7 +63,7 @@ GoRouter router(Ref ref) {
             );
           }
           final exercise = state.extra as ExerciseEntity;
-          return ExerciseStatsPage(exercise: exercise);
+          return ExerciseDetailsPage(exercise: exercise);
         },
       ),
       StatefulShellRoute.indexedStack(

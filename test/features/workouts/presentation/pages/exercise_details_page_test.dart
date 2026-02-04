@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_entity.dart';
-import 'package:my_academy/features/workouts/presentation/pages/exercise_stats_page.dart';
+import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
+import 'package:my_academy/features/workouts/presentation/pages/exercise_details_page.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
 
 void main() {
-  testWidgets('ExerciseStatsPage displays exercise info', (tester) async {
+  testWidgets('ExerciseDetailsPage displays exercise info', (tester) async {
     const exercise = ExerciseEntity(
       id: 1,
       name: 'Bench Press',
@@ -17,10 +18,10 @@ void main() {
 
     await tester.pumpWidget(ProviderScope(
       overrides: [
-        exerciseLogsProvider.overrideWith((ref, id) async => []),
+        exerciseLogsProvider.overrideWith((ref, id) async => <ExerciseLogEntity>[]),
       ],
       child: const MaterialApp(
-        home: ExerciseStatsPage(exercise: exercise),
+        home: ExerciseDetailsPage(exercise: exercise),
       ),
     ));
     await tester.pump(); // wait for future
