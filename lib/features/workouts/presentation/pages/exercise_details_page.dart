@@ -10,8 +10,8 @@ import '../../../../utils/one_rep_max_calculator.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/progress_chart.dart';
 
-class ExerciseStatsPage extends ConsumerWidget {
-  const ExerciseStatsPage({required this.exercise, super.key});
+class ExerciseDetailsPage extends ConsumerWidget {
+  const ExerciseDetailsPage({required this.exercise, super.key});
 
   final ExerciseEntity exercise;
 
@@ -88,7 +88,7 @@ class ExerciseStatsPage extends ConsumerWidget {
                 );
               },
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (e, s) => const SizedBox.shrink(),
             ),
           ),
 
@@ -168,7 +168,7 @@ class ExerciseStatsPage extends ConsumerWidget {
                 );
               },
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (e, s) => const SizedBox.shrink(),
             ),
           ),
 

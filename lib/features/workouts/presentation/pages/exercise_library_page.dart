@@ -71,8 +71,9 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                         .contains(searchTerm.value.toLowerCase()))
                     .toList();
 
+                final recentIds = logsAsync.value?.map((l) => l.exerciseId).toSet() ?? {};
+
                 if (filterType.value == FilterType.recent) {
-                   final recentIds = logsAsync.value?.map((l) => l.exerciseId).toSet() ?? {};
                    filtered = filtered.where((e) => recentIds.contains(e.id)).toList();
                 }
 
@@ -89,47 +90,114 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   itemCount: filtered.length,
                   itemBuilder: (context, index) {
                     final exercise = filtered[index];
+                    final isRecent = recentIds.contains(exercise.id);
+
                     return Card(
                       margin: const EdgeInsets.only(bottom: 12),
-                      elevation: 0,
+                      elevation: 2,
+                      shadowColor: Colors.black12,
+                      surfaceTintColor: Theme.of(context).colorScheme.surface,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         side: BorderSide(
-                          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+                          color: isRecent
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.3)
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withValues(alpha: 0.1),
                         ),
                       ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        leading: Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                             color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                             borderRadius: BorderRadius.circular(12),
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: exercise.image != null
-                              ? CachedNetworkImage(
-                                  imageUrl: exercise.image!,
-                                  fit: BoxFit.cover,
-                                  errorWidget: (_, __, ___) =>
-                                      const Icon(Icons.fitness_center),
-                                )
-                              : const Icon(Icons.fitness_center),
-                        ),
-                        title: Text(
-                          exercise.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          exercise.description ?? '',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: const Icon(Icons.chevron_right),
+                      child: InkWell(
                         onTap: () {
                           context.push('/exercise-details', extra: exercise);
                         },
+                        borderRadius: BorderRadius.circular(16),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 64,
+                                height: 64,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                child: exercise.image != null
+                                    ? CachedNetworkImage(
+                                        imageUrl: exercise.image!,
+                                        fit: BoxFit.cover,
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.fitness_center),
+                                      )
+                                    : const Icon(Icons.fitness_center),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            exercise.name,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                        if (isRecent)
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(left: 8),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryContainer,
+                                              borderRadius: BorderRadius.circular(
+                                                  8),
+                                            ),
+                                            child: Text(
+                                              'Recente',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimaryContainer,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      exercise.description ?? 'Sem descrição',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(Icons.chevron_right, color: Colors.grey),
+                            ],
+                          ),
+                        ),
                       ),
                     );
                   },

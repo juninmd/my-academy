@@ -38,7 +38,7 @@ void main() {
       ],
     );
 
-    final sub = container.listen(workoutGroupsProvider('u1').future, (_, __) {});
+    final sub = container.listen(workoutGroupsProvider('u1').future, (prev, next) {});
 
     expect(
       await container.read(workoutGroupsProvider('u1').future),
@@ -59,7 +59,7 @@ void main() {
       ],
     );
 
-    final sub = container.listen(workoutGroupByIdProvider(1).future, (_, __) {});
+    final sub = container.listen(workoutGroupByIdProvider(1).future, (prev, next) {});
 
     expect(
       await container.read(workoutGroupByIdProvider(1).future),
