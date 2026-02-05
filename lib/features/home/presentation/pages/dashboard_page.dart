@@ -10,6 +10,7 @@ import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 import '../widgets/quick_timer_dialog.dart';
 import '../widgets/weekly_progress_card.dart';
+import '../widgets/streak_card.dart';
 import '../widgets/body_weight_dialog.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
@@ -114,6 +115,8 @@ class DashboardPage extends ConsumerWidget {
                       (summary) => Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
+                          StreakCard(completedWorkouts: summary.counter),
+                          const SizedBox(height: 12),
                           const WeeklyProgressCard(),
                           const SizedBox(height: 24),
 
