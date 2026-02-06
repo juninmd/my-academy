@@ -39,7 +39,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       final response = await _apiClient.get(
         'workouts-groups/$groupId',
       );
-      return Right(_mapGroup(response));
+      final data = response as Map<String, dynamic>;
+      return Right(_mapGroup(data));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
