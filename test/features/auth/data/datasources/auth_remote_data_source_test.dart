@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -38,7 +39,7 @@ class MockApiClientManual implements ApiClient {
   Future<dynamic> post(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async {
     postCalls.add(path);
     return null;
@@ -48,18 +49,18 @@ class MockApiClientManual implements ApiClient {
   Future delete(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async => null;
 
   @override
-  Future get(String path, {Map<String, dynamic>? queryParameters}) async =>
+  Future get(String path, {Map<String, dynamic>? queryParameters, Options? options}) async =>
       null;
 
   @override
   Future put(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async => null;
 }
 
