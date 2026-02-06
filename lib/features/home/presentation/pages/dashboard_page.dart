@@ -14,6 +14,8 @@ import '../widgets/streak_card.dart';
 import '../widgets/body_weight_dialog.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
+import '../../../workouts/presentation/providers/workout_create_provider.dart';
+import '../../../workouts/presentation/widgets/workout_history_card.dart';
 
 // Placeholder for now
 class DashboardPage extends ConsumerWidget {
@@ -26,6 +28,9 @@ class DashboardPage extends ConsumerWidget {
     final groupsAsync = user != null
         ? ref.watch(workoutGroupsProvider(user.id))
         : const AsyncValue<List<WorkoutGroupEntity>>.data([]);
+
+    final logsAsync = ref.watch(allExerciseLogsProvider);
+    final exercisesAsync = ref.watch(exercisesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -197,47 +202,49 @@ class DashboardPage extends ConsumerWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(24),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                                    borderRadius: BorderRadius.circular(24),
-                                    border: Border.all(
-                                      color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-                                    ),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Icon(
-                                        Icons.nights_stay_outlined,
-                                        size: 48,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        'Descanso Merecido',
-                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        'Recupere-se para o próximo treino!',
-                                        style: Theme.of(context).textTheme.bodyMedium,
-                                      ),
-                                      if (summary.lastSessionDate != null) ...[
-                                        const SizedBox(height: 16),
-                                        const Divider(),
-                                        const SizedBox(height: 8),
+                                // Show Last Workout if available
+                                logsAsync.when(
+                                  data: (logs) {
+                                    if (logs.isEmpty) return const _GenericRestCard();
+
+                                    // Find latest date
+                                    final latestLog = logs.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+                                    final latestDate = latestLog.date;
+
+                                    // Filter logs for that date
+                                    final sessionLogs = logs.where((e) =>
+                                      e.date.year == latestDate.year &&
+                                      e.date.month == latestDate.month &&
+                                      e.date.day == latestDate.day
+                                    ).toList();
+
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
                                         Text(
-                                          'Último treino: ${DateFormat('dd/MM').format(DateTime.parse(summary.lastSessionDate!))}',
-                                          style: Theme.of(context).textTheme.bodySmall,
+                                          'Último Treino',
+                                          style: Theme.of(context).textTheme.titleLarge,
+                                        ),
+                                        const SizedBox(height: 12),
+                                        exercisesAsync.when(
+                                          data: (exercises) {
+                                            final map = {for (var e in exercises) e.id: e.name};
+                                            return WorkoutHistoryCard(
+                                              date: latestDate,
+                                              logs: sessionLogs,
+                                              exerciseNameMap: map
+                                            );
+                                          },
+                                          loading: () => const Center(child: CircularProgressIndicator()),
+                                          error: (e, s) => const _GenericRestCard(),
                                         ),
                                       ],
-                                    ],
-                                  ),
+                                    );
+                                  },
+                                  loading: () => const Center(child: CircularProgressIndicator()),
+                                  error: (e, s) => const _GenericRestCard(),
                                 ),
+
                                 const SizedBox(height: 24),
                                 Text(
                                   'Seus Planos',
@@ -353,6 +360,46 @@ class DashboardPage extends ConsumerWidget {
                 ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _GenericRestCard extends StatelessWidget {
+  const _GenericRestCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.nights_stay_outlined,
+            size: 48,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Descanso Merecido',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Recupere-se para o próximo treino!',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
       ),
     );
   }
