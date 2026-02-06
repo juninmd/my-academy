@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/workout_group_entity.dart';
@@ -36,7 +39,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       final response = await _apiClient.get(
         'workouts-groups/$groupId',
       );
-      return Right(_mapGroup(response));
+      final data = response as Map<String, dynamic>;
+      return Right(_mapGroup(data));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -98,14 +102,11 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     try {
       final response = await _apiClient.get(
         'exercise-logs?userId=$userId&_sort=date&_order=desc',
+        options: Options(responseType: ResponseType.plain),
       );
-      final List<dynamic> data = response;
-      return Right(
-        data
-            .cast<Map<String, dynamic>>()
-            .map(ExerciseLogEntity.fromJson)
-            .toList(),
-      );
+      final String jsonString = response as String;
+      final logs = await compute(_parseExerciseLogs, jsonString);
+      return Right(logs);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -213,4 +214,12 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     mistakes:
         json['mistakes'] != null ? (json['mistakes'] as String).split(',') : [],
   );
+}
+
+List<ExerciseLogEntity> _parseExerciseLogs(String jsonString) {
+  final List<dynamic> data = jsonDecode(jsonString);
+  return data
+      .cast<Map<String, dynamic>>()
+      .map(ExerciseLogEntity.fromJson)
+      .toList();
 }
