@@ -1,11 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
 
-class ProgressChart extends StatelessWidget {
+class ProgressChart extends HookWidget {
   const ProgressChart({required this.logs, super.key});
 
   final List<ExerciseLogEntity> logs;
@@ -15,25 +16,31 @@ class ProgressChart extends StatelessWidget {
     if (logs.length < 2) return const SizedBox.shrink();
 
     // Process data
-    final points = <FlSpot>[];
-    // Sort logs by date ascending
-    final sortedLogs = List<ExerciseLogEntity>.from(logs)
-      ..sort((a, b) => a.date.compareTo(b.date));
+    final chartData = useMemoized(() {
+      final points = <FlSpot>[];
+      // Sort logs by date ascending
+      final sortedLogs = List<ExerciseLogEntity>.from(logs)
+        ..sort((a, b) => a.date.compareTo(b.date));
 
-    for (int i = 0; i < sortedLogs.length; i++) {
-      final log = sortedLogs[i];
-      double max1RM = 0;
-      for (final set in log.sets) {
-        final rm = OneRepMaxCalculator.calculateEpley(
-          set.weight.toDouble(),
-          set.reps,
-        );
-        if (rm > max1RM) max1RM = rm;
+      for (int i = 0; i < sortedLogs.length; i++) {
+        final log = sortedLogs[i];
+        double max1RM = 0;
+        for (final set in log.sets) {
+          final rm = OneRepMaxCalculator.calculateEpley(
+            set.weight.toDouble(),
+            set.reps,
+          );
+          if (rm > max1RM) max1RM = rm;
+        }
+        if (max1RM > 0) {
+          points.add(FlSpot(i.toDouble(), max1RM));
+        }
       }
-      if (max1RM > 0) {
-        points.add(FlSpot(i.toDouble(), max1RM));
-      }
-    }
+      return (sortedLogs: sortedLogs, points: points);
+    }, [logs]);
+
+    final sortedLogs = chartData.sortedLogs;
+    final points = chartData.points;
 
     if (points.isEmpty) return const SizedBox.shrink();
 
