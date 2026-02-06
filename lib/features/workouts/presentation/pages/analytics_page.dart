@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/exercise_log_entity.dart';
 import '../providers/workout_provider.dart';
 
 class AnalyticsPage extends HookConsumerWidget {
@@ -29,14 +28,51 @@ class AnalyticsPage extends HookConsumerWidget {
               child: Text('Nenhum dado de treino registrado ainda.'),
             );
           }
+
+          // Calculate chart data, memoized to prevent expensive recalculation on every rebuild.
+          // Re-runs only if logs change or the current date changes.
+          final now = DateTime.now();
+          final today = DateTime(now.year, now.month, now.day);
+
+          final chartData = useMemoized(() {
+            final lowerBound = today.subtract(const Duration(days: 6));
+            final upperBound = today.add(const Duration(days: 1));
+
+            final Map<int, double> volumePerDay = {};
+            final Map<int, int> setsPerDay = {};
+
+            for (var log in logs) {
+              // Check bounds efficiently without creating new DateTime objects
+              if (log.date.compareTo(lowerBound) >= 0 &&
+                  log.date.isBefore(upperBound)) {
+                // Calculate index based on difference from start of the window
+                final dayIndex = log.date.difference(lowerBound).inDays;
+                if (dayIndex >= 0 && dayIndex < 7) {
+                  // Volume
+                  final volume = log.sets.fold<double>(
+                    0,
+                    (sum, set) => sum + (set.weight * set.reps),
+                  );
+                  volumePerDay[dayIndex] =
+                      (volumePerDay[dayIndex] ?? 0) + volume;
+
+                  // Sets
+                  setsPerDay[dayIndex] =
+                      (setsPerDay[dayIndex] ?? 0) + log.sets.length;
+                }
+              }
+            }
+            return (volume: volumePerDay, sets: setsPerDay);
+          }, [logs, today]);
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildVolumeChart(context, logs),
+                _buildVolumeChart(context, chartData.volume),
                 const SizedBox(height: 24),
-                _buildWorkoutFrequencyChart(context, logs),
+                _buildWorkoutFrequencyChart(context, chartData.sets),
               ],
             ),
           );
@@ -47,28 +83,16 @@ class AnalyticsPage extends HookConsumerWidget {
     );
   }
 
-  Widget _buildVolumeChart(BuildContext context, List<ExerciseLogEntity> logs) {
-    // Calculate volume per day for the last 7 days
+  Widget _buildVolumeChart(
+    BuildContext context,
+    Map<int, double> volumePerDay,
+  ) {
+    // Labels for the last 7 days
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final last7Days = List.generate(7, (index) {
       return today.subtract(Duration(days: 6 - index));
     });
-
-    final Map<int, double> volumePerDay = {};
-
-    for (var log in logs) {
-      final logDate = DateTime(log.date.year, log.date.month, log.date.day);
-      if (logDate.isAfter(today.subtract(const Duration(days: 7))) &&
-          logDate.isBefore(today.add(const Duration(days: 1)))) {
-        final dayIndex = 6 - today.difference(logDate).inDays;
-        if (dayIndex >= 0 && dayIndex < 7) {
-          final volume = log.sets.fold<double>(
-              0, (sum, set) => sum + (set.weight * set.reps));
-          volumePerDay[dayIndex] = (volumePerDay[dayIndex] ?? 0) + volume;
-        }
-      }
-    }
 
     final barGroups = List.generate(7, (index) {
       final volume = volumePerDay[index] ?? 0;
@@ -89,7 +113,9 @@ class AnalyticsPage extends HookConsumerWidget {
     });
 
     final maxVolume = barGroups.fold<double>(
-        0, (max, group) => group.barRods[0].toY > max ? group.barRods[0].toY : max);
+      0,
+      (max, group) => group.barRods[0].toY > max ? group.barRods[0].toY : max,
+    );
     final maxY = maxVolume == 0 ? 1.0 : maxVolume * 1.2;
 
     return Card(
@@ -98,8 +124,10 @@ class AnalyticsPage extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Volume (Toneladas) - Últimos 7 dias',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Volume (Toneladas) - Últimos 7 dias',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 24),
             AspectRatio(
               aspectRatio: 1.5,
@@ -116,7 +144,9 @@ class AnalyticsPage extends HookConsumerWidget {
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              DateFormat.E('pt_BR').format(date)[0].toUpperCase(),
+                              DateFormat.E(
+                                'pt_BR',
+                              ).format(date)[0].toUpperCase(),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           );
@@ -137,9 +167,11 @@ class AnalyticsPage extends HookConsumerWidget {
                       ),
                     ),
                     topTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false)),
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                     rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false)),
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                   ),
                   gridData: const FlGridData(show: false),
                   borderData: FlBorderData(show: false),
@@ -153,31 +185,15 @@ class AnalyticsPage extends HookConsumerWidget {
   }
 
   Widget _buildWorkoutFrequencyChart(
-      BuildContext context, List<ExerciseLogEntity> logs) {
-    // For frequency, maybe we show workouts per week for last 4 weeks?
-    // Let's simplify and show "Last 7 days" activity (sets performed)
-    // Or just stick to the previous "Workouts per week" idea but with real data.
-
-    // Let's implement Sets per Day for last 7 days for variety.
-
+    BuildContext context,
+    Map<int, int> setsPerDay,
+  ) {
+    // Labels for the last 7 days
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final last7Days = List.generate(7, (index) {
       return today.subtract(Duration(days: 6 - index));
     });
-
-    final Map<int, int> setsPerDay = {};
-
-    for (var log in logs) {
-      final logDate = DateTime(log.date.year, log.date.month, log.date.day);
-      if (logDate.isAfter(today.subtract(const Duration(days: 7))) &&
-          logDate.isBefore(today.add(const Duration(days: 1)))) {
-        final dayIndex = 6 - today.difference(logDate).inDays;
-        if (dayIndex >= 0 && dayIndex < 7) {
-          setsPerDay[dayIndex] = (setsPerDay[dayIndex] ?? 0) + log.sets.length;
-        }
-      }
-    }
 
     final barGroups = List.generate(7, (index) {
       return BarChartGroupData(
@@ -194,8 +210,10 @@ class AnalyticsPage extends HookConsumerWidget {
     });
 
     final maxSets = barGroups.fold<double>(
-        0, (max, group) => group.barRods[0].toY > max ? group.barRods[0].toY : max);
-     final maxY = maxSets == 0 ? 1.0 : maxSets * 1.2;
+      0,
+      (max, group) => group.barRods[0].toY > max ? group.barRods[0].toY : max,
+    );
+    final maxY = maxSets == 0 ? 1.0 : maxSets * 1.2;
 
     return Card(
       child: Padding(
@@ -203,16 +221,18 @@ class AnalyticsPage extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Séries Realizadas - Últimos 7 dias',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Séries Realizadas - Últimos 7 dias',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 24),
-             AspectRatio(
+            AspectRatio(
               aspectRatio: 1.5,
               child: BarChart(
                 BarChartData(
                   maxY: maxY,
                   barGroups: barGroups,
-                   titlesData: FlTitlesData(
+                  titlesData: FlTitlesData(
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
@@ -221,7 +241,9 @@ class AnalyticsPage extends HookConsumerWidget {
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              DateFormat.E('pt_BR').format(date)[0].toUpperCase(),
+                              DateFormat.E(
+                                'pt_BR',
+                              ).format(date)[0].toUpperCase(),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           );
@@ -232,8 +254,8 @@ class AnalyticsPage extends HookConsumerWidget {
                       sideTitles: SideTitles(
                         showTitles: true,
                         reservedSize: 30,
-                         getTitlesWidget: (value, meta) {
-                           if (value % 1 != 0) return const SizedBox();
+                        getTitlesWidget: (value, meta) {
+                          if (value % 1 != 0) return const SizedBox();
                           return Text(
                             value.toInt().toString(),
                             style: const TextStyle(fontSize: 10),
@@ -242,9 +264,11 @@ class AnalyticsPage extends HookConsumerWidget {
                       ),
                     ),
                     topTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false)),
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                     rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false)),
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                   ),
                   gridData: const FlGridData(show: false),
                   borderData: FlBorderData(show: false),
