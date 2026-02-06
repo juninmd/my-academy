@@ -32,7 +32,7 @@ void main() {
         }
       ];
 
-      when(mockApiClient.get('workout-groups?userId=user1'))
+      when(mockApiClient.get('workouts-groups/user/user1'))
           .thenAnswer((_) async => mockData);
 
       final result = await repository.getWorkoutGroups('user1');
@@ -87,7 +87,7 @@ void main() {
     test('should return logs', () async {
        final mockData = [
         {
-          'id': '1',
+          'id': 1,
           'userId': 'u1',
           'exerciseId': 10,
           'date': DateTime.now().toIso8601String(),
@@ -110,7 +110,7 @@ void main() {
         sets: const [],
       );
       final mockResponse = {
-         'id': '1',
+         'id': 1,
           'userId': 'u1',
           'exerciseId': 10,
           'date': log.date.toIso8601String(),
