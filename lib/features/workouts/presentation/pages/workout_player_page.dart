@@ -21,6 +21,7 @@ import '../widgets/number_input_control.dart';
 import '../widgets/one_rep_max_display.dart';
 import '../widgets/plate_calculator_dialog.dart';
 import '../widgets/rpe_info_dialog.dart';
+import '../widgets/rpe_selector_sheet.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
 import '../widgets/progress_chart.dart';
@@ -102,9 +103,12 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           restTimer.value = Timer.periodic(const Duration(seconds: 1), (t) {
             if (restTimerRemaining.value > 0) {
               restTimerRemaining.value--;
+              if (restTimerRemaining.value <= 3 && restTimerRemaining.value > 0) {
+                HapticFeedback.selectionClick();
+              }
             } else {
               stopRestTimer();
-              // Optional: Play sound or vibrate
+              HapticFeedback.heavyImpact();
             }
           });
         }
@@ -967,25 +971,17 @@ class _SetRow extends HookWidget {
                   ),
                   InkWell(
                     onTap: log.isCompleted ? null : () {
-                       // Simple RPE Picker Dialog
-                       showDialog(
+                       showModalBottomSheet(
                         context: context,
-                        builder: (context) => SimpleDialog(
-                          title: const Text('Selecionar RPE'),
-                          children: List.generate(10, (i) => 10 - i).map((rpe) {
-                            return SimpleDialogOption(
-                              onPressed: () {
-                                Navigator.pop(context);
-                                onChanged(SetLogState(
-                                  actualReps: log.actualReps,
-                                  actualWeight: log.actualWeight,
-                                  rpe: rpe,
-                                  isCompleted: log.isCompleted,
-                                ));
-                              },
-                              child: Text('RPE $rpe', textAlign: TextAlign.center),
-                            );
-                          }).toList(),
+                        builder: (context) => RpeSelectorSheet(
+                          onSelected: (rpe) {
+                            onChanged(SetLogState(
+                              actualReps: log.actualReps,
+                              actualWeight: log.actualWeight,
+                              rpe: rpe,
+                              isCompleted: log.isCompleted,
+                            ));
+                          },
                         ),
                        );
                     },
