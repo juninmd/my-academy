@@ -5,6 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../utils/one_rep_max_calculator.dart';
+import '../../domain/entities/exercise_entity.dart';
+import '../providers/workout_create_provider.dart';
 import '../providers/workout_provider.dart';
 
 class AnalyticsPage extends HookConsumerWidget {
@@ -17,69 +20,93 @@ class AnalyticsPage extends HookConsumerWidget {
       return null;
     }, []);
 
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Análise de Progresso'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Progresso', icon: Icon(Icons.bar_chart)),
+              Tab(text: 'Recordes', icon: Icon(Icons.emoji_events)),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            _ProgressTab(),
+            _RecordsTab(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProgressTab extends HookConsumerWidget {
+  const _ProgressTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final logsAsync = ref.watch(allExerciseLogsProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Análise de Progresso')),
-      body: logsAsync.when(
-        data: (logs) {
-          if (logs.isEmpty) {
-            return const Center(
-              child: Text('Nenhum dado de treino registrado ainda.'),
-            );
-          }
+    return logsAsync.when(
+      data: (logs) {
+        if (logs.isEmpty) {
+          return const Center(
+            child: Text('Nenhum dado de treino registrado ainda.'),
+          );
+        }
 
-          // Calculate chart data, memoized to prevent expensive recalculation on every rebuild.
-          // Re-runs only if logs change or the current date changes.
-          final now = DateTime.now();
-          final today = DateTime(now.year, now.month, now.day);
+        // Calculate chart data, memoized to prevent expensive recalculation on every rebuild.
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
 
-          final chartData = useMemoized(() {
-            final lowerBound = today.subtract(const Duration(days: 6));
-            final upperBound = today.add(const Duration(days: 1));
+        final chartData = useMemoized(() {
+          final lowerBound = today.subtract(const Duration(days: 6));
+          final upperBound = today.add(const Duration(days: 1));
 
-            final Map<int, double> volumePerDay = {};
-            final Map<int, int> setsPerDay = {};
+          final Map<int, double> volumePerDay = {};
+          final Map<int, int> setsPerDay = {};
 
-            for (var log in logs) {
-              // Check bounds efficiently without creating new DateTime objects
-              if (log.date.compareTo(lowerBound) >= 0 &&
-                  log.date.isBefore(upperBound)) {
-                // Calculate index based on difference from start of the window
-                final dayIndex = log.date.difference(lowerBound).inDays;
-                if (dayIndex >= 0 && dayIndex < 7) {
-                  // Volume
-                  final volume = log.sets.fold<double>(
-                    0,
-                    (sum, set) => sum + (set.weight * set.reps),
-                  );
-                  volumePerDay[dayIndex] =
-                      (volumePerDay[dayIndex] ?? 0) + volume;
+          for (var log in logs) {
+            // Check bounds efficiently without creating new DateTime objects
+            if (log.date.compareTo(lowerBound) >= 0 &&
+                log.date.isBefore(upperBound)) {
+              // Calculate index based on difference from start of the window
+              final dayIndex = log.date.difference(lowerBound).inDays;
+              if (dayIndex >= 0 && dayIndex < 7) {
+                // Volume
+                final volume = log.sets.fold<double>(
+                  0,
+                  (sum, set) => sum + (set.weight * set.reps),
+                );
+                volumePerDay[dayIndex] =
+                    (volumePerDay[dayIndex] ?? 0) + volume;
 
-                  // Sets
-                  setsPerDay[dayIndex] =
-                      (setsPerDay[dayIndex] ?? 0) + log.sets.length;
-                }
+                // Sets
+                setsPerDay[dayIndex] =
+                    (setsPerDay[dayIndex] ?? 0) + log.sets.length;
               }
             }
-            return (volume: volumePerDay, sets: setsPerDay);
-          }, [logs, today]);
+          }
+          return (volume: volumePerDay, sets: setsPerDay);
+        }, [logs, today]);
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildVolumeChart(context, chartData.volume),
-                const SizedBox(height: 24),
-                _buildWorkoutFrequencyChart(context, chartData.sets),
-              ],
-            ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Erro ao carregar dados: $e')),
-      ),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildVolumeChart(context, chartData.volume),
+              const SizedBox(height: 24),
+              _buildWorkoutFrequencyChart(context, chartData.sets),
+            ],
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Erro ao carregar dados: $e')),
     );
   }
 
@@ -96,7 +123,6 @@ class AnalyticsPage extends HookConsumerWidget {
 
     final barGroups = List.generate(7, (index) {
       final volume = volumePerDay[index] ?? 0;
-      // Convert to tons for display if huge, but let's stick to kg for now or tons if > 1000
       final displayValue = volume / 1000.0; // Tonnes
 
       return BarChartGroupData(
@@ -280,4 +306,132 @@ class AnalyticsPage extends HookConsumerWidget {
       ),
     );
   }
+}
+
+class _RecordsTab extends HookConsumerWidget {
+  const _RecordsTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logsAsync = ref.watch(allExerciseLogsProvider);
+    final exercisesAsync = ref.watch(exercisesProvider);
+
+    return logsAsync.when(
+      data: (logs) {
+        return exercisesAsync.when(
+          data: (exercises) {
+            if (logs.isEmpty) {
+              return const Center(child: Text('Sem recordes ainda. Treine mais!'));
+            }
+
+            final prs = useMemoized(() {
+              final Map<int, _PRItem> bests = {};
+
+              for (var log in logs) {
+                for (var set in log.sets) {
+                  final oneRM = OneRepMaxCalculator.calculateEpley(
+                    set.weight.toDouble(),
+                    set.reps,
+                  );
+
+                  // If no entry or new 1RM is higher, update
+                  if (!bests.containsKey(log.exerciseId) ||
+                      oneRM > bests[log.exerciseId]!.weight) {
+
+                    final exercise = exercises
+                        .where((e) => e.id == log.exerciseId)
+                        .firstOrNull;
+
+                    if (exercise != null) {
+                       bests[log.exerciseId] = _PRItem(
+                        exerciseName: exercise.name,
+                        weight: oneRM,
+                        date: log.date,
+                        actualSet: '${set.weight.toStringAsFixed(1)}kg x ${set.reps}',
+                      );
+                    }
+                  }
+                }
+              }
+              // Sort by date descending (newest PRs first)
+              final list = bests.values.toList();
+              list.sort((a, b) => b.date.compareTo(a.date));
+              return list;
+            }, [logs, exercises]);
+
+            if (prs.isEmpty) {
+              return const Center(child: Text('Nenhum recorde encontrado.'));
+            }
+
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: prs.length,
+              itemBuilder: (context, index) {
+                final pr = prs[index];
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    leading: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.emoji_events, color: Colors.amber),
+                    ),
+                    title: Text(
+                      pr.exerciseName,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      '${DateFormat('dd/MM/yyyy').format(pr.date)} • ${pr.actualSet}',
+                    ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const Text(
+                          '1RM Est.',
+                          style: TextStyle(fontSize: 10, color: Colors.grey),
+                        ),
+                        Text(
+                          '${pr.weight.toStringAsFixed(1)} kg',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, s) => const Center(child: Text('Erro ao carregar exercícios')),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, s) => const Center(child: Text('Erro ao carregar logs')),
+    );
+  }
+}
+
+class _PRItem {
+  final String exerciseName;
+  final double weight;
+  final DateTime date;
+  final String actualSet;
+
+  _PRItem({
+    required this.exerciseName,
+    required this.weight,
+    required this.date,
+    required this.actualSet,
+  });
 }
