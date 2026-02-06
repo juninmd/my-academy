@@ -5,6 +5,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:dio/dio.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:my_academy/core/network/api_client.dart' as _i2;
 
@@ -21,6 +22,7 @@ import 'package:my_academy/core/network/api_client.dart' as _i2;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 /// A class which mocks [ApiClient].
 ///
@@ -46,12 +48,13 @@ class MockApiClient extends _i1.Mock implements _i2.ApiClient {
   _i3.Future<dynamic> get(
     String? path, {
     Map<String, dynamic>? queryParameters,
+    _i4.Options? options,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
               #get,
               [path],
-              {#queryParameters: queryParameters},
+              {#queryParameters: queryParameters, #options: options},
             ),
             returnValue: _i3.Future<dynamic>.value(),
           )
@@ -62,12 +65,17 @@ class MockApiClient extends _i1.Mock implements _i2.ApiClient {
     String? path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    _i4.Options? options,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
               #post,
               [path],
-              {#data: data, #queryParameters: queryParameters},
+              {
+                #data: data,
+                #queryParameters: queryParameters,
+                #options: options,
+              },
             ),
             returnValue: _i3.Future<dynamic>.value(),
           )
@@ -78,12 +86,17 @@ class MockApiClient extends _i1.Mock implements _i2.ApiClient {
     String? path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    _i4.Options? options,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
               #put,
               [path],
-              {#data: data, #queryParameters: queryParameters},
+              {
+                #data: data,
+                #queryParameters: queryParameters,
+                #options: options,
+              },
             ),
             returnValue: _i3.Future<dynamic>.value(),
           )
@@ -94,12 +107,17 @@ class MockApiClient extends _i1.Mock implements _i2.ApiClient {
     String? path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    _i4.Options? options,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
               #delete,
               [path],
-              {#data: data, #queryParameters: queryParameters},
+              {
+                #data: data,
+                #queryParameters: queryParameters,
+                #options: options,
+              },
             ),
             returnValue: _i3.Future<dynamic>.value(),
           )

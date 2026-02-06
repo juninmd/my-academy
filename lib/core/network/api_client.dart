@@ -57,10 +57,10 @@ class ApiClient {
 
   Future<dynamic> get(
     String path, {
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async {
     try {
-      final response = await _dio.get(path, queryParameters: queryParameters);
+      final response = await _dio.get(path, queryParameters: queryParameters, options: options);
       return response.data;
     } on DioException catch (e) {
       throw _handleDioError(e);
@@ -70,10 +70,10 @@ class ApiClient {
   Future<dynamic> post(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async {
     try {
-      final response = await _dio.post(
+      final response = await _dio.post(options: options,
         path,
         data: data,
         queryParameters: queryParameters,
@@ -87,10 +87,10 @@ class ApiClient {
   Future<dynamic> put(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async {
     try {
-      final response = await _dio.put(
+      final response = await _dio.put(options: options,
         path,
         data: data,
         queryParameters: queryParameters,
@@ -104,10 +104,10 @@ class ApiClient {
   Future<dynamic> delete(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? queryParameters, Options? options,
   }) async {
     try {
-      final response = await _dio.delete(
+      final response = await _dio.delete(options: options,
         path,
         data: data,
         queryParameters: queryParameters,
