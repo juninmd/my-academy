@@ -44,3 +44,13 @@ app.*.map.json
 /android/app/release
 google-services.json
 *.g.dart
+
+# Backend related
+node_modules/
+dist/
+dev.db
+.env
+backend/node_modules/
+backend/dist/
+backend/dev.db
+backend/.env
