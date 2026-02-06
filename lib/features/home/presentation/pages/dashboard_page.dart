@@ -235,13 +235,13 @@ class DashboardPage extends ConsumerWidget {
                                               exerciseNameMap: map
                                             );
                                           },
-                                          loading: () => const Center(child: CircularProgressIndicator()),
+                                          loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
                                           error: (e, s) => const _GenericRestCard(),
                                         ),
                                       ],
                                     );
                                   },
-                                  loading: () => const Center(child: CircularProgressIndicator()),
+                                  loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
                                   error: (e, s) => const _GenericRestCard(),
                                 ),
 
