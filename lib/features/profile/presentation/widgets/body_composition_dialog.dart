@@ -9,6 +9,8 @@ class BodyCompositionDialog extends HookWidget {
   Widget build(BuildContext context) {
     // 0 = Men, 1 = Women
     final genderIndex = useState(0);
+    // 0 = 7-Site, 1 = 3-Site
+    final methodIndex = useState(0);
     final ageController = useTextEditingController();
 
     // Skinfolds (mm)
@@ -42,28 +44,50 @@ class BodyCompositionDialog extends HookWidget {
       double density;
       if (genderIndex.value == 0) {
         // Men
-        density = BodyCompositionCalculator.calculateBodyDensityMen(
-          chest: chest,
-          axilla: axilla,
-          triceps: triceps,
-          subscapular: subscapular,
-          abdominal: abdominal,
-          suprailiac: suprailiac,
-          thigh: thigh,
-          age: age,
-        );
+        if (methodIndex.value == 0) {
+          // 7-Site
+          density = BodyCompositionCalculator.calculateBodyDensityMen(
+            chest: chest,
+            axilla: axilla,
+            triceps: triceps,
+            subscapular: subscapular,
+            abdominal: abdominal,
+            suprailiac: suprailiac,
+            thigh: thigh,
+            age: age,
+          );
+        } else {
+          // 3-Site
+          density = BodyCompositionCalculator.calculateBodyDensityMen3Site(
+            chest: chest,
+            abdominal: abdominal,
+            thigh: thigh,
+            age: age,
+          );
+        }
       } else {
         // Women
-        density = BodyCompositionCalculator.calculateBodyDensityWomen(
-          chest: chest,
-          axilla: axilla,
-          triceps: triceps,
-          subscapular: subscapular,
-          abdominal: abdominal,
-          suprailiac: suprailiac,
-          thigh: thigh,
-          age: age,
-        );
+        if (methodIndex.value == 0) {
+          // 7-Site
+          density = BodyCompositionCalculator.calculateBodyDensityWomen(
+            chest: chest,
+            axilla: axilla,
+            triceps: triceps,
+            subscapular: subscapular,
+            abdominal: abdominal,
+            suprailiac: suprailiac,
+            thigh: thigh,
+            age: age,
+          );
+        } else {
+          // 3-Site
+          density = BodyCompositionCalculator.calculateBodyDensityWomen3Site(
+            triceps: triceps,
+            suprailiac: suprailiac,
+            thigh: thigh,
+            age: age,
+          );
+        }
       }
 
       final fatPercentage = BodyCompositionCalculator.calculateBodyFatPercentage(density);
@@ -84,7 +108,9 @@ class BodyCompositionDialog extends HookWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Protocolo Pollock 7 dobras',
+              methodIndex.value == 0
+                  ? 'Protocolo Pollock 7 dobras'
+                  : 'Protocolo Jackson & Pollock 3 dobras',
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -93,8 +119,10 @@ class BodyCompositionDialog extends HookWidget {
             // Gender Toggle
             SegmentedButton<int>(
               segments: const [
-                 ButtonSegment(value: 0, label: Text('Homem'), icon: Icon(Icons.male)),
-                 ButtonSegment(value: 1, label: Text('Mulher'), icon: Icon(Icons.female)),
+                ButtonSegment(
+                    value: 0, label: Text('Homem'), icon: Icon(Icons.male)),
+                ButtonSegment(
+                    value: 1, label: Text('Mulher'), icon: Icon(Icons.female)),
               ],
               selected: {genderIndex.value},
               onSelectionChanged: (newSelection) {
@@ -103,17 +131,46 @@ class BodyCompositionDialog extends HookWidget {
             ),
             const SizedBox(height: 16),
 
+            // Method Toggle
+            SegmentedButton<int>(
+              segments: const [
+                ButtonSegment(value: 0, label: Text('7 Dobras')),
+                ButtonSegment(value: 1, label: Text('3 Dobras')),
+              ],
+              selected: {methodIndex.value},
+              onSelectionChanged: (newSelection) {
+                methodIndex.value = newSelection.first;
+              },
+            ),
+            const SizedBox(height: 16),
+
             _buildInput(context, 'Idade (anos)', ageController),
             const Divider(),
-            Text('Dobras Cutâneas (mm)', style: Theme.of(context).textTheme.titleMedium),
+            Text('Dobras Cutâneas (mm)',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            _buildInput(context, 'Peitoral', chestController),
-            _buildInput(context, 'Axilar Média', axillaController),
-            _buildInput(context, 'Tríceps', tricepsController),
-            _buildInput(context, 'Subescapular', subscapularController),
-            _buildInput(context, 'Abdominal', abdominalController),
-            _buildInput(context, 'Supra-ilíaca', suprailiacController),
-            _buildInput(context, 'Coxa', thighController),
+
+            // Fields logic
+            if (methodIndex.value == 0) ...[
+              // 7-Site (Show all)
+              _buildInput(context, 'Peitoral', chestController),
+              _buildInput(context, 'Axilar Média', axillaController),
+              _buildInput(context, 'Tríceps', tricepsController),
+              _buildInput(context, 'Subescapular', subscapularController),
+              _buildInput(context, 'Abdominal', abdominalController),
+              _buildInput(context, 'Supra-ilíaca', suprailiacController),
+              _buildInput(context, 'Coxa', thighController),
+            ] else if (genderIndex.value == 0) ...[
+              // Men 3-Site: Chest, Abdominal, Thigh
+              _buildInput(context, 'Peitoral', chestController),
+              _buildInput(context, 'Abdominal', abdominalController),
+              _buildInput(context, 'Coxa', thighController),
+            ] else ...[
+              // Women 3-Site: Triceps, Suprailiac, Thigh
+              _buildInput(context, 'Tríceps', tricepsController),
+              _buildInput(context, 'Supra-ilíaca', suprailiacController),
+              _buildInput(context, 'Coxa', thighController),
+            ],
 
             const SizedBox(height: 24),
 

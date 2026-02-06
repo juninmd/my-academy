@@ -38,10 +38,15 @@ class RpeInfoDialog extends StatelessWidget {
 
   Widget _buildRpeRow(BuildContext context, int rpe, String title, String desc) {
     Color color;
-    if (rpe >= 9) color = Colors.red;
-    else if (rpe >= 7) color = Colors.orange;
-    else if (rpe >= 5) color = Colors.yellow.shade700;
-    else color = Colors.green;
+    if (rpe >= 9) {
+      color = Colors.red;
+    } else if (rpe >= 7) {
+      color = Colors.orange;
+    } else if (rpe >= 5) {
+      color = Colors.yellow.shade700;
+    } else {
+      color = Colors.green;
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),

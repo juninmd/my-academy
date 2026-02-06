@@ -7,11 +7,11 @@ import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/set_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
-import '../providers/exercise_stats_provider.dart';
 import '../providers/workout_provider.dart';
+import '../widgets/progress_chart.dart';
 
-class ExerciseStatsPage extends ConsumerWidget {
-  const ExerciseStatsPage({required this.exercise, super.key});
+class ExerciseDetailsPage extends ConsumerWidget {
+  const ExerciseDetailsPage({required this.exercise, super.key});
 
   final ExerciseEntity exercise;
 
@@ -37,9 +37,64 @@ class ExerciseStatsPage extends ConsumerWidget {
                   : Container(color: Theme.of(context).primaryColor),
             ),
           ),
+          // Personal Records Section
+          SliverToBoxAdapter(
+            child: logsAsync.when(
+              data: (logs) {
+                if (logs.isEmpty) return const SizedBox.shrink();
+
+                double allTimeMax1RM = 0;
+                double maxVolume = 0;
+
+                for (final log in logs) {
+                  double sessionVolume = 0;
+                  for (final set in log.sets) {
+                    // 1RM
+                    final oneRM = OneRepMaxCalculator.calculateEpley(
+                      set.weight.toDouble(),
+                      set.reps,
+                    );
+                    if (oneRM > allTimeMax1RM) allTimeMax1RM = oneRM;
+
+                    // Volume
+                    sessionVolume += set.weight * set.reps;
+                  }
+                  if (sessionVolume > maxVolume) maxVolume = sessionVolume;
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _StatHighlightCard(
+                          label: 'Recorde 1RM',
+                          value: '${allTimeMax1RM.toStringAsFixed(1)} kg',
+                          icon: Icons.emoji_events,
+                          color: Colors.amber,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _StatHighlightCard(
+                          label: 'Maior Volume',
+                          value: '${maxVolume.toStringAsFixed(0)} kg',
+                          icon: Icons.fitness_center,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (e, s) => const SizedBox.shrink(),
+            ),
+          ),
+
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -83,15 +138,51 @@ class ExerciseStatsPage extends ConsumerWidget {
                         )),
                     const SizedBox(height: 24),
                   ],
-                  Text(
-                    'Histórico',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
           ),
+
+          // Chart Section
+          SliverToBoxAdapter(
+            child: logsAsync.when(
+              data: (logs) {
+                if (logs.length < 2) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Progresso 1RM Estimado',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        height: 200,
+                        child: ProgressChart(logs: logs),
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+                  ),
+                );
+              },
+              loading: () => const SizedBox.shrink(),
+              error: (e, s) => const SizedBox.shrink(),
+            ),
+          ),
+
+          SliverToBoxAdapter(
+             child: Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 16),
+               child: Text(
+                  'Histórico',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+             ),
+          ),
+          const SliverPadding(padding: EdgeInsets.only(top: 16)),
+
           logsAsync.when(
             data: (logs) {
               if (logs.isEmpty) {
@@ -117,6 +208,51 @@ class ExerciseStatsPage extends ConsumerWidget {
             ),
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
+        ],
+      ),
+    );
+  }
+}
+
+
+class _StatHighlightCard extends StatelessWidget {
+  const _StatHighlightCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 32),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

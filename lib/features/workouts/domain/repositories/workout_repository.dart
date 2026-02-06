@@ -26,4 +26,14 @@ abstract class WorkoutRepository {
   Future<Either<Failure, List<ExerciseLogEntity>>> getAllExerciseLogs(
     String userId,
   );
+
+  Future<Either<Failure, WorkoutGroupEntity>> createWorkoutGroup(
+    WorkoutGroupEntity group,
+  );
+
+  Future<Either<Failure, WorkoutGroupEntity>> updateWorkoutGroup(
+    WorkoutGroupEntity group,
+  );
+
+  Future<Either<Failure, Unit>> deleteWorkoutGroup(int groupId);
 }

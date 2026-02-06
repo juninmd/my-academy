@@ -24,7 +24,8 @@ void main() {
     test('should load default settings', () async {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
-      final notifier = container.read(settingsProvider.notifier);
+      // Ensure notifier initializes
+      container.read(settingsProvider.notifier);
 
       // Wait for _loadSettings
       await Future.delayed(Duration.zero);

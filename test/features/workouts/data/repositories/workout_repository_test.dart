@@ -1,12 +1,9 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_academy/core/exceptions/failure.dart';
 import 'package:my_academy/core/network/api_client.dart';
 import 'package:my_academy/features/workouts/data/repositories/workout_repository_impl.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
-import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
 
 import 'workout_repository_test.mocks.dart';
 

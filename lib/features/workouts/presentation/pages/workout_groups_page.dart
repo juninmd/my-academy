@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widgets/common_empty_state.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/workout_group_card.dart';
@@ -36,29 +37,12 @@ class WorkoutGroupsPage extends ConsumerWidget {
       body: groupsAsync.when(
         data: (groups) {
           if (groups.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.fitness_center_outlined,
-                    size: 64,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Nenhum treino encontrado',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.go('/workouts/create');
-                    },
-                    child: const Text('Criar Treino'),
-                  ),
-                ],
-              ),
+            return CommonEmptyState(
+              title: 'Nenhum treino encontrado',
+              message: 'Crie sua primeira rotina de treinos para começar.',
+              icon: Icons.fitness_center_outlined,
+              actionLabel: 'Criar Treino',
+              onAction: () => context.go('/workouts/create'),
             );
           }
           return GridView.builder(

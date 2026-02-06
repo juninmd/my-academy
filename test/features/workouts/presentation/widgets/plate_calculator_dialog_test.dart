@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_academy/features/profile/presentation/providers/settings_provider.dart';
 import 'package:my_academy/features/workouts/presentation/widgets/plate_calculator_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  // Mock SettingsProvider if needed, but for now we can override it with a simple provider
-  // Since we don't have the full SettingsProvider implementation file in context,
-  // we will try to rely on default values or basic override if possible.
-  // However, PlateCalculatorDialog reads `ref.read(settingsProvider).barWeight`.
-  // We need to mock this behavior.
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
 
   testWidgets('PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar', (WidgetTester tester) async {
-    // Override the settings provider to return a fixed bar weight if it's not provided in constructor
-    // Note: Since I don't have the SettingsProvider implementation handy to mock properly with Mockito
-    // in this specific snippet without seeing the provider definition, I will assume the dialog
-    // handles the case where I pass the barWeight in the constructor (which it does).
-
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
@@ -29,13 +22,14 @@ void main() {
     );
 
     // Initial state: Target 100, Bar 20. Side = (100 - 20) / 2 = 40.
-    // Plates for 40: 25 (rem 15) -> 10 (rem 5) -> 5 (rem 0).
-    // So: 1x25, 1x10, 1x5.
+    // Plates for 40 using [25, 20, 15, 10, 5, 2.5, 1.25]:
+    // 40 / 25 = 1 (rem 15)
+    // 15 / 15 = 1 (rem 0)
+    // So: 1x25, 1x15.
 
     expect(find.text('Peso por lado: 40.00 kg'), findsOneWidget);
     expect(find.text('25.0 kg'), findsOneWidget);
-    expect(find.text('10.0 kg'), findsOneWidget);
-    expect(find.text('5.0 kg'), findsOneWidget);
+    expect(find.text('15.0 kg'), findsOneWidget);
   });
 
   testWidgets('PlateCalculatorDialog updates calculation on input change', (WidgetTester tester) async {

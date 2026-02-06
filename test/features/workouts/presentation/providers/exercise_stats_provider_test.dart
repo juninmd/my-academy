@@ -37,11 +37,14 @@ void main() {
         workoutRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
-    addTearDown(container.dispose);
+
+    final sub = container.listen(exerciseStatsProvider(1).future, (prev, next) {});
 
     expect(
       await container.read(exerciseStatsProvider(1).future),
       isEmpty,
     );
+
+    sub.close();
   });
 }

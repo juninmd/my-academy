@@ -37,17 +37,20 @@ void main() {
         workoutRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
-    addTearDown(container.dispose);
+
+    final sub = container.listen(workoutGroupsProvider('u1').future, (prev, next) {});
 
     expect(
       await container.read(workoutGroupsProvider('u1').future),
       groups,
     );
+
+    sub.close();
   });
 
   test('workoutGroupByIdProvider returns group when found', () async {
-    final groups = [const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: [])];
-    when(mockRepository.getWorkoutGroups('u1')).thenAnswer((_) async => Right(groups));
+    final group = const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: []);
+    when(mockRepository.getWorkoutGroup(any, any)).thenAnswer((_) async => Right(group));
 
     final container = ProviderContainer(
       overrides: [
@@ -55,11 +58,14 @@ void main() {
          workoutRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
-    addTearDown(container.dispose);
+
+    final sub = container.listen(workoutGroupByIdProvider(1).future, (prev, next) {});
 
     expect(
       await container.read(workoutGroupByIdProvider(1).future),
-      groups[0],
+      group,
     );
+
+    sub.close();
   });
 }

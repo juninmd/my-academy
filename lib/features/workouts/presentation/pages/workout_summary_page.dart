@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../domain/entities/session_log_entity.dart';
 
-class WorkoutSummaryPage extends StatelessWidget {
+class WorkoutSummaryPage extends HookWidget {
   const WorkoutSummaryPage({
     required this.duration,
     required this.sessionLogs,
@@ -14,17 +15,26 @@ class WorkoutSummaryPage extends StatelessWidget {
   final Duration duration;
   final Map<int, ExerciseSessionLog> sessionLogs;
 
+  String _getWeightEquivalence(int weightKg) {
+    if (weightKg < 100) return 'um Lobo Grande 🐺';
+    if (weightKg < 500) return 'um Urso Pardo 🐻';
+    if (weightKg < 1000) return 'um Piano de Cauda 🎹';
+    if (weightKg < 2000) return 'um Carro Compacto 🚗';
+    if (weightKg < 5000) return 'um Elefante 🐘';
+    if (weightKg < 10000) return 'um T-Rex 🦖';
+    return 'um Ônibus Espacial 🚀';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final intensity = useState(3.0);
     int totalSets = 0;
-    int totalReps = 0;
     int totalWeight = 0;
 
     for (final log in sessionLogs.values) {
       for (final set in log.setLogs.values) {
         if (set.isCompleted) {
           totalSets++;
-          totalReps += set.actualReps;
           totalWeight += set.actualWeight * set.actualReps;
         }
       }
@@ -57,7 +67,33 @@ class WorkoutSummaryPage extends StatelessWidget {
                     ),
                 textAlign: TextAlign.center,
               ).animate().fadeIn(delay: 400.ms),
-              const SizedBox(height: 48),
+              const SizedBox(height: 32),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Você levantou o equivalente a',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _getWeightEquivalence(totalWeight),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ).animate().scale(delay: 600.ms),
+              const SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -82,6 +118,38 @@ class WorkoutSummaryPage extends StatelessWidget {
                 ],
               ).animate().slideY(begin: 0.2, end: 0, delay: 500.ms).fadeIn(),
               const SizedBox(height: 48),
+
+              // Intensity Slider
+              Text(
+                'Como foi o treino?',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Text('😎'),
+                  Expanded(
+                    child: Slider(
+                      value: intensity.value,
+                      min: 1,
+                      max: 5,
+                      divisions: 4,
+                      label: ['Fácil', 'Moderado', 'Bom', 'Intenso', 'Insano'][intensity.value.toInt() - 1],
+                      onChanged: (v) => intensity.value = v,
+                    ),
+                  ),
+                  const Text('🥵'),
+                ],
+              ),
+              Center(
+                child: Text(
+                  ['Fácil', 'Moderado', 'Bom', 'Intenso', 'Insano'][intensity.value.toInt() - 1],
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+              const SizedBox(height: 48),
+
               Text(
                 'Resumo dos Exercícios',
                 style: Theme.of(context).textTheme.titleLarge,

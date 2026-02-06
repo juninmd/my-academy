@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -10,8 +9,13 @@ import '../providers/home_provider.dart';
 import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 import '../widgets/quick_timer_dialog.dart';
-import '../widgets/weekly_goal_widget.dart';
+import '../widgets/weekly_progress_card.dart';
+import '../widgets/streak_card.dart';
 import '../widgets/body_weight_dialog.dart';
+import '../../../workouts/domain/entities/workout_group_entity.dart';
+import '../../../workouts/presentation/providers/workout_provider.dart';
+import '../../../workouts/presentation/providers/workout_create_provider.dart';
+import '../../../workouts/presentation/widgets/workout_history_card.dart';
 
 // Placeholder for now
 class DashboardPage extends ConsumerWidget {
@@ -21,6 +25,12 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(authNotifierProvider);
     final user = userState.value;
+    final groupsAsync = user != null
+        ? ref.watch(workoutGroupsProvider(user.id))
+        : const AsyncValue<List<WorkoutGroupEntity>>.data([]);
+
+    final logsAsync = ref.watch(allExerciseLogsProvider);
+    final exercisesAsync = ref.watch(exercisesProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -32,6 +42,11 @@ class DashboardPage extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => context.push('/workouts/create'),
+        icon: const Icon(Icons.fitness_center),
+        label: const Text('Treino Rápido'),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -41,8 +56,22 @@ class DashboardPage extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color,
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primaryContainer,
+                    Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
@@ -89,38 +118,11 @@ class DashboardPage extends ConsumerWidget {
                 .when(
                   data:
                       (summary) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          WeeklyGoalWidget(completedDays: summary.counter),
-                          const SizedBox(height: 24),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _StatCard(
-                                  icon: Icons.local_fire_department,
-                                  label: 'Frequência',
-                                  value: '${summary.counter} dias',
-                                  color: Colors.orange,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _StatCard(
-                                  icon: Icons.timer,
-                                  label: 'Último',
-                                  value:
-                                      summary.lastSessionDate != null
-                                          ? DateFormat('dd/MM').format(
-                                            DateTime.parse(
-                                              summary.lastSessionDate!,
-                                            ),
-                                          )
-                                          : '-',
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ],
-                          ),
+                          StreakCard(completedWorkouts: summary.counter),
+                          const SizedBox(height: 12),
+                          const WeeklyProgressCard(),
                           const SizedBox(height: 24),
 
                           // Tools Section
@@ -197,37 +199,159 @@ class DashboardPage extends ConsumerWidget {
                               ),
                             )
                           else
-                            Container(
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).colorScheme.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.fitness_center,
-                                    size: 48,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withValues(alpha: 0.5),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                // Show Last Workout if available
+                                logsAsync.when(
+                                  data: (logs) {
+                                    if (logs.isEmpty) return const _GenericRestCard();
+
+                                    // Find latest date
+                                    final latestLog = logs.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+                                    final latestDate = latestLog.date;
+
+                                    // Filter logs for that date
+                                    final sessionLogs = logs.where((e) =>
+                                      e.date.year == latestDate.year &&
+                                      e.date.month == latestDate.month &&
+                                      e.date.day == latestDate.day
+                                    ).toList();
+
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Último Treino',
+                                          style: Theme.of(context).textTheme.titleLarge,
+                                        ),
+                                        const SizedBox(height: 12),
+                                        exercisesAsync.when(
+                                          data: (exercises) {
+                                            final map = {for (var e in exercises) e.id: e.name};
+                                            return WorkoutHistoryCard(
+                                              date: latestDate,
+                                              logs: sessionLogs,
+                                              exerciseNameMap: map
+                                            );
+                                          },
+                                          loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                                          error: (e, s) => const _GenericRestCard(),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                                  error: (e, s) => const _GenericRestCard(),
+                                ),
+
+                                const SizedBox(height: 24),
+                                Text(
+                                  'Seus Planos',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  height: 140,
+                                  child: groupsAsync.when(
+                                    data: (groups) {
+                                      if (groups.isEmpty) {
+                                        return Center(
+                                          child: OutlinedButton.icon(
+                                            onPressed: () => context.push('/workouts/create'),
+                                            icon: const Icon(Icons.add),
+                                            label: const Text('Criar Novo Plano'),
+                                          ),
+                                        );
+                                      }
+                                      return ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: groups.length + 1,
+                                        itemBuilder: (context, index) {
+                                          if (index == groups.length) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(right: 16),
+                                              child: AspectRatio(
+                                                aspectRatio: 1,
+                                                child: Card(
+                                                  clipBehavior: Clip.antiAlias,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                  child: InkWell(
+                                                    onTap: () => context.push('/workouts/create'),
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(Icons.add, size: 32, color: Theme.of(context).colorScheme.primary),
+                                                        const SizedBox(height: 8),
+                                                        const Text('Criar'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final group = groups[index];
+                                          return Padding(
+                                            padding: const EdgeInsets.only(right: 12),
+                                            child: AspectRatio(
+                                              aspectRatio: 1.2,
+                                              child: Card(
+                                                elevation: 2,
+                                                clipBehavior: Clip.antiAlias,
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                child: InkWell(
+                                                  onTap: () => context.go('/workouts/${group.id}'),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(12),
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Container(
+                                                          padding: const EdgeInsets.all(8),
+                                                          decoration: BoxDecoration(
+                                                            color: Theme.of(context).colorScheme.primaryContainer,
+                                                            shape: BoxShape.circle,
+                                                          ),
+                                                          child: Icon(
+                                                            Icons.fitness_center,
+                                                            size: 20,
+                                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                                          ),
+                                                        ),
+                                                        const Spacer(),
+                                                        Text(
+                                                          group.name,
+                                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                        ),
+                                                        const SizedBox(height: 4),
+                                                        Text(
+                                                          '${group.workouts.length} treinos',
+                                                          style: Theme.of(context).textTheme.bodySmall,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    loading: () => const Center(child: CircularProgressIndicator()),
+                                    error: (e, s) => Center(child: Text('Erro: $e')),
                                   ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'Descanso Merecido',
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Nenhum treino programado para hoje.',
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
+
+                            // Space for FAB
+                            const SizedBox(height: 80),
                         ],
                       ),
                   loading:
@@ -241,6 +365,46 @@ class DashboardPage extends ConsumerWidget {
   }
 }
 
+class _GenericRestCard extends StatelessWidget {
+  const _GenericRestCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.nights_stay_outlined,
+            size: 48,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Descanso Merecido',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Recupere-se para o próximo treino!',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ToolsSection extends StatelessWidget {
   const _ToolsSection();
 
@@ -249,77 +413,118 @@ class _ToolsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
-            // Optional: Add "See All" if list grows
-          ],
-        ),
+        Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
-        SizedBox(
-          height: 100,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              _ToolCard(
-                icon: Icons.calculate_outlined,
-                label: 'Anilhas',
-                color: Colors.blue,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
-                  );
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.fitness_center,
-                label: '1RM',
-                color: Colors.red,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const OneRepMaxCalculatorDialog(),
-                  );
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.timer_outlined,
-                label: 'Descanso',
-                color: Colors.orange,
-                onTap: () {
-                   showDialog(
-                     context: context,
-                     builder: (context) => const QuickTimerDialog(),
-                   );
-                },
-              ),
-              const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.monitor_weight_outlined,
-                label: 'Peso',
-                color: Colors.purple,
-                onTap: () {
-                   showDialog(
-                     context: context,
-                     builder: (context) => const BodyWeightDialog(),
-                   );
-                },
-              ),
-               const SizedBox(width: 12),
-              _ToolCard(
-                icon: Icons.bar_chart,
-                label: 'Análise',
-                color: Colors.teal,
-                onTap: () {
-                   context.push('/analytics');
-                },
-              ),
-            ],
-          ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final double itemWidth = (constraints.maxWidth - 24) / 3;
+            return Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.add_circle_outline,
+                    label: 'Criar',
+                    color: Theme.of(context).colorScheme.primary,
+                    onTap: () {
+                      context.push('/workouts/create');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.history,
+                    label: 'Histórico',
+                    color: Colors.deepPurple,
+                    onTap: () {
+                      context.push('/history');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.menu_book_outlined,
+                    label: 'Exercícios',
+                    color: Colors.indigo,
+                    onTap: () {
+                      context.go('/home/exercises');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.bar_chart,
+                    label: 'Análise',
+                    color: Colors.teal,
+                    onTap: () {
+                       context.push('/analytics');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.calculate_outlined,
+                    label: 'Anilhas',
+                    color: Colors.blue,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.fitness_center,
+                    label: '1RM',
+                    color: Colors.red,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const OneRepMaxCalculatorDialog(),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.timer_outlined,
+                    label: 'Timer',
+                    color: Colors.orange,
+                    onTap: () {
+                       showDialog(
+                         context: context,
+                         builder: (context) => const QuickTimerDialog(),
+                       );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _ToolCard(
+                    icon: Icons.monitor_weight_outlined,
+                    label: 'Peso',
+                    color: Colors.purple,
+                    onTap: () {
+                       showDialog(
+                         context: context,
+                         builder: (context) => const BodyWeightDialog(),
+                       );
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
         ),
       ],
     );
@@ -341,70 +546,46 @@ class _ToolCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 100,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: color, size: 32),
-            const SizedBox(height: 8),
-            Text(
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+             // Removed border as elevation provides separation
+             // border: Border.all(color: color.withValues(alpha: 0.15)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 24),
+              ),
+              const SizedBox(height: 8),
+              Text(
                 label,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
                 textAlign: TextAlign.center,
-            ),
-          ],
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
-  final IconData icon;
-  final String label;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Theme.of(context).cardTheme.color,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: color),
-        const SizedBox(height: 12),
-        Text(value, style: Theme.of(context).textTheme.titleLarge),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
-      ],
-    ),
-  );
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<IconData>('icon', icon));
-    properties.add(StringProperty('label', label));
-    properties.add(StringProperty('value', value));
-    properties.add(ColorProperty('color', color));
   }
 }

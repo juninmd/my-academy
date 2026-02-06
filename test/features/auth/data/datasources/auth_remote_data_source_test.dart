@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -15,14 +16,58 @@ import 'package:my_academy/features/auth/data/models/user_dto.dart';
   MockSpec<GoogleSignInAuthentication>(),
   MockSpec<UserCredential>(),
   MockSpec<User>(),
-  MockSpec<ApiClient>(),
 ])
 import 'auth_remote_data_source_test.mocks.dart';
+
+// Manual Mock for ApiClient
+class MockApiClientManual implements ApiClient {
+  String? capturedAuthToken;
+  bool clearAuthTokenCalled = false;
+  final List<String> postCalls = [];
+
+  @override
+  void setAuthToken(String token) {
+    capturedAuthToken = token;
+  }
+
+  @override
+  void clearAuthToken() {
+    clearAuthTokenCalled = true;
+  }
+
+  @override
+  Future<dynamic> post(
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters, Options? options,
+  }) async {
+    postCalls.add(path);
+    return null;
+  }
+
+  @override
+  Future delete(
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters, Options? options,
+  }) async => null;
+
+  @override
+  Future get(String path, {Map<String, dynamic>? queryParameters, Options? options}) async =>
+      null;
+
+  @override
+  Future put(
+    String path, {
+    data,
+    Map<String, dynamic>? queryParameters, Options? options,
+  }) async => null;
+}
 
 void main() {
   late MockFirebaseAuth mockFirebaseAuth;
   late MockGoogleSignIn mockGoogleSignIn;
-  late MockApiClient mockApiClient;
+  late MockApiClientManual mockApiClient;
   late AuthRemoteDataSourceImpl dataSource;
 
   late MockGoogleSignInAccount mockGoogleUser;
@@ -33,7 +78,7 @@ void main() {
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockGoogleSignIn = MockGoogleSignIn();
-    mockApiClient = MockApiClient();
+    mockApiClient = MockApiClientManual();
     dataSource = AuthRemoteDataSourceImpl(
       firebaseAuth: mockFirebaseAuth,
       googleSignIn: mockGoogleSignIn,
@@ -49,10 +94,13 @@ void main() {
   group('signInWithGoogle', () {
     test('should return UserDto when successful', () async {
       when(mockGoogleSignIn.signIn()).thenAnswer((_) async => mockGoogleUser);
-      when(mockGoogleUser.authentication).thenAnswer((_) async => mockGoogleAuth);
+      when(mockGoogleUser.authentication)
+          .thenAnswer((_) async => mockGoogleAuth);
       when(mockGoogleAuth.accessToken).thenReturn('access_token');
       when(mockGoogleAuth.idToken).thenReturn('id_token');
 
+      // Note: We cannot easily mock the static GoogleAuthProvider.credential.
+      // However, we mock signInWithCredential to accept ANY credential.
       when(mockFirebaseAuth.signInWithCredential(any))
           .thenAnswer((_) async => mockUserCredential);
       when(mockUserCredential.user).thenReturn(mockUser);
@@ -65,7 +113,9 @@ void main() {
       final result = await dataSource.signInWithGoogle();
 
       expect(result, isA<UserDto>());
-      verify(mockApiClient.setAuthToken('token'));
+      // Verify manual mock state
+      expect(mockApiClient.capturedAuthToken, 'token');
+      expect(mockApiClient.postCalls, contains('/users'));
     });
 
     test('should throw AuthFailure when Google Sign In is canceled', () async {
@@ -80,10 +130,17 @@ void main() {
 
   group('signOut', () {
     test('should call signOut on dependencies', () async {
+      // Explicitly stub signOut to return void Future
+      when(mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
+      when(mockFirebaseAuth.signOut()).thenAnswer((_) async {});
+
       await dataSource.signOut();
-      verify(mockGoogleSignIn.signOut());
-      verify(mockFirebaseAuth.signOut());
-      verify(mockApiClient.clearAuthToken());
+
+      verify(mockGoogleSignIn.signOut()).called(1);
+      verify(mockFirebaseAuth.signOut()).called(1);
+
+      // Verify manual mock
+      expect(mockApiClient.clearAuthTokenCalled, true);
     });
   });
 
@@ -98,7 +155,7 @@ void main() {
 
       final result = await dataSource.getCurrentUser();
       expect(result, isA<UserDto>());
-      verify(mockApiClient.setAuthToken('token'));
+      expect(mockApiClient.capturedAuthToken, 'token');
     });
 
     test('should return null when user is not logged in', () async {

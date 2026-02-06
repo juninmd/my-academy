@@ -130,7 +130,7 @@ final class ApiClientProvider
   }
 }
 
-String _$apiClientHash() => r'7d01238bef7202eecad83ff841063efcf5120be5';
+String _$apiClientHash() => r'd979c0e43cde02194de441be65d2fe13da7f0c8b';
 
 @ProviderFor(authRemoteDataSource)
 final authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
@@ -178,7 +178,7 @@ final class AuthRemoteDataSourceProvider
 }
 
 String _$authRemoteDataSourceHash() =>
-    r'537a6bf28fa6ab34d51413905e551a10253cd8b9';
+    r'99e3df8f1b3af3f964e336cf4ffc64a3bd19a936';
 
 @ProviderFor(authRepository)
 final authRepositoryProvider = AuthRepositoryProvider._();

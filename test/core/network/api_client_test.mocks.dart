@@ -6,13 +6,13 @@
 import 'dart:async' as _i8;
 import 'dart:math' as _i11;
 
-import 'package:dio/src/adapter.dart' as _i3;
+import 'package:dio/src/adapter.dart' as _i4;
 import 'package:dio/src/cancel_token.dart' as _i9;
 import 'package:dio/src/dio.dart' as _i7;
-import 'package:dio/src/dio_mixin.dart' as _i5;
+import 'package:dio/src/dio_mixin.dart' as _i3;
 import 'package:dio/src/options.dart' as _i2;
 import 'package:dio/src/response.dart' as _i6;
-import 'package:dio/src/transformer.dart' as _i4;
+import 'package:dio/src/transformer.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i10;
 
@@ -29,25 +29,26 @@ import 'package:mockito/src/dummies.dart' as _i10;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeBaseOptions_0 extends _i1.SmartFake implements _i2.BaseOptions {
   _FakeBaseOptions_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeHttpClientAdapter_1 extends _i1.SmartFake
-    implements _i3.HttpClientAdapter {
-  _FakeHttpClientAdapter_1(Object parent, Invocation parentInvocation)
+class _FakeInterceptors_1 extends _i1.SmartFake implements _i3.Interceptors {
+  _FakeInterceptors_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeTransformer_2 extends _i1.SmartFake implements _i4.Transformer {
-  _FakeTransformer_2(Object parent, Invocation parentInvocation)
+class _FakeHttpClientAdapter_2 extends _i1.SmartFake
+    implements _i4.HttpClientAdapter {
+  _FakeHttpClientAdapter_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeInterceptors_3 extends _i1.SmartFake implements _i5.Interceptors {
-  _FakeInterceptors_3(Object parent, Invocation parentInvocation)
+class _FakeTransformer_3 extends _i1.SmartFake implements _i5.Transformer {
+  _FakeTransformer_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -66,7 +67,7 @@ class _FakeIterator_6<E> extends _i1.SmartFake implements Iterator<E> {
     : super(parent, parentInvocation);
 }
 
-class _FakeInterceptor_7 extends _i1.SmartFake implements _i5.Interceptor {
+class _FakeInterceptor_7 extends _i1.SmartFake implements _i3.Interceptor {
   _FakeInterceptor_7(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
@@ -88,66 +89,65 @@ class MockDio extends _i1.Mock implements _i7.Dio {
           as _i2.BaseOptions);
 
   @override
-  _i3.HttpClientAdapter get httpClientAdapter =>
-      (super.noSuchMethod(
-            Invocation.getter(#httpClientAdapter),
-            returnValue: _FakeHttpClientAdapter_1(
-              this,
-              Invocation.getter(#httpClientAdapter),
-            ),
-            returnValueForMissingStub: _FakeHttpClientAdapter_1(
-              this,
-              Invocation.getter(#httpClientAdapter),
-            ),
-          )
-          as _i3.HttpClientAdapter);
-
-  @override
-  _i4.Transformer get transformer =>
-      (super.noSuchMethod(
-            Invocation.getter(#transformer),
-            returnValue: _FakeTransformer_2(
-              this,
-              Invocation.getter(#transformer),
-            ),
-            returnValueForMissingStub: _FakeTransformer_2(
-              this,
-              Invocation.getter(#transformer),
-            ),
-          )
-          as _i4.Transformer);
-
-  @override
-  _i5.Interceptors get interceptors =>
+  _i3.Interceptors get interceptors =>
       (super.noSuchMethod(
             Invocation.getter(#interceptors),
-            returnValue: _FakeInterceptors_3(
+            returnValue: _FakeInterceptors_1(
               this,
               Invocation.getter(#interceptors),
             ),
-            returnValueForMissingStub: _FakeInterceptors_3(
+            returnValueForMissingStub: _FakeInterceptors_1(
               this,
               Invocation.getter(#interceptors),
             ),
           )
-          as _i5.Interceptors);
+          as _i3.Interceptors);
 
   @override
-  set options(_i2.BaseOptions? _options) => super.noSuchMethod(
-    Invocation.setter(#options, _options),
+  _i4.HttpClientAdapter get httpClientAdapter =>
+      (super.noSuchMethod(
+            Invocation.getter(#httpClientAdapter),
+            returnValue: _FakeHttpClientAdapter_2(
+              this,
+              Invocation.getter(#httpClientAdapter),
+            ),
+            returnValueForMissingStub: _FakeHttpClientAdapter_2(
+              this,
+              Invocation.getter(#httpClientAdapter),
+            ),
+          )
+          as _i4.HttpClientAdapter);
+
+  @override
+  _i5.Transformer get transformer =>
+      (super.noSuchMethod(
+            Invocation.getter(#transformer),
+            returnValue: _FakeTransformer_3(
+              this,
+              Invocation.getter(#transformer),
+            ),
+            returnValueForMissingStub: _FakeTransformer_3(
+              this,
+              Invocation.getter(#transformer),
+            ),
+          )
+          as _i5.Transformer);
+
+  @override
+  set options(_i2.BaseOptions? value) => super.noSuchMethod(
+    Invocation.setter(#options, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set httpClientAdapter(_i3.HttpClientAdapter? _httpClientAdapter) =>
-      super.noSuchMethod(
-        Invocation.setter(#httpClientAdapter, _httpClientAdapter),
-        returnValueForMissingStub: null,
-      );
+  set httpClientAdapter(_i4.HttpClientAdapter? value) => super.noSuchMethod(
+    Invocation.setter(#httpClientAdapter, value),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  set transformer(_i4.Transformer? _transformer) => super.noSuchMethod(
-    Invocation.setter(#transformer, _transformer),
+  set transformer(_i5.Transformer? value) => super.noSuchMethod(
+    Invocation.setter(#transformer, value),
     returnValueForMissingStub: null,
   );
 
@@ -1061,9 +1061,9 @@ class MockDio extends _i1.Mock implements _i7.Dio {
   @override
   _i7.Dio clone({
     _i2.BaseOptions? options,
-    _i5.Interceptors? interceptors,
-    _i3.HttpClientAdapter? httpClientAdapter,
-    _i4.Transformer? transformer,
+    _i3.Interceptors? interceptors,
+    _i4.HttpClientAdapter? httpClientAdapter,
+    _i5.Transformer? transformer,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#clone, [], {
@@ -1097,7 +1097,7 @@ class MockDio extends _i1.Mock implements _i7.Dio {
 /// A class which mocks [Interceptors].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
+class MockInterceptors extends _i1.Mock implements _i3.Interceptors {
   @override
   int get length =>
       (super.noSuchMethod(
@@ -1114,19 +1114,19 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
   );
 
   @override
-  Iterator<_i5.Interceptor> get iterator =>
+  Iterator<_i3.Interceptor> get iterator =>
       (super.noSuchMethod(
             Invocation.getter(#iterator),
-            returnValue: _FakeIterator_6<_i5.Interceptor>(
+            returnValue: _FakeIterator_6<_i3.Interceptor>(
               this,
               Invocation.getter(#iterator),
             ),
-            returnValueForMissingStub: _FakeIterator_6<_i5.Interceptor>(
+            returnValueForMissingStub: _FakeIterator_6<_i3.Interceptor>(
               this,
               Invocation.getter(#iterator),
             ),
           )
-          as Iterator<_i5.Interceptor>);
+          as Iterator<_i3.Interceptor>);
 
   @override
   bool get isEmpty =>
@@ -1147,7 +1147,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as bool);
 
   @override
-  _i5.Interceptor get first =>
+  _i3.Interceptor get first =>
       (super.noSuchMethod(
             Invocation.getter(#first),
             returnValue: _FakeInterceptor_7(this, Invocation.getter(#first)),
@@ -1156,10 +1156,10 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.getter(#first),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  _i5.Interceptor get last =>
+  _i3.Interceptor get last =>
       (super.noSuchMethod(
             Invocation.getter(#last),
             returnValue: _FakeInterceptor_7(this, Invocation.getter(#last)),
@@ -1168,10 +1168,10 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.getter(#last),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  _i5.Interceptor get single =>
+  _i3.Interceptor get single =>
       (super.noSuchMethod(
             Invocation.getter(#single),
             returnValue: _FakeInterceptor_7(this, Invocation.getter(#single)),
@@ -1180,31 +1180,31 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.getter(#single),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  Iterable<_i5.Interceptor> get reversed =>
+  Iterable<_i3.Interceptor> get reversed =>
       (super.noSuchMethod(
             Invocation.getter(#reversed),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
-  set first(_i5.Interceptor? value) => super.noSuchMethod(
+  set first(_i3.Interceptor? value) => super.noSuchMethod(
     Invocation.setter(#first, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set last(_i5.Interceptor? value) => super.noSuchMethod(
+  set last(_i3.Interceptor? value) => super.noSuchMethod(
     Invocation.setter(#last, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  _i5.Interceptor operator [](int? index) =>
+  _i3.Interceptor operator [](int? index) =>
       (super.noSuchMethod(
             Invocation.method(#[], [index]),
             returnValue: _FakeInterceptor_7(
@@ -1216,10 +1216,10 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#[], [index]),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  void operator []=(int? index, _i5.Interceptor? value) => super.noSuchMethod(
+  void operator []=(int? index, _i3.Interceptor? value) => super.noSuchMethod(
     Invocation.method(#[]=, [index, value]),
     returnValueForMissingStub: null,
   );
@@ -1240,7 +1240,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
   );
 
   @override
-  _i5.Interceptor elementAt(int? index) =>
+  _i3.Interceptor elementAt(int? index) =>
       (super.noSuchMethod(
             Invocation.method(#elementAt, [index]),
             returnValue: _FakeInterceptor_7(
@@ -1252,19 +1252,19 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#elementAt, [index]),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  Iterable<_i5.Interceptor> followedBy(Iterable<_i5.Interceptor>? other) =>
+  Iterable<_i3.Interceptor> followedBy(Iterable<_i3.Interceptor>? other) =>
       (super.noSuchMethod(
             Invocation.method(#followedBy, [other]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
-  void forEach(void Function(_i5.Interceptor)? action) => super.noSuchMethod(
+  void forEach(void Function(_i3.Interceptor)? action) => super.noSuchMethod(
     Invocation.method(#forEach, [action]),
     returnValueForMissingStub: null,
   );
@@ -1279,7 +1279,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as bool);
 
   @override
-  bool every(bool Function(_i5.Interceptor)? test) =>
+  bool every(bool Function(_i3.Interceptor)? test) =>
       (super.noSuchMethod(
             Invocation.method(#every, [test]),
             returnValue: false,
@@ -1288,7 +1288,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as bool);
 
   @override
-  bool any(bool Function(_i5.Interceptor)? test) =>
+  bool any(bool Function(_i3.Interceptor)? test) =>
       (super.noSuchMethod(
             Invocation.method(#any, [test]),
             returnValue: false,
@@ -1297,9 +1297,9 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as bool);
 
   @override
-  _i5.Interceptor firstWhere(
-    bool Function(_i5.Interceptor)? test, {
-    _i5.Interceptor Function()? orElse,
+  _i3.Interceptor firstWhere(
+    bool Function(_i3.Interceptor)? test, {
+    _i3.Interceptor Function()? orElse,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#firstWhere, [test], {#orElse: orElse}),
@@ -1312,12 +1312,12 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#firstWhere, [test], {#orElse: orElse}),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  _i5.Interceptor lastWhere(
-    bool Function(_i5.Interceptor)? test, {
-    _i5.Interceptor Function()? orElse,
+  _i3.Interceptor lastWhere(
+    bool Function(_i3.Interceptor)? test, {
+    _i3.Interceptor Function()? orElse,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#lastWhere, [test], {#orElse: orElse}),
@@ -1330,12 +1330,12 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#lastWhere, [test], {#orElse: orElse}),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  _i5.Interceptor singleWhere(
-    bool Function(_i5.Interceptor)? test, {
-    _i5.Interceptor Function()? orElse,
+  _i3.Interceptor singleWhere(
+    bool Function(_i3.Interceptor)? test, {
+    _i3.Interceptor Function()? orElse,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#singleWhere, [test], {#orElse: orElse}),
@@ -1348,7 +1348,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#singleWhere, [test], {#orElse: orElse}),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
   String join([String? separator = '']) =>
@@ -1366,13 +1366,13 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as String);
 
   @override
-  Iterable<_i5.Interceptor> where(bool Function(_i5.Interceptor)? test) =>
+  Iterable<_i3.Interceptor> where(bool Function(_i3.Interceptor)? test) =>
       (super.noSuchMethod(
             Invocation.method(#where, [test]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
   Iterable<T> whereType<T>() =>
@@ -1384,7 +1384,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as Iterable<T>);
 
   @override
-  Iterable<T> map<T>(T Function(_i5.Interceptor)? f) =>
+  Iterable<T> map<T>(T Function(_i3.Interceptor)? f) =>
       (super.noSuchMethod(
             Invocation.method(#map, [f]),
             returnValue: <T>[],
@@ -1393,7 +1393,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as Iterable<T>);
 
   @override
-  Iterable<T> expand<T>(Iterable<T> Function(_i5.Interceptor)? f) =>
+  Iterable<T> expand<T>(Iterable<T> Function(_i3.Interceptor)? f) =>
       (super.noSuchMethod(
             Invocation.method(#expand, [f]),
             returnValue: <T>[],
@@ -1402,8 +1402,8 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as Iterable<T>);
 
   @override
-  _i5.Interceptor reduce(
-    _i5.Interceptor Function(_i5.Interceptor, _i5.Interceptor)? combine,
+  _i3.Interceptor reduce(
+    _i3.Interceptor Function(_i3.Interceptor, _i3.Interceptor)? combine,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#reduce, [combine]),
@@ -1416,10 +1416,10 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#reduce, [combine]),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  T fold<T>(T? initialValue, T Function(T, _i5.Interceptor)? combine) =>
+  T fold<T>(T? initialValue, T Function(T, _i3.Interceptor)? combine) =>
       (super.noSuchMethod(
             Invocation.method(#fold, [initialValue, combine]),
             returnValue: _i10.dummyValue<T>(
@@ -1434,67 +1434,67 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as T);
 
   @override
-  Iterable<_i5.Interceptor> skip(int? count) =>
+  Iterable<_i3.Interceptor> skip(int? count) =>
       (super.noSuchMethod(
             Invocation.method(#skip, [count]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
-  Iterable<_i5.Interceptor> skipWhile(bool Function(_i5.Interceptor)? test) =>
+  Iterable<_i3.Interceptor> skipWhile(bool Function(_i3.Interceptor)? test) =>
       (super.noSuchMethod(
             Invocation.method(#skipWhile, [test]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
-  Iterable<_i5.Interceptor> take(int? count) =>
+  Iterable<_i3.Interceptor> take(int? count) =>
       (super.noSuchMethod(
             Invocation.method(#take, [count]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
-  Iterable<_i5.Interceptor> takeWhile(bool Function(_i5.Interceptor)? test) =>
+  Iterable<_i3.Interceptor> takeWhile(bool Function(_i3.Interceptor)? test) =>
       (super.noSuchMethod(
             Invocation.method(#takeWhile, [test]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
-  List<_i5.Interceptor> toList({bool? growable = true}) =>
+  List<_i3.Interceptor> toList({bool? growable = true}) =>
       (super.noSuchMethod(
             Invocation.method(#toList, [], {#growable: growable}),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as List<_i5.Interceptor>);
+          as List<_i3.Interceptor>);
 
   @override
-  Set<_i5.Interceptor> toSet() =>
+  Set<_i3.Interceptor> toSet() =>
       (super.noSuchMethod(
             Invocation.method(#toSet, []),
-            returnValue: <_i5.Interceptor>{},
-            returnValueForMissingStub: <_i5.Interceptor>{},
+            returnValue: <_i3.Interceptor>{},
+            returnValueForMissingStub: <_i3.Interceptor>{},
           )
-          as Set<_i5.Interceptor>);
+          as Set<_i3.Interceptor>);
 
   @override
-  void add(_i5.Interceptor? element) => super.noSuchMethod(
+  void add(_i3.Interceptor? element) => super.noSuchMethod(
     Invocation.method(#add, [element]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void addAll(Iterable<_i5.Interceptor>? iterable) => super.noSuchMethod(
+  void addAll(Iterable<_i3.Interceptor>? iterable) => super.noSuchMethod(
     Invocation.method(#addAll, [iterable]),
     returnValueForMissingStub: null,
   );
@@ -1509,13 +1509,13 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as bool);
 
   @override
-  void removeWhere(bool Function(_i5.Interceptor)? test) => super.noSuchMethod(
+  void removeWhere(bool Function(_i3.Interceptor)? test) => super.noSuchMethod(
     Invocation.method(#removeWhere, [test]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void retainWhere(bool Function(_i5.Interceptor)? test) => super.noSuchMethod(
+  void retainWhere(bool Function(_i3.Interceptor)? test) => super.noSuchMethod(
     Invocation.method(#retainWhere, [test]),
     returnValueForMissingStub: null,
   );
@@ -1530,7 +1530,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as List<R>);
 
   @override
-  _i5.Interceptor removeLast() =>
+  _i3.Interceptor removeLast() =>
       (super.noSuchMethod(
             Invocation.method(#removeLast, []),
             returnValue: _FakeInterceptor_7(
@@ -1542,10 +1542,10 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#removeLast, []),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  void sort([int Function(_i5.Interceptor, _i5.Interceptor)? compare]) =>
+  void sort([int Function(_i3.Interceptor, _i3.Interceptor)? compare]) =>
       super.noSuchMethod(
         Invocation.method(#sort, [compare]),
         returnValueForMissingStub: null,
@@ -1558,40 +1558,40 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
   );
 
   @override
-  Map<int, _i5.Interceptor> asMap() =>
+  Map<int, _i3.Interceptor> asMap() =>
       (super.noSuchMethod(
             Invocation.method(#asMap, []),
-            returnValue: <int, _i5.Interceptor>{},
-            returnValueForMissingStub: <int, _i5.Interceptor>{},
+            returnValue: <int, _i3.Interceptor>{},
+            returnValueForMissingStub: <int, _i3.Interceptor>{},
           )
-          as Map<int, _i5.Interceptor>);
+          as Map<int, _i3.Interceptor>);
 
   @override
-  List<_i5.Interceptor> operator +(List<_i5.Interceptor>? other) =>
+  List<_i3.Interceptor> operator +(List<_i3.Interceptor>? other) =>
       (super.noSuchMethod(
             Invocation.method(#+, [other]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as List<_i5.Interceptor>);
+          as List<_i3.Interceptor>);
 
   @override
-  List<_i5.Interceptor> sublist(int? start, [int? end]) =>
+  List<_i3.Interceptor> sublist(int? start, [int? end]) =>
       (super.noSuchMethod(
             Invocation.method(#sublist, [start, end]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as List<_i5.Interceptor>);
+          as List<_i3.Interceptor>);
 
   @override
-  Iterable<_i5.Interceptor> getRange(int? start, int? end) =>
+  Iterable<_i3.Interceptor> getRange(int? start, int? end) =>
       (super.noSuchMethod(
             Invocation.method(#getRange, [start, end]),
-            returnValue: <_i5.Interceptor>[],
-            returnValueForMissingStub: <_i5.Interceptor>[],
+            returnValue: <_i3.Interceptor>[],
+            returnValueForMissingStub: <_i3.Interceptor>[],
           )
-          as Iterable<_i5.Interceptor>);
+          as Iterable<_i3.Interceptor>);
 
   @override
   void removeRange(int? start, int? end) => super.noSuchMethod(
@@ -1600,7 +1600,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
   );
 
   @override
-  void fillRange(int? start, int? end, [_i5.Interceptor? fill]) =>
+  void fillRange(int? start, int? end, [_i3.Interceptor? fill]) =>
       super.noSuchMethod(
         Invocation.method(#fillRange, [start, end, fill]),
         returnValueForMissingStub: null,
@@ -1610,7 +1610,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
   void setRange(
     int? start,
     int? end,
-    Iterable<_i5.Interceptor>? iterable, [
+    Iterable<_i3.Interceptor>? iterable, [
     int? skipCount = 0,
   ]) => super.noSuchMethod(
     Invocation.method(#setRange, [start, end, iterable, skipCount]),
@@ -1621,7 +1621,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
   void replaceRange(
     int? start,
     int? end,
-    Iterable<_i5.Interceptor>? newContents,
+    Iterable<_i3.Interceptor>? newContents,
   ) => super.noSuchMethod(
     Invocation.method(#replaceRange, [start, end, newContents]),
     returnValueForMissingStub: null,
@@ -1637,7 +1637,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as int);
 
   @override
-  int indexWhere(bool Function(_i5.Interceptor)? test, [int? start = 0]) =>
+  int indexWhere(bool Function(_i3.Interceptor)? test, [int? start = 0]) =>
       (super.noSuchMethod(
             Invocation.method(#indexWhere, [test, start]),
             returnValue: 0,
@@ -1655,7 +1655,7 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as int);
 
   @override
-  int lastIndexWhere(bool Function(_i5.Interceptor)? test, [int? start]) =>
+  int lastIndexWhere(bool Function(_i3.Interceptor)? test, [int? start]) =>
       (super.noSuchMethod(
             Invocation.method(#lastIndexWhere, [test, start]),
             returnValue: 0,
@@ -1664,13 +1664,13 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
           as int);
 
   @override
-  void insert(int? index, _i5.Interceptor? element) => super.noSuchMethod(
+  void insert(int? index, _i3.Interceptor? element) => super.noSuchMethod(
     Invocation.method(#insert, [index, element]),
     returnValueForMissingStub: null,
   );
 
   @override
-  _i5.Interceptor removeAt(int? index) =>
+  _i3.Interceptor removeAt(int? index) =>
       (super.noSuchMethod(
             Invocation.method(#removeAt, [index]),
             returnValue: _FakeInterceptor_7(
@@ -1682,17 +1682,17 @@ class MockInterceptors extends _i1.Mock implements _i5.Interceptors {
               Invocation.method(#removeAt, [index]),
             ),
           )
-          as _i5.Interceptor);
+          as _i3.Interceptor);
 
   @override
-  void insertAll(int? index, Iterable<_i5.Interceptor>? iterable) =>
+  void insertAll(int? index, Iterable<_i3.Interceptor>? iterable) =>
       super.noSuchMethod(
         Invocation.method(#insertAll, [index, iterable]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void setAll(int? index, Iterable<_i5.Interceptor>? iterable) =>
+  void setAll(int? index, Iterable<_i3.Interceptor>? iterable) =>
       super.noSuchMethod(
         Invocation.method(#setAll, [index, iterable]),
         returnValueForMissingStub: null,
