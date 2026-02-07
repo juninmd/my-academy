@@ -415,116 +415,120 @@ class _ToolsSection extends StatelessWidget {
       children: [
         Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final double itemWidth = (constraints.maxWidth - 24) / 3;
-            return Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.add_circle_outline,
-                    label: 'Criar',
-                    color: Theme.of(context).colorScheme.primary,
-                    onTap: () {
-                      context.push('/workouts/create');
-                    },
-                  ),
+        SizedBox(
+          height: 100,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.add_circle_outline,
+                  label: 'Criar',
+                  color: Theme.of(context).colorScheme.primary,
+                  onTap: () {
+                    context.push('/workouts/create');
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.history,
-                    label: 'Histórico',
-                    color: Colors.deepPurple,
-                    onTap: () {
-                      context.push('/history');
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.history,
+                  label: 'Histórico',
+                  color: Colors.deepPurple,
+                  onTap: () {
+                    context.push('/history');
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.menu_book_outlined,
-                    label: 'Exercícios',
-                    color: Colors.indigo,
-                    onTap: () {
-                      context.go('/home/exercises');
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.menu_book_outlined,
+                  label: 'Exercícios',
+                  color: Colors.indigo,
+                  onTap: () {
+                    context.go('/home/exercises');
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.bar_chart,
-                    label: 'Análise',
-                    color: Colors.teal,
-                    onTap: () {
-                       context.push('/analytics');
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.bar_chart,
+                  label: 'Análise',
+                  color: Colors.teal,
+                  onTap: () {
+                     context.push('/analytics');
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.calculate_outlined,
-                    label: 'Anilhas',
-                    color: Colors.blue,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
-                      );
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.calculate_outlined,
+                  label: 'Anilhas',
+                  color: Colors.blue,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                    );
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.fitness_center,
-                    label: '1RM',
-                    color: Colors.red,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const OneRepMaxCalculatorDialog(),
-                      );
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.fitness_center,
+                  label: '1RM',
+                  color: Colors.red,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const OneRepMaxCalculatorDialog(),
+                    );
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.timer_outlined,
-                    label: 'Timer',
-                    color: Colors.orange,
-                    onTap: () {
-                       showDialog(
-                         context: context,
-                         builder: (context) => const QuickTimerDialog(),
-                       );
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.timer_outlined,
+                  label: 'Timer',
+                  color: Colors.orange,
+                  onTap: () {
+                     showDialog(
+                       context: context,
+                       builder: (context) => const QuickTimerDialog(),
+                     );
+                  },
                 ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _ToolCard(
-                    icon: Icons.monitor_weight_outlined,
-                    label: 'Peso',
-                    color: Colors.purple,
-                    onTap: () {
-                       showDialog(
-                         context: context,
-                         builder: (context) => const BodyWeightDialog(),
-                       );
-                    },
-                  ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 90,
+                child: _ToolCard(
+                  icon: Icons.monitor_weight_outlined,
+                  label: 'Peso',
+                  color: Colors.purple,
+                  onTap: () {
+                     showDialog(
+                       context: context,
+                       builder: (context) => const BodyWeightDialog(),
+                     );
+                  },
                 ),
-              ],
-            );
-          }
+              ),
+            ],
+          ),
         ),
       ],
     );

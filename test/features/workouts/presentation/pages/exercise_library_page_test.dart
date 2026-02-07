@@ -50,11 +50,11 @@ void main() {
 
     // Enter search text
     await tester.enterText(find.byType(TextField), 'Squat');
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Bench Press'), findsNothing);
     // Finds 2: one in TextField, one in list
-    expect(find.descendant(of: find.byType(ListTile), matching: find.text('Squat')), findsOneWidget);
+    expect(find.descendant(of: find.byType(Card), matching: find.text('Squat')), findsOneWidget);
   });
 
   testWidgets('ExerciseLibraryPage shows empty state when no matches', (tester) async {

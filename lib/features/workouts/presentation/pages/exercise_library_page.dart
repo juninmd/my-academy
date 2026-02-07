@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/widgets/common_empty_state.dart';
+import '../../domain/utils/muscle_group_mapper.dart';
+import '../providers/favorites_provider.dart';
 import '../providers/workout_create_provider.dart';
 import '../providers/workout_provider.dart';
 
@@ -18,9 +20,13 @@ class ExerciseLibraryPage extends HookConsumerWidget {
     final searchController = useTextEditingController();
     final searchTerm = useState('');
     final filterType = useState(FilterType.all);
+    final selectedMuscleGroup = useState<String?>(null);
+    final showFavoritesOnly = useState(false);
 
     final exercisesAsync = ref.watch(exercisesProvider);
     final logsAsync = ref.watch(allExerciseLogsProvider);
+    final favoritesAsync = ref.watch(favoritesProvider);
+    final favorites = favoritesAsync.value ?? {};
 
     return Scaffold(
       appBar: AppBar(title: const Text('Biblioteca de Exercícios')),
@@ -39,25 +45,74 @@ class ExerciseLibraryPage extends HookConsumerWidget {
               onChanged: (val) => searchTerm.value = val,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Wrap(
-              spacing: 8,
+          SizedBox(
+            height: 40,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 FilterChip(
                   label: const Text('Todos'),
-                  selected: filterType.value == FilterType.all,
+                  selected: filterType.value == FilterType.all && !showFavoritesOnly.value && selectedMuscleGroup.value == null,
                   onSelected: (selected) {
-                    if (selected) filterType.value = FilterType.all;
+                    if (selected) {
+                      filterType.value = FilterType.all;
+                      showFavoritesOnly.value = false;
+                      selectedMuscleGroup.value = null;
+                    }
                   },
                 ),
+                const SizedBox(width: 8),
                 FilterChip(
                   label: const Text('Recentes'),
                   selected: filterType.value == FilterType.recent,
                   onSelected: (selected) {
-                    if (selected) filterType.value = FilterType.recent;
+                     filterType.value = selected ? FilterType.recent : FilterType.all;
+                     if (selected) {
+                       showFavoritesOnly.value = false;
+                       selectedMuscleGroup.value = null;
+                     }
                   },
                 ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: const Text('Favoritos'),
+                  selected: showFavoritesOnly.value,
+                  avatar: Icon(
+                    showFavoritesOnly.value ? Icons.favorite : Icons.favorite_border,
+                    size: 16,
+                    color: showFavoritesOnly.value ? Colors.red : null,
+                  ),
+                  onSelected: (selected) {
+                    showFavoritesOnly.value = selected;
+                    if (selected) {
+                      filterType.value = FilterType.all;
+                      // Keep muscle group selected if user wants "Favorite Chest Exercises"
+                    }
+                  },
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  width: 1,
+                  height: 24,
+                  color: Theme.of(context).dividerColor,
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                ...['Peito', 'Costas', 'Pernas', 'Ombros', 'Bíceps', 'Tríceps', 'Core', 'Outros'].map((group) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: FilterChip(
+                      label: Text(group),
+                      selected: selectedMuscleGroup.value == group,
+                      onSelected: (selected) {
+                        selectedMuscleGroup.value = selected ? group : null;
+                        if (selected) {
+                          filterType.value = FilterType.all;
+                        }
+                      },
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -77,6 +132,14 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                    filtered = filtered.where((e) => recentIds.contains(e.id)).toList();
                 }
 
+                if (showFavoritesOnly.value) {
+                  filtered = filtered.where((e) => favorites.contains(e.id)).toList();
+                }
+
+                if (selectedMuscleGroup.value != null) {
+                  filtered = filtered.where((e) => MuscleGroupMapper.getMuscleGroup(e.name) == selectedMuscleGroup.value).toList();
+                }
+
                 if (filtered.isEmpty) {
                   return const CommonEmptyState(
                     title: 'Nenhum exercício encontrado',
@@ -91,6 +154,8 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   itemBuilder: (context, index) {
                     final exercise = filtered[index];
                     final isRecent = recentIds.contains(exercise.id);
+                    final isFav = favorites.contains(exercise.id);
+                    final muscleGroup = MuscleGroupMapper.getMuscleGroup(exercise.name);
 
                     return Card(
                       margin: const EdgeInsets.only(bottom: 12),
@@ -184,17 +249,37 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                                       ],
                                     ),
                                     const SizedBox(height: 4),
-                                    Text(
-                                      exercise.description ?? 'Sem descrição',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
+                                    Wrap(
+                                      spacing: 4,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.secondaryContainer,
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                          child: Text(
+                                            muscleGroup,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.chevron_right, color: Colors.grey),
+                              IconButton(
+                                icon: Icon(
+                                  isFav ? Icons.favorite : Icons.favorite_border,
+                                  color: isFav ? Colors.red : Colors.grey,
+                                ),
+                                onPressed: () {
+                                  ref.read(favoritesProvider.notifier).toggleFavorite(exercise.id);
+                                },
+                              ),
                             ],
                           ),
                         ),

@@ -53,7 +53,7 @@ void main() {
     expect(find.text('Recordes'), findsOneWidget);
 
     // Verify Charts (First Tab)
-    expect(find.text('Séries Realizadas - Últimos 7 dias'), findsOneWidget);
+    expect(find.text('Séries Realizadas'), findsOneWidget);
 
     // Tap Records Tab
     await tester.tap(find.text('Recordes'));

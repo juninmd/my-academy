@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../utils/one_rep_max_calculator.dart';
 import '../../domain/entities/exercise_entity.dart';
+import '../../domain/utils/muscle_group_mapper.dart';
 import '../providers/workout_create_provider.dart';
 import '../providers/workout_provider.dart';
 
@@ -21,13 +22,14 @@ class AnalyticsPage extends HookConsumerWidget {
     }, []);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Análise de Progresso'),
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Progresso', icon: Icon(Icons.bar_chart)),
+              Tab(text: 'Divisão', icon: Icon(Icons.pie_chart)),
               Tab(text: 'Recordes', icon: Icon(Icons.emoji_events)),
             ],
           ),
@@ -35,6 +37,7 @@ class AnalyticsPage extends HookConsumerWidget {
         body: const TabBarView(
           children: [
             _ProgressTab(),
+            _SplitTab(),
             _RecordsTab(),
           ],
         ),
@@ -49,6 +52,7 @@ class _ProgressTab extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final logsAsync = ref.watch(allExerciseLogsProvider);
+    final range = useState(7); // 7 or 30 days
 
     return logsAsync.when(
       data: (logs) {
@@ -58,25 +62,23 @@ class _ProgressTab extends HookConsumerWidget {
           );
         }
 
-        // Calculate chart data, memoized to prevent expensive recalculation on every rebuild.
+        // Calculate chart data
         final now = DateTime.now();
         final today = DateTime(now.year, now.month, now.day);
+        final daysToShow = range.value;
 
         final chartData = useMemoized(() {
-          final lowerBound = today.subtract(const Duration(days: 6));
+          final lowerBound = today.subtract(Duration(days: daysToShow - 1));
           final upperBound = today.add(const Duration(days: 1));
 
           final Map<int, double> volumePerDay = {};
           final Map<int, int> setsPerDay = {};
 
           for (var log in logs) {
-            // Check bounds efficiently without creating new DateTime objects
             if (log.date.compareTo(lowerBound) >= 0 &&
                 log.date.isBefore(upperBound)) {
-              // Calculate index based on difference from start of the window
               final dayIndex = log.date.difference(lowerBound).inDays;
-              if (dayIndex >= 0 && dayIndex < 7) {
-                // Volume
+              if (dayIndex >= 0 && dayIndex < daysToShow) {
                 final volume = log.sets.fold<double>(
                   0,
                   (sum, set) => sum + (set.weight * set.reps),
@@ -84,23 +86,33 @@ class _ProgressTab extends HookConsumerWidget {
                 volumePerDay[dayIndex] =
                     (volumePerDay[dayIndex] ?? 0) + volume;
 
-                // Sets
                 setsPerDay[dayIndex] =
                     (setsPerDay[dayIndex] ?? 0) + log.sets.length;
               }
             }
           }
           return (volume: volumePerDay, sets: setsPerDay);
-        }, [logs, today]);
+        }, [logs, today, daysToShow]);
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildVolumeChart(context, chartData.volume),
+              SegmentedButton<int>(
+                segments: const [
+                  ButtonSegment(value: 7, label: Text('7 Dias')),
+                  ButtonSegment(value: 30, label: Text('30 Dias')),
+                ],
+                selected: {range.value},
+                onSelectionChanged: (Set<int> newSelection) {
+                  range.value = newSelection.first;
+                },
+              ),
               const SizedBox(height: 24),
-              _buildWorkoutFrequencyChart(context, chartData.sets),
+              _buildVolumeChart(context, chartData.volume, daysToShow),
+              const SizedBox(height: 24),
+              _buildWorkoutFrequencyChart(context, chartData.sets, daysToShow),
             ],
           ),
         );
@@ -113,15 +125,15 @@ class _ProgressTab extends HookConsumerWidget {
   Widget _buildVolumeChart(
     BuildContext context,
     Map<int, double> volumePerDay,
+    int days,
   ) {
-    // Labels for the last 7 days
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final last7Days = List.generate(7, (index) {
-      return today.subtract(Duration(days: 6 - index));
-    });
 
-    final barGroups = List.generate(7, (index) {
+    // Only show titles for specific intervals if days=30
+    final interval = days == 30 ? 5 : 1;
+
+    final barGroups = List.generate(days, (index) {
       final volume = volumePerDay[index] ?? 0;
       final displayValue = volume / 1000.0; // Tonnes
 
@@ -131,7 +143,7 @@ class _ProgressTab extends HookConsumerWidget {
           BarChartRodData(
             toY: displayValue,
             color: Theme.of(context).colorScheme.primary,
-            width: 16,
+            width: days == 30 ? 6 : 16,
             borderRadius: BorderRadius.circular(4),
           ),
         ],
@@ -151,7 +163,7 @@ class _ProgressTab extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Volume (Toneladas) - Últimos 7 dias',
+              'Volume (Toneladas)',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 24),
@@ -165,15 +177,15 @@ class _ProgressTab extends HookConsumerWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: interval.toDouble(),
                         getTitlesWidget: (value, meta) {
-                          final date = last7Days[value.toInt()];
+                          if (value.toInt() >= days) return const SizedBox();
+                          final date = today.subtract(Duration(days: (days - 1) - value.toInt()));
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              DateFormat.E(
-                                'pt_BR',
-                              ).format(date)[0].toUpperCase(),
-                              style: Theme.of(context).textTheme.bodySmall,
+                              days == 30 ? DateFormat('dd').format(date) : DateFormat.E('pt_BR').format(date)[0].toUpperCase(),
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10),
                             ),
                           );
                         },
@@ -213,22 +225,20 @@ class _ProgressTab extends HookConsumerWidget {
   Widget _buildWorkoutFrequencyChart(
     BuildContext context,
     Map<int, int> setsPerDay,
+    int days,
   ) {
-    // Labels for the last 7 days
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final last7Days = List.generate(7, (index) {
-      return today.subtract(Duration(days: 6 - index));
-    });
+    final interval = days == 30 ? 5 : 1;
 
-    final barGroups = List.generate(7, (index) {
+    final barGroups = List.generate(days, (index) {
       return BarChartGroupData(
         x: index,
         barRods: [
           BarChartRodData(
             toY: (setsPerDay[index] ?? 0).toDouble(),
             color: Theme.of(context).colorScheme.secondary,
-            width: 16,
+            width: days == 30 ? 6 : 16,
             borderRadius: BorderRadius.circular(4),
           ),
         ],
@@ -248,7 +258,7 @@ class _ProgressTab extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Séries Realizadas - Últimos 7 dias',
+              'Séries Realizadas',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 24),
@@ -262,15 +272,15 @@ class _ProgressTab extends HookConsumerWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: interval.toDouble(),
                         getTitlesWidget: (value, meta) {
-                          final date = last7Days[value.toInt()];
-                          return Padding(
+                           if (value.toInt() >= days) return const SizedBox();
+                           final date = today.subtract(Duration(days: (days - 1) - value.toInt()));
+                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              DateFormat.E(
-                                'pt_BR',
-                              ).format(date)[0].toUpperCase(),
-                              style: Theme.of(context).textTheme.bodySmall,
+                              days == 30 ? DateFormat('dd').format(date) : DateFormat.E('pt_BR').format(date)[0].toUpperCase(),
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10),
                             ),
                           );
                         },
@@ -305,6 +315,138 @@ class _ProgressTab extends HookConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class _SplitTab extends HookConsumerWidget {
+  const _SplitTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logsAsync = ref.watch(allExerciseLogsProvider);
+    final exercisesAsync = ref.watch(exercisesProvider);
+
+    return logsAsync.when(
+      data: (logs) {
+        return exercisesAsync.when(
+          data: (exercises) {
+            if (logs.isEmpty) {
+              return const Center(child: Text('Nenhum dado de treino disponível.'));
+            }
+
+            // Calculate Split
+            final splitData = useMemoized(() {
+               final Map<String, double> volumeMap = {};
+               for (var log in logs) {
+                 // Ignore logs older than 90 days for generic split analysis?
+                 // Or keep all time? Let's keep all time for now or last 30 days?
+                 // Let's do last 30 days to be relevant.
+                 if (DateTime.now().difference(log.date).inDays > 30) continue;
+
+                 final exercise = exercises.where((e) => e.id == log.exerciseId).firstOrNull
+                    ?? const ExerciseEntity(id: -1, name: 'Desconhecido');
+
+                 final group = MuscleGroupMapper.getMuscleGroup(exercise.name);
+                 final volume = log.sets.fold(0.0, (sum, s) => sum + (s.weight * s.reps));
+                 volumeMap[group] = (volumeMap[group] ?? 0) + volume;
+               }
+
+               // Sort
+               final sorted = volumeMap.entries.toList()..sort((a,b) => b.value.compareTo(a.value));
+               return sorted;
+            }, [logs, exercises]);
+
+            if (splitData.isEmpty) {
+              return const Center(child: Text('Sem dados recentes (30 dias).'));
+            }
+
+            final totalVolume = splitData.fold(0.0, (sum, e) => sum + e.value);
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                   Text('Distribuição de Volume (30d)', style: Theme.of(context).textTheme.titleLarge),
+                   const SizedBox(height: 24),
+                   AspectRatio(
+                     aspectRatio: 1.3,
+                     child: PieChart(
+                       PieChartData(
+                         sections: splitData.map((e) {
+                           final percent = (e.value / totalVolume) * 100;
+                           final isLarge = percent > 10;
+                           return PieChartSectionData(
+                             value: e.value,
+                             title: '${percent.toStringAsFixed(0)}%',
+                             radius: isLarge ? 80 : 60,
+                             titleStyle: TextStyle(
+                               fontSize: isLarge ? 16 : 12,
+                               fontWeight: FontWeight.bold,
+                               color: Colors.white
+                             ),
+                             color: _getColor(e.key),
+                           );
+                         }).toList(),
+                         sectionsSpace: 2,
+                         centerSpaceRadius: 40,
+                       )
+                     ),
+                   ),
+                   const SizedBox(height: 24),
+                   // Legend
+                   Card(
+                     child: Padding(
+                       padding: const EdgeInsets.symmetric(vertical: 8),
+                       child: Column(
+                         children: splitData.map((e) {
+                           final percent = (e.value / totalVolume) * 100;
+                           return ListTile(
+                             dense: true,
+                             leading: CircleAvatar(backgroundColor: _getColor(e.key), radius: 6),
+                             title: Text(e.key),
+                             subtitle: LinearProgressIndicator(
+                               value: percent / 100,
+                               color: _getColor(e.key),
+                               backgroundColor: Colors.grey.withValues(alpha: 0.1),
+                             ),
+                             trailing: Column(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               crossAxisAlignment: CrossAxisAlignment.end,
+                               children: [
+                                 Text('${percent.toStringAsFixed(1)}%'),
+                                 Text('${(e.value / 1000).toStringAsFixed(1)} ton', style: const TextStyle(fontSize: 10, color: Colors.grey)),
+                               ],
+                             ),
+                           );
+                         }).toList(),
+                       ),
+                     ),
+                   ),
+                ],
+              ),
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e,s) => Center(child: Text('Erro: $e')),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e,s) => Center(child: Text('Erro: $e')),
+    );
+  }
+
+  Color _getColor(String group) {
+     switch(group) {
+       case 'Peito': return Colors.red;
+       case 'Costas': return Colors.blue;
+       case 'Pernas': return Colors.green;
+       case 'Ombros': return Colors.orange;
+       case 'Bíceps': return Colors.pink;
+       case 'Tríceps': return Colors.purple;
+       case 'Core': return Colors.teal;
+       default: return Colors.grey;
+     }
   }
 }
 
