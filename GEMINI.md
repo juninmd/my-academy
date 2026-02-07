@@ -41,3 +41,10 @@ This file serves as a living memory for AI agents (Jules, etc.) working on this 
 - **Performance Optimization (ProgressChart):**
   - Converted `ProgressChart` to `HookWidget` and used `useMemoized` to cache sorted logs and chart points.
   - Reduced rebuild time by ~17% in high-load scenarios (5000 logs) by avoiding redundant sorting and calculation.
+
+## 🏗️ Architectural Decisions (Session Update)
+- **Monolithic Refactor:** Identified `WorkoutPlayerPage.dart` as a violation of the 150-line rule (currently ~1026 lines).
+- **Strategy:** Extracting UI components (`SetRow`, `HistoryView`, `WarmupList`) into dedicated widgets in `lib/features/workouts/presentation/widgets/workout_player/`.
+- **Goal:** Improve maintainability and testability of the workout player feature.
+- **Refactor Status:** Successfully extracted `WorkoutSetRow`, `WorkoutHistoryView`, and `WorkoutWarmupList` from `WorkoutPlayerPage`.
+- **Result:** Reduced `WorkoutPlayerPage` size by ~32%. Tests passed.
