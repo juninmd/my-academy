@@ -2,24 +2,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/home_provider.dart';
-import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
-import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
-import '../widgets/quick_timer_dialog.dart';
+import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
 import '../widgets/streak_card.dart';
-import '../widgets/body_weight_dialog.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../../workouts/presentation/providers/workout_create_provider.dart';
 import '../../../workouts/presentation/widgets/workout_history_card.dart';
 
-// Placeholder for now
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Bom dia';
+    if (hour < 18) return 'Boa tarde';
+    return 'Boa noite';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +56,7 @@ class DashboardPage extends ConsumerWidget {
           children: [
             // Hello Card
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -76,7 +78,7 @@ class DashboardPage extends ConsumerWidget {
               child: Row(
                 children: [
                   CircleAvatar(
-                    radius: 30,
+                    radius: 32,
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     backgroundImage:
                         user?.photoUrl != null
@@ -89,23 +91,30 @@ class DashboardPage extends ConsumerWidget {
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 24,
                               ),
                             )
                             : null,
                   ),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Olá,',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      Text(
-                        user?.name?.split(' ').first ?? 'Atleta',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                    ],
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${_getGreeting()},',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          user?.name?.split(' ').first ?? 'Atleta',
+                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -123,11 +132,11 @@ class DashboardPage extends ConsumerWidget {
                           StreakCard(completedWorkouts: summary.counter),
                           const SizedBox(height: 12),
                           const WeeklyProgressCard(),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 32),
 
-                          // Tools Section
-                          const _ToolsSection(),
-                          const SizedBox(height: 24),
+                          // Quick Actions Grid (Replaces old Tools)
+                          const QuickActionsGrid(),
+                          const SizedBox(height: 32),
 
                           // Workout Card
                           if (summary.hasWorkoutToday)
@@ -139,6 +148,8 @@ class DashboardPage extends ConsumerWidget {
                                     Theme.of(context).colorScheme.primary,
                                     Theme.of(context).colorScheme.tertiary,
                                   ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
                                 ),
                                 borderRadius: BorderRadius.circular(24),
                                 boxShadow: [
@@ -146,37 +157,67 @@ class DashboardPage extends ConsumerWidget {
                                     color: Theme.of(
                                       context,
                                     ).colorScheme.primary.withValues(alpha: 0.4),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 6),
                                   ),
                                 ],
                               ),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(
-                                    Icons.fitness_center,
-                                    size: 48,
-                                    color: Colors.white,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withValues(alpha: 0.2),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.fitness_center,
+                                          size: 32,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withValues(alpha: 0.2),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: const Text(
+                                          'HOJE',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    'Treino de Hoje',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.copyWith(color: Colors.white),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    summary.workoutName ??
-                                        'Treino Personalizado',
-                                    style: const TextStyle(
+                                  const SizedBox(height: 20),
+                                  const Text(
+                                    'Próximo Treino',
+                                    style: TextStyle(
                                       color: Colors.white70,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  const SizedBox(height: 16),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    summary.workoutName ?? 'Treino Personalizado',
+                                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 24),
                                   SizedBox(
                                     width: double.infinity,
+                                    height: 54,
                                     child: ElevatedButton(
                                       onPressed: () {
                                         if (summary.workoutGroupId != null) {
@@ -191,8 +232,19 @@ class DashboardPage extends ConsumerWidget {
                                             Theme.of(
                                               context,
                                             ).colorScheme.primary,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
                                       ),
-                                      child: const Text('Iniciar Treino'),
+                                      child: const Text(
+                                        'INICIAR TREINO',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1.0,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -400,195 +452,6 @@ class _GenericRestCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ToolsSection extends StatelessWidget {
-  const _ToolsSection();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Ferramentas', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 100,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.add_circle_outline,
-                  label: 'Criar',
-                  color: Theme.of(context).colorScheme.primary,
-                  onTap: () {
-                    context.push('/workouts/create');
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.history,
-                  label: 'Histórico',
-                  color: Colors.deepPurple,
-                  onTap: () {
-                    context.push('/history');
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.menu_book_outlined,
-                  label: 'Exercícios',
-                  color: Colors.indigo,
-                  onTap: () {
-                    context.go('/home/exercises');
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.bar_chart,
-                  label: 'Análise',
-                  color: Colors.teal,
-                  onTap: () {
-                     context.push('/analytics');
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.calculate_outlined,
-                  label: 'Anilhas',
-                  color: Colors.blue,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.fitness_center,
-                  label: '1RM',
-                  color: Colors.red,
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const OneRepMaxCalculatorDialog(),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.timer_outlined,
-                  label: 'Timer',
-                  color: Colors.orange,
-                  onTap: () {
-                     showDialog(
-                       context: context,
-                       builder: (context) => const QuickTimerDialog(),
-                     );
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 90,
-                child: _ToolCard(
-                  icon: Icons.monitor_weight_outlined,
-                  label: 'Peso',
-                  color: Colors.purple,
-                  onTap: () {
-                     showDialog(
-                       context: context,
-                       builder: (context) => const BodyWeightDialog(),
-                     );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ToolCard extends StatelessWidget {
-  const _ToolCard({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: EdgeInsets.zero,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-             // Removed border as elevation provides separation
-             // border: Border.all(color: color.withValues(alpha: 0.15)),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, color: color, size: 24),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

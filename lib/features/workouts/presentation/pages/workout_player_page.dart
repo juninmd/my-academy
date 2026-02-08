@@ -854,8 +854,9 @@ class _SetRow extends HookWidget {
         ),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header: Set Info & History
+          // Header: Set Info & Smart Copy Chip
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -868,37 +869,26 @@ class _SetRow extends HookWidget {
                   color: Colors.grey,
                 ),
               ),
-              if (lastSet != null)
-                GestureDetector(
-                  onTap: !log.isCompleted
-                      ? () {
-                          onChanged(SetLogState(
-                            actualReps: lastSet!.reps,
-                            actualWeight: lastSet!.weight,
-                            rpe: log.rpe,
-                            isCompleted: log.isCompleted,
-                          ));
-                        }
-                      : null,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.history,
-                        size: 12,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${lastSet!.reps}x ${lastSet!.weight}kg',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+              if (lastSet != null && !log.isCompleted)
+                ActionChip(
+                  label: Text('Repetir: ${lastSet!.weight}kg x ${lastSet!.reps}'),
+                  avatar: const Icon(Icons.history, size: 14),
+                  visualDensity: VisualDensity.compact,
+                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.3),
+                  side: BorderSide.none,
+                  labelStyle: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
                   ),
+                  onPressed: () {
+                    onChanged(SetLogState(
+                      actualReps: lastSet!.reps,
+                      actualWeight: lastSet!.weight,
+                      rpe: log.rpe,
+                      isCompleted: log.isCompleted,
+                    ));
+                  },
                 ),
             ],
           ),
@@ -906,11 +896,11 @@ class _SetRow extends HookWidget {
 
           // Main Input Row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // Reps Input
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: NumberInputControl(
                   label: 'Reps',
                   value: log.actualReps,
@@ -928,8 +918,8 @@ class _SetRow extends HookWidget {
               const SizedBox(width: 8),
               // Weight Input
               Expanded(
-                 flex: 2,
-                 child: NumberInputControl(
+                flex: 3,
+                child: NumberInputControl(
                   label: 'kg',
                   value: log.actualWeight,
                   enabled: !log.isCompleted,
@@ -944,58 +934,74 @@ class _SetRow extends HookWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
 
-              // Tools (RPE & Calc)
-              Column(
-                children: [
-                   IconButton(
-                    icon: const Icon(Icons.calculate_outlined, size: 20),
-                    constraints: const BoxConstraints(),
-                    padding: const EdgeInsets.all(8),
-                    tooltip: 'Calculadora',
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        showDragHandle: true,
-                        builder: (context) => Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
-                          child: PlateCalculatorContent(
-                            targetWeight: log.actualWeight.toDouble(),
-                          ),
+              const SizedBox(width: 4),
+              // Plate Calculator Button
+               IconButton(
+                  icon: Icon(Icons.calculate_outlined, color: Theme.of(context).colorScheme.primary),
+                  tooltip: 'Calculadora de Anilhas',
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      showDragHandle: true,
+                      builder: (context) => Padding(
+                        padding: const EdgeInsets.only(bottom: 24.0),
+                        child: PlateCalculatorContent(
+                          targetWeight: log.actualWeight.toDouble(),
                         ),
-                      );
-                    },
-                  ),
-                  InkWell(
-                    onTap: log.isCompleted ? null : () {
-                       showModalBottomSheet(
-                        context: context,
-                        builder: (context) => RpeSelectorSheet(
-                          onSelected: (rpe) {
-                            onChanged(SetLogState(
-                              actualReps: log.actualReps,
-                              actualWeight: log.actualWeight,
-                              rpe: rpe,
-                              isCompleted: log.isCompleted,
-                            ));
-                          },
-                        ),
-                       );
-                    },
-                    borderRadius: BorderRadius.circular(4),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      child: Text(
-                        'RPE ${log.rpe ?? '-'}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                       ),
+                    );
+                  },
+                ),
+
+              // RPE Badge
+              InkWell(
+                onTap: log.isCompleted ? null : () {
+                   showModalBottomSheet(
+                    context: context,
+                    builder: (context) => RpeSelectorSheet(
+                      onSelected: (rpe) {
+                        onChanged(SetLogState(
+                          actualReps: log.actualReps,
+                          actualWeight: log.actualWeight,
+                          rpe: rpe,
+                          isCompleted: log.isCompleted,
+                        ));
+                      },
+                    ),
+                   );
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
                     ),
                   ),
-                ],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'RPE',
+                        style: TextStyle(fontSize: 8, color: Colors.grey),
+                      ),
+                      Text(
+                        log.rpe?.toString() ?? '-',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
 
               // Completion Button
               InkWell(
@@ -1008,12 +1014,15 @@ class _SetRow extends HookWidget {
                   decoration: BoxDecoration(
                     color: log.isCompleted
                         ? Colors.green
-                        : Colors.grey.withValues(alpha: 0.2),
+                        : Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(8),
+                    boxShadow: log.isCompleted
+                        ? [BoxShadow(color: Colors.green.withValues(alpha: 0.4), blurRadius: 8, offset: const Offset(0, 2))]
+                        : null,
                   ),
                   child: Icon(
                     Icons.check,
-                    color: log.isCompleted ? Colors.white : Colors.grey,
+                    color: log.isCompleted ? Colors.white : Theme.of(context).disabledColor,
                   ),
                 ),
               ),
