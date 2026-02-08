@@ -50,8 +50,8 @@ void main() {
     // Verify App Bar
     expect(find.text('Treino do dia'), findsOneWidget);
 
-    // Verify Tools Section
-    expect(find.text('Ferramentas'), findsOneWidget);
+    // Verify Tools Section (Renamed to Acesso Rápido)
+    expect(find.text('Acesso Rápido'), findsOneWidget);
 
     // Verify Rest Card (Generic because no logs)
     expect(find.text('Descanso Merecido'), findsOneWidget);
