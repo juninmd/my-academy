@@ -1,3 +1,6 @@
+import '../widgets/workout_player/workout_set_row.dart';
+import '../widgets/workout_player/workout_history_view.dart';
+import '../widgets/workout_player/workout_warmup_list.dart';
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +12,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../domain/entities/workout_entity.dart';
-import '../../domain/entities/workout_series_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/set_log_entity.dart';
 import '../providers/workout_provider.dart';
@@ -17,12 +19,8 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/rest_timer_widget.dart';
 import '../widgets/workout_timer.dart';
 import '../widgets/timer_notifier.dart';
-import '../widgets/number_input_control.dart';
-import '../widgets/plate_calculator_dialog.dart';
-import '../widgets/rpe_selector_sheet.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
-import '../widgets/progress_chart.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
@@ -399,7 +397,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     if (warmupSets.value.isNotEmpty) ...[
-                      _buildWarmupList(context, warmupSets),
+                      WorkoutWarmupList(warmupSetsNotifier: warmupSets),
                       const SizedBox(height: 16),
                     ],
                     _buildSetsList(context, logs, historyLogsAsync.asData?.value.firstOrNull),
@@ -526,7 +524,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
                 ),
               ),
               // History View
-              _HistoryView(exerciseId: workout.exerciseId),
+              WorkoutHistoryView(exerciseId: workout.exerciseId),
             ],
           ),
         ),
@@ -651,73 +649,6 @@ class _ExercisePlayerView extends HookConsumerWidget {
   }
 
 
-  Widget _buildWarmupList(BuildContext context, ValueNotifier<List<Map<String, dynamic>>> warmupSetsNotifier) {
-    final sets = warmupSetsNotifier.value;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            const Icon(Icons.whatshot, size: 16, color: Colors.orange),
-            const SizedBox(width: 8),
-            Text(
-              'Aquecimento',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.orange,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        ...sets.asMap().entries.map((e) {
-          final index = e.key;
-          final set = e.value;
-          final isCompleted = set['completed'] as bool;
-
-          return GestureDetector(
-            onTap: () {
-               final newSets = List<Map<String, dynamic>>.from(sets);
-               newSets[index] = {...set, 'completed': !isCompleted};
-               warmupSetsNotifier.value = newSets;
-            },
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              decoration: BoxDecoration(
-                color: isCompleted
-                  ? Colors.orange.withValues(alpha: 0.2)
-                  : Theme.of(context).cardTheme.color,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isCompleted ? Colors.orange : Theme.of(context).dividerColor.withValues(alpha: 0.1),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    '${set['reps']} reps',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('x', style: TextStyle(color: Colors.grey)),
-                  ),
-                  Text('${set['weight']} kg'),
-                  const Spacer(),
-                  if (isCompleted)
-                    const Icon(Icons.check, size: 16, color: Colors.orange),
-                ],
-              ),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-// ...
-// Keeping _buildSetsList and _HistoryView and _SetRow same as before (verified by previous read)
-// ...
   Widget _buildSetsList(
     BuildContext context,
     ValueNotifier<Map<int, SetLogState>> logs,
@@ -736,7 +667,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
         if (log == null) return const SizedBox.shrink();
 
-        return _SetRow(
+        return WorkoutSetRow(
           index: index,
           series: series,
           log: log,
@@ -768,268 +699,3 @@ class _ExercisePlayerView extends HookConsumerWidget {
   }
 }
 
-class _HistoryView extends HookConsumerWidget {
-  const _HistoryView({required this.exerciseId});
-  final int exerciseId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final logsAsync = ref.watch(exerciseLogsProvider(exerciseId));
-
-    return logsAsync.when(
-      data: (logs) {
-        if (logs.isEmpty) {
-          return const Center(child: Text('Nenhum histórico encontrado'));
-        }
-        return Column(
-          children: [
-            if (logs.length >= 2)
-              SizedBox(
-                height: 200,
-                child: ProgressChart(logs: logs),
-              ),
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.only(bottom: 100, top: 16),
-                itemCount: logs.length,
-                separatorBuilder: (c, i) => const Divider(),
-                itemBuilder: (context, index) {
-                  final log = logs[index];
-                  return ListTile(
-                    title: Text(DateFormat('dd/MM/yyyy HH:mm').format(log.date)),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ...log.sets.asMap().entries.map((e) => Text(
-                          'Série ${e.key + 1}: ${e.value.reps} reps @ ${e.value.weight}kg (RPE: ${e.value.rpe ?? "-"})',
-                        )),
-                        if (log.notes != null && log.notes!.isNotEmpty)
-                           Text('Notas: ${log.notes}', style: const TextStyle(fontStyle: FontStyle.italic)),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, s) => Center(child: Text('Erro ao carregar histórico: $e')),
-    );
-  }
-}
-
-class _SetRow extends HookWidget {
-  const _SetRow({
-    required this.index,
-    required this.series,
-    required this.log,
-    required this.onChanged,
-    required this.onCompleted,
-    this.lastSet,
-  });
-
-  final int index;
-  final WorkoutSeriesEntity series;
-  final SetLogState log;
-  final SetLogEntity? lastSet;
-  final ValueChanged<SetLogState> onChanged;
-  final VoidCallback onCompleted;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: log.isCompleted
-            ? Colors.green.withValues(alpha: 0.05)
-            : Theme.of(context).cardTheme.color,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: log.isCompleted
-              ? Colors.green.withValues(alpha: 0.3)
-              : Theme.of(context).dividerColor.withValues(alpha: 0.1),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Header: Set Info & Smart Copy Chip
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'SÉRIE ${index + 1}',
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0,
-                  color: Colors.grey,
-                ),
-              ),
-              if (lastSet != null && !log.isCompleted)
-                ActionChip(
-                  label: Text('Repetir: ${lastSet!.weight}kg x ${lastSet!.reps}'),
-                  avatar: const Icon(Icons.history, size: 14),
-                  visualDensity: VisualDensity.compact,
-                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer.withValues(alpha: 0.3),
-                  side: BorderSide.none,
-                  labelStyle: TextStyle(
-                    fontSize: 11,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  onPressed: () {
-                    onChanged(SetLogState(
-                      actualReps: lastSet!.reps,
-                      actualWeight: lastSet!.weight,
-                      rpe: log.rpe,
-                      isCompleted: log.isCompleted,
-                    ));
-                  },
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-
-          // Main Input Row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // Reps Input
-              Expanded(
-                flex: 3,
-                child: NumberInputControl(
-                  label: 'Reps',
-                  value: log.actualReps,
-                  enabled: !log.isCompleted,
-                  onChanged: (val) {
-                    onChanged(SetLogState(
-                      actualReps: val,
-                      actualWeight: log.actualWeight,
-                      rpe: log.rpe,
-                      isCompleted: log.isCompleted,
-                    ));
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Weight Input
-              Expanded(
-                flex: 3,
-                child: NumberInputControl(
-                  label: 'kg',
-                  value: log.actualWeight,
-                  enabled: !log.isCompleted,
-                  step: 1,
-                  onChanged: (val) {
-                    onChanged(SetLogState(
-                      actualReps: log.actualReps,
-                      actualWeight: val,
-                      rpe: log.rpe,
-                      isCompleted: log.isCompleted,
-                    ));
-                  },
-                ),
-              ),
-
-              const SizedBox(width: 4),
-              // Plate Calculator Button
-               IconButton(
-                  icon: Icon(Icons.calculate_outlined, color: Theme.of(context).colorScheme.primary),
-                  tooltip: 'Calculadora de Anilhas',
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      showDragHandle: true,
-                      builder: (context) => Padding(
-                        padding: const EdgeInsets.only(bottom: 24.0),
-                        child: PlateCalculatorContent(
-                          targetWeight: log.actualWeight.toDouble(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-              // RPE Badge
-              InkWell(
-                onTap: log.isCompleted ? null : () {
-                   showModalBottomSheet(
-                    context: context,
-                    builder: (context) => RpeSelectorSheet(
-                      onSelected: (rpe) {
-                        onChanged(SetLogState(
-                          actualReps: log.actualReps,
-                          actualWeight: log.actualWeight,
-                          rpe: rpe,
-                          isCompleted: log.isCompleted,
-                        ));
-                      },
-                    ),
-                   );
-                },
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'RPE',
-                        style: TextStyle(fontSize: 8, color: Colors.grey),
-                      ),
-                      Text(
-                        log.rpe?.toString() ?? '-',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-
-              // Completion Button
-              InkWell(
-                onTap: onCompleted,
-                borderRadius: BorderRadius.circular(8),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: log.isCompleted
-                        ? Colors.green
-                        : Theme.of(context).colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: log.isCompleted
-                        ? [BoxShadow(color: Colors.green.withValues(alpha: 0.4), blurRadius: 8, offset: const Offset(0, 2))]
-                        : null,
-                  ),
-                  child: Icon(
-                    Icons.check,
-                    color: log.isCompleted ? Colors.white : Theme.of(context).disabledColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
