@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../providers/workout_provider.dart';
 import '../progress_chart.dart';
+import '../../../../../core/widgets/common_empty_state.dart';
 
 class WorkoutHistoryView extends HookConsumerWidget {
   const WorkoutHistoryView({required this.exerciseId, super.key});
@@ -16,7 +17,11 @@ class WorkoutHistoryView extends HookConsumerWidget {
     return logsAsync.when(
       data: (logs) {
         if (logs.isEmpty) {
-          return const Center(child: Text('Nenhum histórico encontrado'));
+          return const CommonEmptyState(
+            title: 'Sem Histórico',
+            message: 'Complete este exercício pela primeira vez para ver seu progresso aqui.',
+            icon: Icons.history,
+          );
         }
         return Column(
           children: [

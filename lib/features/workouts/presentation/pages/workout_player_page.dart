@@ -22,6 +22,9 @@ import '../widgets/timer_notifier.dart';
 import '../../domain/entities/session_log_entity.dart';
 import 'workout_summary_page.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
+import '../widgets/plate_calculator_dialog.dart';
+import '../widgets/one_rep_max_calculator_dialog.dart';
+import '../../../home/presentation/widgets/quick_timer_dialog.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -183,6 +186,60 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               child: WorkoutTimer(notifier: timerNotifier),
             ),
             actions: [
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.build_circle_outlined),
+                tooltip: 'Ferramentas',
+                onSelected: (value) {
+                  if (value == 'plate') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                    );
+                  } else if (value == 'timer') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const QuickTimerDialog(),
+                    );
+                  } else if (value == '1rm') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const OneRepMaxCalculatorDialog(),
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'plate',
+                    child: Row(
+                      children: [
+                        Icon(Icons.calculate_outlined),
+                        SizedBox(width: 8),
+                        Text('Calculadora de Anilhas'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'timer',
+                    child: Row(
+                      children: [
+                        Icon(Icons.timer_outlined),
+                        SizedBox(width: 8),
+                        Text('Cronômetro Rápido'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: '1rm',
+                    child: Row(
+                      children: [
+                        Icon(Icons.fitness_center),
+                        SizedBox(width: 8),
+                        Text('Calculadora 1RM'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
               IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.close),

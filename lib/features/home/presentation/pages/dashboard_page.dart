@@ -8,6 +8,7 @@ import '../providers/home_provider.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
 import '../widgets/streak_card.dart';
+import '../widgets/body_weight_tile.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../../workouts/presentation/providers/workout_create_provider.dart';
@@ -132,11 +133,58 @@ class DashboardPage extends ConsumerWidget {
                           StreakCard(completedWorkouts: summary.counter),
                           const SizedBox(height: 12),
                           const WeeklyProgressCard(),
+                          const SizedBox(height: 16),
+                          const BodyWeightTile(),
                           const SizedBox(height: 32),
 
                           // Quick Actions Grid (Replaces old Tools)
                           const QuickActionsGrid(),
                           const SizedBox(height: 32),
+
+                          if (!summary.hasWorkoutToday) ...[
+                            Card(
+                              elevation: 0,
+                              color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () => context.push('/workouts/create'),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.flash_on,
+                                        size: 32,
+                                        color: Theme.of(context).colorScheme.primary,
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Treino Rápido',
+                                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'Iniciar uma sessão sem plano definido',
+                                              style: Theme.of(context).textTheme.bodySmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Icon(Icons.arrow_forward_ios, size: 16),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
 
                           // Workout Card
                           if (summary.hasWorkoutToday)
