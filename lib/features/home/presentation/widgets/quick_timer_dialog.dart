@@ -59,7 +59,9 @@ class QuickTimerDialog extends HookConsumerWidget {
             ),
              const SizedBox(height: 16),
              LinearProgressIndicator(
-               value: remaining.value / selectedDuration.value,
+               value: selectedDuration.value > 0
+                   ? remaining.value / selectedDuration.value
+                   : 0,
              ),
              const SizedBox(height: 24),
              Row(

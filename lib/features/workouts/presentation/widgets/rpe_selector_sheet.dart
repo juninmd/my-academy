@@ -90,6 +90,50 @@ class RpeSelectorSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
+          const Divider(),
+          const SizedBox(height: 16),
+          Text(
+            'Guia de Esforço:',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          _buildGuideRow(context, '10', 'Falha Concêntrica / 0 RIR'),
+          _buildGuideRow(context, '9', 'Difícil (1 Rep na Reserva)'),
+          _buildGuideRow(context, '8', 'Moderado (2 Reps na Reserva)'),
+          _buildGuideRow(context, '7', 'Controle (3 Reps na Reserva)'),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGuideRow(BuildContext context, String rpe, String desc) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 24,
+            height: 24,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: _getRpeColor(int.parse(rpe)).withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              rpe,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: _getRpeColor(int.parse(rpe)),
+                fontSize: 12,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            desc,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
     );
