@@ -11,6 +11,7 @@ import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
 import '../widgets/consistency_heatmap.dart';
 import '../widgets/personal_best_widget.dart';
+import '../widgets/muscle_split_chart.dart';
 
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
@@ -208,6 +209,23 @@ class ProfilePage extends HookConsumerWidget {
                     },
                     loading:
                         () => const Center(child: CircularProgressIndicator()),
+                    error: (e, s) => const SizedBox(),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Muscle Split Chart
+                  ref.watch(allExerciseLogsProvider).when(
+                    data: (logs) {
+                      return exercisesAsync.maybeWhen(
+                        data: (exercises) => MuscleSplitChart(
+                          logs: logs,
+                          exercises: exercises,
+                        ),
+                        orElse: () => const SizedBox.shrink(),
+                      );
+                    },
+                    loading: () => const SizedBox(),
                     error: (e, s) => const SizedBox(),
                   ),
 
