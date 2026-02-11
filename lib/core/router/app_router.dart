@@ -30,7 +30,7 @@ final _key = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter router(Ref ref) {
   final authState = ref.watch(authNotifierProvider);
-  final onboardingState = ref.watch(onboardingNotifierProvider);
+  final onboardingState = ref.watch(onboardingProvider);
 
   return GoRouter(
     navigatorKey: _key,
