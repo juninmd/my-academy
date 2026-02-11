@@ -7,6 +7,7 @@ class NumberInputControl extends HookWidget {
     required this.value,
     required this.onChanged,
     required this.label,
+    this.labelSuffix,
     this.enabled = true,
     this.min = 0,
     this.max = 999,
@@ -17,6 +18,7 @@ class NumberInputControl extends HookWidget {
   final int value;
   final ValueChanged<int> onChanged;
   final String label;
+  final Widget? labelSuffix;
   final bool enabled;
   final int min;
   final int max;
@@ -45,7 +47,13 @@ class NumberInputControl extends HookWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label, style: Theme.of(context).textTheme.labelSmall),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: Theme.of(context).textTheme.labelSmall),
+            if (labelSuffix != null) labelSuffix!,
+          ],
+        ),
         const SizedBox(height: 4),
         Container(
           height: 50,

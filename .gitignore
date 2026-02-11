@@ -43,7 +43,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 google-services.json
-*.g.dart
+# *.g.dart
 
 # Backend related
 node_modules/
@@ -54,3 +54,4 @@ backend/node_modules/
 backend/dist/
 backend/dev.db
 backend/.env
+!lib/features/onboarding/presentation/providers/onboarding_provider.g.dart
