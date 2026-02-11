@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../profile/presentation/providers/settings_provider.dart';
 import '../providers/home_provider.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
@@ -28,6 +29,7 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(authNotifierProvider);
     final user = userState.value;
+    final settings = ref.watch(settingsProvider);
     final groupsAsync = user != null
         ? ref.watch(workoutGroupsProvider(user.id))
         : const AsyncValue<List<WorkoutGroupEntity>>.data([]);
@@ -112,6 +114,23 @@ class DashboardPage extends ConsumerWidget {
                           user?.name?.split(' ').first ?? 'Atleta',
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)),
+                          ),
+                          child: Text(
+                            'Meta: ${settings.weeklyWorkoutGoal}x/sem',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ),
                       ],

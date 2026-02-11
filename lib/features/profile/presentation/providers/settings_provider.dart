@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum UnitSystem { metric, imperial }
+
 class SettingsState {
   final double barWeight;
   final double bodyWeight;
   final ThemeMode themeMode;
   final List<double> availablePlates;
   final int weeklyWorkoutGoal;
+  final String goal;
+  final String experienceLevel;
+  final UnitSystem unitSystem;
 
   SettingsState({
     this.barWeight = 20.0,
@@ -15,6 +20,9 @@ class SettingsState {
     this.themeMode = ThemeMode.system,
     this.availablePlates = const [25, 20, 15, 10, 5, 2.5, 1.25],
     this.weeklyWorkoutGoal = 4,
+    this.goal = 'Hipertrofia',
+    this.experienceLevel = 'Iniciante',
+    this.unitSystem = UnitSystem.metric,
   });
 
   SettingsState copyWith({
@@ -23,6 +31,9 @@ class SettingsState {
     ThemeMode? themeMode,
     List<double>? availablePlates,
     int? weeklyWorkoutGoal,
+    String? goal,
+    String? experienceLevel,
+    UnitSystem? unitSystem,
   }) {
     return SettingsState(
       barWeight: barWeight ?? this.barWeight,
@@ -30,6 +41,9 @@ class SettingsState {
       themeMode: themeMode ?? this.themeMode,
       availablePlates: availablePlates ?? this.availablePlates,
       weeklyWorkoutGoal: weeklyWorkoutGoal ?? this.weeklyWorkoutGoal,
+      goal: goal ?? this.goal,
+      experienceLevel: experienceLevel ?? this.experienceLevel,
+      unitSystem: unitSystem ?? this.unitSystem,
     );
   }
 }
@@ -49,6 +63,13 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final themeIndex = prefs.getInt('theme_mode') ?? 0;
     final themeMode = ThemeMode.values[themeIndex];
     final weeklyWorkoutGoal = prefs.getInt('weekly_workout_goal') ?? 4;
+    final goal = prefs.getString('workout_goal') ?? 'Hipertrofia';
+    final experienceLevel = prefs.getString('experience_level') ?? 'Iniciante';
+    final unitSystemIndex = prefs.getInt('unit_system') ?? 0;
+    final unitSystem = UnitSystem.values.length > unitSystemIndex
+        ? UnitSystem.values[unitSystemIndex]
+        : UnitSystem.metric;
+
 
     final platesStrings = prefs.getStringList('available_plates');
     List<double> availablePlates;
@@ -71,6 +92,9 @@ class SettingsNotifier extends Notifier<SettingsState> {
       themeMode: themeMode,
       availablePlates: availablePlates,
       weeklyWorkoutGoal: weeklyWorkoutGoal,
+      goal: goal,
+      experienceLevel: experienceLevel,
+      unitSystem: unitSystem,
     );
   }
 
@@ -90,6 +114,24 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('weekly_workout_goal', goal);
     state = state.copyWith(weeklyWorkoutGoal: goal);
+  }
+
+  Future<void> setGoal(String goal) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('workout_goal', goal);
+    state = state.copyWith(goal: goal);
+  }
+
+  Future<void> setExperienceLevel(String level) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('experience_level', level);
+    state = state.copyWith(experienceLevel: level);
+  }
+
+  Future<void> setUnitSystem(UnitSystem unitSystem) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('unit_system', unitSystem.index);
+    state = state.copyWith(unitSystem: unitSystem);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {

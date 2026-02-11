@@ -343,6 +343,70 @@ class ProfilePage extends HookConsumerWidget {
                           const Divider(height: 32),
                           Row(
                             children: [
+                              const Icon(Icons.flag_outlined),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Objetivo',
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                              DropdownButton<String>(
+                                value: ['Hipertrofia', 'Força', 'Resistência'].contains(settings.goal) ? settings.goal : 'Hipertrofia',
+                                onChanged: (val) {
+                                  if (val != null) ref.read(settingsProvider.notifier).setGoal(val);
+                                },
+                                items: ['Hipertrofia', 'Força', 'Resistência'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                                underline: const SizedBox(),
+                              ),
+                            ],
+                          ),
+                          const Divider(height: 32),
+                          Row(
+                            children: [
+                              const Icon(Icons.trending_up),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  'Nível',
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
+                              DropdownButton<String>(
+                                value: ['Iniciante', 'Intermediário', 'Avançado'].contains(settings.experienceLevel) ? settings.experienceLevel : 'Iniciante',
+                                onChanged: (val) {
+                                  if (val != null) ref.read(settingsProvider.notifier).setExperienceLevel(val);
+                                },
+                                items: ['Iniciante', 'Intermediário', 'Avançado'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                                underline: const SizedBox(),
+                              ),
+                            ],
+                          ),
+                          const Divider(height: 32),
+                          Row(
+                            children: [
+                              const Icon(Icons.scale_outlined),
+                              const SizedBox(width: 12),
+                              Expanded(child: Text('Sistema de Medidas', style: Theme.of(context).textTheme.titleMedium)),
+                              SegmentedButton<UnitSystem>(
+                                segments: const [
+                                   ButtonSegment(value: UnitSystem.metric, label: Text('KG')),
+                                   ButtonSegment(value: UnitSystem.imperial, label: Text('LBS')),
+                                ],
+                                selected: {settings.unitSystem},
+                                onSelectionChanged: (Set<UnitSystem> newSelection) {
+                                  ref.read(settingsProvider.notifier).setUnitSystem(newSelection.first);
+                                },
+                                showSelectedIcon: false,
+                                style: const ButtonStyle(
+                                   visualDensity: VisualDensity.compact,
+                                ),
+                              )
+                            ],
+                          ),
+                          const Divider(height: 32),
+                          Row(
+                            children: [
                               const Icon(Icons.fitness_center),
                               const SizedBox(width: 12),
                               Expanded(

@@ -120,6 +120,25 @@ class WorkoutSetRow extends HookWidget {
                  flex: 2,
                  child: NumberInputControl(
                   label: 'kg',
+                  labelSuffix: GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        showDragHandle: true,
+                        builder: (context) => Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: PlateCalculatorContent(
+                            targetWeight: log.actualWeight.toDouble(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.calculate,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                   value: log.actualWeight,
                   enabled: !log.isCompleted,
                   step: 1,
@@ -135,27 +154,11 @@ class WorkoutSetRow extends HookWidget {
               ),
               const SizedBox(width: 8),
 
-              // Tools (RPE & Calc)
+              // RPE Selector
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                   IconButton(
-                    icon: const Icon(Icons.calculate_outlined, size: 20),
-                    constraints: const BoxConstraints(),
-                    padding: const EdgeInsets.all(8),
-                    tooltip: 'Calculadora',
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        showDragHandle: true,
-                        builder: (context) => Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
-                          child: PlateCalculatorContent(
-                            targetWeight: log.actualWeight.toDouble(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                  const SizedBox(height: 18), // Align with input center roughly
                   InkWell(
                     onTap: log.isCompleted ? null : () {
                        showModalBottomSheet(

@@ -7,6 +7,8 @@ import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/calendar/presentation/pages/calendar_page.dart';
 import '../../features/home/presentation/pages/dashboard_page.dart';
 import '../../features/home/presentation/pages/home_shell_page.dart';
+import '../../features/onboarding/presentation/pages/onboarding_page.dart';
+import '../../features/onboarding/presentation/providers/onboarding_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/students/presentation/pages/student_add_page.dart';
 import '../../features/students/presentation/pages/students_page.dart';
@@ -28,24 +30,43 @@ final _key = GlobalKey<NavigatorState>();
 @riverpod
 GoRouter router(Ref ref) {
   final authState = ref.watch(authNotifierProvider);
+  final onboardingState = ref.watch(onboardingNotifierProvider);
 
   return GoRouter(
     navigatorKey: _key,
     initialLocation: '/login',
+    // We don't strictly need refreshListenable if the provider rebuilds the router,
+    // but preserving it for authState logic if needed.
+    // However, rebuilding the router on every state change can be jarring.
+    // A better approach usually involves a Listenable that combines states, but adhering to current pattern:
     refreshListenable: ValueNotifier(authState),
     redirect: (context, state) {
       final isLoggedIn = authState.value != null;
       final isLoggingIn = state.uri.toString() == '/login';
+      final isOnboardingPage = state.uri.toString() == '/onboarding';
 
-      if (authState.isLoading) return null;
+      if (authState.isLoading || onboardingState.isLoading) return null;
 
       if (!isLoggedIn && !isLoggingIn) return '/login';
-      if (isLoggedIn && isLoggingIn) return '/home';
+
+      if (isLoggedIn) {
+        final isOnboardingComplete = onboardingState.value ?? false;
+
+        if (!isOnboardingComplete) {
+           if (!isOnboardingPage) return '/onboarding';
+           return null;
+        }
+
+        if (isOnboardingPage) return '/home';
+
+        if (isLoggingIn) return '/home';
+      }
 
       return null;
     },
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
+      GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingPage()),
       GoRoute(
         path: '/analytics',
         builder: (context, state) => const AnalyticsPage(),
@@ -123,7 +144,7 @@ GoRouter router(Ref ref) {
               ),
             ],
           ),
-          // Branch 3: Calendar
+          // Branch 2: Calendar
           StatefulShellBranch(
             routes: [
               GoRoute(
