@@ -27,13 +27,8 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Treino do dia',
-      theme: AppTheme.premiumTheme,
-      darkTheme: ThemeData.dark().copyWith(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: AppTheme.lightPremiumTheme,
+      darkTheme: AppTheme.darkPremiumTheme,
       themeMode: settings.themeMode,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

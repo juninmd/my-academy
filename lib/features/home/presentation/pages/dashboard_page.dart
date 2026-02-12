@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../profile/presentation/providers/settings_provider.dart';
 import '../providers/home_provider.dart';
+import '../providers/next_workout_provider.dart';
+import '../widgets/next_workout_card.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
 import '../widgets/streak_card.dart';
@@ -36,6 +38,7 @@ class DashboardPage extends ConsumerWidget {
 
     final logsAsync = ref.watch(allExerciseLogsProvider);
     final exercisesAsync = ref.watch(exercisesProvider);
+    final nextWorkoutAsync = ref.watch(nextWorkoutProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -321,10 +324,30 @@ class DashboardPage extends ConsumerWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                // Suggest Next Workout
+                                nextWorkoutAsync.when(
+                                  data: (nextGroup) {
+                                    if (nextGroup != null) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 24),
+                                        child: NextWorkoutCard(workoutGroup: nextGroup),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                  loading: () => const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  ),
+                                  error: (_, stack) => const SizedBox.shrink(),
+                                ),
+
                                 // Show Last Workout if available
                                 logsAsync.when(
                                   data: (logs) {
-                                    if (logs.isEmpty) return const _GenericRestCard();
+                                    if (logs.isEmpty) return const SizedBox.shrink();
 
                                     // Find latest date
                                     final latestLog = logs.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
@@ -355,16 +378,15 @@ class DashboardPage extends ConsumerWidget {
                                             );
                                           },
                                           loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
-                                          error: (e, s) => const _GenericRestCard(),
+                                          error: (e, s) => const SizedBox.shrink(),
                                         ),
+                                        const SizedBox(height: 24),
                                       ],
                                     );
                                   },
-                                  loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
-                                  error: (e, s) => const _GenericRestCard(),
+                                  loading: () => const SizedBox.shrink(),
+                                  error: (e, s) => const SizedBox.shrink(),
                                 ),
-
-                                const SizedBox(height: 24),
                                 Text(
                                   'Seus Planos',
                                   style: Theme.of(context).textTheme.titleLarge,
@@ -484,42 +506,3 @@ class DashboardPage extends ConsumerWidget {
   }
 }
 
-class _GenericRestCard extends StatelessWidget {
-  const _GenericRestCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
-        ),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.nights_stay_outlined,
-            size: 48,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Descanso Merecido',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Recupere-se para o próximo treino!',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
-      ),
-    );
-  }
-}
