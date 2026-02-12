@@ -120,23 +120,30 @@ class WorkoutSetRow extends HookWidget {
                  flex: 2,
                  child: NumberInputControl(
                   label: 'kg',
-                  labelSuffix: GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        showDragHandle: true,
-                        builder: (context) => Padding(
-                          padding: const EdgeInsets.only(bottom: 24.0),
-                          child: PlateCalculatorContent(
-                            targetWeight: log.actualWeight.toDouble(),
+                  labelSuffix: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          showDragHandle: true,
+                          builder: (context) => Padding(
+                            padding: const EdgeInsets.only(bottom: 24.0),
+                            child: PlateCalculatorContent(
+                              targetWeight: log.actualWeight.toDouble(),
+                            ),
                           ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.calculate,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.calculate,
-                      size: 18,
-                      color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ),
                   value: log.actualWeight,
