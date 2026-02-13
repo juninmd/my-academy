@@ -11,6 +11,7 @@ abstract class AuthRemoteDataSource {
   Future<void> signOut();
   Future<UserDto?> getCurrentUser();
   Future<String> getAuthToken();
+  Future<void> updateDisplayName(String name);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -124,5 +125,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return await user.getIdToken() ?? '';
     }
     return '';
+  }
+
+  @override
+  Future<void> updateDisplayName(String name) async {
+    final user = _firebaseAuth.currentUser;
+    if (user != null) {
+      await user.updateDisplayName(name);
+      // Ideally we would also sync with backend if UserDto is used there
+      // But for this task, local Firebase update is sufficient for display.
+      // If we had a backend user update endpoint, we'd call it here.
+    }
   }
 }

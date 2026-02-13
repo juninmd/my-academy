@@ -30,4 +30,24 @@ class WorkoutEntity extends Equatable {
     series,
     isFinished,
   ];
+
+  WorkoutEntity copyWith({
+    int? id,
+    int? exerciseId,
+    int? methodId,
+    String? description,
+    ExerciseEntity? exercise,
+    List<WorkoutSeriesEntity>? series,
+    bool? isFinished,
+  }) {
+    return WorkoutEntity(
+      id: id ?? this.id,
+      exerciseId: exerciseId ?? this.exerciseId,
+      methodId: methodId ?? this.methodId,
+      description: description ?? this.description,
+      exercise: exercise ?? this.exercise,
+      series: series ?? this.series,
+      isFinished: isFinished ?? this.isFinished,
+    );
+  }
 }

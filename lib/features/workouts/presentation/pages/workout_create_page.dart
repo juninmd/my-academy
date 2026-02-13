@@ -8,6 +8,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../providers/workout_create_provider.dart';
 import '../widgets/workout_series_dialog.dart';
+import '../widgets/workout_edit_series_dialog.dart';
 
 class WorkoutCreatePage extends HookConsumerWidget {
   const WorkoutCreatePage({super.key, this.initialGroup});
@@ -91,6 +92,21 @@ class WorkoutCreatePage extends HookConsumerWidget {
                           vertical: 4,
                         ),
                         child: ListTile(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => WorkoutEditSeriesDialog(
+                                workout: workout,
+                                onSave: (updatedWorkout) {
+                                  if (updatedWorkout.series.isEmpty) {
+                                    notifier.removeWorkout(index);
+                                  } else {
+                                    notifier.updateWorkout(index, updatedWorkout);
+                                  }
+                                },
+                              ),
+                            );
+                          },
                           contentPadding: const EdgeInsets.all(8),
                           leading: Container(
                             width: 50,

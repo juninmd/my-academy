@@ -4,6 +4,8 @@ import '../../domain/entities/exercise_log_entity.dart';
 import '../providers/workout_provider.dart';
 import '../providers/workout_create_provider.dart';
 import '../widgets/workout_history_card.dart';
+import '../../../../core/widgets/common_empty_state.dart';
+import 'package:go_router/go_router.dart';
 
 class WorkoutHistoryPage extends ConsumerWidget {
   const WorkoutHistoryPage({super.key});
@@ -32,15 +34,12 @@ class WorkoutHistoryPage extends ConsumerWidget {
           }
 
           if (logs.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.history, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('Nenhum treino registrado ainda.'),
-                ],
-              ),
+            return CommonEmptyState(
+              title: 'Nenhum treino registrado',
+              message: 'Complete seu primeiro treino para ver seu histórico aqui.',
+              icon: Icons.history,
+              actionLabel: 'Iniciar Treino',
+              onAction: () => context.push('/workouts/create'),
             );
           }
 
