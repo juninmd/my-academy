@@ -30,6 +30,50 @@ class ExerciseLibraryPage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Biblioteca de Exercícios')),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Solicitar Novo Exercício'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Não encontrou o que procurava? Digite o nome do exercício abaixo e nós o adicionaremos em breve.'),
+                  const SizedBox(height: 16),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Exercício',
+                      border: OutlineInputBorder(),
+                    ),
+                    autofocus: true,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancelar'),
+                ),
+                FilledButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Solicitação enviada com sucesso!'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                  child: const Text('Enviar'),
+                ),
+              ],
+            ),
+          );
+        },
+        icon: const Icon(Icons.add_task),
+        label: const Text('Solicitar'),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

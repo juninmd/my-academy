@@ -57,6 +57,21 @@ class AuthNotifier extends _$AuthNotifier {
     await repository.signOut();
     state = const AsyncValue.data(null);
   }
+
+  Future<void> updateName(String name) async {
+    final repository = ref.read(authRepositoryProvider);
+    final result = await repository.updateDisplayName(name);
+
+    if (result.isRight()) {
+       // Refresh the user state
+       state = const AsyncValue.loading();
+       final userResult = await repository.getCurrentUser();
+       state = userResult.fold(
+         (failure) => AsyncValue.error(failure.message, StackTrace.current),
+         AsyncValue.data,
+       );
+    }
+  }
 }
 
 // Alias for backward compatibility

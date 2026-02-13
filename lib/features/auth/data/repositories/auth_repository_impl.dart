@@ -43,4 +43,16 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(AuthFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> updateDisplayName(String name) async {
+    try {
+      await _remoteDataSource.updateDisplayName(name);
+      return const Right(null);
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return Left(AuthFailure(e.toString()));
+    }
+  }
 }

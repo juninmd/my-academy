@@ -618,13 +618,9 @@ class ProfilePage extends HookConsumerWidget {
                           child: ElevatedButton(
                             onPressed: () {
                               isEditing.value = false;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Perfil atualizado com sucesso! (Simulação)',
-                                  ),
-                                ),
-                              );
+                              ref
+                                  .read(authNotifierProvider.notifier)
+                                  .updateName(nameController.text);
                             },
                             child: const Text('Salvar'),
                           ),

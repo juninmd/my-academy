@@ -58,6 +58,12 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
     }
   }
 
+  void updateWorkout(int index, WorkoutEntity workout) {
+    final newWorkouts = [...state.workouts];
+    newWorkouts[index] = workout;
+    state = state.copyWith(workouts: newWorkouts);
+  }
+
   void removeWorkout(int index) {
     final newWorkouts = [...state.workouts];
     newWorkouts.removeAt(index);
