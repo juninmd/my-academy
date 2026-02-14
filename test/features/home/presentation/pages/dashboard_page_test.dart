@@ -7,6 +7,7 @@ import 'package:my_academy/features/auth/presentation/providers/auth_provider.da
 import 'package:my_academy/features/home/domain/entities/workout_summary_entity.dart';
 import 'package:my_academy/features/home/presentation/pages/dashboard_page.dart';
 import 'package:my_academy/features/home/presentation/providers/home_provider.dart';
+import 'package:my_academy/features/home/presentation/providers/dashboard_stats_provider.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_entity.dart';
 import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
@@ -36,7 +37,13 @@ void main() {
             counter: 5,
             hasWorkoutToday: false,
           )),
-          allExerciseLogsProvider.overrideWith((ref) async => []), // No logs
+          allExerciseLogsProvider.overrideWith((ref) async => []), // No logs for history
+          dashboardStatsProvider.overrideWith((ref) async => DashboardStats(
+            workoutsThisWeek: 2,
+            weeklyGoal: 4,
+            volumeThisWeek: 500, // Reduced to avoid 'k' formatting
+            streak: 3,
+          )),
           exercisesProvider.overrideWith((ref) async => []),
         ],
         child: const MaterialApp(
@@ -50,51 +57,19 @@ void main() {
     // Verify App Bar
     expect(find.text('Treino do dia'), findsOneWidget);
 
+    // Verify Quick Stats Row elements
+    expect(find.text('Treinos'), findsAtLeastNWidgets(1));
+    expect(find.text('2/4'), findsOneWidget); // Workouts/Goal
+    expect(find.text('Volume'), findsOneWidget);
+    expect(find.text('500 kg'), findsOneWidget); // Volume
+    expect(find.text('Sequência'), findsOneWidget);
+    expect(find.text('3 dias'), findsOneWidget); // Streak
+
     // Verify Tools Section (Renamed to Acesso Rápido)
     expect(find.text('Acesso Rápido'), findsOneWidget);
 
-    // Verify Rest Card (Generic because no logs)
-    expect(find.text('Descanso Merecido'), findsOneWidget);
-  });
-
-  testWidgets('DashboardPage shows Last Workout when resting and logs exist', (WidgetTester tester) async {
-    final now = DateTime.now();
-    final log = ExerciseLogEntity(
-      id: 'l1',
-      userId: 'u1',
-      exerciseId: 1,
-      date: now,
-      sets: [SetLogEntity(weight: 100, reps: 5)],
-    );
-    final exercise = ExerciseEntity(id: 1, name: 'Supino', tips: [], mistakes: []);
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          authNotifierProvider.overrideWith(() => FakeAuthNotifier(
-            const UserEntity(id: 'u1', email: 'e', name: 'User')
-          )),
-          workoutSummaryProvider.overrideWith((ref) async => const WorkoutSummaryEntity(
-            counter: 5,
-            hasWorkoutToday: false,
-          )),
-          allExerciseLogsProvider.overrideWith((ref) async => [log]),
-          exercisesProvider.overrideWith((ref) async => [exercise]),
-        ],
-        child: const MaterialApp(
-          home: DashboardPage(),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    // Should NOT see generic rest card text
-    expect(find.text('Descanso Merecido'), findsNothing);
-
-    // Should see Last Workout
-    expect(find.text('Último Treino'), findsOneWidget);
-    expect(find.text('Supino'), findsOneWidget);
-    expect(find.text('100kg'), findsOneWidget);
+    // Verify "Treino Rápido" card is shown instead of "Descanso Merecido"
+    expect(find.text('Treino Rápido'), findsWidgets);
+    expect(find.text('Iniciar uma sessão sem plano definido'), findsOneWidget);
   });
 }
