@@ -7,10 +7,10 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../profile/presentation/providers/settings_provider.dart';
 import '../providers/home_provider.dart';
 import '../providers/next_workout_provider.dart';
+import '../providers/dashboard_stats_provider.dart';
 import '../widgets/next_workout_card.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
-import '../widgets/streak_card.dart';
 import '../widgets/body_weight_tile.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
@@ -39,6 +39,7 @@ class DashboardPage extends ConsumerWidget {
     final logsAsync = ref.watch(allExerciseLogsProvider);
     final exercisesAsync = ref.watch(exercisesProvider);
     final nextWorkoutAsync = ref.watch(nextWorkoutProvider);
+    final dashboardStatsAsync = ref.watch(dashboardStatsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -152,8 +153,12 @@ class DashboardPage extends ConsumerWidget {
                       (summary) => Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          StreakCard(completedWorkouts: summary.counter),
-                          const SizedBox(height: 12),
+                          dashboardStatsAsync.when(
+                            data: (stats) => _QuickStatsRow(stats: stats),
+                            loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                            error: (_, __) => const SizedBox.shrink(),
+                          ),
+                          const SizedBox(height: 24),
                           const WeeklyProgressCard(),
                           const SizedBox(height: 16),
                           const BodyWeightTile(),
@@ -506,3 +511,100 @@ class DashboardPage extends ConsumerWidget {
   }
 }
 
+class _QuickStatsRow extends StatelessWidget {
+  const _QuickStatsRow({required this.stats});
+
+  final DashboardStats stats;
+
+  @override
+  Widget build(BuildContext context) {
+    final volumeDisplay = stats.volumeThisWeek > 1000
+        ? '${(stats.volumeThisWeek / 1000).toStringAsFixed(1)}k'
+        : stats.volumeThisWeek.toStringAsFixed(0);
+
+    return Row(
+      children: [
+        Expanded(
+          child: _StatCard(
+            label: 'Treinos',
+            value: '${stats.workoutsThisWeek}/${stats.weeklyGoal}',
+            icon: Icons.fitness_center,
+            color: Colors.blue,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _StatCard(
+            label: 'Volume',
+            value: '$volumeDisplay kg',
+            icon: Icons.fitness_center,
+            color: Colors.orange,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _StatCard(
+            label: 'Sequência',
+            value: '${stats.streak} dias',
+            icon: Icons.local_fire_department,
+            color: Colors.red,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  const _StatCard({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 28),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
