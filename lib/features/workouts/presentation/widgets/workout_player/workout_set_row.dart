@@ -162,36 +162,81 @@ class WorkoutSetRow extends HookWidget {
               const SizedBox(width: 8),
 
               // RPE Selector
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 18), // Align with input center roughly
-                  InkWell(
-                    onTap: log.isCompleted ? null : () {
-                       showModalBottomSheet(
-                        context: context,
-                        builder: (context) => RpeSelectorSheet(
-                          onSelected: (rpe) {
-                            onChanged(SetLogState(
-                              actualReps: log.actualReps,
-                              actualWeight: log.actualWeight,
-                              rpe: rpe,
-                              isCompleted: log.isCompleted,
-                            ));
+              Padding(
+                padding: const EdgeInsets.only(top: 24), // Align with input fields
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: log.isCompleted
+                        ? null
+                        : () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) => RpeSelectorSheet(
+                                onSelected: (rpe) {
+                                  onChanged(SetLogState(
+                                    actualReps: log.actualReps,
+                                    actualWeight: log.actualWeight,
+                                    rpe: rpe,
+                                    isCompleted: log.isCompleted,
+                                  ));
+                                },
+                              ),
+                            );
                           },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: 50,
+                      height: 48, // Match height of NumberInputControl roughly
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      decoration: BoxDecoration(
+                        color: log.rpe != null
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.1)
+                            : Theme.of(context)
+                                .disabledColor
+                                .withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: log.rpe != null
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.3)
+                              : Colors.transparent,
                         ),
-                       );
-                    },
-                    borderRadius: BorderRadius.circular(4),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                      child: Text(
-                        'RPE ${log.rpe ?? '-'}',
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'RPE',
+                            style: TextStyle(
+                              fontSize: 9,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            log.rpe?.toString() ?? '-',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: log.rpe != null
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
 
               const SizedBox(width: 12),

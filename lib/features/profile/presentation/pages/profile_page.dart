@@ -359,44 +359,66 @@ class ProfilePage extends HookConsumerWidget {
                             style: TextStyle(color: Colors.grey, fontSize: 12),
                           ),
                           const Divider(height: 32),
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.flag_outlined),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Objetivo',
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.flag_outlined),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Objetivo',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
                               ),
-                              DropdownButton<String>(
-                                value: ['Hipertrofia', 'Força', 'Resistência'].contains(settings.goal) ? settings.goal : 'Hipertrofia',
-                                onChanged: (val) {
-                                  if (val != null) ref.read(settingsProvider.notifier).setGoal(val);
-                                },
-                                items: ['Hipertrofia', 'Força', 'Resistência'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                                underline: const SizedBox(),
+                              const SizedBox(height: 12),
+                              SizedBox(
+                                width: double.infinity,
+                                child: SegmentedButton<String>(
+                                  segments: const [
+                                    ButtonSegment(value: 'Hipertrofia', label: Text('Hipertrofia')),
+                                    ButtonSegment(value: 'Força', label: Text('Força')),
+                                    ButtonSegment(value: 'Resistência', label: Text('Resistência')),
+                                  ],
+                                  selected: {['Hipertrofia', 'Força', 'Resistência'].contains(settings.goal) ? settings.goal : 'Hipertrofia'},
+                                  onSelectionChanged: (newSelection) {
+                                    ref.read(settingsProvider.notifier).setGoal(newSelection.first);
+                                  },
+                                  showSelectedIcon: false,
+                                ),
                               ),
                             ],
                           ),
                           const Divider(height: 32),
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(Icons.trending_up),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  'Nível',
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.trending_up),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Nível',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
                               ),
-                              DropdownButton<String>(
-                                value: ['Iniciante', 'Intermediário', 'Avançado'].contains(settings.experienceLevel) ? settings.experienceLevel : 'Iniciante',
-                                onChanged: (val) {
-                                  if (val != null) ref.read(settingsProvider.notifier).setExperienceLevel(val);
-                                },
-                                items: ['Iniciante', 'Intermediário', 'Avançado'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                                underline: const SizedBox(),
+                              const SizedBox(height: 12),
+                              SizedBox(
+                                width: double.infinity,
+                                child: SegmentedButton<String>(
+                                  segments: const [
+                                    ButtonSegment(value: 'Iniciante', label: Text('Iniciante')),
+                                    ButtonSegment(value: 'Intermediário', label: Text('Interm.')),
+                                    ButtonSegment(value: 'Avançado', label: Text('Avançado')),
+                                  ],
+                                  selected: {['Iniciante', 'Intermediário', 'Avançado'].contains(settings.experienceLevel) ? settings.experienceLevel : 'Iniciante'},
+                                  onSelectionChanged: (newSelection) {
+                                    ref.read(settingsProvider.notifier).setExperienceLevel(newSelection.first);
+                                  },
+                                  showSelectedIcon: false,
+                                ),
                               ),
                             ],
                           ),
