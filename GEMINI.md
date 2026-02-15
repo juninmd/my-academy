@@ -48,3 +48,7 @@ This file serves as a living memory for AI agents (Jules, etc.) working on this 
 - **Goal:** Improve maintainability and testability of the workout player feature.
 - **Refactor Status:** Successfully extracted `WorkoutSetRow`, `WorkoutHistoryView`, and `WorkoutWarmupList` from `WorkoutPlayerPage`.
 - **Result:** Reduced `WorkoutPlayerPage` size by ~32%. Tests passed.
+
+## Recent Actions (Codex - 2026-02-14)
+- **Web bootstrap compatibility fix:** Replaced legacy `flutter.js` loader script in `web/index.html` with `flutter_bootstrap.js` to avoid runtime JavaScript bootstrap errors in generated web builds.
+- **Deployment note:** Keep `web/index.html` aligned with the active Flutter template to prevent non-rendering web bundles after SDK upgrades.
