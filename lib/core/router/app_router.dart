@@ -10,8 +10,6 @@ import '../../features/home/presentation/pages/home_shell_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/onboarding/presentation/providers/onboarding_provider.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
-import '../../features/students/presentation/pages/student_add_page.dart';
-import '../../features/students/presentation/pages/students_page.dart';
 import '../../features/workouts/domain/entities/exercise_entity.dart';
 import '../../features/workouts/domain/entities/workout_group_entity.dart';
 import '../../features/workouts/presentation/pages/analytics_page.dart';
@@ -67,10 +65,6 @@ GoRouter router(Ref ref) {
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
       GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingPage()),
-      GoRoute(
-        path: '/analytics',
-        builder: (context, state) => const AnalyticsPage(),
-      ),
       GoRoute(
         path: '/history',
         builder: (context, state) => const WorkoutHistoryPage(),
@@ -154,18 +148,12 @@ GoRouter router(Ref ref) {
             ],
           ),
 
-          // Branch 3: Students
+          // Branch 3: Analytics (Progress)
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/students',
-                builder: (context, state) => const StudentsPage(),
-                routes: [
-                  GoRoute(
-                    path: 'add',
-                    builder: (context, state) => const StudentAddPage(),
-                  ),
-                ],
+                path: '/analytics',
+                builder: (context, state) => const AnalyticsPage(),
               ),
             ],
           ),

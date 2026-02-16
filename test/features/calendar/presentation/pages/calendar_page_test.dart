@@ -7,6 +7,9 @@ import 'package:my_academy/features/auth/presentation/providers/auth_provider.da
 import 'package:my_academy/features/calendar/data/repositories/calendar_repository.dart';
 import 'package:my_academy/features/calendar/domain/entities/workout_session_entity.dart';
 import 'package:my_academy/features/calendar/presentation/pages/calendar_page.dart';
+import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
+import 'package:my_academy/features/workouts/domain/entities/workout_group_entity.dart';
+import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
@@ -30,14 +33,22 @@ void main() {
           authNotifierProvider.overrideWith(() => MockAuthNotifier(user)),
           // Provide specific override for the current month view
           workoutSessionsProvider('user1', now.month, now.year).overrideWith(
-            (ref) => Future.value([
-              WorkoutSessionEntity(
-                workoutGroupId: 1,
-                date: now,
-                checked: true,
-                userId: 'user1',
-              ),
-            ]),
+            (ref) async {
+              return [
+                WorkoutSessionEntity(
+                  workoutGroupId: 1,
+                  date: now,
+                  checked: true,
+                  userId: 'user1',
+                ),
+              ];
+            },
+          ),
+          workoutGroupsProvider('user1').overrideWith(
+            (ref) async => <WorkoutGroupEntity>[],
+          ),
+          allExerciseLogsProvider.overrideWith(
+            (ref) async => <ExerciseLogEntity>[],
           ),
         ],
         child: const MaterialApp(
