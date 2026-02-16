@@ -24,6 +24,7 @@ void main() {
 
     expect(find.text('Dashboard'), findsOneWidget);
     expect(find.text('Treinos'), findsOneWidget);
+    expect(find.text('Progresso'), findsOneWidget);
 
     await tester.tap(find.text('Treinos'));
     verify(mockShell.goBranch(1, initialLocation: false));

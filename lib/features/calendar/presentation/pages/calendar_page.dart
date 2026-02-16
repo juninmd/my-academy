@@ -3,10 +3,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'package:intl/intl.dart';
+
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../data/repositories/calendar_repository.dart';
 import '../../domain/entities/workout_session_entity.dart';
+import '../../../workouts/domain/entities/workout_group_entity.dart';
+import '../../../workouts/domain/entities/exercise_log_entity.dart';
 
 class CalendarPage extends HookConsumerWidget {
   const CalendarPage({super.key});
@@ -28,6 +32,7 @@ class CalendarPage extends HookConsumerWidget {
 
     // Fetch workout groups to resolve names
     final workoutGroupsAsync = ref.watch(workoutGroupsProvider(user?.id ?? ''));
+    final logsAsync = ref.watch(allExerciseLogsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Calendário')),
@@ -44,10 +49,22 @@ class CalendarPage extends HookConsumerWidget {
                     selectedDay.value,
                   );
 
-                  final groupNames = workoutGroupsAsync.maybeWhen(
-                    data: (groups) => {for (var g in groups) g.id: g.name},
-                    orElse: () => <int, String>{},
+                  final groupsMap = workoutGroupsAsync.maybeWhen(
+                    data: (groups) => {for (var g in groups) g.id: g},
+                    orElse: () => <int, WorkoutGroupEntity>{},
                   );
+
+                  // Calculate daily stats from logs
+                  final dailyLogs = logsAsync.maybeWhen(
+                    data: (logs) => logs.where((l) => isSameDay(l.date, selectedDay.value)).toList(),
+                    orElse: () => <ExerciseLogEntity>[],
+                  );
+
+                  final dailyVolume = dailyLogs.fold<double>(0, (sum, log) =>
+                    sum + log.sets.fold(0, (s, set) => s + (set.weight * set.reps))
+                  );
+
+                  final distinctExercises = dailyLogs.map((l) => l.exerciseId).toSet().length;
 
                   return Column(
                     children: [
@@ -93,7 +110,7 @@ class CalendarPage extends HookConsumerWidget {
                               child: Row(
                                 children: [
                                   Icon(
-                                    Icons.check_circle,
+                                    Icons.insights,
                                     color:
                                         Theme.of(context).colorScheme.primary,
                                   ),
@@ -103,13 +120,13 @@ class CalendarPage extends HookConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${eventsForSelectedDay.length} treinos no dia',
+                                        '${eventsForSelectedDay.length} sessões • $distinctExercises exercícios',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       Text(
-                                        'Total no mês: ${sessions.length}',
+                                        'Volume do dia: ${(dailyVolume / 1000).toStringAsFixed(1)} ton',
                                         style:
                                             Theme.of(
                                               context,
@@ -131,25 +148,56 @@ class CalendarPage extends HookConsumerWidget {
                               )
                             else
                               ...eventsForSelectedDay.map(
-                                (e) => Card(
-                                  child: ListTile(
-                                    leading: const Icon(Icons.fitness_center),
-                                    title: Text(
-                                      groupNames[e.workoutGroupId] ??
-                                          'Treino (ID: ${e.workoutGroupId})',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                (e) {
+                                  final group = groupsMap[e.workoutGroupId];
+                                  final groupName = group?.name ?? 'Treino (ID: ${e.workoutGroupId})';
+                                  final exercisesList = group?.workouts.map((w) => w.exercise?.name).whereType<String>().join(', ') ?? '';
+                                  final timeFormat = DateFormat('HH:mm');
+
+                                  return Card(
+                                    margin: const EdgeInsets.only(bottom: 8),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                      leading: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.secondaryContainer,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(Icons.fitness_center, color: Theme.of(context).colorScheme.onSecondaryContainer),
+                                      ),
+                                      title: Text(
+                                        groupName,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Realizado às ${timeFormat.format(e.date)}',
+                                            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                                          ),
+                                          if (exercisesList.isNotEmpty)
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 4.0),
+                                              child: Text(
+                                                exercisesList,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Theme.of(context).textTheme.bodySmall,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      trailing: const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
                                       ),
                                     ),
-                                    subtitle: Text(
-                                      'Realizado às ${e.date.hour.toString().padLeft(2, '0')}:${e.date.minute.toString().padLeft(2, '0')}',
-                                    ),
-                                    trailing: const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                           ],
                         ),

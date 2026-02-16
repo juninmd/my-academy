@@ -40,9 +40,9 @@ class HomeShellPage extends StatelessWidget {
           label: 'Calendário',
         ),
         NavigationDestination(
-          icon: Icon(Icons.people_outline),
-          selectedIcon: Icon(Icons.people),
-          label: 'Alunos',
+          icon: Icon(Icons.bar_chart_outlined),
+          selectedIcon: Icon(Icons.bar_chart),
+          label: 'Progresso',
         ),
         NavigationDestination(
           icon: Icon(Icons.person_outline),
