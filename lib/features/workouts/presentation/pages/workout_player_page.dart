@@ -44,6 +44,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
         final pageController = usePageController();
         final currentExerciseIndex = useState(0);
         final sessionLogs = useState<Map<int, ExerciseSessionLog>>({});
+        final newRecords = useState<List<String>>([]);
 
         // Global Workout Timer (Total Duration)
         final timerNotifier = useMemoized(() => TimerNotifier()..start(), []);
@@ -131,9 +132,15 @@ class WorkoutPlayerPage extends HookConsumerWidget {
         Future<void> onExerciseFinished(
           Map<int, SetLogState> logs,
           String notes,
+          String? recordBroken,
         ) async {
           await HapticFeedback.heavyImpact();
           stopRestTimer();
+
+          if (recordBroken != null) {
+            newRecords.value = [...newRecords.value, recordBroken];
+          }
+
           final currentWorkout = activeWorkouts[currentExerciseIndex.value];
 
           // Save to Repository
@@ -185,6 +192,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                       (context) => WorkoutSummaryPage(
                         duration: Duration(seconds: timerNotifier.value),
                         sessionLogs: newSessionLogs,
+                        newRecords: newRecords.value,
                       ),
                 ),
               );
@@ -346,7 +354,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
   final bool isTimerRunning;
   final String timerValue;
   final VoidCallback onToggleTimer;
-  final Function(Map<int, SetLogState>, String) onFinished;
+  final Function(Map<int, SetLogState>, String, String?) onFinished;
   final Function(int) onSetCompleted;
 
   @override
@@ -373,6 +381,50 @@ class _ExercisePlayerView extends HookConsumerWidget {
     final historyLogsAsync = ref.watch(
       exerciseLogsProvider(workout.exerciseId),
     );
+
+    // Smart Pre-fill Logic
+    useEffect(() {
+      if (historyLogsAsync.asData != null &&
+          historyLogsAsync.value != null &&
+          historyLogsAsync.value!.isNotEmpty) {
+        final lastLog = historyLogsAsync.value!.first;
+        bool updated = false;
+        final newLogs = Map<int, SetLogState>.from(logs.value);
+
+        for (var entry in newLogs.entries) {
+          // Only pre-fill if the planned weight is 0 (unspecified)
+          // and we have a corresponding set in history
+          if (entry.value.actualWeight == 0 &&
+              entry.key < lastLog.sets.length) {
+            final lastSet = lastLog.sets[entry.key];
+            newLogs[entry.key] = SetLogState(
+              actualReps: lastSet.reps,
+              actualWeight: lastSet.weight,
+              rpe: entry.value.rpe,
+              isCompleted: false,
+            );
+            updated = true;
+          }
+        }
+
+        if (updated) {
+          // Using a microtask to avoid setState during build if this runs synchronously
+          Future.microtask(() {
+            logs.value = newLogs;
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Pesos do último treino carregados automaticamente'),
+                  duration: Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+          });
+        }
+      }
+      return null;
+    }, [historyLogsAsync.asData?.value]);
 
     final allSetsCompleted =
         workout.series.isEmpty ||
@@ -523,8 +575,9 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                   )
                                   .firstOrNull;
 
-                          if (lastNoteLog == null)
+                          if (lastNoteLog == null) {
                             return const SizedBox.shrink();
+                          }
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16),
@@ -584,6 +637,8 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                   // PR Check
                                   final historyLogs =
                                       historyLogsAsync.asData?.value ?? [];
+                                  String? recordMessage;
+
                                   if (historyLogs.isNotEmpty) {
                                     double currentMax1RM = 0;
                                     for (final log in logs.value.values) {
@@ -592,8 +647,9 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                             log.actualWeight.toDouble(),
                                             log.actualReps,
                                           );
-                                      if (oneRM > currentMax1RM)
+                                      if (oneRM > currentMax1RM) {
                                         currentMax1RM = oneRM;
+                                      }
                                     }
 
                                     double historyMax1RM = 0;
@@ -604,13 +660,17 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                               set.weight.toDouble(),
                                               set.reps,
                                             );
-                                        if (oneRM > historyMax1RM)
+                                        if (oneRM > historyMax1RM) {
                                           historyMax1RM = oneRM;
+                                        }
                                       }
                                     }
 
                                     if (currentMax1RM > historyMax1RM &&
                                         historyMax1RM > 0) {
+                                      recordMessage =
+                                          "${workout.exercise?.name ?? 'Exercício'}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)";
+
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
@@ -651,7 +711,11 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                       );
                                     }
                                   }
-                                  onFinished(logs.value, notesController.text);
+                                  onFinished(
+                                    logs.value,
+                                    notesController.text,
+                                    recordMessage,
+                                  );
                                 }
                                 : null,
                         style: ElevatedButton.styleFrom(

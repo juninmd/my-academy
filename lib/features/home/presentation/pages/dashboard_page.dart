@@ -22,8 +22,12 @@ class DashboardPage extends ConsumerWidget {
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Bom dia';
-    if (hour < 18) return 'Boa tarde';
+    if (hour < 12) {
+      return 'Bom dia';
+    }
+    if (hour < 18) {
+      return 'Boa tarde';
+    }
     return 'Boa noite';
   }
 
@@ -176,7 +180,7 @@ class DashboardPage extends ConsumerWidget {
                                     child: CircularProgressIndicator(),
                                   ),
                                 ),
-                            error: (_, __) => const SizedBox.shrink(),
+                            error: (error, stack) => const SizedBox.shrink(),
                           ),
                           const SizedBox(height: 24),
                           const WeeklyProgressCard(),
@@ -189,29 +193,54 @@ class DashboardPage extends ConsumerWidget {
                           const SizedBox(height: 32),
 
                           if (!summary.hasWorkoutToday) ...[
-                            Card(
-                              elevation: 0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer
-                                  .withValues(alpha: 0.3),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: 0.1),
+                                    Theme.of(context).colorScheme.tertiary
+                                        .withValues(alpha: 0.1),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.primary
+                                      .withValues(alpha: 0.2),
+                                ),
                               ),
                               child: InkWell(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(24),
                                 onTap: () => context.push('/workouts/create'),
                                 child: Padding(
                                   padding: const EdgeInsets.all(20),
                                   child: Row(
                                     children: [
-                                      Icon(
-                                        Icons.flash_on,
-                                        size: 32,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withValues(alpha: 0.4),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Icon(
+                                          Icons.flash_on,
+                                          size: 24,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                       const SizedBox(width: 16),
                                       Expanded(
@@ -221,26 +250,29 @@ class DashboardPage extends ConsumerWidget {
                                           children: [
                                             Text(
                                               'Treino Rápido',
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.titleMedium?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              'Iniciar uma sessão sem plano definido',
-                                              style:
-                                                  Theme.of(
-                                                    context,
-                                                  ).textTheme.bodySmall,
+                                              'Sem planos? Inicie agora.',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
                                             ),
                                           ],
                                         ),
                                       ),
-                                      const Icon(
+                                      Icon(
                                         Icons.arrow_forward_ios,
                                         size: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                     ],
                                   ),
@@ -408,8 +440,9 @@ class DashboardPage extends ConsumerWidget {
                                 // Show Last Workout if available
                                 logsAsync.when(
                                   data: (logs) {
-                                    if (logs.isEmpty)
+                                    if (logs.isEmpty) {
                                       return const SizedBox.shrink();
+                                    }
 
                                     // Find latest date
                                     final latestLog = logs.reduce(
@@ -655,7 +688,7 @@ class DashboardPage extends ConsumerWidget {
                       ),
                   loading:
                       () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) => Center(child: Text('Erro: $err')),
+                  error: (error, stack) => Center(child: Text('Erro: $error')),
                 ),
           ],
         ),
