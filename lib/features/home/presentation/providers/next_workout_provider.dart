@@ -6,7 +6,9 @@ import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 
 // Manual provider definition to avoid build_runner dependency for this task
-final nextWorkoutProvider = FutureProvider.autoDispose<WorkoutGroupEntity?>((ref) async {
+final nextWorkoutProvider = FutureProvider.autoDispose<WorkoutGroupEntity?>((
+  ref,
+) async {
   final userAsync = ref.watch(authProvider);
   final user = userAsync.value;
   if (user == null) return null;
@@ -19,18 +21,20 @@ final nextWorkoutProvider = FutureProvider.autoDispose<WorkoutGroupEntity?>((ref
   // Fetch recent sessions (this month)
   final now = DateTime.now();
   final currentSessions = await ref.watch(
-      workoutSessionsProvider(user.id, now.month, now.year).future);
+    workoutSessionsProvider(user.id, now.month, now.year).future,
+  );
 
-  var sessions = [...currentSessions];
+  final sessions = [...currentSessions];
 
   // If no sessions this month, check last month
   if (sessions.isEmpty) {
-     final lastMonth = now.month == 1 ? 12 : now.month - 1;
-     final lastYear = now.month == 1 ? now.year - 1 : now.year;
-     // Note: workoutSessionsProvider is family, so we must invoke it
-     final prevSessions = await ref.watch(
-         workoutSessionsProvider(user.id, lastMonth, lastYear).future);
-     sessions.addAll(prevSessions);
+    final lastMonth = now.month == 1 ? 12 : now.month - 1;
+    final lastYear = now.month == 1 ? now.year - 1 : now.year;
+    // Note: workoutSessionsProvider is family, so we must invoke it
+    final prevSessions = await ref.watch(
+      workoutSessionsProvider(user.id, lastMonth, lastYear).future,
+    );
+    sessions.addAll(prevSessions);
   }
 
   if (sessions.isEmpty) {
@@ -43,7 +47,9 @@ final nextWorkoutProvider = FutureProvider.autoDispose<WorkoutGroupEntity?>((ref
   final lastSession = sessions.first;
 
   // Find the group index
-  final lastGroupIndex = groups.indexWhere((g) => g.id == lastSession.workoutGroupId);
+  final lastGroupIndex = groups.indexWhere(
+    (g) => g.id == lastSession.workoutGroupId,
+  );
 
   if (lastGroupIndex == -1) {
     // Group deleted or not found, suggest first

@@ -21,7 +21,8 @@ class MuscleSplitChart extends StatelessWidget {
     // 1. Filter logs (last 30 days)
     final now = DateTime.now();
     final thirtyDaysAgo = now.subtract(const Duration(days: 30));
-    final recentLogs = logs.where((l) => l.date.isAfter(thirtyDaysAgo)).toList();
+    final recentLogs =
+        logs.where((l) => l.date.isAfter(thirtyDaysAgo)).toList();
 
     if (recentLogs.isEmpty) {
       return const Padding(
@@ -35,7 +36,8 @@ class MuscleSplitChart extends StatelessWidget {
     int totalSets = 0;
 
     for (final log in recentLogs) {
-      final exercise = exercises.where((e) => e.id == log.exerciseId).firstOrNull;
+      final exercise =
+          exercises.where((e) => e.id == log.exerciseId).firstOrNull;
       if (exercise == null) continue;
 
       final group = MuscleGroupMapper.getMuscleGroup(exercise.name);
@@ -63,8 +65,9 @@ class MuscleSplitChart extends StatelessWidget {
     int colorIndex = 0;
 
     // Sort by count descending
-    final sortedEntries = distribution.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final sortedEntries =
+        distribution.entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
 
     for (final entry in sortedEntries) {
       final percentage = (entry.value / totalSets) * 100;
@@ -107,7 +110,10 @@ class MuscleSplitChart extends StatelessWidget {
                     child: PieChart(
                       PieChartData(
                         pieTouchData: PieTouchData(
-                          touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                          touchCallback: (
+                            FlTouchEvent event,
+                            pieTouchResponse,
+                          ) {
                             // Handle touch if needed
                           },
                         ),
@@ -125,32 +131,33 @@ class MuscleSplitChart extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: sortedEntries.map((entry) {
-                      final index = sortedEntries.indexOf(entry);
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 4.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 12,
-                              height: 12,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: colors[index % colors.length],
-                              ),
+                    children:
+                        sortedEntries.map((entry) {
+                          final index = sortedEntries.indexOf(entry);
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 4.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: colors[index % colors.length],
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    entry.key,
+                                    style: const TextStyle(fontSize: 12),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                entry.key,
-                                style: const TextStyle(fontSize: 12),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                          );
+                        }).toList(),
                   ),
                 ),
               ],

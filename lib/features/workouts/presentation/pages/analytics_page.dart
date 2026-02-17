@@ -35,11 +35,7 @@ class AnalyticsPage extends HookConsumerWidget {
           ),
         ),
         body: const TabBarView(
-          children: [
-            _ProgressTab(),
-            _SplitTab(),
-            _RecordsTab(),
-          ],
+          children: [_ProgressTab(), _SplitTab(), _RecordsTab()],
         ),
       ),
     );
@@ -83,8 +79,7 @@ class _ProgressTab extends HookConsumerWidget {
                   0,
                   (sum, set) => sum + (set.weight * set.reps),
                 );
-                volumePerDay[dayIndex] =
-                    (volumePerDay[dayIndex] ?? 0) + volume;
+                volumePerDay[dayIndex] = (volumePerDay[dayIndex] ?? 0) + volume;
 
                 setsPerDay[dayIndex] =
                     (setsPerDay[dayIndex] ?? 0) + log.sets.length;
@@ -180,12 +175,20 @@ class _ProgressTab extends HookConsumerWidget {
                         interval: interval.toDouble(),
                         getTitlesWidget: (value, meta) {
                           if (value.toInt() >= days) return const SizedBox();
-                          final date = today.subtract(Duration(days: (days - 1) - value.toInt()));
+                          final date = today.subtract(
+                            Duration(days: (days - 1) - value.toInt()),
+                          );
                           return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              days == 30 ? DateFormat('dd').format(date) : DateFormat.E('pt_BR').format(date)[0].toUpperCase(),
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10),
+                              days == 30
+                                  ? DateFormat('dd').format(date)
+                                  : DateFormat.E(
+                                    'pt_BR',
+                                  ).format(date)[0].toUpperCase(),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodySmall?.copyWith(fontSize: 10),
                             ),
                           );
                         },
@@ -274,13 +277,21 @@ class _ProgressTab extends HookConsumerWidget {
                         showTitles: true,
                         interval: interval.toDouble(),
                         getTitlesWidget: (value, meta) {
-                           if (value.toInt() >= days) return const SizedBox();
-                           final date = today.subtract(Duration(days: (days - 1) - value.toInt()));
-                           return Padding(
+                          if (value.toInt() >= days) return const SizedBox();
+                          final date = today.subtract(
+                            Duration(days: (days - 1) - value.toInt()),
+                          );
+                          return Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
-                              days == 30 ? DateFormat('dd').format(date) : DateFormat.E('pt_BR').format(date)[0].toUpperCase(),
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10),
+                              days == 30
+                                  ? DateFormat('dd').format(date)
+                                  : DateFormat.E(
+                                    'pt_BR',
+                                  ).format(date)[0].toUpperCase(),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.bodySmall?.copyWith(fontSize: 10),
                             ),
                           );
                         },
@@ -331,29 +342,39 @@ class _SplitTab extends HookConsumerWidget {
         return exercisesAsync.when(
           data: (exercises) {
             if (logs.isEmpty) {
-              return const Center(child: Text('Nenhum dado de treino disponível.'));
+              return const Center(
+                child: Text('Nenhum dado de treino disponível.'),
+              );
             }
 
             // Calculate Split
             final splitData = useMemoized(() {
-               final Map<String, double> volumeMap = {};
-               for (var log in logs) {
-                 // Ignore logs older than 90 days for generic split analysis?
-                 // Or keep all time? Let's keep all time for now or last 30 days?
-                 // Let's do last 30 days to be relevant.
-                 if (DateTime.now().difference(log.date).inDays > 30) continue;
+              final Map<String, double> volumeMap = {};
+              for (var log in logs) {
+                // Ignore logs older than 90 days for generic split analysis?
+                // Or keep all time? Let's keep all time for now or last 30 days?
+                // Let's do last 30 days to be relevant.
+                if (DateTime.now().difference(log.date).inDays > 30) continue;
 
-                 final exercise = exercises.where((e) => e.id == log.exerciseId).firstOrNull
-                    ?? const ExerciseEntity(id: -1, name: 'Desconhecido');
+                final exercise =
+                    exercises
+                        .where((e) => e.id == log.exerciseId)
+                        .firstOrNull ??
+                    const ExerciseEntity(id: -1, name: 'Desconhecido');
 
-                 final group = MuscleGroupMapper.getMuscleGroup(exercise.name);
-                 final volume = log.sets.fold(0.0, (sum, s) => sum + (s.weight * s.reps));
-                 volumeMap[group] = (volumeMap[group] ?? 0) + volume;
-               }
+                final group = MuscleGroupMapper.getMuscleGroup(exercise.name);
+                final volume = log.sets.fold(
+                  0.0,
+                  (sum, s) => sum + (s.weight * s.reps),
+                );
+                volumeMap[group] = (volumeMap[group] ?? 0) + volume;
+              }
 
-               // Sort
-               final sorted = volumeMap.entries.toList()..sort((a,b) => b.value.compareTo(a.value));
-               return sorted;
+              // Sort
+              final sorted =
+                  volumeMap.entries.toList()
+                    ..sort((a, b) => b.value.compareTo(a.value));
+              return sorted;
             }, [logs, exercises]);
 
             if (splitData.isEmpty) {
@@ -367,86 +388,110 @@ class _SplitTab extends HookConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                   Text('Distribuição de Volume (30d)', style: Theme.of(context).textTheme.titleLarge),
-                   const SizedBox(height: 24),
-                   AspectRatio(
-                     aspectRatio: 1.3,
-                     child: PieChart(
-                       PieChartData(
-                         sections: splitData.map((e) {
-                           final percent = (e.value / totalVolume) * 100;
-                           final isLarge = percent > 10;
-                           return PieChartSectionData(
-                             value: e.value,
-                             title: '${percent.toStringAsFixed(0)}%',
-                             radius: isLarge ? 80 : 60,
-                             titleStyle: TextStyle(
-                               fontSize: isLarge ? 16 : 12,
-                               fontWeight: FontWeight.bold,
-                               color: Colors.white
-                             ),
-                             color: _getColor(e.key),
-                           );
-                         }).toList(),
-                         sectionsSpace: 2,
-                         centerSpaceRadius: 40,
-                       )
-                     ),
-                   ),
-                   const SizedBox(height: 24),
-                   // Legend
-                   Card(
-                     child: Padding(
-                       padding: const EdgeInsets.symmetric(vertical: 8),
-                       child: Column(
-                         children: splitData.map((e) {
-                           final percent = (e.value / totalVolume) * 100;
-                           return ListTile(
-                             dense: true,
-                             leading: CircleAvatar(backgroundColor: _getColor(e.key), radius: 6),
-                             title: Text(e.key),
-                             subtitle: LinearProgressIndicator(
-                               value: percent / 100,
-                               color: _getColor(e.key),
-                               backgroundColor: Colors.grey.withValues(alpha: 0.1),
-                             ),
-                             trailing: Column(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               crossAxisAlignment: CrossAxisAlignment.end,
-                               children: [
-                                 Text('${percent.toStringAsFixed(1)}%'),
-                                 Text('${(e.value / 1000).toStringAsFixed(1)} ton', style: const TextStyle(fontSize: 10, color: Colors.grey)),
-                               ],
-                             ),
-                           );
-                         }).toList(),
-                       ),
-                     ),
-                   ),
+                  Text(
+                    'Distribuição de Volume (30d)',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 24),
+                  AspectRatio(
+                    aspectRatio: 1.3,
+                    child: PieChart(
+                      PieChartData(
+                        sections:
+                            splitData.map((e) {
+                              final percent = (e.value / totalVolume) * 100;
+                              final isLarge = percent > 10;
+                              return PieChartSectionData(
+                                value: e.value,
+                                title: '${percent.toStringAsFixed(0)}%',
+                                radius: isLarge ? 80 : 60,
+                                titleStyle: TextStyle(
+                                  fontSize: isLarge ? 16 : 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                color: _getColor(e.key),
+                              );
+                            }).toList(),
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 40,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Legend
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Column(
+                        children:
+                            splitData.map((e) {
+                              final percent = (e.value / totalVolume) * 100;
+                              return ListTile(
+                                dense: true,
+                                leading: CircleAvatar(
+                                  backgroundColor: _getColor(e.key),
+                                  radius: 6,
+                                ),
+                                title: Text(e.key),
+                                subtitle: LinearProgressIndicator(
+                                  value: percent / 100,
+                                  color: _getColor(e.key),
+                                  backgroundColor: Colors.grey.withValues(
+                                    alpha: 0.1,
+                                  ),
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text('${percent.toStringAsFixed(1)}%'),
+                                    Text(
+                                      '${(e.value / 1000).toStringAsFixed(1)} ton',
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e,s) => Center(child: Text('Erro: $e')),
+          error: (e, s) => Center(child: Text('Erro: $e')),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e,s) => Center(child: Text('Erro: $e')),
+      error: (e, s) => Center(child: Text('Erro: $e')),
     );
   }
 
   Color _getColor(String group) {
-     switch(group) {
-       case 'Peito': return Colors.red;
-       case 'Costas': return Colors.blue;
-       case 'Pernas': return Colors.green;
-       case 'Ombros': return Colors.orange;
-       case 'Bíceps': return Colors.pink;
-       case 'Tríceps': return Colors.purple;
-       case 'Core': return Colors.teal;
-       default: return Colors.grey;
-     }
+    switch (group) {
+      case 'Peito':
+        return Colors.red;
+      case 'Costas':
+        return Colors.blue;
+      case 'Pernas':
+        return Colors.green;
+      case 'Ombros':
+        return Colors.orange;
+      case 'Bíceps':
+        return Colors.pink;
+      case 'Tríceps':
+        return Colors.purple;
+      case 'Core':
+        return Colors.teal;
+      default:
+        return Colors.grey;
+    }
   }
 }
 
@@ -463,7 +508,9 @@ class _RecordsTab extends HookConsumerWidget {
         return exercisesAsync.when(
           data: (exercises) {
             if (logs.isEmpty) {
-              return const Center(child: Text('Sem recordes ainda. Treine mais!'));
+              return const Center(
+                child: Text('Sem recordes ainda. Treine mais!'),
+              );
             }
 
             final prs = useMemoized(() {
@@ -479,17 +526,18 @@ class _RecordsTab extends HookConsumerWidget {
                   // If no entry or new 1RM is higher, update
                   if (!bests.containsKey(log.exerciseId) ||
                       oneRM > bests[log.exerciseId]!.weight) {
-
-                    final exercise = exercises
-                        .where((e) => e.id == log.exerciseId)
-                        .firstOrNull;
+                    final exercise =
+                        exercises
+                            .where((e) => e.id == log.exerciseId)
+                            .firstOrNull;
 
                     if (exercise != null) {
-                       bests[log.exerciseId] = _PRItem(
+                      bests[log.exerciseId] = _PRItem(
                         exerciseName: exercise.name,
                         weight: oneRM,
                         date: log.date,
-                        actualSet: '${set.weight.toStringAsFixed(1)}kg x ${set.reps}',
+                        actualSet:
+                            '${set.weight.toStringAsFixed(1)}kg x ${set.reps}',
                       );
                     }
                   }
@@ -513,16 +561,24 @@ class _RecordsTab extends HookConsumerWidget {
                 return Card(
                   elevation: 2,
                   margin: const EdgeInsets.only(bottom: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   child: ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     leading: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Colors.amber.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.emoji_events, color: Colors.amber),
+                      child: const Icon(
+                        Icons.emoji_events,
+                        color: Colors.amber,
+                      ),
                     ),
                     title: Text(
                       pr.exerciseName,
@@ -555,7 +611,9 @@ class _RecordsTab extends HookConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, s) => const Center(child: Text('Erro ao carregar exercícios')),
+          error:
+              (e, s) =>
+                  const Center(child: Text('Erro ao carregar exercícios')),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

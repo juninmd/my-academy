@@ -26,7 +26,6 @@ class AppTheme {
   static const Color onBackgroundLight = Colors.black87;
   static const Color onSurfaceLight = Colors.black87;
 
-
   static ThemeData get darkPremiumTheme {
     final baseTextTheme = GoogleFonts.outfitTextTheme(
       ThemeData.dark().textTheme,
@@ -55,12 +54,22 @@ class AppTheme {
 
       textTheme: _buildTextTheme(baseTextTheme, onBackgroundDark),
       appBarTheme: _buildAppBarTheme(backgroundDark, onBackgroundDark),
-      cardTheme: _buildCardTheme(surfaceDark, Colors.white.withValues(alpha: 0.08)),
+      cardTheme: _buildCardTheme(
+        surfaceDark,
+        Colors.white.withValues(alpha: 0.08),
+      ),
       elevatedButtonTheme: _buildElevatedButtonTheme(onPrimaryDark),
       outlinedButtonTheme: _buildOutlinedButtonTheme(secondaryColor),
       textButtonTheme: _buildTextButtonTheme(secondaryColor),
-      inputDecorationTheme: _buildInputDecorationTheme(surfaceVariantDark, onBackgroundDark, Colors.white.withValues(alpha: 0.1)),
-      bottomNavigationBarTheme: _buildBottomNavTheme(surfaceDark, onBackgroundDark),
+      inputDecorationTheme: _buildInputDecorationTheme(
+        surfaceVariantDark,
+        onBackgroundDark,
+        Colors.white.withValues(alpha: 0.1),
+      ),
+      bottomNavigationBarTheme: _buildBottomNavTheme(
+        surfaceDark,
+        onBackgroundDark,
+      ),
     );
   }
 
@@ -92,12 +101,24 @@ class AppTheme {
 
       textTheme: _buildTextTheme(baseTextTheme, onBackgroundLight),
       appBarTheme: _buildAppBarTheme(backgroundLight, onBackgroundLight),
-      cardTheme: _buildCardTheme(surfaceLight, Colors.black.withValues(alpha: 0.05)),
+      cardTheme: _buildCardTheme(
+        surfaceLight,
+        Colors.black.withValues(alpha: 0.05),
+      ),
       elevatedButtonTheme: _buildElevatedButtonTheme(onPrimaryLight),
-      outlinedButtonTheme: _buildOutlinedButtonTheme(primaryColor), // Use Primary for outlined in light mode for better contrast? Or keep secondary
+      outlinedButtonTheme: _buildOutlinedButtonTheme(
+        primaryColor,
+      ), // Use Primary for outlined in light mode for better contrast? Or keep secondary
       textButtonTheme: _buildTextButtonTheme(primaryColor),
-      inputDecorationTheme: _buildInputDecorationTheme(surfaceVariantLight, onBackgroundLight, Colors.black.withValues(alpha: 0.1)),
-      bottomNavigationBarTheme: _buildBottomNavTheme(surfaceLight, onBackgroundLight),
+      inputDecorationTheme: _buildInputDecorationTheme(
+        surfaceVariantLight,
+        onBackgroundLight,
+        Colors.black.withValues(alpha: 0.1),
+      ),
+      bottomNavigationBarTheme: _buildBottomNavTheme(
+        surfaceLight,
+        onBackgroundLight,
+      ),
     );
   }
 
@@ -105,158 +126,152 @@ class AppTheme {
 
   static TextTheme _buildTextTheme(TextTheme base, Color color) {
     return base.copyWith(
-        displayLarge: base.displayLarge?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: color,
-          letterSpacing: -1.5,
-        ),
-        displayMedium: base.displayMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-          color: color,
-          letterSpacing: -0.5,
-        ),
-        headlineMedium: base.headlineMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: color,
-        ),
-        titleLarge: base.titleLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: color,
-        ),
-        bodyLarge: base.bodyLarge?.copyWith(
-          color: color.withValues(alpha: 0.87),
-          fontSize: 16,
-          height: 1.5,
-        ),
-        bodyMedium: base.bodyMedium?.copyWith(
-          color: color.withValues(alpha: 0.60),
-          fontSize: 14,
-          height: 1.5,
-        ),
-      );
+      displayLarge: base.displayLarge?.copyWith(
+        fontWeight: FontWeight.bold,
+        color: color,
+        letterSpacing: -1.5,
+      ),
+      displayMedium: base.displayMedium?.copyWith(
+        fontWeight: FontWeight.bold,
+        color: color,
+        letterSpacing: -0.5,
+      ),
+      headlineMedium: base.headlineMedium?.copyWith(
+        fontWeight: FontWeight.w600,
+        color: color,
+      ),
+      titleLarge: base.titleLarge?.copyWith(
+        fontWeight: FontWeight.w600,
+        color: color,
+      ),
+      bodyLarge: base.bodyLarge?.copyWith(
+        color: color.withValues(alpha: 0.87),
+        fontSize: 16,
+        height: 1.5,
+      ),
+      bodyMedium: base.bodyMedium?.copyWith(
+        color: color.withValues(alpha: 0.60),
+        fontSize: 14,
+        height: 1.5,
+      ),
+    );
   }
 
   static AppBarTheme _buildAppBarTheme(Color bgColor, Color fgColor) {
     return AppBarTheme(
-        backgroundColor: bgColor,
-        elevation: 0,
-        centerTitle: true,
-        scrolledUnderElevation: 0,
-        titleTextStyle: GoogleFonts.outfit(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: fgColor,
-        ),
-        iconTheme: IconThemeData(color: fgColor),
-      );
+      backgroundColor: bgColor,
+      elevation: 0,
+      centerTitle: true,
+      scrolledUnderElevation: 0,
+      titleTextStyle: GoogleFonts.outfit(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: fgColor,
+      ),
+      iconTheme: IconThemeData(color: fgColor),
+    );
   }
 
   static CardThemeData _buildCardTheme(Color color, Color borderColor) {
     return CardThemeData(
-        color: color,
-        elevation: 0,
-        shadowColor: Colors.black.withValues(alpha: 0.05),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: borderColor,
-            width: 1,
-          ),
-        ),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      );
+      color: color,
+      elevation: 0,
+      shadowColor: Colors.black.withValues(alpha: 0.05),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: borderColor, width: 1),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    );
   }
 
   static ElevatedButtonThemeData _buildElevatedButtonTheme(Color fgColor) {
     return ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: fgColor,
-          elevation: 4,
-          shadowColor: primaryColor.withValues(alpha: 0.3),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          textStyle: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
-          ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: fgColor,
+        elevation: 4,
+        shadowColor: primaryColor.withValues(alpha: 0.3),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        textStyle: GoogleFonts.outfit(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 0.5,
         ),
-      );
+      ),
+    );
   }
 
   static OutlinedButtonThemeData _buildOutlinedButtonTheme(Color color) {
     return OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: color,
-          side: BorderSide(color: color, width: 2),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          textStyle: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+      style: OutlinedButton.styleFrom(
+        foregroundColor: color,
+        side: BorderSide(color: color, width: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        textStyle: GoogleFonts.outfit(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
         ),
-      );
+      ),
+    );
   }
 
   static TextButtonThemeData _buildTextButtonTheme(Color color) {
     return TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: color,
-          textStyle: GoogleFonts.outfit(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+      style: TextButton.styleFrom(
+        foregroundColor: color,
+        textStyle: GoogleFonts.outfit(
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
         ),
-      );
+      ),
+    );
   }
 
-  static InputDecorationTheme _buildInputDecorationTheme(Color fillColor, Color textColor, Color borderColor) {
+  static InputDecorationTheme _buildInputDecorationTheme(
+    Color fillColor,
+    Color textColor,
+    Color borderColor,
+  ) {
     return InputDecorationTheme(
-        filled: true,
-        fillColor: fillColor,
-        contentPadding: const EdgeInsets.all(20),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: borderColor,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: primaryColor, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: errorColor, width: 1),
-        ),
-        labelStyle: TextStyle(
-          color: textColor.withValues(alpha: 0.6),
-        ),
-        hintStyle: TextStyle(
-          color: textColor.withValues(alpha: 0.4),
-        ),
-        prefixIconColor: textColor.withValues(alpha: 0.6),
-        suffixIconColor: textColor.withValues(alpha: 0.6),
-      );
+      filled: true,
+      fillColor: fillColor,
+      contentPadding: const EdgeInsets.all(20),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(color: borderColor),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: primaryColor, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: errorColor, width: 1),
+      ),
+      labelStyle: TextStyle(color: textColor.withValues(alpha: 0.6)),
+      hintStyle: TextStyle(color: textColor.withValues(alpha: 0.4)),
+      prefixIconColor: textColor.withValues(alpha: 0.6),
+      suffixIconColor: textColor.withValues(alpha: 0.6),
+    );
   }
 
-  static BottomNavigationBarThemeData _buildBottomNavTheme(Color bgColor, Color unselectedColor) {
+  static BottomNavigationBarThemeData _buildBottomNavTheme(
+    Color bgColor,
+    Color unselectedColor,
+  ) {
     return BottomNavigationBarThemeData(
-        backgroundColor: bgColor.withValues(alpha: 0.9),
-        selectedItemColor: secondaryColor,
-        unselectedItemColor: unselectedColor.withValues(alpha: 0.4),
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-      );
+      backgroundColor: bgColor.withValues(alpha: 0.9),
+      selectedItemColor: secondaryColor,
+      unselectedItemColor: unselectedColor.withValues(alpha: 0.4),
+      type: BottomNavigationBarType.fixed,
+      elevation: 0,
+    );
   }
 }

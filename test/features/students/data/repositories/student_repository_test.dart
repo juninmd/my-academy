@@ -26,31 +26,29 @@ void main() {
           'name': 'Student 1',
           'email': 's1@test.com',
           'photoUrl': 'url1',
-          'personalId': 'trainer1'
+          'personalId': 'trainer1',
         },
         {
           'id': '2',
           'name': 'Student 2',
           'email': 's2@test.com',
           'photoUrl': 'url2',
-          'personalId': 'trainer1'
-        }
+          'personalId': 'trainer1',
+        },
       ];
 
-      when(mockApiClient.get('students?personalId=trainer1'))
-          .thenAnswer((_) async => mockData);
+      when(
+        mockApiClient.get('students?personalId=trainer1'),
+      ).thenAnswer((_) async => mockData);
 
       final result = await repository.getStudents('trainer1');
 
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('Should be right'),
-        (r) {
-          expect(r.length, 2);
-          expect(r[0].id, '1');
-          expect(r[1].id, '2');
-        },
-      );
+      result.fold((l) => fail('Should be right'), (r) {
+        expect(r.length, 2);
+        expect(r[0].id, '1');
+        expect(r[1].id, '2');
+      });
     });
 
     test('should return failure when exception occurs', () async {
@@ -74,55 +72,49 @@ void main() {
         'name': 'New',
         'email': 'new@test.com',
         'photoUrl': null,
-        'personalId': 'trainer1'
+        'personalId': 'trainer1',
       };
 
-      when(mockApiClient.post('students', data: anyNamed('data')))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        mockApiClient.post('students', data: anyNamed('data')),
+      ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.addStudent(student, 'trainer1');
 
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('Should be right'),
-        (r) => expect(r.id, '123'),
-      );
+      result.fold((l) => fail('Should be right'), (r) => expect(r.id, '123'));
     });
   });
 
   group('checkStudentExists', () {
     test('should return student when found', () async {
-       final mockResponse = [
+      final mockResponse = [
         {
-        'id': '123',
-        'name': 'New',
-        'email': 'new@test.com',
-        'photoUrl': null,
-        'personalId': 'trainer1'
-        }
+          'id': '123',
+          'name': 'New',
+          'email': 'new@test.com',
+          'photoUrl': null,
+          'personalId': 'trainer1',
+        },
       ];
-      when(mockApiClient.get('students?email=new@test.com'))
-        .thenAnswer((_) async => mockResponse);
+      when(
+        mockApiClient.get('students?email=new@test.com'),
+      ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.checkStudentExists('new@test.com');
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('Should be right'),
-        (r) => expect(r?.id, '123'),
-      );
+      result.fold((l) => fail('Should be right'), (r) => expect(r?.id, '123'));
     });
 
     test('should return null when not found', () async {
-       final mockResponse = [];
-      when(mockApiClient.get('students?email=new@test.com'))
-        .thenAnswer((_) async => mockResponse);
+      final mockResponse = [];
+      when(
+        mockApiClient.get('students?email=new@test.com'),
+      ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.checkStudentExists('new@test.com');
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('Should be right'),
-        (r) => expect(r, null),
-      );
+      result.fold((l) => fail('Should be right'), (r) => expect(r, null));
     });
   });
 

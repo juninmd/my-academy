@@ -28,14 +28,15 @@ class ExerciseDetailsPage extends ConsumerWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(exercise.name),
-              background: exercise.image != null
-                  ? CachedNetworkImage(
-                      imageUrl: exercise.image!,
-                      fit: BoxFit.cover,
-                      color: Colors.black45,
-                      colorBlendMode: BlendMode.darken,
-                    )
-                  : Container(color: Theme.of(context).primaryColor),
+              background:
+                  exercise.image != null
+                      ? CachedNetworkImage(
+                        imageUrl: exercise.image!,
+                        fit: BoxFit.cover,
+                        color: Colors.black45,
+                        colorBlendMode: BlendMode.darken,
+                      )
+                      : Container(color: Theme.of(context).primaryColor),
             ),
           ),
           // Personal Records Section
@@ -59,18 +60,23 @@ class ExerciseDetailsPage extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
-                    ...exercise.tips.map((tip) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(Icons.check_circle_outline,
-                                  size: 20, color: Colors.green),
-                              const SizedBox(width: 8),
-                              Expanded(child: Text(tip)),
-                            ],
-                          ),
-                        )),
+                    ...exercise.tips.map(
+                      (tip) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.check_circle_outline,
+                              size: 20,
+                              color: Colors.green,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(child: Text(tip)),
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 24),
                   ],
                   if (exercise.mistakes.isNotEmpty) ...[
@@ -79,18 +85,23 @@ class ExerciseDetailsPage extends ConsumerWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
-                    ...exercise.mistakes.map((mistake) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(Icons.error_outline,
-                                  size: 20, color: Colors.redAccent),
-                              const SizedBox(width: 8),
-                              Expanded(child: Text(mistake)),
-                            ],
-                          ),
-                        )),
+                    ...exercise.mistakes.map(
+                      (mistake) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              size: 20,
+                              color: Colors.redAccent,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(child: Text(mistake)),
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 24),
                   ],
                 ],
@@ -104,7 +115,10 @@ class ExerciseDetailsPage extends ConsumerWidget {
               data: (logs) {
                 if (logs.length < 2) return const SizedBox.shrink();
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -113,10 +127,7 @@ class ExerciseDetailsPage extends ConsumerWidget {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
-                      SizedBox(
-                        height: 200,
-                        child: ProgressChart(logs: logs),
-                      ),
+                      SizedBox(height: 200, child: ProgressChart(logs: logs)),
                       const SizedBox(height: 24),
                     ],
                   ),
@@ -128,13 +139,13 @@ class ExerciseDetailsPage extends ConsumerWidget {
           ),
 
           SliverToBoxAdapter(
-             child: Padding(
-               padding: const EdgeInsets.symmetric(horizontal: 16),
-               child: Text(
-                  'Histórico',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-             ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Histórico',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
           ),
           const SliverPadding(padding: EdgeInsets.only(top: 16)),
 
@@ -146,21 +157,22 @@ class ExerciseDetailsPage extends ConsumerWidget {
                 );
               }
               return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final log = logs[index];
-                    return _LogCard(log: log);
-                  },
-                  childCount: logs.length,
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final log = logs[index];
+                  return _LogCard(log: log);
+                }, childCount: logs.length),
               );
             },
-            loading: () => const SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()),
-            ),
-            error: (err, stack) => SliverFillRemaining(
-              child: Center(child: Text('Erro ao carregar histórico: $err')),
-            ),
+            loading:
+                () => const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+            error:
+                (err, stack) => SliverFillRemaining(
+                  child: Center(
+                    child: Text('Erro ao carregar histórico: $err'),
+                  ),
+                ),
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
         ],
@@ -168,7 +180,6 @@ class ExerciseDetailsPage extends ConsumerWidget {
     );
   }
 }
-
 
 class _LogCard extends StatelessWidget {
   const _LogCard({required this.log});
@@ -215,8 +226,9 @@ class _LogCard extends StatelessWidget {
                       Text(
                         'Melhor Série',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold),
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         '${bestSet.weight.toStringAsFixed(1)}kg x ${bestSet.reps}',
@@ -225,13 +237,14 @@ class _LogCard extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondaryContainer
-                          .withValues(alpha: 0.5),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.secondaryContainer.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(
@@ -248,10 +261,7 @@ class _LogCard extends StatelessWidget {
               ),
             if (log.notes != null && log.notes!.isNotEmpty) ...[
               const Divider(height: 24),
-              Text(
-                'Notas:',
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
+              Text('Notas:', style: Theme.of(context).textTheme.labelSmall),
               Text(log.notes!),
             ],
           ],

@@ -34,41 +34,44 @@ class ExerciseLibraryPage extends HookConsumerWidget {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Solicitar Novo Exercício'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Não encontrou o que procurava? Digite o nome do exercício abaixo e nós o adicionaremos em breve.'),
-                  const SizedBox(height: 16),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Nome do Exercício',
-                      border: OutlineInputBorder(),
-                    ),
-                    autofocus: true,
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancelar'),
-                ),
-                FilledButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Solicitação enviada com sucesso!'),
-                        behavior: SnackBarBehavior.floating,
+            builder:
+                (context) => AlertDialog(
+                  title: const Text('Solicitar Novo Exercício'),
+                  content: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Não encontrou o que procurava? Digite o nome do exercício abaixo e nós o adicionaremos em breve.',
                       ),
-                    );
-                  },
-                  child: const Text('Enviar'),
+                      SizedBox(height: 16),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: 'Nome do Exercício',
+                          border: OutlineInputBorder(),
+                        ),
+                        autofocus: true,
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancelar'),
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Solicitação enviada com sucesso!'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                      child: const Text('Enviar'),
+                    ),
+                  ],
                 ),
-              ],
-            ),
           );
         },
         icon: const Icon(Icons.add_task),
@@ -97,7 +100,10 @@ class ExerciseLibraryPage extends HookConsumerWidget {
               children: [
                 FilterChip(
                   label: const Text('Todos'),
-                  selected: filterType.value == FilterType.all && !showFavoritesOnly.value && selectedMuscleGroup.value == null,
+                  selected:
+                      filterType.value == FilterType.all &&
+                      !showFavoritesOnly.value &&
+                      selectedMuscleGroup.value == null,
                   onSelected: (selected) {
                     if (selected) {
                       filterType.value = FilterType.all;
@@ -111,11 +117,12 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   label: const Text('Recentes'),
                   selected: filterType.value == FilterType.recent,
                   onSelected: (selected) {
-                     filterType.value = selected ? FilterType.recent : FilterType.all;
-                     if (selected) {
-                       showFavoritesOnly.value = false;
-                       selectedMuscleGroup.value = null;
-                     }
+                    filterType.value =
+                        selected ? FilterType.recent : FilterType.all;
+                    if (selected) {
+                      showFavoritesOnly.value = false;
+                      selectedMuscleGroup.value = null;
+                    }
                   },
                 ),
                 const SizedBox(width: 8),
@@ -123,7 +130,9 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   label: const Text('Favoritos'),
                   selected: showFavoritesOnly.value,
                   avatar: Icon(
-                    showFavoritesOnly.value ? Icons.favorite : Icons.favorite_border,
+                    showFavoritesOnly.value
+                        ? Icons.favorite
+                        : Icons.favorite_border,
                     size: 16,
                     color: showFavoritesOnly.value ? Colors.red : null,
                   ),
@@ -142,7 +151,16 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   color: Theme.of(context).dividerColor,
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                 ),
-                ...['Peito', 'Costas', 'Pernas', 'Ombros', 'Bíceps', 'Tríceps', 'Core', 'Outros'].map((group) {
+                ...[
+                  'Peito',
+                  'Costas',
+                  'Pernas',
+                  'Ombros',
+                  'Bíceps',
+                  'Tríceps',
+                  'Core',
+                  'Outros',
+                ].map((group) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: FilterChip(
@@ -164,30 +182,44 @@ class ExerciseLibraryPage extends HookConsumerWidget {
           Expanded(
             child: exercisesAsync.when(
               data: (exercises) {
-                var filtered = exercises
-                    .where((e) => e.name
-                        .toLowerCase()
-                        .contains(searchTerm.value.toLowerCase()))
-                    .toList();
+                var filtered =
+                    exercises
+                        .where(
+                          (e) => e.name.toLowerCase().contains(
+                            searchTerm.value.toLowerCase(),
+                          ),
+                        )
+                        .toList();
 
-                final recentIds = logsAsync.value?.map((l) => l.exerciseId).toSet() ?? {};
+                final recentIds =
+                    logsAsync.value?.map((l) => l.exerciseId).toSet() ?? {};
 
                 if (filterType.value == FilterType.recent) {
-                   filtered = filtered.where((e) => recentIds.contains(e.id)).toList();
+                  filtered =
+                      filtered.where((e) => recentIds.contains(e.id)).toList();
                 }
 
                 if (showFavoritesOnly.value) {
-                  filtered = filtered.where((e) => favorites.contains(e.id)).toList();
+                  filtered =
+                      filtered.where((e) => favorites.contains(e.id)).toList();
                 }
 
                 if (selectedMuscleGroup.value != null) {
-                  filtered = filtered.where((e) => MuscleGroupMapper.getMuscleGroup(e.name) == selectedMuscleGroup.value).toList();
+                  filtered =
+                      filtered
+                          .where(
+                            (e) =>
+                                MuscleGroupMapper.getMuscleGroup(e.name) ==
+                                selectedMuscleGroup.value,
+                          )
+                          .toList();
                 }
 
                 if (filtered.isEmpty) {
                   return const CommonEmptyState(
                     title: 'Nenhum exercício encontrado',
-                    message: 'Tente buscar com outro termo ou alterar o filtro.',
+                    message:
+                        'Tente buscar com outro termo ou alterar o filtro.',
                     icon: Icons.search_off,
                   );
                 }
@@ -199,7 +231,9 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                     final exercise = filtered[index];
                     final isRecent = recentIds.contains(exercise.id);
                     final isFav = favorites.contains(exercise.id);
-                    final muscleGroup = MuscleGroupMapper.getMuscleGroup(exercise.name);
+                    final muscleGroup = MuscleGroupMapper.getMuscleGroup(
+                      exercise.name,
+                    );
 
                     return Card(
                       margin: const EdgeInsets.only(bottom: 12),
@@ -209,15 +243,14 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                         side: BorderSide(
-                          color: isRecent
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.3)
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .outline
-                                  .withValues(alpha: 0.1),
+                          color:
+                              isRecent
+                                  ? Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.3)
+                                  : Theme.of(
+                                    context,
+                                  ).colorScheme.outline.withValues(alpha: 0.1),
                         ),
                       ),
                       child: InkWell(
@@ -233,20 +266,25 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                                 width: 64,
                                 height: 64,
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHighest,
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).colorScheme.surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 clipBehavior: Clip.antiAlias,
-                                child: exercise.image != null
-                                    ? CachedNetworkImage(
-                                        imageUrl: exercise.image!,
-                                        fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.fitness_center),
-                                      )
-                                    : const Icon(Icons.fitness_center),
+                                child:
+                                    exercise.image != null
+                                        ? CachedNetworkImage(
+                                          imageUrl: exercise.image!,
+                                          fit: BoxFit.cover,
+                                          errorWidget:
+                                              (context, url, error) =>
+                                                  const Icon(
+                                                    Icons.fitness_center,
+                                                  ),
+                                        )
+                                        : const Icon(Icons.fitness_center),
                               ),
                               const SizedBox(width: 16),
                               Expanded(
@@ -266,26 +304,29 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                                         ),
                                         if (isRecent)
                                           Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 8),
+                                            margin: const EdgeInsets.only(
+                                              left: 8,
+                                            ),
                                             padding: const EdgeInsets.symmetric(
                                               horizontal: 8,
                                               vertical: 2,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryContainer,
-                                              borderRadius: BorderRadius.circular(
-                                                  8),
+                                              color:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                             child: Text(
                                               'Recente',
                                               style: TextStyle(
                                                 fontSize: 10,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimaryContainer,
+                                                color:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimaryContainer,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -297,16 +338,27 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                                       spacing: 4,
                                       children: [
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 6,
+                                            vertical: 2,
+                                          ),
                                           decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.secondaryContainer,
-                                            borderRadius: BorderRadius.circular(4),
+                                            color:
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .secondaryContainer,
+                                            borderRadius: BorderRadius.circular(
+                                              4,
+                                            ),
                                           ),
                                           child: Text(
                                             muscleGroup,
                                             style: TextStyle(
                                               fontSize: 10,
-                                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                                              color:
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onSecondaryContainer,
                                             ),
                                           ),
                                         ),
@@ -317,11 +369,15 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  isFav ? Icons.favorite : Icons.favorite_border,
+                                  isFav
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
                                   color: isFav ? Colors.red : Colors.grey,
                                 ),
                                 onPressed: () {
-                                  ref.read(favoritesProvider.notifier).toggleFavorite(exercise.id);
+                                  ref
+                                      .read(favoritesProvider.notifier)
+                                      .toggleFavorite(exercise.id);
                                 },
                               ),
                             ],

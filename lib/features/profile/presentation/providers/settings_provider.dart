@@ -66,19 +66,20 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final goal = prefs.getString('workout_goal') ?? 'Hipertrofia';
     final experienceLevel = prefs.getString('experience_level') ?? 'Iniciante';
     final unitSystemIndex = prefs.getInt('unit_system') ?? 0;
-    final unitSystem = UnitSystem.values.length > unitSystemIndex
-        ? UnitSystem.values[unitSystemIndex]
-        : UnitSystem.metric;
-
+    final unitSystem =
+        UnitSystem.values.length > unitSystemIndex
+            ? UnitSystem.values[unitSystemIndex]
+            : UnitSystem.metric;
 
     final platesStrings = prefs.getStringList('available_plates');
     List<double> availablePlates;
 
     if (platesStrings != null) {
-      availablePlates = platesStrings
-          .map((s) => double.tryParse(s))
-          .whereType<double>()
-          .toList();
+      availablePlates =
+          platesStrings
+              .map((s) => double.tryParse(s))
+              .whereType<double>()
+              .toList();
     } else {
       availablePlates = [25, 20, 15, 10, 5, 2.5, 1.25];
     }
@@ -154,11 +155,13 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(
       'available_plates',
-      currentPlates.map((p) => p.toString()).toList()
+      currentPlates.map((p) => p.toString()).toList(),
     );
 
     state = state.copyWith(availablePlates: currentPlates);
   }
 }
 
-final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(SettingsNotifier.new);
+final settingsProvider = NotifierProvider<SettingsNotifier, SettingsState>(
+  SettingsNotifier.new,
+);

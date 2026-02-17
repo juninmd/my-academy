@@ -62,85 +62,100 @@ class WorkoutCreatePage extends HookConsumerWidget {
             ),
           ),
           Expanded(
-            child: draftGroup.workouts.isEmpty
-                ? Center(
-                    child: Text(
-                      'Nenhum exercício adicionado',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                    ),
-                  )
-                : ReorderableListView.builder(
-                    padding: const EdgeInsets.only(bottom: 80),
-                    itemCount: draftGroup.workouts.length,
-                    onReorder: (oldIndex, newIndex) {
-                      notifier.reorderWorkouts(oldIndex, newIndex);
-                    },
-                    itemBuilder: (context, index) {
-                      final workout = draftGroup.workouts[index];
-                      // Use a composite key that includes the index to force rebuild on reorder?
-                      // No, keys must be stable for the ITEM, not the slot.
-                      // Using ObjectKey(workout) is best if objects are distinct.
-                      // If adding same exercise twice, they might be equal.
-                      // However, we rely on the list order.
-                      // Let's use ObjectKey for now.
-                      return Card(
-                        key: ObjectKey(workout),
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
+            child:
+                draftGroup.workouts.isEmpty
+                    ? Center(
+                      child: Text(
+                        'Nenhum exercício adicionado',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.outline,
                         ),
-                        child: ListTile(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => WorkoutEditSeriesDialog(
-                                workout: workout,
-                                onSave: (updatedWorkout) {
-                                  if (updatedWorkout.series.isEmpty) {
-                                    notifier.removeWorkout(index);
-                                  } else {
-                                    notifier.updateWorkout(index, updatedWorkout);
-                                  }
-                                },
+                      ),
+                    )
+                    : ReorderableListView.builder(
+                      padding: const EdgeInsets.only(bottom: 80),
+                      itemCount: draftGroup.workouts.length,
+                      onReorder: (oldIndex, newIndex) {
+                        notifier.reorderWorkouts(oldIndex, newIndex);
+                      },
+                      itemBuilder: (context, index) {
+                        final workout = draftGroup.workouts[index];
+                        // Use a composite key that includes the index to force rebuild on reorder?
+                        // No, keys must be stable for the ITEM, not the slot.
+                        // Using ObjectKey(workout) is best if objects are distinct.
+                        // If adding same exercise twice, they might be equal.
+                        // However, we rely on the list order.
+                        // Let's use ObjectKey for now.
+                        return Card(
+                          key: ObjectKey(workout),
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
+                          child: ListTile(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => WorkoutEditSeriesDialog(
+                                      workout: workout,
+                                      onSave: (updatedWorkout) {
+                                        if (updatedWorkout.series.isEmpty) {
+                                          notifier.removeWorkout(index);
+                                        } else {
+                                          notifier.updateWorkout(
+                                            index,
+                                            updatedWorkout,
+                                          );
+                                        }
+                                      },
+                                    ),
+                              );
+                            },
+                            contentPadding: const EdgeInsets.all(8),
+                            leading: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.surfaceContainerHighest,
                               ),
-                            );
-                          },
-                          contentPadding: const EdgeInsets.all(8),
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                              clipBehavior: Clip.antiAlias,
+                              child:
+                                  workout.exercise?.image != null
+                                      ? CachedNetworkImage(
+                                        imageUrl: workout.exercise!.image!,
+                                        fit: BoxFit.cover,
+                                        errorWidget:
+                                            (context, url, error) => const Icon(
+                                              Icons.fitness_center,
+                                            ),
+                                      )
+                                      : const Icon(Icons.fitness_center),
                             ),
-                            clipBehavior: Clip.antiAlias,
-                            child: workout.exercise?.image != null
-                                ? CachedNetworkImage(
-                                    imageUrl: workout.exercise!.image!,
-                                    fit: BoxFit.cover,
-                                    errorWidget: (context, url, error) => const Icon(Icons.fitness_center),
-                                  )
-                                : const Icon(Icons.fitness_center),
+                            title: Text(
+                              workout.exercise?.name ??
+                                  'Exercício Indisponível',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              '${workout.series.length} séries • ${workout.series.map((s) => '${s.repetitions}x${s.weight}').join(', ')}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              onPressed: () => notifier.removeWorkout(index),
+                            ),
                           ),
-                          title: Text(
-                            workout.exercise?.name ?? 'Exercício Indisponível',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            '${workout.series.length} séries • ${workout.series.map((s) => '${s.repetitions}x${s.weight}').join(', ')}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            onPressed: () => notifier.removeWorkout(index),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -153,13 +168,17 @@ class WorkoutCreatePage extends HookConsumerWidget {
                   if (user != null) {
                     if (draftGroup.name.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Digite um nome para o treino')),
+                        const SnackBar(
+                          content: Text('Digite um nome para o treino'),
+                        ),
                       );
                       return;
                     }
                     if (draftGroup.workouts.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Adicione pelo menos um exercício')),
+                        const SnackBar(
+                          content: Text('Adicione pelo menos um exercício'),
+                        ),
                       );
                       return;
                     }
@@ -226,15 +245,19 @@ class _ExercisePickerSheet extends HookConsumerWidget {
             Expanded(
               child: exercisesAsync.when(
                 data: (exercises) {
-                  final filtered = exercises
-                      .where((e) => e.name
-                          .toLowerCase()
-                          .contains(searchTerm.value.toLowerCase()))
-                      .toList();
+                  final filtered =
+                      exercises
+                          .where(
+                            (e) => e.name.toLowerCase().contains(
+                              searchTerm.value.toLowerCase(),
+                            ),
+                          )
+                          .toList();
 
                   if (filtered.isEmpty) {
                     return const Center(
-                        child: Text('Nenhum exercício encontrado'));
+                      child: Text('Nenhum exercício encontrado'),
+                    );
                   }
 
                   return GridView.builder(
@@ -242,45 +265,52 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                     padding: const EdgeInsets.all(16),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.85,
-                    ),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.85,
+                        ),
                     itemCount: filtered.length,
                     itemBuilder: (context, index) {
                       final exercise = filtered[index];
-                      final isAdded = draftGroup.workouts
-                          .any((w) => w.exerciseId == exercise.id);
+                      final isAdded = draftGroup.workouts.any(
+                        (w) => w.exerciseId == exercise.id,
+                      );
 
                       return Card(
                         clipBehavior: Clip.antiAlias,
-                        color: isAdded
-                            ? Theme.of(context)
-                                .colorScheme
-                                .primaryContainer
-                                .withValues(alpha: 0.3)
-                            : null,
+                        color:
+                            isAdded
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                    .withValues(alpha: 0.3)
+                                : null,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
-                          side: isAdded
-                              ? BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 2,
-                                )
-                              : BorderSide.none,
+                          side:
+                              isAdded
+                                  ? BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 2,
+                                  )
+                                  : BorderSide.none,
                         ),
                         child: InkWell(
                           onTap: () {
                             showDialog(
                               context: context,
-                              builder: (context) => WorkoutSeriesDialog(
-                                exerciseName: exercise.name,
-                                onSave: (reps, weight, rest) {
-                                  notifier.addWorkout(
-                                      exercise, reps, weight, rest);
-                                },
-                              ),
+                              builder:
+                                  (context) => WorkoutSeriesDialog(
+                                    exerciseName: exercise.name,
+                                    onSave: (reps, weight, rest) {
+                                      notifier.addWorkout(
+                                        exercise,
+                                        reps,
+                                        weight,
+                                        rest,
+                                      );
+                                    },
+                                  ),
                             );
                           },
                           child: Column(
@@ -288,30 +318,33 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                             children: [
                               Expanded(
                                 flex: 3,
-                                child: exercise.image != null
-                                    ? CachedNetworkImage(
-                                        imageUrl: exercise.image!,
-                                        fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) =>
-                                            Container(
+                                child:
+                                    exercise.image != null
+                                        ? CachedNetworkImage(
+                                          imageUrl: exercise.image!,
+                                          fit: BoxFit.cover,
+                                          errorWidget:
+                                              (context, url, error) =>
+                                                  Container(
+                                                    color: Colors.grey[200],
+                                                    child: const Icon(
+                                                      Icons.fitness_center,
+                                                    ),
+                                                  ),
+                                        )
+                                        : Container(
                                           color: Colors.grey[200],
                                           child: const Icon(
-                                              Icons.fitness_center),
+                                            Icons.fitness_center,
+                                          ),
                                         ),
-                                      )
-                                    : Container(
-                                        color: Colors.grey[200],
-                                        child:
-                                            const Icon(Icons.fitness_center),
-                                      ),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         exercise.name,
@@ -325,25 +358,30 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                                       ),
                                       if (isAdded)
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 4),
+                                          padding: const EdgeInsets.only(
+                                            top: 4,
+                                          ),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Icon(Icons.check_circle,
-                                                  size: 14,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary),
+                                              Icon(
+                                                Icons.check_circle,
+                                                size: 14,
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                              ),
                                               const SizedBox(width: 4),
                                               Text(
                                                 'Adicionado',
                                                 style: TextStyle(
                                                   fontSize: 10,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
+                                                  color:
+                                                      Theme.of(
+                                                        context,
+                                                      ).colorScheme.primary,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
@@ -361,8 +399,7 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                     },
                   );
                 },
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (e, s) => Center(child: Text('Erro: $e')),
               ),
             ),

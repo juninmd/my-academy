@@ -60,7 +60,10 @@ class NumberInputControl extends HookWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.withValues(alpha: 0.5)),
             borderRadius: BorderRadius.circular(8),
-            color: enabled ? null : Theme.of(context).disabledColor.withValues(alpha: 0.1),
+            color:
+                enabled
+                    ? null
+                    : Theme.of(context).disabledColor.withValues(alpha: 0.1),
           ),
           child: Row(
             children: [
@@ -75,7 +78,10 @@ class NumberInputControl extends HookWidget {
                   focusNode: focusNode,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     isDense: true,
@@ -89,7 +95,7 @@ class NumberInputControl extends HookWidget {
                       onChanged(val);
                     }
                   },
-                   onTap: () {
+                  onTap: () {
                     controller.selection = TextSelection(
                       baseOffset: 0,
                       extentOffset: controller.text.length,
@@ -111,10 +117,7 @@ class NumberInputControl extends HookWidget {
 }
 
 class _ControlButton extends StatelessWidget {
-  const _ControlButton({
-    required this.icon,
-    this.onPressed,
-  });
+  const _ControlButton({required this.icon, this.onPressed});
 
   final IconData icon;
   final VoidCallback? onPressed;
@@ -126,9 +129,7 @@ class _ControlButton extends StatelessWidget {
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(4),
-        child: Center(
-          child: Icon(icon, size: 20),
-        ),
+        child: Center(child: Icon(icon, size: 20)),
       ),
     );
   }

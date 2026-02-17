@@ -25,24 +25,22 @@ void main() {
           'name': 'Group 1',
           'image': 'img.jpg',
           'userId': 'user1',
-          'workouts': []
-        }
+          'workouts': [],
+        },
       ];
 
-      when(mockApiClient.get('workouts-groups/user/user1'))
-          .thenAnswer((_) async => mockData);
+      when(
+        mockApiClient.get('workouts-groups/user/user1'),
+      ).thenAnswer((_) async => mockData);
 
       final result = await repository.getWorkoutGroups('user1');
 
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('Should be right'),
-        (r) {
-          expect(r.length, 1);
-          expect(r[0].id, 1);
-          expect(r[0].name, 'Group 1');
-        },
-      );
+      result.fold((l) => fail('Should be right'), (r) {
+        expect(r.length, 1);
+        expect(r[0].id, 1);
+        expect(r[0].name, 'Group 1');
+      });
     });
 
     test('should return failure when exception', () async {
@@ -61,8 +59,8 @@ void main() {
           'id': 1,
           'name': 'Exercise 1',
           'image': 'img.jpg',
-          'description': 'desc'
-        }
+          'description': 'desc',
+        },
       ];
 
       when(mockApiClient.get('exercises')).thenAnswer((_) async => mockData);
@@ -70,26 +68,23 @@ void main() {
       final result = await repository.getExercises();
 
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('Should be right'),
-        (r) {
-          expect(r.length, 1);
-          expect(r[0].id, 1);
-        },
-      );
+      result.fold((l) => fail('Should be right'), (r) {
+        expect(r.length, 1);
+        expect(r[0].id, 1);
+      });
     });
   });
 
   group('getExerciseLogs', () {
     test('should return logs', () async {
-       final mockData = [
+      final mockData = [
         {
           'id': 1,
           'userId': 'u1',
           'exerciseId': 10,
           'date': DateTime.now().toIso8601String(),
-          'sets': []
-        }
+          'sets': [],
+        },
       ];
       when(mockApiClient.get(any)).thenAnswer((_) async => mockData);
 
@@ -107,15 +102,16 @@ void main() {
         sets: const [],
       );
       final mockResponse = {
-         'id': 1,
-          'userId': 'u1',
-          'exerciseId': 10,
-          'date': log.date.toIso8601String(),
-          'sets': []
+        'id': 1,
+        'userId': 'u1',
+        'exerciseId': 10,
+        'date': log.date.toIso8601String(),
+        'sets': [],
       };
 
-      when(mockApiClient.post('exercise-logs', data: anyNamed('data')))
-        .thenAnswer((_) async => mockResponse);
+      when(
+        mockApiClient.post('exercise-logs', data: anyNamed('data')),
+      ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.saveExerciseLog(log);
       expect(result.isRight(), true);

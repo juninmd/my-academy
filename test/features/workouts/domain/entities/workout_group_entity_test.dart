@@ -19,7 +19,13 @@ void main() {
       expect(group.image, 'legs.jpg');
       expect(group.userId, 'user1');
       expect(group.workouts, [workout]);
-      expect(group.props, [1, 'Leg Day', 'legs.jpg', 'user1', [workout]]);
+      expect(group.props, [
+        1,
+        'Leg Day',
+        'legs.jpg',
+        'user1',
+        [workout],
+      ]);
     });
   });
 }

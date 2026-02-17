@@ -8,29 +8,37 @@ import 'package:my_academy/core/widgets/common_empty_state.dart';
 
 void main() {
   final exercises = [
-    const ExerciseEntity(id: 1, name: 'Bench Press', description: 'Chest exercise'),
+    const ExerciseEntity(
+      id: 1,
+      name: 'Bench Press',
+      description: 'Chest exercise',
+    ),
     const ExerciseEntity(id: 2, name: 'Squat', description: 'Leg exercise'),
   ];
 
   testWidgets('ExerciseLibraryPage shows loading state', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        exercisesProvider.overrideWith((ref) => Future.delayed(const Duration(seconds: 1), () => [])),
-      ],
-      child: const MaterialApp(home: ExerciseLibraryPage()),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          exercisesProvider.overrideWith(
+            (ref) => Future.delayed(const Duration(seconds: 1), () => []),
+          ),
+        ],
+        child: const MaterialApp(home: ExerciseLibraryPage()),
+      ),
+    );
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     await tester.pumpAndSettle();
   });
 
   testWidgets('ExerciseLibraryPage shows list of exercises', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        exercisesProvider.overrideWith((ref) async => exercises),
-      ],
-      child: const MaterialApp(home: ExerciseLibraryPage()),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [exercisesProvider.overrideWith((ref) async => exercises)],
+        child: const MaterialApp(home: ExerciseLibraryPage()),
+      ),
+    );
 
     await tester.pumpAndSettle();
 
@@ -39,12 +47,12 @@ void main() {
   });
 
   testWidgets('ExerciseLibraryPage filters exercises', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        exercisesProvider.overrideWith((ref) async => exercises),
-      ],
-      child: const MaterialApp(home: ExerciseLibraryPage()),
-    ));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [exercisesProvider.overrideWith((ref) async => exercises)],
+        child: const MaterialApp(home: ExerciseLibraryPage()),
+      ),
+    );
 
     await tester.pumpAndSettle();
 
@@ -54,16 +62,21 @@ void main() {
 
     expect(find.text('Bench Press'), findsNothing);
     // Finds 2: one in TextField, one in list
-    expect(find.descendant(of: find.byType(Card), matching: find.text('Squat')), findsOneWidget);
+    expect(
+      find.descendant(of: find.byType(Card), matching: find.text('Squat')),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('ExerciseLibraryPage shows empty state when no matches', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        exercisesProvider.overrideWith((ref) async => exercises),
-      ],
-      child: const MaterialApp(home: ExerciseLibraryPage()),
-    ));
+  testWidgets('ExerciseLibraryPage shows empty state when no matches', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [exercisesProvider.overrideWith((ref) async => exercises)],
+        child: const MaterialApp(home: ExerciseLibraryPage()),
+      ),
+    );
 
     await tester.pumpAndSettle();
 

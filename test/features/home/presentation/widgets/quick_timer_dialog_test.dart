@@ -5,11 +5,9 @@ import 'package:my_academy/features/home/presentation/widgets/quick_timer_dialog
 
 void main() {
   testWidgets('QuickTimerDialog starts timer', (tester) async {
-    await tester.pumpWidget(const ProviderScope(
-      child: MaterialApp(
-        home: QuickTimerDialog(),
-      ),
-    ));
+    await tester.pumpWidget(
+      const ProviderScope(child: MaterialApp(home: QuickTimerDialog())),
+    );
 
     expect(find.text('Descanso Rápido'), findsOneWidget);
 

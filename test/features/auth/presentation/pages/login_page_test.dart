@@ -25,9 +25,7 @@ void main() {
         overrides: [
           authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
         ],
-        child: const MaterialApp(
-          home: LoginPage(),
-        ),
+        child: const MaterialApp(home: LoginPage()),
       ),
     );
 

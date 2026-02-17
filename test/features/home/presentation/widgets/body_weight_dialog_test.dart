@@ -18,14 +18,12 @@ class FakeSettingsNotifier extends SettingsNotifier {
 
 void main() {
   testWidgets('BodyWeightDialog updates weight', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        settingsProvider.overrideWith(FakeSettingsNotifier.new),
-      ],
-      child: const MaterialApp(
-        home: BodyWeightDialog(),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [settingsProvider.overrideWith(FakeSettingsNotifier.new)],
+        child: const MaterialApp(home: BodyWeightDialog()),
       ),
-    ));
+    );
 
     expect(find.text('Registrar Peso Corporal'), findsOneWidget);
     expect(find.text('70'), findsOneWidget);

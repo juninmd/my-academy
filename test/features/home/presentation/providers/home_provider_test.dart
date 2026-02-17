@@ -15,7 +15,10 @@ class FakeHomeRepository implements HomeRepository {
     if (shouldThrow) {
       return const Left(ServerFailure('error'));
     }
-    return Right(summaryToReturn ?? const WorkoutSummaryEntity(counter: 0, hasWorkoutToday: false));
+    return Right(
+      summaryToReturn ??
+          const WorkoutSummaryEntity(counter: 0, hasWorkoutToday: false),
+    );
   }
 }
 
@@ -26,18 +29,16 @@ void main() {
     fakeRepository.summaryToReturn = entity;
 
     final container = ProviderContainer(
-      overrides: [
-        homeRepositoryProvider.overrideWithValue(fakeRepository),
-      ],
+      overrides: [homeRepositoryProvider.overrideWithValue(fakeRepository)],
     );
 
     // Keep provider alive
-    final sub = container.listen(workoutSummaryProvider.future, (prev, next) {});
-
-    expect(
-      await container.read(workoutSummaryProvider.future),
-      entity,
+    final sub = container.listen(
+      workoutSummaryProvider.future,
+      (prev, next) {},
     );
+
+    expect(await container.read(workoutSummaryProvider.future), entity);
 
     sub.close();
   });
@@ -46,14 +47,15 @@ void main() {
     final fakeRepository = FakeHomeRepository();
     fakeRepository.shouldThrow = true;
 
-     final container = ProviderContainer(
-      overrides: [
-        homeRepositoryProvider.overrideWithValue(fakeRepository),
-      ],
+    final container = ProviderContainer(
+      overrides: [homeRepositoryProvider.overrideWithValue(fakeRepository)],
     );
 
     // Keep provider alive
-    final sub = container.listen(workoutSummaryProvider.future, (prev, next) {});
+    final sub = container.listen(
+      workoutSummaryProvider.future,
+      (prev, next) {},
+    );
 
     try {
       await container.read(workoutSummaryProvider.future);

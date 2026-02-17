@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OneRepMaxDisplay extends StatelessWidget {
-  const OneRepMaxDisplay({
-    required this.weight,
-    required this.reps,
-    super.key,
-  });
+  const OneRepMaxDisplay({required this.weight, required this.reps, super.key});
 
   final int weight;
   final int reps;
@@ -37,7 +33,9 @@ class OneRepMaxDisplay extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               '1RM: ~$oneRm kg',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
             ),
           ],
         ),

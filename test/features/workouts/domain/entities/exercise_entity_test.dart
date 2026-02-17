@@ -25,7 +25,7 @@ void main() {
         'bench.jpg',
         ['Tip 1'],
         ['Mistake 1'],
-        'Description'
+        'Description',
       ]);
     });
   });

@@ -18,9 +18,9 @@ void main() {
         exerciseId: 1,
         date: DateTime.now().subtract(Duration(days: dayOffset)),
         sets: [
-          SetLogEntity(reps: 10, weight: 100),
-          SetLogEntity(reps: 8, weight: 110),
-          SetLogEntity(reps: 5, weight: 120),
+          const SetLogEntity(reps: 10, weight: 100),
+          const SetLogEntity(reps: 8, weight: 110),
+          const SetLogEntity(reps: 5, weight: 120),
         ],
       );
     });
@@ -52,7 +52,11 @@ void main() {
     }
 
     stopwatch.stop();
-    print('BENCHMARK_RESULT: ${stopwatch.elapsedMilliseconds}ms for $iterations iterations');
-    print('BENCHMARK_AVG: ${stopwatch.elapsedMilliseconds / iterations}ms per iteration');
+    print(
+      'BENCHMARK_RESULT: ${stopwatch.elapsedMilliseconds}ms for $iterations iterations',
+    );
+    print(
+      'BENCHMARK_AVG: ${stopwatch.elapsedMilliseconds / iterations}ms per iteration',
+    );
   });
 }

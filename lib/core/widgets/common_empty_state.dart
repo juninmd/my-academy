@@ -28,24 +28,26 @@ class CommonEmptyState extends StatelessWidget {
               Icon(
                 icon,
                 size: 80,
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5),
+                color: Theme.of(
+                  context,
+                ).colorScheme.outline.withValues(alpha: 0.5),
               ),
               const SizedBox(height: 24),
             ],
             Text(
               title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               message,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
             if (actionLabel != null && onAction != null) ...[

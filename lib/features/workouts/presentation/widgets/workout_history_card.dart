@@ -52,7 +52,8 @@ class WorkoutHistoryCard extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
                       ),
                       Text(
@@ -60,7 +61,8 @@ class WorkoutHistoryCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                         ),
                       ),
                     ],
@@ -73,14 +75,17 @@ class WorkoutHistoryCard extends StatelessWidget {
                     children: [
                       Text(
                         DateFormat('EEEE', 'pt_BR').format(date).capitalize(),
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.fitness_center, size: 14, color: Colors.grey[600]),
+                          Icon(
+                            Icons.fitness_center,
+                            size: 14,
+                            color: Colors.grey[600],
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${(totalVolume / 1000).toStringAsFixed(1)}t Vol',
@@ -103,33 +108,38 @@ class WorkoutHistoryCard extends StatelessWidget {
             const Divider(height: 24),
             // Exercise List
             ...logs.map((log) {
-               final name = exerciseNameMap[log.exerciseId] ?? 'Exercício ${log.exerciseId}';
-               // Find best set
-               double maxWeight = 0;
-               for (var s in log.sets) {
-                 if (s.weight > maxWeight) {
-                   maxWeight = s.weight.toDouble();
-                 }
-               }
+              final name =
+                  exerciseNameMap[log.exerciseId] ??
+                  'Exercício ${log.exerciseId}';
+              // Find best set
+              double maxWeight = 0;
+              for (var s in log.sets) {
+                if (s.weight > maxWeight) {
+                  maxWeight = s.weight.toDouble();
+                }
+              }
 
-               return Padding(
-                 padding: const EdgeInsets.symmetric(vertical: 4),
-                 child: Row(
-                   children: [
-                     Expanded(
-                       child: Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
-                     ),
-                     Text(
-                       '${log.sets.length} x ',
-                       style: const TextStyle(color: Colors.grey, fontSize: 12),
-                     ),
-                     Text(
-                       '${maxWeight.toInt()}kg',
-                       style: const TextStyle(fontWeight: FontWeight.bold),
-                     ),
-                   ],
-                 ),
-               );
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Text(
+                      '${log.sets.length} x ',
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                    Text(
+                      '${maxWeight.toInt()}kg',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              );
             }),
           ],
         ),

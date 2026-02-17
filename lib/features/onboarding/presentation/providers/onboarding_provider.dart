@@ -20,8 +20,8 @@ class OnboardingNotifier extends _$OnboardingNotifier {
   }
 
   Future<void> resetOnboarding() async {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove(_onboardingKey);
-      state = const AsyncValue.data(false);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_onboardingKey);
+    state = const AsyncValue.data(false);
   }
 }

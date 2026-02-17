@@ -25,66 +25,90 @@ void main() {
 
   group('ApiClient', () {
     test('get call should return data when successful', () async {
-      when(mockDio.get(any, queryParameters: anyNamed('queryParameters')))
-          .thenAnswer((_) async => Response(
-                requestOptions: RequestOptions(path: 'test'),
-                data: {'key': 'value'},
-                statusCode: 200,
-              ));
+      when(
+        mockDio.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: 'test'),
+          data: {'key': 'value'},
+          statusCode: 200,
+        ),
+      );
 
       final result = await apiClient.get('test');
       expect(result, {'key': 'value'});
     });
 
     test('get call should throw ServerFailure on DioException', () async {
-      when(mockDio.get(any, queryParameters: anyNamed('queryParameters')))
-          .thenThrow(DioException(
+      when(
+        mockDio.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: 'test'),
+          response: Response(
             requestOptions: RequestOptions(path: 'test'),
-            response: Response(
-              requestOptions: RequestOptions(path: 'test'),
-              statusCode: 500,
-              data: {'message': 'Server Error'},
-            ),
-            type: DioExceptionType.badResponse,
-          ));
-
-      expect(
-        () => apiClient.get('test'),
-        throwsA(isA<ServerFailure>()),
+            statusCode: 500,
+            data: {'message': 'Server Error'},
+          ),
+          type: DioExceptionType.badResponse,
+        ),
       );
+
+      expect(() => apiClient.get('test'), throwsA(isA<ServerFailure>()));
     });
 
     test('post call should return data when successful', () async {
-      when(mockDio.post(any, data: anyNamed('data'), queryParameters: anyNamed('queryParameters')))
-          .thenAnswer((_) async => Response(
-                requestOptions: RequestOptions(path: 'test'),
-                data: {'key': 'value'},
-                statusCode: 200,
-              ));
+      when(
+        mockDio.post(
+          any,
+          data: anyNamed('data'),
+          queryParameters: anyNamed('queryParameters'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: 'test'),
+          data: {'key': 'value'},
+          statusCode: 200,
+        ),
+      );
 
       final result = await apiClient.post('test', data: {});
       expect(result, {'key': 'value'});
     });
 
-     test('put call should return data when successful', () async {
-      when(mockDio.put(any, data: anyNamed('data'), queryParameters: anyNamed('queryParameters')))
-          .thenAnswer((_) async => Response(
-                requestOptions: RequestOptions(path: 'test'),
-                data: {'key': 'value'},
-                statusCode: 200,
-              ));
+    test('put call should return data when successful', () async {
+      when(
+        mockDio.put(
+          any,
+          data: anyNamed('data'),
+          queryParameters: anyNamed('queryParameters'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: 'test'),
+          data: {'key': 'value'},
+          statusCode: 200,
+        ),
+      );
 
       final result = await apiClient.put('test', data: {});
       expect(result, {'key': 'value'});
     });
 
-     test('delete call should return data when successful', () async {
-      when(mockDio.delete(any, data: anyNamed('data'), queryParameters: anyNamed('queryParameters')))
-          .thenAnswer((_) async => Response(
-                requestOptions: RequestOptions(path: 'test'),
-                data: {'key': 'value'},
-                statusCode: 200,
-              ));
+    test('delete call should return data when successful', () async {
+      when(
+        mockDio.delete(
+          any,
+          data: anyNamed('data'),
+          queryParameters: anyNamed('queryParameters'),
+        ),
+      ).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: 'test'),
+          data: {'key': 'value'},
+          statusCode: 200,
+        ),
+      );
 
       final result = await apiClient.delete('test');
       expect(result, {'key': 'value'});

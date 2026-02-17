@@ -20,18 +20,27 @@ class FakeStudentRepository implements StudentRepository {
   bool addStudentCalled = false;
 
   @override
-  Future<Either<Failure, StudentEntity>> addStudent(StudentEntity student, String personalId) async {
+  Future<Either<Failure, StudentEntity>> addStudent(
+    StudentEntity student,
+    String personalId,
+  ) async {
     addStudentCalled = true;
-    return const Right(StudentEntity(id: '1', name: 'New Student', email: 'new@student.com'));
+    return const Right(
+      StudentEntity(id: '1', name: 'New Student', email: 'new@student.com'),
+    );
   }
 
   @override
-  Future<Either<Failure, StudentEntity?>> checkStudentExists(String email) async {
+  Future<Either<Failure, StudentEntity?>> checkStudentExists(
+    String email,
+  ) async {
     return const Right(null);
   }
 
   @override
-  Future<Either<Failure, List<StudentEntity>>> getStudents(String userId) async {
+  Future<Either<Failure, List<StudentEntity>>> getStudents(
+    String userId,
+  ) async {
     return const Right([]);
   }
 
@@ -45,17 +54,19 @@ void main() {
   testWidgets('StudentAddPage adds student', (tester) async {
     final fakeRepository = FakeStudentRepository();
 
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        authNotifierProvider.overrideWith(() => FakeAuthNotifier(
-          const UserEntity(id: 'u1', email: 'e', name: 'n')
-        )),
-        studentRepositoryProvider.overrideWithValue(fakeRepository),
-      ],
-      child: const MaterialApp(
-        home: StudentAddPage(),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authNotifierProvider.overrideWith(
+            () => FakeAuthNotifier(
+              const UserEntity(id: 'u1', email: 'e', name: 'n'),
+            ),
+          ),
+          studentRepositoryProvider.overrideWithValue(fakeRepository),
+        ],
+        child: const MaterialApp(home: StudentAddPage()),
       ),
-    ));
+    );
 
     // Wait for auth provider to settle
     await tester.pumpAndSettle();
@@ -63,10 +74,16 @@ void main() {
     expect(find.text('Adicionar Aluno'), findsAtLeastNWidgets(1));
 
     // Fill form
-    await tester.enterText(find.widgetWithText(TextFormField, 'Email'), 'new@student.com');
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Email'),
+      'new@student.com',
+    );
     await tester.testTextInput.receiveAction(TextInputAction.next);
 
-    await tester.enterText(find.widgetWithText(TextFormField, 'Nome completo'), 'New Student');
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Nome completo'),
+      'New Student',
+    );
 
     await tester.pump();
 

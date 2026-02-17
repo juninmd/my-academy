@@ -50,9 +50,12 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     width: _currentPage == index ? 24 : 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: _currentPage == index
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                      color:
+                          _currentPage == index
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   );
@@ -100,9 +103,9 @@ class _WelcomePage extends StatelessWidget {
           const SizedBox(height: 32),
           Text(
             'Bem-vindo ao MyAcademy',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -145,9 +148,9 @@ class _GoalPage extends ConsumerWidget {
         children: [
           Text(
             'Qual é seu objetivo?',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 32),
           _SelectionCard(
@@ -199,9 +202,9 @@ class _ExperiencePage extends ConsumerWidget {
         children: [
           Text(
             'Qual seu nível de experiência?',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 32),
           _SelectionCard(
@@ -209,7 +212,9 @@ class _ExperiencePage extends ConsumerWidget {
             subtitle: 'Menos de 6 meses de treino',
             icon: Icons.person_outline,
             onTap: () {
-              ref.read(settingsProvider.notifier).setExperienceLevel('Iniciante');
+              ref
+                  .read(settingsProvider.notifier)
+                  .setExperienceLevel('Iniciante');
               onNext();
             },
           ),
@@ -219,7 +224,9 @@ class _ExperiencePage extends ConsumerWidget {
             subtitle: '6 meses a 2 anos',
             icon: Icons.person,
             onTap: () {
-              ref.read(settingsProvider.notifier).setExperienceLevel('Intermediário');
+              ref
+                  .read(settingsProvider.notifier)
+                  .setExperienceLevel('Intermediário');
               onNext();
             },
           ),
@@ -229,7 +236,9 @@ class _ExperiencePage extends ConsumerWidget {
             subtitle: 'Mais de 2 anos de treino sério',
             icon: Icons.emoji_events_outlined,
             onTap: () {
-              ref.read(settingsProvider.notifier).setExperienceLevel('Avançado');
+              ref
+                  .read(settingsProvider.notifier)
+                  .setExperienceLevel('Avançado');
               onNext();
             },
           ),
@@ -255,9 +264,9 @@ class _CommitmentPage extends ConsumerWidget {
         children: [
           Text(
             'Quantas vezes por semana você pretende treinar?',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 32),
 
@@ -281,7 +290,9 @@ class _CommitmentPage extends ConsumerWidget {
                     divisions: 6,
                     label: settings.weeklyWorkoutGoal.toString(),
                     onChanged: (value) {
-                      ref.read(settingsProvider.notifier).setWeeklyGoal(value.round());
+                      ref
+                          .read(settingsProvider.notifier)
+                          .setWeeklyGoal(value.round());
                     },
                   ),
                 ],
@@ -322,7 +333,9 @@ class _SelectionCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2)),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+        ),
       ),
       child: InkWell(
         onTap: onTap,
@@ -334,7 +347,9 @@ class _SelectionCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: Theme.of(context).colorScheme.primary),

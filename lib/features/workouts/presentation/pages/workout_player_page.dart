@@ -99,15 +99,18 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           restTimerRemaining.value = duration;
           isRestTimerActive.value = true;
 
-          restTimer.value = Timer.periodic(const Duration(seconds: 1), (t) {
+          restTimer.value = Timer.periodic(const Duration(seconds: 1), (
+            t,
+          ) async {
             if (restTimerRemaining.value > 0) {
               restTimerRemaining.value--;
-              if (restTimerRemaining.value <= 3 && restTimerRemaining.value > 0) {
-                HapticFeedback.selectionClick();
+              if (restTimerRemaining.value <= 3 &&
+                  restTimerRemaining.value > 0) {
+                await HapticFeedback.selectionClick();
               }
             } else {
               stopRestTimer();
-              HapticFeedback.heavyImpact();
+              await HapticFeedback.heavyImpact();
             }
           });
         }
@@ -125,32 +128,42 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           return '$m:$s';
         }
 
-        Future<void> onExerciseFinished(Map<int, SetLogState> logs, String notes) async {
-          HapticFeedback.heavyImpact();
+        Future<void> onExerciseFinished(
+          Map<int, SetLogState> logs,
+          String notes,
+        ) async {
+          await HapticFeedback.heavyImpact();
           stopRestTimer();
           final currentWorkout = activeWorkouts[currentExerciseIndex.value];
 
           // Save to Repository
           final userId = ref.read(authProvider).value?.id;
           if (userId != null) {
-             final logEntity = ExerciseLogEntity(
-                userId: userId,
-                exerciseId: currentWorkout.exerciseId,
-                date: DateTime.now(),
-                sets: logs.values.map((l) => SetLogEntity(
-                    reps: l.actualReps,
-                    weight: l.actualWeight,
-                    rpe: l.rpe,
-                )).toList(),
-                notes: notes,
+            final logEntity = ExerciseLogEntity(
+              userId: userId,
+              exerciseId: currentWorkout.exerciseId,
+              date: DateTime.now(),
+              sets:
+                  logs.values
+                      .map(
+                        (l) => SetLogEntity(
+                          reps: l.actualReps,
+                          weight: l.actualWeight,
+                          rpe: l.rpe,
+                        ),
+                      )
+                      .toList(),
+              notes: notes,
             );
-            await ref.read(workoutRepositoryProvider).saveExerciseLog(logEntity);
+            await ref
+                .read(workoutRepositoryProvider)
+                .saveExerciseLog(logEntity);
             ref.invalidate(exerciseLogsProvider(currentWorkout.exerciseId));
           }
 
-
-          final newSessionLogs =
-              Map<int, ExerciseSessionLog>.from(sessionLogs.value);
+          final newSessionLogs = Map<int, ExerciseSessionLog>.from(
+            sessionLogs.value,
+          );
           newSessionLogs[currentExerciseIndex.value] = ExerciseSessionLog(
             exerciseId: currentWorkout.exerciseId,
             exerciseName: currentWorkout.exercise?.name,
@@ -160,18 +173,19 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           sessionLogs.value = newSessionLogs;
 
           if (currentExerciseIndex.value < activeWorkouts.length - 1) {
-            pageController.nextPage(
+            await pageController.nextPage(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOut,
             );
           } else {
-             if (context.mounted) {
-              Navigator.of(context).pushReplacement(
+            if (context.mounted) {
+              await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => WorkoutSummaryPage(
-                    duration: Duration(seconds: timerNotifier.value),
-                    sessionLogs: newSessionLogs,
-                  ),
+                  builder:
+                      (context) => WorkoutSummaryPage(
+                        duration: Duration(seconds: timerNotifier.value),
+                        sessionLogs: newSessionLogs,
+                      ),
                 ),
               );
             }
@@ -182,9 +196,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           appBar: AppBar(
             title: Text(group.name),
             centerTitle: true,
-            leading: Center(
-              child: WorkoutTimer(notifier: timerNotifier),
-            ),
+            leading: Center(child: WorkoutTimer(notifier: timerNotifier)),
             actions: [
               PopupMenuButton<String>(
                 icon: const Icon(Icons.build_circle_outlined),
@@ -193,7 +205,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                   if (value == 'plate') {
                     showDialog(
                       context: context,
-                      builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
+                      builder:
+                          (context) =>
+                              const PlateCalculatorDialog(targetWeight: 0),
                     );
                   } else if (value == 'timer') {
                     showDialog(
@@ -207,38 +221,39 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     );
                   }
                 },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'plate',
-                    child: Row(
-                      children: [
-                        Icon(Icons.calculate_outlined),
-                        SizedBox(width: 8),
-                        Text('Calculadora de Anilhas'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'timer',
-                    child: Row(
-                      children: [
-                        Icon(Icons.timer_outlined),
-                        SizedBox(width: 8),
-                        Text('Cronômetro Rápido'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: '1rm',
-                    child: Row(
-                      children: [
-                        Icon(Icons.fitness_center),
-                        SizedBox(width: 8),
-                        Text('Calculadora 1RM'),
-                      ],
-                    ),
-                  ),
-                ],
+                itemBuilder:
+                    (context) => [
+                      const PopupMenuItem(
+                        value: 'plate',
+                        child: Row(
+                          children: [
+                            Icon(Icons.calculate_outlined),
+                            SizedBox(width: 8),
+                            Text('Calculadora de Anilhas'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: 'timer',
+                        child: Row(
+                          children: [
+                            Icon(Icons.timer_outlined),
+                            SizedBox(width: 8),
+                            Text('Cronômetro Rápido'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem(
+                        value: '1rm',
+                        child: Row(
+                          children: [
+                            Icon(Icons.fitness_center),
+                            SizedBox(width: 8),
+                            Text('Calculadora 1RM'),
+                          ],
+                        ),
+                      ),
+                    ],
               ),
               IconButton(
                 onPressed: () => context.pop(),
@@ -251,7 +266,8 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               Column(
                 children: [
                   LinearProgressIndicator(
-                    value: (currentExerciseIndex.value + 1) /
+                    value:
+                        (currentExerciseIndex.value + 1) /
                         activeWorkouts.length,
                     backgroundColor: Colors.white10,
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -267,23 +283,24 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                         resetExerciseTimer();
                       },
                       itemCount: activeWorkouts.length,
-                      itemBuilder: (context, index) => _ExercisePlayerView(
-                        key: ValueKey(activeWorkouts[index].id ?? index),
-                        workout: activeWorkouts[index],
-                        isTimerRunning: isExerciseTimerRunning.value,
-                        timerValue: formatTime(exerciseTimerValue.value),
-                        onToggleTimer: () {
-                          isExerciseTimerRunning.value
-                              ? stopExerciseTimer()
-                              : startExerciseTimer();
-                        },
-                        onFinished: onExerciseFinished,
-                        onSetCompleted: (restTime) {
-                          if (restTime > 0) {
-                            startRestTimer(restTime);
-                          }
-                        },
-                      ),
+                      itemBuilder:
+                          (context, index) => _ExercisePlayerView(
+                            key: ValueKey(activeWorkouts[index].id ?? index),
+                            workout: activeWorkouts[index],
+                            isTimerRunning: isExerciseTimerRunning.value,
+                            timerValue: formatTime(exerciseTimerValue.value),
+                            onToggleTimer: () {
+                              isExerciseTimerRunning.value
+                                  ? stopExerciseTimer()
+                                  : startExerciseTimer();
+                            },
+                            onFinished: onExerciseFinished,
+                            onSetCompleted: (restTime) {
+                              if (restTime > 0) {
+                                startRestTimer(restTime);
+                              }
+                            },
+                          ),
                     ),
                   ),
                 ],
@@ -307,8 +324,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           ),
         );
       },
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading:
+          () =>
+              const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, s) => Scaffold(body: Center(child: Text('Erro: $e'))),
     );
   }
@@ -336,14 +354,14 @@ class _ExercisePlayerView extends HookConsumerWidget {
     final logs = useState<Map<int, SetLogState>>(
       Map.fromEntries(
         workout.series.asMap().entries.map(
-              (e) => MapEntry(
-                e.key,
-                SetLogState(
-                  actualReps: e.value.repetitions,
-                  actualWeight: e.value.weight,
-                ),
-              ),
+          (e) => MapEntry(
+            e.key,
+            SetLogState(
+              actualReps: e.value.repetitions,
+              actualWeight: e.value.weight,
             ),
+          ),
+        ),
       ),
     );
 
@@ -352,9 +370,12 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
     final notesController = useTextEditingController();
     final tabController = useTabController(initialLength: 2);
-    final historyLogsAsync = ref.watch(exerciseLogsProvider(workout.exerciseId));
+    final historyLogsAsync = ref.watch(
+      exerciseLogsProvider(workout.exerciseId),
+    );
 
-    final allSetsCompleted = workout.series.isEmpty ||
+    final allSetsCompleted =
+        workout.series.isEmpty ||
         (logs.value.values.every((l) => l.isCompleted) &&
             logs.value.isNotEmpty &&
             logs.value.length == workout.series.length);
@@ -370,8 +391,16 @@ class _ExercisePlayerView extends HookConsumerWidget {
       if (workingWeight == 0) return;
 
       warmupSets.value = [
-        {'weight': (workingWeight * 0.5).round(), 'reps': 12, 'completed': false},
-        {'weight': (workingWeight * 0.75).round(), 'reps': 8, 'completed': false},
+        {
+          'weight': (workingWeight * 0.5).round(),
+          'reps': 12,
+          'completed': false,
+        },
+        {
+          'weight': (workingWeight * 0.75).round(),
+          'reps': 8,
+          'completed': false,
+        },
       ];
     }
 
@@ -380,10 +409,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
         _buildHeaderImage(context),
         TabBar(
           controller: tabController,
-          tabs: const [
-            Tab(text: 'Execução'),
-            Tab(text: 'Histórico'),
-          ],
+          tabs: const [Tab(text: 'Execução'), Tab(text: 'Histórico')],
         ),
         Expanded(
           child: TabBarView(
@@ -402,8 +428,13 @@ class _ExercisePlayerView extends HookConsumerWidget {
                   children: [
                     _buildExerciseTimer(context),
                     const SizedBox(height: 24),
-                     if (workout.description != null && workout.description!.isNotEmpty) ...[
-                      _buildInfoSection(context, 'Instruções', workout.description!),
+                    if (workout.description != null &&
+                        workout.description!.isNotEmpty) ...[
+                      _buildInfoSection(
+                        context,
+                        'Instruções',
+                        workout.description!,
+                      ),
                       const SizedBox(height: 16),
                     ],
                     if (workout.exercise?.tips.isNotEmpty == true) ...[
@@ -413,7 +444,8 @@ class _ExercisePlayerView extends HookConsumerWidget {
                         workout.exercise!.tips,
                         Icons.lightbulb_outline,
                         Colors.amber,
-                        initiallyExpanded: historyLogsAsync.asData?.value.isEmpty ?? false,
+                        initiallyExpanded:
+                            historyLogsAsync.asData?.value.isEmpty ?? false,
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -423,12 +455,20 @@ class _ExercisePlayerView extends HookConsumerWidget {
                       children: [
                         Row(
                           children: [
-                            Text('Séries', style: Theme.of(context).textTheme.titleLarge),
+                            Text(
+                              'Séries',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                             const SizedBox(width: 12),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
@@ -442,13 +482,22 @@ class _ExercisePlayerView extends HookConsumerWidget {
                             ),
                           ],
                         ),
-                        if (warmupSets.value.isEmpty && (workout.series.firstOrNull?.weight ?? 0) > 0)
+                        if (warmupSets.value.isEmpty &&
+                            (workout.series.firstOrNull?.weight ?? 0) > 0)
                           ActionChip(
-                            avatar: const Icon(Icons.fitness_center, size: 16, color: Colors.orange),
+                            avatar: const Icon(
+                              Icons.fitness_center,
+                              size: 16,
+                              color: Colors.orange,
+                            ),
                             label: const Text('Aquecer'),
                             onPressed: generateWarmup,
-                            backgroundColor: Colors.orange.withValues(alpha: 0.1),
-                            side: BorderSide(color: Colors.orange.withValues(alpha: 0.5)),
+                            backgroundColor: Colors.orange.withValues(
+                              alpha: 0.1,
+                            ),
+                            side: BorderSide(
+                              color: Colors.orange.withValues(alpha: 0.5),
+                            ),
                           ),
                       ],
                     ),
@@ -457,16 +506,25 @@ class _ExercisePlayerView extends HookConsumerWidget {
                       WorkoutWarmupList(warmupSetsNotifier: warmupSets),
                       const SizedBox(height: 16),
                     ],
-                    _buildSetsList(context, logs, historyLogsAsync.asData?.value.firstOrNull),
+                    _buildSetsList(
+                      context,
+                      logs,
+                      historyLogsAsync.asData?.value.firstOrNull,
+                    ),
                     const SizedBox(height: 24),
                     if (historyLogsAsync.asData?.value != null)
                       Builder(
                         builder: (context) {
-                          final lastNoteLog = historyLogsAsync.asData!.value
-                              .where((l) => l.notes != null && l.notes!.isNotEmpty)
-                              .firstOrNull;
+                          final lastNoteLog =
+                              historyLogsAsync.asData!.value
+                                  .where(
+                                    (l) =>
+                                        l.notes != null && l.notes!.isNotEmpty,
+                                  )
+                                  .firstOrNull;
 
-                          if (lastNoteLog == null) return const SizedBox.shrink();
+                          if (lastNoteLog == null)
+                            return const SizedBox.shrink();
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16),
@@ -483,11 +541,17 @@ class _ExercisePlayerView extends HookConsumerWidget {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.sticky_note_2_outlined, size: 16, color: Colors.amber),
+                                    const Icon(
+                                      Icons.sticky_note_2_outlined,
+                                      size: 16,
+                                      color: Colors.amber,
+                                    ),
                                     const SizedBox(width: 8),
                                     Text(
                                       'Nota Anterior (${DateFormat('dd/MM').format(lastNoteLog.date)})',
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall?.copyWith(
                                         color: Colors.amber,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -514,66 +578,93 @@ class _ExercisePlayerView extends HookConsumerWidget {
                     SizedBox(
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: allSetsCompleted
-                            ? () {
-                                // PR Check
-                                final historyLogs = historyLogsAsync.asData?.value ?? [];
-                                if (historyLogs.isNotEmpty) {
-                                  double currentMax1RM = 0;
-                                  for (final log in logs.value.values) {
-                                    final oneRM = OneRepMaxCalculator.calculateEpley(
-                                        log.actualWeight.toDouble(), log.actualReps);
-                                    if (oneRM > currentMax1RM) currentMax1RM = oneRM;
-                                  }
+                        onPressed:
+                            allSetsCompleted
+                                ? () {
+                                  // PR Check
+                                  final historyLogs =
+                                      historyLogsAsync.asData?.value ?? [];
+                                  if (historyLogs.isNotEmpty) {
+                                    double currentMax1RM = 0;
+                                    for (final log in logs.value.values) {
+                                      final oneRM =
+                                          OneRepMaxCalculator.calculateEpley(
+                                            log.actualWeight.toDouble(),
+                                            log.actualReps,
+                                          );
+                                      if (oneRM > currentMax1RM)
+                                        currentMax1RM = oneRM;
+                                    }
 
-                                  double historyMax1RM = 0;
-                                  for (final log in historyLogs) {
-                                    for (final set in log.sets) {
-                                      final oneRM = OneRepMaxCalculator.calculateEpley(
-                                          set.weight.toDouble(), set.reps);
-                                      if (oneRM > historyMax1RM) historyMax1RM = oneRM;
+                                    double historyMax1RM = 0;
+                                    for (final log in historyLogs) {
+                                      for (final set in log.sets) {
+                                        final oneRM =
+                                            OneRepMaxCalculator.calculateEpley(
+                                              set.weight.toDouble(),
+                                              set.reps,
+                                            );
+                                        if (oneRM > historyMax1RM)
+                                          historyMax1RM = oneRM;
+                                      }
+                                    }
+
+                                    if (currentMax1RM > historyMax1RM &&
+                                        historyMax1RM > 0) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.emoji_events,
+                                                color: Colors.white,
+                                              ),
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      'Novo Recorde Pessoal!',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '1RM estimado: ${currentMax1RM.toStringAsFixed(1)} kg',
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          backgroundColor: Colors.orange,
+                                          duration: const Duration(seconds: 4),
+                                          behavior: SnackBarBehavior.floating,
+                                        ),
+                                      );
                                     }
                                   }
-
-                                  if (currentMax1RM > historyMax1RM && historyMax1RM > 0) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Row(
-                                          children: [
-                                            const Icon(Icons.emoji_events, color: Colors.white),
-                                            const SizedBox(width: 12),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(
-                                                    'Novo Recorde Pessoal!',
-                                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Text('1RM estimado: ${currentMax1RM.toStringAsFixed(1)} kg'),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        backgroundColor: Colors.orange,
-                                        duration: const Duration(seconds: 4),
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
-                                    );
-                                  }
+                                  onFinished(logs.value, notesController.text);
                                 }
-                                onFinished(logs.value, notesController.text);
-                              }
-                            : null,
+                                : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text(
                           'Próximo Exercício',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -640,9 +731,10 @@ class _ExercisePlayerView extends HookConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
-          color: isTimerRunning
-              ? Colors.redAccent.withValues(alpha: 0.1)
-              : Colors.greenAccent.withValues(alpha: 0.1),
+          color:
+              isTimerRunning
+                  ? Colors.redAccent.withValues(alpha: 0.1)
+                  : Colors.greenAccent.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isTimerRunning ? Colors.redAccent : Colors.greenAccent,
@@ -690,21 +782,32 @@ class _ExercisePlayerView extends HookConsumerWidget {
     );
   }
 
-  Widget _buildExpandableSection(BuildContext context, String title, List<String> items, IconData icon, Color iconColor, {bool initiallyExpanded = false}) {
+  Widget _buildExpandableSection(
+    BuildContext context,
+    String title,
+    List<String> items,
+    IconData icon,
+    Color iconColor, {
+    bool initiallyExpanded = false,
+  }) {
     return Card(
       child: ExpansionTile(
         initiallyExpanded: initiallyExpanded,
         leading: Icon(icon, color: iconColor),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        children: items.map((item) => ListTile(
-          dense: true,
-          leading: const Icon(Icons.circle, size: 8),
-          title: Text(item),
-        )).toList(),
+        children:
+            items
+                .map(
+                  (item) => ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.circle, size: 8),
+                    title: Text(item),
+                  ),
+                )
+                .toList(),
       ),
     );
   }
-
 
   Widget _buildSetsList(
     BuildContext context,
@@ -712,47 +815,48 @@ class _ExercisePlayerView extends HookConsumerWidget {
     ExerciseLogEntity? lastLog,
   ) {
     return Column(
-      children: workout.series.asMap().entries.map((entry) {
-        final index = entry.key;
-        final series = entry.value;
-        final log = logs.value[index];
+      children:
+          workout.series.asMap().entries.map((entry) {
+            final index = entry.key;
+            final series = entry.value;
+            final log = logs.value[index];
 
-        // Try to match with last session set
-        final lastSet = (lastLog != null && lastLog.sets.length > index)
-            ? lastLog.sets[index]
-            : null;
+            // Try to match with last session set
+            final lastSet =
+                (lastLog != null && lastLog.sets.length > index)
+                    ? lastLog.sets[index]
+                    : null;
 
-        if (log == null) return const SizedBox.shrink();
+            if (log == null) return const SizedBox.shrink();
 
-        return WorkoutSetRow(
-          index: index,
-          series: series,
-          log: log,
-          lastSet: lastSet,
-          onChanged: (newLog) {
-            final newLogs = Map<int, SetLogState>.from(logs.value);
-            newLogs[index] = newLog;
-            logs.value = newLogs;
-          },
-          onCompleted: () {
-            HapticFeedback.mediumImpact();
-            final newLogs = Map<int, SetLogState>.from(logs.value);
-            final wasCompleted = log.isCompleted;
-            newLogs[index] = SetLogState(
-              actualReps: log.actualReps,
-              actualWeight: log.actualWeight,
-              rpe: log.rpe,
-              isCompleted: !wasCompleted,
+            return WorkoutSetRow(
+              index: index,
+              series: series,
+              log: log,
+              lastSet: lastSet,
+              onChanged: (newLog) {
+                final newLogs = Map<int, SetLogState>.from(logs.value);
+                newLogs[index] = newLog;
+                logs.value = newLogs;
+              },
+              onCompleted: () {
+                HapticFeedback.mediumImpact();
+                final newLogs = Map<int, SetLogState>.from(logs.value);
+                final wasCompleted = log.isCompleted;
+                newLogs[index] = SetLogState(
+                  actualReps: log.actualReps,
+                  actualWeight: log.actualWeight,
+                  rpe: log.rpe,
+                  isCompleted: !wasCompleted,
+                );
+                logs.value = newLogs;
+
+                if (!wasCompleted) {
+                  onSetCompleted(series.rest);
+                }
+              },
             );
-            logs.value = newLogs;
-
-            if (!wasCompleted) {
-              onSetCompleted(series.rest);
-            }
-          },
-        );
-      }).toList(),
+          }).toList(),
     );
   }
 }
-

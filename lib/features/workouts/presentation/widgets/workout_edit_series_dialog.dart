@@ -71,7 +71,9 @@ class WorkoutEditSeriesDialog extends HookWidget {
                   itemBuilder: (context, index) {
                     final wrapper = seriesList.value[index];
                     return _SeriesEditorRow(
-                      key: wrapper.key, // Vital for correct controller behavior on delete
+                      key:
+                          wrapper
+                              .key, // Vital for correct controller behavior on delete
                       index: index,
                       series: wrapper.entity,
                       onUpdate: (s) => updateSeries(index, s),
@@ -96,9 +98,11 @@ class WorkoutEditSeriesDialog extends HookWidget {
         ),
         FilledButton(
           onPressed: () {
-            onSave(workout.copyWith(
-              series: seriesList.value.map((w) => w.entity).toList(),
-            ));
+            onSave(
+              workout.copyWith(
+                series: seriesList.value.map((w) => w.entity).toList(),
+              ),
+            );
             Navigator.of(context).pop();
           },
           child: const Text('Salvar'),
@@ -131,16 +135,26 @@ class _SeriesEditorRow extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final repsController = useTextEditingController(text: series.repetitions.toString());
-    final weightController = useTextEditingController(text: series.weight.toString());
-    final restController = useTextEditingController(text: series.rest.toString());
+    final repsController = useTextEditingController(
+      text: series.repetitions.toString(),
+    );
+    final weightController = useTextEditingController(
+      text: series.weight.toString(),
+    );
+    final restController = useTextEditingController(
+      text: series.rest.toString(),
+    );
 
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         children: [
@@ -234,10 +248,15 @@ class _CompactInput extends StatelessWidget {
             keyboardType: TextInputType.number,
             style: const TextStyle(fontSize: 14),
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 8,
+              ),
               isDense: true,
               suffixText: suffix,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
             onChanged: onChanged,
           ),

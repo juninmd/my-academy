@@ -35,14 +35,15 @@ class ProfilePage extends HookConsumerWidget {
     }, [user]);
 
     if (user == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     // Extract name logic to avoid complex expressions in widget tree
     final userName = user.name;
-    final displayName = (userName != null && userName.isNotEmpty) ? userName[0].toUpperCase() : '?';
+    final displayName =
+        (userName != null && userName.isNotEmpty)
+            ? userName[0].toUpperCase()
+            : '?';
 
     return DefaultTabController(
       length: 2,
@@ -80,9 +81,10 @@ class ProfilePage extends HookConsumerWidget {
                               user.photoUrl == null
                                   ? Text(
                                     displayName,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.headlineLarge,
+                                    style:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.headlineLarge,
                                   )
                                   : null,
                         ),
@@ -101,160 +103,174 @@ class ProfilePage extends HookConsumerWidget {
                   const SizedBox(height: 32),
 
                   // Stats Summary
-                  ref.watch(allExerciseLogsProvider).when(
-                    data: (logs) {
-                      // Calculate Stats
-                      final uniqueDays = logs
-                          .map(
-                            (l) => DateTime(
-                              l.date.year,
-                              l.date.month,
-                              l.date.day,
+                  ref
+                      .watch(allExerciseLogsProvider)
+                      .when(
+                        data: (logs) {
+                          // Calculate Stats
+                          final uniqueDays =
+                              logs
+                                  .map(
+                                    (l) => DateTime(
+                                      l.date.year,
+                                      l.date.month,
+                                      l.date.day,
+                                    ),
+                                  )
+                                  .toSet();
+                          final totalWorkouts = uniqueDays.length;
+
+                          double totalVolume = 0;
+                          for (final log in logs) {
+                            for (final set in log.sets) {
+                              totalVolume += set.weight * set.reps;
+                            }
+                          }
+                          final volumeDisplay =
+                              totalVolume > 1000
+                                  ? '${(totalVolume / 1000).toStringAsFixed(1)} ton'
+                                  : '${totalVolume.toStringAsFixed(0)} kg';
+
+                          // Streak Calculation
+                          int streak = 0;
+                          if (uniqueDays.isNotEmpty) {
+                            final sortedDays =
+                                uniqueDays.toList()
+                                  ..sort((a, b) => b.compareTo(a));
+                            final today = DateTime.now();
+                            final todayDate = DateTime(
+                              today.year,
+                              today.month,
+                              today.day,
+                            );
+
+                            // Check if trained today
+                            var currentDate = todayDate;
+                            if (!sortedDays.contains(currentDate)) {
+                              currentDate = currentDate.subtract(
+                                const Duration(days: 1),
+                              );
+                            }
+
+                            while (sortedDays.contains(currentDate)) {
+                              streak++;
+                              currentDate = currentDate.subtract(
+                                const Duration(days: 1),
+                              );
+                            }
+                          }
+
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _StatCard(
+                                      label: 'Treinos',
+                                      value: totalWorkouts.toString(),
+                                      icon: Icons.fitness_center,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: _StatCard(
+                                      label: 'Volume Total',
+                                      value: volumeDisplay,
+                                      icon: Icons.monitor_weight,
+                                      color: Colors.orange,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _StatCard(
+                                      label: 'Sequência',
+                                      value: '$streak dias',
+                                      icon: Icons.local_fire_department,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: _StatCard(
+                                      label: 'Último Treino',
+                                      value:
+                                          logs.isNotEmpty
+                                              ? DateFormat(
+                                                'dd/MM',
+                                              ).format(logs.first.date)
+                                              : '-',
+                                      icon: Icons.calendar_today,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                        loading:
+                            () => const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                          )
-                          .toSet();
-                      final totalWorkouts = uniqueDays.length;
-
-                      double totalVolume = 0;
-                      for (final log in logs) {
-                        for (final set in log.sets) {
-                          totalVolume += set.weight * set.reps;
-                        }
-                      }
-                      final volumeDisplay =
-                          totalVolume > 1000
-                              ? '${(totalVolume / 1000).toStringAsFixed(1)} ton'
-                              : '${totalVolume.toStringAsFixed(0)} kg';
-
-                      // Streak Calculation
-                      int streak = 0;
-                      if (uniqueDays.isNotEmpty) {
-                        final sortedDays = uniqueDays.toList()
-                          ..sort((a, b) => b.compareTo(a));
-                        final today = DateTime.now();
-                        final todayDate = DateTime(
-                          today.year,
-                          today.month,
-                          today.day,
-                        );
-
-                        // Check if trained today
-                        var currentDate = todayDate;
-                        if (!sortedDays.contains(currentDate)) {
-                          currentDate = currentDate.subtract(
-                            const Duration(days: 1),
-                          );
-                        }
-
-                        while (sortedDays.contains(currentDate)) {
-                          streak++;
-                          currentDate = currentDate.subtract(
-                            const Duration(days: 1),
-                          );
-                        }
-                      }
-
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _StatCard(
-                                  label: 'Treinos',
-                                  value: totalWorkouts.toString(),
-                                  icon: Icons.fitness_center,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _StatCard(
-                                  label: 'Volume Total',
-                                  value: volumeDisplay,
-                                  icon: Icons.monitor_weight,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _StatCard(
-                                  label: 'Sequência',
-                                  value: '$streak dias',
-                                  icon: Icons.local_fire_department,
-                                  color: Colors.red,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: _StatCard(
-                                  label: 'Último Treino',
-                                  value:
-                                      logs.isNotEmpty
-                                          ? DateFormat(
-                                            'dd/MM',
-                                          ).format(logs.first.date)
-                                          : '-',
-                                  icon: Icons.calendar_today,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
-                    error: (e, s) => const SizedBox(),
-                  ),
+                        error: (e, s) => const SizedBox(),
+                      ),
 
                   const SizedBox(height: 16),
 
                   // Muscle Split Chart
-                  ref.watch(allExerciseLogsProvider).when(
-                    data: (logs) {
-                      return exercisesAsync.maybeWhen(
-                        data: (exercises) => MuscleSplitChart(
-                          logs: logs,
-                          exercises: exercises,
-                        ),
-                        orElse: () => const SizedBox.shrink(),
-                      );
-                    },
-                    loading: () => const SizedBox(),
-                    error: (e, s) => const SizedBox(),
-                  ),
+                  ref
+                      .watch(allExerciseLogsProvider)
+                      .when(
+                        data: (logs) {
+                          return exercisesAsync.maybeWhen(
+                            data:
+                                (exercises) => MuscleSplitChart(
+                                  logs: logs,
+                                  exercises: exercises,
+                                ),
+                            orElse: () => const SizedBox.shrink(),
+                          );
+                        },
+                        loading: () => const SizedBox(),
+                        error: (e, s) => const SizedBox(),
+                      ),
 
                   const SizedBox(height: 16),
 
                   // Personal Records
-                  ref.watch(allExerciseLogsProvider).when(
-                    data: (logs) {
-                      return exercisesAsync.maybeWhen(
-                        data: (exercises) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: PersonalBestWidget(
-                            logs: logs,
-                            exercises: exercises,
-                          ),
-                        ),
-                        orElse: () => const SizedBox.shrink(),
-                      );
-                    },
-                    loading: () => const SizedBox(),
-                    error: (e, s) => const SizedBox(),
-                  ),
+                  ref
+                      .watch(allExerciseLogsProvider)
+                      .when(
+                        data: (logs) {
+                          return exercisesAsync.maybeWhen(
+                            data:
+                                (exercises) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: PersonalBestWidget(
+                                    logs: logs,
+                                    exercises: exercises,
+                                  ),
+                                ),
+                            orElse: () => const SizedBox.shrink(),
+                          );
+                        },
+                        loading: () => const SizedBox(),
+                        error: (e, s) => const SizedBox(),
+                      ),
 
                   // Consistency Heatmap
-                  ref.watch(allExerciseLogsProvider).when(
-                    data: (logs) => ConsistencyHeatmap(logs: logs),
-                    loading: () => const SizedBox(),
-                    error: (e, s) => const SizedBox(),
-                  ),
+                  ref
+                      .watch(allExerciseLogsProvider)
+                      .when(
+                        data: (logs) => ConsistencyHeatmap(logs: logs),
+                        loading: () => const SizedBox(),
+                        error: (e, s) => const SizedBox(),
+                      ),
 
                   const SizedBox(height: 16),
 
@@ -262,10 +278,10 @@ class ProfilePage extends HookConsumerWidget {
                   Card(
                     child: InkWell(
                       onTap: () {
-                         showDialog(
-                           context: context,
-                           builder: (context) => const BodyCompositionDialog(),
-                         );
+                        showDialog(
+                          context: context,
+                          builder: (context) => const BodyCompositionDialog(),
+                        );
                       },
                       borderRadius: BorderRadius.circular(12),
                       child: Padding(
@@ -278,7 +294,10 @@ class ProfilePage extends HookConsumerWidget {
                                 color: Colors.orange.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(Icons.accessibility_new, color: Colors.orange),
+                              child: const Icon(
+                                Icons.accessibility_new,
+                                color: Colors.orange,
+                              ),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
@@ -287,7 +306,8 @@ class ProfilePage extends HookConsumerWidget {
                                 children: [
                                   Text(
                                     'Composição Corporal',
-                                    style: Theme.of(context).textTheme.titleMedium,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const Text(
                                     'Calcular % de gordura',
@@ -330,14 +350,13 @@ class ProfilePage extends HookConsumerWidget {
                               Expanded(
                                 child: Text(
                                   'Meta Semanal',
-                                  style: Theme.of(context).textTheme.titleMedium,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
                               Text(
                                 '${settings.weeklyWorkoutGoal} treinos',
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -368,7 +387,8 @@ class ProfilePage extends HookConsumerWidget {
                                   const SizedBox(width: 12),
                                   Text(
                                     'Objetivo',
-                                    style: Theme.of(context).textTheme.titleMedium,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ],
                               ),
@@ -377,13 +397,32 @@ class ProfilePage extends HookConsumerWidget {
                                 width: double.infinity,
                                 child: SegmentedButton<String>(
                                   segments: const [
-                                    ButtonSegment(value: 'Hipertrofia', label: Text('Hipertrofia')),
-                                    ButtonSegment(value: 'Força', label: Text('Força')),
-                                    ButtonSegment(value: 'Resistência', label: Text('Resistência')),
+                                    ButtonSegment(
+                                      value: 'Hipertrofia',
+                                      label: Text('Hipertrofia'),
+                                    ),
+                                    ButtonSegment(
+                                      value: 'Força',
+                                      label: Text('Força'),
+                                    ),
+                                    ButtonSegment(
+                                      value: 'Resistência',
+                                      label: Text('Resistência'),
+                                    ),
                                   ],
-                                  selected: {['Hipertrofia', 'Força', 'Resistência'].contains(settings.goal) ? settings.goal : 'Hipertrofia'},
+                                  selected: {
+                                    [
+                                          'Hipertrofia',
+                                          'Força',
+                                          'Resistência',
+                                        ].contains(settings.goal)
+                                        ? settings.goal
+                                        : 'Hipertrofia',
+                                  },
                                   onSelectionChanged: (newSelection) {
-                                    ref.read(settingsProvider.notifier).setGoal(newSelection.first);
+                                    ref
+                                        .read(settingsProvider.notifier)
+                                        .setGoal(newSelection.first);
                                   },
                                   showSelectedIcon: false,
                                 ),
@@ -400,7 +439,8 @@ class ProfilePage extends HookConsumerWidget {
                                   const SizedBox(width: 12),
                                   Text(
                                     'Nível',
-                                    style: Theme.of(context).textTheme.titleMedium,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
                                   ),
                                 ],
                               ),
@@ -409,13 +449,32 @@ class ProfilePage extends HookConsumerWidget {
                                 width: double.infinity,
                                 child: SegmentedButton<String>(
                                   segments: const [
-                                    ButtonSegment(value: 'Iniciante', label: Text('Iniciante')),
-                                    ButtonSegment(value: 'Intermediário', label: Text('Interm.')),
-                                    ButtonSegment(value: 'Avançado', label: Text('Avançado')),
+                                    ButtonSegment(
+                                      value: 'Iniciante',
+                                      label: Text('Iniciante'),
+                                    ),
+                                    ButtonSegment(
+                                      value: 'Intermediário',
+                                      label: Text('Interm.'),
+                                    ),
+                                    ButtonSegment(
+                                      value: 'Avançado',
+                                      label: Text('Avançado'),
+                                    ),
                                   ],
-                                  selected: {['Iniciante', 'Intermediário', 'Avançado'].contains(settings.experienceLevel) ? settings.experienceLevel : 'Iniciante'},
+                                  selected: {
+                                    [
+                                          'Iniciante',
+                                          'Intermediário',
+                                          'Avançado',
+                                        ].contains(settings.experienceLevel)
+                                        ? settings.experienceLevel
+                                        : 'Iniciante',
+                                  },
                                   onSelectionChanged: (newSelection) {
-                                    ref.read(settingsProvider.notifier).setExperienceLevel(newSelection.first);
+                                    ref
+                                        .read(settingsProvider.notifier)
+                                        .setExperienceLevel(newSelection.first);
                                   },
                                   showSelectedIcon: false,
                                 ),
@@ -427,21 +486,37 @@ class ProfilePage extends HookConsumerWidget {
                             children: [
                               const Icon(Icons.scale_outlined),
                               const SizedBox(width: 12),
-                              Expanded(child: Text('Sistema de Medidas', style: Theme.of(context).textTheme.titleMedium)),
+                              Expanded(
+                                child: Text(
+                                  'Sistema de Medidas',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ),
                               SegmentedButton<UnitSystem>(
                                 segments: const [
-                                   ButtonSegment(value: UnitSystem.metric, label: Text('KG')),
-                                   ButtonSegment(value: UnitSystem.imperial, label: Text('LBS')),
+                                  ButtonSegment(
+                                    value: UnitSystem.metric,
+                                    label: Text('KG'),
+                                  ),
+                                  ButtonSegment(
+                                    value: UnitSystem.imperial,
+                                    label: Text('LBS'),
+                                  ),
                                 ],
                                 selected: {settings.unitSystem},
-                                onSelectionChanged: (Set<UnitSystem> newSelection) {
-                                  ref.read(settingsProvider.notifier).setUnitSystem(newSelection.first);
+                                onSelectionChanged: (
+                                  Set<UnitSystem> newSelection,
+                                ) {
+                                  ref
+                                      .read(settingsProvider.notifier)
+                                      .setUnitSystem(newSelection.first);
                                 },
                                 showSelectedIcon: false,
                                 style: const ButtonStyle(
-                                   visualDensity: VisualDensity.compact,
+                                  visualDensity: VisualDensity.compact,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           const Divider(height: 32),
@@ -458,9 +533,7 @@ class ProfilePage extends HookConsumerWidget {
                               ),
                               Text(
                                 '${settings.barWeight.toStringAsFixed(1)} kg',
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -495,9 +568,7 @@ class ProfilePage extends HookConsumerWidget {
                               ),
                               Text(
                                 '${settings.bodyWeight.toStringAsFixed(1)} kg',
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -544,28 +615,30 @@ class ProfilePage extends HookConsumerWidget {
                           Wrap(
                             spacing: 8,
                             runSpacing: 8,
-                            children: [
-                              25.0,
-                              20.0,
-                              15.0,
-                              10.0,
-                              5.0,
-                              2.5,
-                              1.25,
-                              1.0,
-                              0.5
-                            ].map((plate) {
-                              final isAvailable = settings.availablePlates.contains(plate);
-                              return FilterChip(
-                                label: Text('${plate}kg'),
-                                selected: isAvailable,
-                                onSelected: (_) {
-                                  ref
-                                      .read(settingsProvider.notifier)
-                                      .togglePlateAvailability(plate);
-                                },
-                              );
-                            }).toList(),
+                            children:
+                                [
+                                  25.0,
+                                  20.0,
+                                  15.0,
+                                  10.0,
+                                  5.0,
+                                  2.5,
+                                  1.25,
+                                  1.0,
+                                  0.5,
+                                ].map((plate) {
+                                  final isAvailable = settings.availablePlates
+                                      .contains(plate);
+                                  return FilterChip(
+                                    label: Text('${plate}kg'),
+                                    selected: isAvailable,
+                                    onSelected: (_) {
+                                      ref
+                                          .read(settingsProvider.notifier)
+                                          .togglePlateAvailability(plate);
+                                    },
+                                  );
+                                }).toList(),
                           ),
                         ],
                       ),
@@ -608,10 +681,7 @@ class ProfilePage extends HookConsumerWidget {
                   const SizedBox(height: 32),
 
                   // Account Actions
-                  Text(
-                    'Conta',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  Text('Conta', style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 16),
 
                   if (isEditing.value) ...[
@@ -703,7 +773,9 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+        ),
       ),
       child: Column(
         children: [
@@ -711,9 +783,9 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             label,

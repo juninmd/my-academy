@@ -47,7 +47,7 @@ void main() {
       expect(state.barWeight, 30.0);
     });
 
-     test('should update body weight', () async {
+    test('should update body weight', () async {
       SharedPreferences.setMockInitialValues({});
       final container = ProviderContainer();
       final notifier = container.read(settingsProvider.notifier);

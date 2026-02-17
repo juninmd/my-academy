@@ -25,7 +25,7 @@ void main() {
           'date': '2023-01-01T00:00:00.000Z',
           'checked': true,
           'userId': 'u1',
-        }
+        },
       ];
 
       when(mockApiClient.get(any)).thenAnswer((_) async => mockData);
@@ -33,13 +33,10 @@ void main() {
       final result = await repository.getSessions('u1', 1, 2023);
 
       expect(result.isRight(), true);
-      result.fold(
-        (l) => fail('should be right'),
-        (r) {
-          expect(r.length, 1);
-          expect(r[0].id, '1');
-        },
-      );
+      result.fold((l) => fail('should be right'), (r) {
+        expect(r.length, 1);
+        expect(r[0].id, '1');
+      });
     });
 
     test('should return failure when exception', () async {

@@ -15,14 +15,14 @@ void main() {
       image: null,
     );
 
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        workoutGroupByIdProvider(1).overrideWith((ref) async => group),
-      ],
-      child: const MaterialApp(
-        home: WorkoutDetailsPage(groupId: 1),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          workoutGroupByIdProvider(1).overrideWith((ref) async => group),
+        ],
+        child: const MaterialApp(home: WorkoutDetailsPage(groupId: 1)),
       ),
-    ));
+    );
     await tester.pump();
 
     expect(find.text('Leg Day'), findsOneWidget);

@@ -15,7 +15,12 @@ void main() {
       expect(student.name, 'John Doe');
       expect(student.email, 'john@example.com');
       expect(student.photoUrl, 'https://example.com/photo.jpg');
-      expect(student.props, ['1', 'John Doe', 'john@example.com', 'https://example.com/photo.jpg']);
+      expect(student.props, [
+        '1',
+        'John Doe',
+        'john@example.com',
+        'https://example.com/photo.jpg',
+      ]);
     });
   });
 }

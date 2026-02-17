@@ -17,12 +17,27 @@ class RpeInfoDialog extends StatelessWidget {
               style: TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 16),
-            _buildRpeRow(context, 10, 'Esforço Máximo', '0 repetições na reserva (RIR)'),
+            _buildRpeRow(
+              context,
+              10,
+              'Esforço Máximo',
+              '0 repetições na reserva (RIR)',
+            ),
             _buildRpeRow(context, 9, 'Muito Difícil', '1 repetição na reserva'),
             _buildRpeRow(context, 8, 'Difícil', '2 repetições na reserva'),
-            _buildRpeRow(context, 7, 'Moderado/Difícil', '3 repetições na reserva'),
+            _buildRpeRow(
+              context,
+              7,
+              'Moderado/Difícil',
+              '3 repetições na reserva',
+            ),
             _buildRpeRow(context, 6, 'Moderado', '4 repetições na reserva'),
-            _buildRpeRow(context, 5, 'Moderado/Fácil', 'Esforço de aquecimento'),
+            _buildRpeRow(
+              context,
+              5,
+              'Moderado/Fácil',
+              'Esforço de aquecimento',
+            ),
             _buildRpeRow(context, 4, 'Fácil', 'Recuperação ativa'),
           ],
         ),
@@ -36,7 +51,12 @@ class RpeInfoDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildRpeRow(BuildContext context, int rpe, String title, String desc) {
+  Widget _buildRpeRow(
+    BuildContext context,
+    int rpe,
+    String title,
+    String desc,
+  ) {
     Color color;
     if (rpe >= 9) {
       color = Colors.red;
@@ -64,10 +84,7 @@ class RpeInfoDialog extends StatelessWidget {
             ),
             child: Text(
               '$rpe',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, color: color),
             ),
           ),
           const SizedBox(width: 12),
@@ -75,7 +92,10 @@ class RpeInfoDialog extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Text(desc, style: Theme.of(context).textTheme.bodySmall),
               ],
             ),

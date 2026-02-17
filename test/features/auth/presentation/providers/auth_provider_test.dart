@@ -19,26 +19,31 @@ void main() {
   });
 
   group('AuthNotifier', () {
-    test('build should return user when getCurrentUser is successful', () async {
-      const user = UserEntity(id: '1', email: 'test@test.com');
+    test(
+      'build should return user when getCurrentUser is successful',
+      () async {
+        const user = UserEntity(id: '1', email: 'test@test.com');
 
-      when(mockAuthRepository.getCurrentUser())
-          .thenAnswer((_) async => const Right(user));
+        when(
+          mockAuthRepository.getCurrentUser(),
+        ).thenAnswer((_) async => const Right(user));
 
-      final container = ProviderContainer(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(mockAuthRepository),
-        ],
-      );
+        final container = ProviderContainer(
+          overrides: [
+            authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          ],
+        );
 
-      final result = await container.read(authNotifierProvider.future);
-      expect(result, user);
-      verify(mockAuthRepository.getCurrentUser()).called(1);
-    });
+        final result = await container.read(authNotifierProvider.future);
+        expect(result, user);
+        verify(mockAuthRepository.getCurrentUser()).called(1);
+      },
+    );
 
     test('build should return null when getCurrentUser fails', () async {
-      when(mockAuthRepository.getCurrentUser())
-          .thenAnswer((_) async => const Left(ServerFailure('Error')));
+      when(
+        mockAuthRepository.getCurrentUser(),
+      ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
         overrides: [
@@ -54,11 +59,13 @@ void main() {
       const user = UserEntity(id: '1', email: 'test@test.com');
 
       // Mock initial load
-      when(mockAuthRepository.getCurrentUser())
-          .thenAnswer((_) async => const Right(null));
+      when(
+        mockAuthRepository.getCurrentUser(),
+      ).thenAnswer((_) async => const Right(null));
 
-      when(mockAuthRepository.signInWithGoogle())
-          .thenAnswer((_) async => const Right(user));
+      when(
+        mockAuthRepository.signInWithGoogle(),
+      ).thenAnswer((_) async => const Right(user));
 
       final container = ProviderContainer(
         overrides: [
@@ -77,13 +84,45 @@ void main() {
       expect(state.value, user);
     });
 
-    test('signInWithGoogle should update state with error on failure', () async {
-      // Mock initial load
-      when(mockAuthRepository.getCurrentUser())
-          .thenAnswer((_) async => const Right(null));
+    test(
+      'signInWithGoogle should update state with error on failure',
+      () async {
+        // Mock initial load
+        when(
+          mockAuthRepository.getCurrentUser(),
+        ).thenAnswer((_) async => const Right(null));
 
-      when(mockAuthRepository.signInWithGoogle())
-          .thenAnswer((_) async => const Left(ServerFailure('Error login')));
+        when(
+          mockAuthRepository.signInWithGoogle(),
+        ).thenAnswer((_) async => const Left(ServerFailure('Error login')));
+
+        final container = ProviderContainer(
+          overrides: [
+            authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          ],
+        );
+
+        // Initialize
+        container.read(authNotifierProvider);
+
+        // Perform action
+        await container.read(authNotifierProvider.notifier).signInWithGoogle();
+
+        // Check state
+        final state = container.read(authNotifierProvider);
+        expect(state.hasError, true);
+      },
+    );
+
+    test('signOut should update state to null', () async {
+      // Mock initial load
+      when(
+        mockAuthRepository.getCurrentUser(),
+      ).thenAnswer((_) async => const Right(UserEntity(id: '1', email: 't')));
+
+      when(
+        mockAuthRepository.signOut(),
+      ).thenAnswer((_) async => const Right(null));
 
       final container = ProviderContainer(
         overrides: [
@@ -92,31 +131,6 @@ void main() {
       );
 
       // Initialize
-      container.read(authNotifierProvider);
-
-      // Perform action
-      await container.read(authNotifierProvider.notifier).signInWithGoogle();
-
-      // Check state
-      final state = container.read(authNotifierProvider);
-      expect(state.hasError, true);
-    });
-
-    test('signOut should update state to null', () async {
-       // Mock initial load
-      when(mockAuthRepository.getCurrentUser())
-          .thenAnswer((_) async => const Right(UserEntity(id: '1', email: 't')));
-
-      when(mockAuthRepository.signOut())
-          .thenAnswer((_) async => const Right(null));
-
-      final container = ProviderContainer(
-        overrides: [
-          authRepositoryProvider.overrideWithValue(mockAuthRepository),
-        ],
-      );
-
-       // Initialize
       await container.read(authNotifierProvider.future);
 
       // Perform action

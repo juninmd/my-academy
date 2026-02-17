@@ -28,7 +28,8 @@ class PersonalBestWidget extends StatelessWidget {
           set.reps,
         );
 
-        if (!prMap.containsKey(log.exerciseId) || oneRM > prMap[log.exerciseId]!.weight) {
+        if (!prMap.containsKey(log.exerciseId) ||
+            oneRM > prMap[log.exerciseId]!.weight) {
           prMap[log.exerciseId] = _PREntry(
             weight: oneRM,
             date: log.date,
@@ -40,15 +41,17 @@ class PersonalBestWidget extends StatelessWidget {
     }
 
     // 2. Map to display objects and sort
-    final prs = prMap.entries.map((e) {
-      final exercise = exercises.where((ex) => ex.id == e.key).firstOrNull;
-      return _PRDisplay(
-        name: exercise?.name ?? 'Exercício ${e.key}',
-        oneRM: e.value.weight,
-        date: e.value.date,
-        details: '${e.value.actualWeight.toStringAsFixed(0)}kg x ${e.value.actualReps}',
-      );
-    }).toList();
+    final prs =
+        prMap.entries.map((e) {
+          final exercise = exercises.where((ex) => ex.id == e.key).firstOrNull;
+          return _PRDisplay(
+            name: exercise?.name ?? 'Exercício ${e.key}',
+            oneRM: e.value.weight,
+            date: e.value.date,
+            details:
+                '${e.value.actualWeight.toStringAsFixed(0)}kg x ${e.value.actualReps}',
+          );
+        }).toList();
 
     // Sort by 1RM descending
     prs.sort((a, b) => b.oneRM.compareTo(a.oneRM));
@@ -71,7 +74,11 @@ class PersonalBestWidget extends StatelessWidget {
                   color: Colors.amber.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+                child: const Icon(
+                  Icons.emoji_events,
+                  color: Colors.amber,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               Text(
@@ -97,7 +104,9 @@ class PersonalBestWidget extends StatelessWidget {
                   color: Theme.of(context).cardTheme.color,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+                    color: Theme.of(
+                      context,
+                    ).dividerColor.withValues(alpha: 0.1),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -114,31 +123,35 @@ class PersonalBestWidget extends StatelessWidget {
                     Text(
                       pr.name,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       maxLines: 2,
                     ),
                     const Spacer(),
                     Text(
                       '${pr.oneRM.toStringAsFixed(1)} kg',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       pr.details,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
-                          ),
+                        color: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                      ),
                     ),
                     Text(
                       DateFormat('dd/MM/yy').format(pr.date),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.grey,
-                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelSmall?.copyWith(color: Colors.grey),
                     ),
                   ],
                 ),

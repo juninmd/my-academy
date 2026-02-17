@@ -18,10 +18,7 @@ class WorkoutTimer extends StatelessWidget {
       builder: (context, value, child) {
         return Text(
           _formatTime(value),
-          style: const TextStyle(
-            fontSize: 18,
-            fontFamily: 'monospace',
-          ),
+          style: const TextStyle(fontSize: 18, fontFamily: 'monospace'),
         );
       },
     );

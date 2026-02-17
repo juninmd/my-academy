@@ -8,7 +8,8 @@ import 'package:my_academy/features/workouts/presentation/providers/workout_crea
 
 class FakeWorkoutCreateNotifier extends WorkoutCreateNotifier {
   @override
-  WorkoutGroupEntity build() => const WorkoutGroupEntity(name: '', userId: 'u1', workouts: []);
+  WorkoutGroupEntity build() =>
+      const WorkoutGroupEntity(name: '', userId: 'u1', workouts: []);
 
   @override
   void updateName(String name) {
@@ -26,15 +27,17 @@ void main() {
   testWidgets('WorkoutCreatePage displays exercises in picker', (tester) async {
     const exercise = ExerciseEntity(id: 1, name: 'Bench Press', image: null);
 
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        exercisesProvider.overrideWith((ref) async => [exercise]),
-        workoutCreateNotifierProvider.overrideWith(FakeWorkoutCreateNotifier.new),
-      ],
-      child: const MaterialApp(
-        home: WorkoutCreatePage(),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          exercisesProvider.overrideWith((ref) async => [exercise]),
+          workoutCreateNotifierProvider.overrideWith(
+            FakeWorkoutCreateNotifier.new,
+          ),
+        ],
+        child: const MaterialApp(home: WorkoutCreatePage()),
       ),
-    ));
+    );
     // Initial pump (exercisesProvider future needs to resolve? No, it's async value)
     await tester.pumpAndSettle();
 

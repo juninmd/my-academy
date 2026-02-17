@@ -26,24 +26,26 @@ void main() {
       ),
     ];
     final exercises = [
-       ExerciseEntity(id: 1, name: 'Agachamento', tips: [], mistakes: []),
+      const ExerciseEntity(id: 1, name: 'Agachamento', tips: [], mistakes: []),
     ];
 
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        allExerciseLogsProvider.overrideWith((ref) async => logs),
-        exercisesProvider.overrideWith((ref) async => exercises),
-      ],
-      child: const MaterialApp(
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          allExerciseLogsProvider.overrideWith((ref) async => logs),
+          exercisesProvider.overrideWith((ref) async => exercises),
         ],
-        supportedLocales: [Locale('pt', 'BR')],
-        home: AnalyticsPage(),
+        child: const MaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [Locale('pt', 'BR')],
+          home: AnalyticsPage(),
+        ),
       ),
-    ));
+    );
 
     // Wait for data
     await tester.pumpAndSettle();

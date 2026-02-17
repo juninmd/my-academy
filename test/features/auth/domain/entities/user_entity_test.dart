@@ -22,7 +22,7 @@ void main() {
         'test@example.com',
         'Test User',
         'http://example.com/photo.jpg',
-        'student'
+        'student',
       ]);
     });
   });

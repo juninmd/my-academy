@@ -41,21 +41,27 @@ class PlateCalculatorContent extends ConsumerStatefulWidget {
   final double? barWeight;
 
   @override
-  ConsumerState<PlateCalculatorContent> createState() => _PlateCalculatorContentState();
+  ConsumerState<PlateCalculatorContent> createState() =>
+      _PlateCalculatorContentState();
 }
 
-class _PlateCalculatorContentState extends ConsumerState<PlateCalculatorContent> {
+class _PlateCalculatorContentState
+    extends ConsumerState<PlateCalculatorContent> {
   late TextEditingController _targetWeightController;
   late TextEditingController _barWeightController;
 
   @override
   void initState() {
     super.initState();
-    _targetWeightController = TextEditingController(text: widget.targetWeight.toString());
+    _targetWeightController = TextEditingController(
+      text: widget.targetWeight.toString(),
+    );
 
     // Use provided weight, or fetch from settings
     final defaultBarWeight = ref.read(settingsProvider).barWeight;
-    _barWeightController = TextEditingController(text: (widget.barWeight ?? defaultBarWeight).toString());
+    _barWeightController = TextEditingController(
+      text: (widget.barWeight ?? defaultBarWeight).toString(),
+    );
   }
 
   @override
@@ -101,7 +107,9 @@ class _PlateCalculatorContentState extends ConsumerState<PlateCalculatorContent>
               Expanded(
                 child: TextField(
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(labelText: 'Peso Total (kg)'),
+                  decoration: const InputDecoration(
+                    labelText: 'Peso Total (kg)',
+                  ),
                   controller: _targetWeightController,
                   onChanged: (v) => setState(() {}),
                 ),
@@ -111,7 +119,7 @@ class _PlateCalculatorContentState extends ConsumerState<PlateCalculatorContent>
                 child: TextField(
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(labelText: 'Barra (kg)'),
-                   controller: _barWeightController,
+                  controller: _barWeightController,
                   onChanged: (v) => setState(() {}),
                 ),
               ),
@@ -124,16 +132,19 @@ class _PlateCalculatorContentState extends ConsumerState<PlateCalculatorContent>
           ),
           const SizedBox(height: 16),
           if (weightOnSide <= 0)
-             const Text('O peso total deve ser maior que o peso da barra.'),
+            const Text('O peso total deve ser maior que o peso da barra.'),
           if (weightOnSide > 0 && plates.isEmpty)
-              const Text('Nenhuma anilha necessária.'),
-          ...plates.entries.map((entry) => ListTile(
-            leading: CircleAvatar(
-              child: Text('${entry.value}'),
+            const Text('Nenhuma anilha necessária.'),
+          ...plates.entries.map(
+            (entry) => ListTile(
+              leading: CircleAvatar(child: Text('${entry.value}')),
+              title: Text('${entry.key} kg'),
+              trailing: Icon(
+                Icons.fitness_center,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
-            title: Text('${entry.key} kg'),
-            trailing: Icon(Icons.fitness_center, color: Theme.of(context).primaryColor),
-          )),
+          ),
         ],
       ),
     );

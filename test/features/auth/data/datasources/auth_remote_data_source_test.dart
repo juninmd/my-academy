@@ -39,7 +39,8 @@ class MockApiClientManual implements ApiClient {
   Future<dynamic> post(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters, Options? options,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
   }) async {
     postCalls.add(path);
     return null;
@@ -49,18 +50,23 @@ class MockApiClientManual implements ApiClient {
   Future delete(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters, Options? options,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
   }) async => null;
 
   @override
-  Future get(String path, {Map<String, dynamic>? queryParameters, Options? options}) async =>
-      null;
+  Future get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async => null;
 
   @override
   Future put(
     String path, {
     data,
-    Map<String, dynamic>? queryParameters, Options? options,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
   }) async => null;
 }
 
@@ -94,15 +100,17 @@ void main() {
   group('signInWithGoogle', () {
     test('should return UserDto when successful', () async {
       when(mockGoogleSignIn.signIn()).thenAnswer((_) async => mockGoogleUser);
-      when(mockGoogleUser.authentication)
-          .thenAnswer((_) async => mockGoogleAuth);
+      when(
+        mockGoogleUser.authentication,
+      ).thenAnswer((_) async => mockGoogleAuth);
       when(mockGoogleAuth.accessToken).thenReturn('access_token');
       when(mockGoogleAuth.idToken).thenReturn('id_token');
 
       // Note: We cannot easily mock the static GoogleAuthProvider.credential.
       // However, we mock signInWithCredential to accept ANY credential.
-      when(mockFirebaseAuth.signInWithCredential(any))
-          .thenAnswer((_) async => mockUserCredential);
+      when(
+        mockFirebaseAuth.signInWithCredential(any),
+      ).thenAnswer((_) async => mockUserCredential);
       when(mockUserCredential.user).thenReturn(mockUser);
       when(mockUser.uid).thenReturn('1');
       when(mockUser.email).thenReturn('email');
@@ -121,10 +129,7 @@ void main() {
     test('should throw AuthFailure when Google Sign In is canceled', () async {
       when(mockGoogleSignIn.signIn()).thenAnswer((_) async => null);
 
-      expect(
-        () => dataSource.signInWithGoogle(),
-        throwsA(isA<AuthFailure>()),
-      );
+      expect(() => dataSource.signInWithGoogle(), throwsA(isA<AuthFailure>()));
     });
   });
 

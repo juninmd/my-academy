@@ -5,15 +5,17 @@ import 'package:my_academy/features/workouts/presentation/widgets/number_input_c
 void main() {
   testWidgets('NumberInputControl updates value', (tester) async {
     int value = 10;
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: NumberInputControl(
-          value: value,
-          onChanged: (v) => value = v,
-          label: 'Label',
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: NumberInputControl(
+            value: value,
+            onChanged: (v) => value = v,
+            label: 'Label',
+          ),
         ),
       ),
-    ));
+    );
 
     expect(find.text('Label'), findsOneWidget);
     expect(find.text('10'), findsOneWidget);
@@ -22,15 +24,17 @@ void main() {
     await tester.pump();
     expect(value, 11);
 
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: NumberInputControl(
-          value: value,
-          onChanged: (v) => value = v,
-          label: 'Label',
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: NumberInputControl(
+            value: value,
+            onChanged: (v) => value = v,
+            label: 'Label',
+          ),
         ),
       ),
-    ));
+    );
     expect(find.text('11'), findsOneWidget);
   });
 }

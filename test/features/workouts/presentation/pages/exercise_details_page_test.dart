@@ -16,14 +16,16 @@ void main() {
       mistakes: ['Mistake 1'],
     );
 
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        exerciseLogsProvider.overrideWith((ref, id) async => <ExerciseLogEntity>[]),
-      ],
-      child: const MaterialApp(
-        home: ExerciseDetailsPage(exercise: exercise),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          exerciseLogsProvider.overrideWith(
+            (ref, id) async => <ExerciseLogEntity>[],
+          ),
+        ],
+        child: const MaterialApp(home: ExerciseDetailsPage(exercise: exercise)),
       ),
-    ));
+    );
     await tester.pump(); // wait for future
 
     expect(find.text('Bench Press'), findsOneWidget);

@@ -146,10 +146,7 @@ class ProgressChart extends HookWidget {
                 spots: points,
                 isCurved: true,
                 gradient: LinearGradient(
-                  colors: [
-                    color.withValues(alpha: 0.5),
-                    color,
-                  ],
+                  colors: [color.withValues(alpha: 0.5), color],
                 ),
                 barWidth: 3,
                 isStrokeCapRound: true,

@@ -56,15 +56,28 @@ class CalendarPage extends HookConsumerWidget {
 
                   // Calculate daily stats from logs
                   final dailyLogs = logsAsync.maybeWhen(
-                    data: (logs) => logs.where((l) => isSameDay(l.date, selectedDay.value)).toList(),
+                    data:
+                        (logs) =>
+                            logs
+                                .where(
+                                  (l) => isSameDay(l.date, selectedDay.value),
+                                )
+                                .toList(),
                     orElse: () => <ExerciseLogEntity>[],
                   );
 
-                  final dailyVolume = dailyLogs.fold<double>(0, (sum, log) =>
-                    sum + log.sets.fold(0, (s, set) => s + (set.weight * set.reps))
+                  final dailyVolume = dailyLogs.fold<double>(
+                    0,
+                    (sum, log) =>
+                        sum +
+                        log.sets.fold(
+                          0,
+                          (s, set) => s + (set.weight * set.reps),
+                        ),
                   );
 
-                  final distinctExercises = dailyLogs.map((l) => l.exerciseId).toSet().length;
+                  final distinctExercises =
+                      dailyLogs.map((l) => l.exerciseId).toSet().length;
 
                   return Column(
                     children: [
@@ -147,58 +160,86 @@ class CalendarPage extends HookConsumerWidget {
                                 ),
                               )
                             else
-                              ...eventsForSelectedDay.map(
-                                (e) {
-                                  final group = groupsMap[e.workoutGroupId];
-                                  final groupName = group?.name ?? 'Treino (ID: ${e.workoutGroupId})';
-                                  final exercisesList = group?.workouts.map((w) => w.exercise?.name).whereType<String>().join(', ') ?? '';
-                                  final timeFormat = DateFormat('HH:mm');
+                              ...eventsForSelectedDay.map((e) {
+                                final group = groupsMap[e.workoutGroupId];
+                                final groupName =
+                                    group?.name ??
+                                    'Treino (ID: ${e.workoutGroupId})';
+                                final exercisesList =
+                                    group?.workouts
+                                        .map((w) => w.exercise?.name)
+                                        .whereType<String>()
+                                        .join(', ') ??
+                                    '';
+                                final timeFormat = DateFormat('HH:mm');
 
-                                  return Card(
-                                    margin: const EdgeInsets.only(bottom: 8),
-                                    child: ListTile(
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                      leading: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.secondaryContainer,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(Icons.fitness_center, color: Theme.of(context).colorScheme.onSecondaryContainer),
+                                return Card(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    leading: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.secondaryContainer,
+                                        shape: BoxShape.circle,
                                       ),
-                                      title: Text(
-                                        groupName,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      subtitle: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Realizado às ${timeFormat.format(e.date)}',
-                                            style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                                          ),
-                                          if (exercisesList.isNotEmpty)
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 4.0),
-                                              child: Text(
-                                                exercisesList,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context).textTheme.bodySmall,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                      trailing: const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
+                                      child: Icon(
+                                        Icons.fitness_center,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onSecondaryContainer,
                                       ),
                                     ),
-                                  );
-                                },
-                              ),
+                                    title: Text(
+                                      groupName,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Realizado às ${timeFormat.format(e.date)}',
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(
+                                                  context,
+                                                ).colorScheme.primary,
+                                          ),
+                                        ),
+                                        if (exercisesList.isNotEmpty)
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 4.0,
+                                            ),
+                                            child: Text(
+                                              exercisesList,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    trailing: const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                );
+                              }),
                           ],
                         ),
                       ),

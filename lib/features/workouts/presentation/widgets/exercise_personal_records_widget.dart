@@ -49,7 +49,11 @@ class ExercisePersonalRecordsWidget extends StatelessWidget {
                   color: Colors.amber.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.emoji_events, color: Colors.amber, size: 20),
+                child: const Icon(
+                  Icons.emoji_events,
+                  color: Colors.amber,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 12),
               Text(
@@ -122,7 +126,9 @@ class _RecordCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -142,9 +148,11 @@ class _RecordCard extends StatelessWidget {
                 child: Text(
                   label,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
+                    fontWeight: FontWeight.bold,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -154,16 +162,16 @@ class _RecordCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           if (subtitle != null)
             Text(
               subtitle!,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Colors.grey,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelSmall?.copyWith(color: Colors.grey),
             ),
         ],
       ),

@@ -20,9 +20,7 @@ void main() {
 
   group('ExerciseSessionLog', () {
     test('should hold correct values', () {
-      final setLogs = {
-        0: SetLogState(actualReps: 10, actualWeight: 20),
-      };
+      final setLogs = {0: SetLogState(actualReps: 10, actualWeight: 20)};
       final sessionLog = ExerciseSessionLog(
         exerciseId: 1,
         exerciseName: 'Squat',

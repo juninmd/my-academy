@@ -160,7 +160,10 @@ class StudentDetailsPage extends HookConsumerWidget {
                     subtitle: const Text('Receber atualizações de treino'),
                     secondary: Icon(
                       Icons.telegram,
-                      color: telegramNotification.value ? Colors.blue : Colors.grey,
+                      color:
+                          telegramNotification.value
+                              ? Colors.blue
+                              : Colors.grey,
                     ),
                     value: telegramNotification.value,
                     onChanged: (val) {
@@ -198,7 +201,9 @@ class StudentDetailsPage extends HookConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         'Ontem, 18:30',
-                        style: textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
+                        style: textTheme.bodySmall?.copyWith(
+                          color: Colors.grey[700],
+                        ),
                       ),
                       const SizedBox(height: 8),
                       LinearProgressIndicator(
@@ -242,19 +247,21 @@ class StudentDetailsPage extends HookConsumerWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.timer_outlined, size: 16, color: Colors.grey[700]),
-                          const SizedBox(width: 4),
-                          Text(
-                            '~60 min',
-                            style: textTheme.bodySmall,
+                          Icon(
+                            Icons.timer_outlined,
+                            size: 16,
+                            color: Colors.grey[700],
                           ),
+                          const SizedBox(width: 4),
+                          Text('~60 min', style: textTheme.bodySmall),
                           const SizedBox(width: 16),
-                          Icon(Icons.local_fire_department_outlined, size: 16, color: Colors.grey[700]),
-                          const SizedBox(width: 4),
-                          Text(
-                            '~450 kcal',
-                            style: textTheme.bodySmall,
+                          Icon(
+                            Icons.local_fire_department_outlined,
+                            size: 16,
+                            color: Colors.grey[700],
                           ),
+                          const SizedBox(width: 4),
+                          Text('~450 kcal', style: textTheme.bodySmall),
                         ],
                       ),
                       const SizedBox(height: 12),
@@ -276,7 +283,7 @@ class StudentDetailsPage extends HookConsumerWidget {
                 const SizedBox(height: 16),
 
                 // Measurements Section
-                _SectionHeader(title: 'Medidas', icon: Icons.straighten),
+                const _SectionHeader(title: 'Medidas', icon: Icons.straighten),
                 const SizedBox(height: 8),
                 _MeasurementsCard(colorScheme: colorScheme),
                 const SizedBox(height: 16),
@@ -299,11 +306,11 @@ class StudentDetailsPage extends HookConsumerWidget {
                 const SizedBox(height: 16),
 
                 // Notes Card
-                _InfoCard(
+                const _InfoCard(
                   title: 'Observações',
                   icon: Icons.notes_outlined,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text(
                         'Nenhuma observação registrada para este aluno.',
@@ -459,14 +466,20 @@ class _ModernInteractiveCard extends StatelessWidget {
                       const SizedBox(width: 12),
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
                       ),
                     ],
                   ),
-                  Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Colors.grey[400],
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -492,7 +505,7 @@ class _MeasurementsCard extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _MeasurementItem(label: 'Peso', value: '75.5 kg', diff: '-0.5'),
@@ -518,7 +531,11 @@ class _MeasurementsCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Icon(Icons.chevron_right, color: colorScheme.primary, size: 16),
+                    Icon(
+                      Icons.chevron_right,
+                      color: colorScheme.primary,
+                      size: 16,
+                    ),
                   ],
                 ),
               ),
@@ -545,10 +562,7 @@ class _MeasurementItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          label,
-          style: const TextStyle(color: Colors.grey, fontSize: 12),
-        ),
+        Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
         const SizedBox(height: 4),
         Text(
           value,
@@ -558,7 +572,11 @@ class _MeasurementItem extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             diff!,
-            style: const TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              color: Colors.green,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ],

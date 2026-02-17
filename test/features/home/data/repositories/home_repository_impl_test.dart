@@ -19,10 +19,7 @@ void main() {
     repository = HomeRepositoryImpl(mockDataSource);
   });
 
-  const entity = WorkoutSummaryEntity(
-    counter: 1,
-    hasWorkoutToday: true,
-  );
+  const entity = WorkoutSummaryEntity(counter: 1, hasWorkoutToday: true);
 
   test('should return summary when successful', () async {
     when(mockDataSource.getWorkoutSummary()).thenAnswer((_) async => entity);

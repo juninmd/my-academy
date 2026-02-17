@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
-import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
 
 // Mock data generator
 List<Map<String, dynamic>> generateMockData(int count) {
@@ -44,7 +42,9 @@ void main() {
     final result = await compute(parseAndMap, jsonString);
 
     stopwatch.stop();
-    print('Full Offload (Decode + Map) of $count items took ${stopwatch.elapsedMilliseconds}ms');
+    print(
+      'Full Offload (Decode + Map) of $count items took ${stopwatch.elapsedMilliseconds}ms',
+    );
     expect(result.length, count);
   });
 }

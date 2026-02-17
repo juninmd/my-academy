@@ -125,8 +125,9 @@ void main() {
         // Formula: ((4.95 / density) - 4.50) * 100
         // (4.646346... - 4.50) * 100 = 14.6346...
 
-        final result =
-            BodyCompositionCalculator.calculateBodyFatPercentage(density);
+        final result = BodyCompositionCalculator.calculateBodyFatPercentage(
+          density,
+        );
 
         expect(result, closeTo(14.6346, 0.001));
       });

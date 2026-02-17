@@ -7,7 +7,9 @@ import 'package:my_academy/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('App Flow: Start -> Login Check -> Dashboard Navigation', (WidgetTester tester) async {
+  testWidgets('App Flow: Start -> Login Check -> Dashboard Navigation', (
+    WidgetTester tester,
+  ) async {
     // 1. Start the app
     app.main();
     await tester.pumpAndSettle();
