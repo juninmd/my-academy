@@ -32,9 +32,10 @@ class DashboardPage extends ConsumerWidget {
     final userState = ref.watch(authNotifierProvider);
     final user = userState.value;
     final settings = ref.watch(settingsProvider);
-    final groupsAsync = user != null
-        ? ref.watch(workoutGroupsProvider(user.id))
-        : const AsyncValue<List<WorkoutGroupEntity>>.data([]);
+    final groupsAsync =
+        user != null
+            ? ref.watch(workoutGroupsProvider(user.id))
+            : const AsyncValue<List<WorkoutGroupEntity>>.data([]);
 
     final logsAsync = ref.watch(allExerciseLogsProvider);
     final exercisesAsync = ref.watch(exercisesProvider);
@@ -68,7 +69,8 @@ class DashboardPage extends ConsumerWidget {
                 gradient: LinearGradient(
                   colors: [
                     Theme.of(context).colorScheme.primaryContainer,
-                    Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+                    Theme.of(context).cardTheme.color ??
+                        Theme.of(context).colorScheme.surface,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -110,31 +112,43 @@ class DashboardPage extends ConsumerWidget {
                       children: [
                         Text(
                           '${_getGreeting()},',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ),
                         Text(
                           user?.name?.split(' ').first ?? 'Atleta',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 4),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.3),
+                            ),
                           ),
                           child: Text(
                             'Meta: ${settings.weeklyWorkoutGoal}x/sem',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -155,7 +169,13 @@ class DashboardPage extends ConsumerWidget {
                         children: [
                           dashboardStatsAsync.when(
                             data: (stats) => _QuickStatsRow(stats: stats),
-                            loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
+                            loading:
+                                () => const SizedBox(
+                                  height: 100,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ),
                             error: (_, __) => const SizedBox.shrink(),
                           ),
                           const SizedBox(height: 24),
@@ -171,8 +191,13 @@ class DashboardPage extends ConsumerWidget {
                           if (!summary.hasWorkoutToday) ...[
                             Card(
                               elevation: 0,
-                              color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer
+                                  .withValues(alpha: 0.3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(16),
                                 onTap: () => context.push('/workouts/create'),
@@ -183,28 +208,40 @@ class DashboardPage extends ConsumerWidget {
                                       Icon(
                                         Icons.flash_on,
                                         size: 32,
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
                                       ),
                                       const SizedBox(width: 16),
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Treino Rápido',
-                                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleMedium?.copyWith(
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
                                               'Iniciar uma sessão sem plano definido',
-                                              style: Theme.of(context).textTheme.bodySmall,
+                                              style:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall,
                                             ),
                                           ],
                                         ),
                                       ),
-                                      const Icon(Icons.arrow_forward_ios, size: 16),
+                                      const Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 16,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -229,9 +266,8 @@ class DashboardPage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(24),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withValues(alpha: 0.4),
+                                    color: Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: 0.4),
                                     blurRadius: 12,
                                     offset: const Offset(0, 6),
                                   ),
@@ -241,12 +277,15 @@ class DashboardPage extends ConsumerWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.2),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.2,
+                                          ),
                                           shape: BoxShape.circle,
                                         ),
                                         child: const Icon(
@@ -256,10 +295,17 @@ class DashboardPage extends ConsumerWidget {
                                         ),
                                       ),
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 6,
+                                        ),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.2),
-                                          borderRadius: BorderRadius.circular(20),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
                                         ),
                                         child: const Text(
                                           'HOJE',
@@ -283,8 +329,11 @@ class DashboardPage extends ConsumerWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    summary.workoutName ?? 'Treino Personalizado',
-                                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                    summary.workoutName ??
+                                        'Treino Personalizado',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.headlineSmall?.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -309,7 +358,9 @@ class DashboardPage extends ConsumerWidget {
                                             ).colorScheme.primary,
                                         elevation: 0,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(16),
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
                                         ),
                                       ),
                                       child: const Text(
@@ -334,56 +385,85 @@ class DashboardPage extends ConsumerWidget {
                                   data: (nextGroup) {
                                     if (nextGroup != null) {
                                       return Padding(
-                                        padding: const EdgeInsets.only(bottom: 24),
-                                        child: NextWorkoutCard(workoutGroup: nextGroup),
+                                        padding: const EdgeInsets.only(
+                                          bottom: 24,
+                                        ),
+                                        child: NextWorkoutCard(
+                                          workoutGroup: nextGroup,
+                                        ),
                                       );
                                     }
                                     return const SizedBox.shrink();
                                   },
-                                  loading: () => const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ),
+                                  loading:
+                                      () => const Center(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(16.0),
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      ),
                                   error: (_, stack) => const SizedBox.shrink(),
                                 ),
 
                                 // Show Last Workout if available
                                 logsAsync.when(
                                   data: (logs) {
-                                    if (logs.isEmpty) return const SizedBox.shrink();
+                                    if (logs.isEmpty)
+                                      return const SizedBox.shrink();
 
                                     // Find latest date
-                                    final latestLog = logs.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+                                    final latestLog = logs.reduce(
+                                      (a, b) => a.date.isAfter(b.date) ? a : b,
+                                    );
                                     final latestDate = latestLog.date;
 
                                     // Filter logs for that date
-                                    final sessionLogs = logs.where((e) =>
-                                      e.date.year == latestDate.year &&
-                                      e.date.month == latestDate.month &&
-                                      e.date.day == latestDate.day
-                                    ).toList();
+                                    final sessionLogs =
+                                        logs
+                                            .where(
+                                              (e) =>
+                                                  e.date.year ==
+                                                      latestDate.year &&
+                                                  e.date.month ==
+                                                      latestDate.month &&
+                                                  e.date.day == latestDate.day,
+                                            )
+                                            .toList();
 
                                     return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Último Treino',
-                                          style: Theme.of(context).textTheme.titleLarge,
+                                          style:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.titleLarge,
                                         ),
                                         const SizedBox(height: 12),
                                         exercisesAsync.when(
                                           data: (exercises) {
-                                            final map = {for (var e in exercises) e.id: e.name};
+                                            final map = {
+                                              for (var e in exercises)
+                                                e.id: e.name,
+                                            };
                                             return WorkoutHistoryCard(
                                               date: latestDate,
                                               logs: sessionLogs,
-                                              exerciseNameMap: map
+                                              exerciseNameMap: map,
                                             );
                                           },
-                                          loading: () => const SizedBox(height: 100, child: Center(child: CircularProgressIndicator())),
-                                          error: (e, s) => const SizedBox.shrink(),
+                                          loading:
+                                              () => const SizedBox(
+                                                height: 100,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              ),
+                                          error:
+                                              (e, s) => const SizedBox.shrink(),
                                         ),
                                         const SizedBox(height: 24),
                                       ],
@@ -404,9 +484,14 @@ class DashboardPage extends ConsumerWidget {
                                       if (groups.isEmpty) {
                                         return Center(
                                           child: OutlinedButton.icon(
-                                            onPressed: () => context.push('/workouts/create'),
+                                            onPressed:
+                                                () => context.push(
+                                                  '/workouts/create',
+                                                ),
                                             icon: const Icon(Icons.add),
-                                            label: const Text('Criar Novo Plano'),
+                                            label: const Text(
+                                              'Criar Novo Plano',
+                                            ),
                                           ),
                                         );
                                       }
@@ -416,19 +501,40 @@ class DashboardPage extends ConsumerWidget {
                                         itemBuilder: (context, index) {
                                           if (index == groups.length) {
                                             return Padding(
-                                              padding: const EdgeInsets.only(right: 16),
+                                              padding: const EdgeInsets.only(
+                                                right: 16,
+                                              ),
                                               child: AspectRatio(
                                                 aspectRatio: 1,
                                                 child: Card(
                                                   clipBehavior: Clip.antiAlias,
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          16,
+                                                        ),
+                                                  ),
                                                   child: InkWell(
-                                                    onTap: () => context.push('/workouts/create'),
+                                                    onTap:
+                                                        () => context.push(
+                                                          '/workouts/create',
+                                                        ),
                                                     child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
                                                       children: [
-                                                        Icon(Icons.add, size: 32, color: Theme.of(context).colorScheme.primary),
-                                                        const SizedBox(height: 8),
+                                                        Icon(
+                                                          Icons.add,
+                                                          size: 32,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .primary,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 8,
+                                                        ),
                                                         const Text('Criar'),
                                                       ],
                                                     ),
@@ -439,45 +545,87 @@ class DashboardPage extends ConsumerWidget {
                                           }
                                           final group = groups[index];
                                           return Padding(
-                                            padding: const EdgeInsets.only(right: 12),
+                                            padding: const EdgeInsets.only(
+                                              right: 12,
+                                            ),
                                             child: AspectRatio(
                                               aspectRatio: 1.2,
                                               child: Card(
                                                 elevation: 2,
                                                 clipBehavior: Clip.antiAlias,
-                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
                                                 child: InkWell(
-                                                  onTap: () => context.go('/workouts/${group.id}'),
+                                                  onTap:
+                                                      () => context.go(
+                                                        '/workouts/${group.id}',
+                                                      ),
                                                   child: Padding(
-                                                    padding: const EdgeInsets.all(12),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                          12,
+                                                        ),
                                                     child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Container(
-                                                          padding: const EdgeInsets.all(8),
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                8,
+                                                              ),
                                                           decoration: BoxDecoration(
-                                                            color: Theme.of(context).colorScheme.primaryContainer,
-                                                            shape: BoxShape.circle,
+                                                            color:
+                                                                Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .colorScheme
+                                                                    .primaryContainer,
+                                                            shape:
+                                                                BoxShape.circle,
                                                           ),
                                                           child: Icon(
-                                                            Icons.fitness_center,
+                                                            Icons
+                                                                .fitness_center,
                                                             size: 20,
-                                                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                                            color:
+                                                                Theme.of(
+                                                                      context,
+                                                                    )
+                                                                    .colorScheme
+                                                                    .onPrimaryContainer,
                                                           ),
                                                         ),
                                                         const Spacer(),
                                                         Text(
                                                           group.name,
-                                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
+                                                          style: Theme.of(
+                                                                context,
+                                                              )
+                                                              .textTheme
+                                                              .titleMedium
+                                                              ?.copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
                                                           maxLines: 2,
-                                                          overflow: TextOverflow.ellipsis,
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
                                                         ),
-                                                        const SizedBox(height: 4),
+                                                        const SizedBox(
+                                                          height: 4,
+                                                        ),
                                                         Text(
                                                           '${group.workouts.length} treinos',
-                                                          style: Theme.of(context).textTheme.bodySmall,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall,
                                                         ),
                                                       ],
                                                     ),
@@ -489,15 +637,20 @@ class DashboardPage extends ConsumerWidget {
                                         },
                                       );
                                     },
-                                    loading: () => const Center(child: CircularProgressIndicator()),
-                                    error: (e, s) => Center(child: Text('Erro: $e')),
+                                    loading:
+                                        () => const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                    error:
+                                        (e, s) =>
+                                            Center(child: Text('Erro: $e')),
                                   ),
                                 ),
                               ],
                             ),
 
-                            // Space for FAB
-                            const SizedBox(height: 80),
+                          // Space for FAB
+                          const SizedBox(height: 80),
                         ],
                       ),
                   loading:
@@ -518,9 +671,10 @@ class _QuickStatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final volumeDisplay = stats.volumeThisWeek > 1000
-        ? '${(stats.volumeThisWeek / 1000).toStringAsFixed(1)}k'
-        : stats.volumeThisWeek.toStringAsFixed(0);
+    final volumeDisplay =
+        stats.volumeThisWeek > 1000
+            ? '${(stats.volumeThisWeek / 1000).toStringAsFixed(1)}k'
+            : stats.volumeThisWeek.toStringAsFixed(0);
 
     return Row(
       children: [
@@ -573,7 +727,9 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+        color:
+            Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: Theme.of(context).dividerColor.withValues(alpha: 0.05),

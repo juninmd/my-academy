@@ -20,9 +20,10 @@ class ConsistencyHeatmap extends StatelessWidget {
     final today = DateTime(now.year, now.month, now.day);
 
     // Create a set of dates that have workouts
-    final activeDates = logs.map((l) {
-      return DateTime(l.date.year, l.date.month, l.date.day);
-    }).toSet();
+    final activeDates =
+        logs.map((l) {
+          return DateTime(l.date.year, l.date.month, l.date.day);
+        }).toSet();
 
     // Calculate start date (ensure it aligns with Sunday/Monday if needed, but simple subtraction is fine for now)
     // We want to show weeks.
@@ -45,7 +46,7 @@ class ConsistencyHeatmap extends StatelessWidget {
               'Consistência',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-             Text(
+            Text(
               'Últimos 3 meses',
               style: Theme.of(context).textTheme.bodySmall,
             ),
@@ -75,16 +76,24 @@ class ConsistencyHeatmap extends StatelessWidget {
               if (isFuture) return const SizedBox.shrink();
 
               return Tooltip(
-                message: '${DateFormat('dd/MM/yyyy').format(date)}${isActive ? ': Treino realizado!' : ''}',
+                message:
+                    '${DateFormat('dd/MM/yyyy').format(date)}${isActive ? ': Treino realizado!' : ''}',
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isActive
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color:
+                        isActive
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(4),
-                    border: date == today
-                       ? Border.all(color: Theme.of(context).colorScheme.secondary, width: 2)
-                       : null,
+                    border:
+                        date == today
+                            ? Border.all(
+                              color: Theme.of(context).colorScheme.secondary,
+                              width: 2,
+                            )
+                            : null,
                   ),
                 ),
               );
@@ -97,13 +106,15 @@ class ConsistencyHeatmap extends StatelessWidget {
           children: [
             Text('Menos', style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(width: 4),
-            _LegendBox(color: Theme.of(context).colorScheme.surfaceContainerHighest),
+            _LegendBox(
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            ),
             const SizedBox(width: 4),
             _LegendBox(color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 4),
             Text('Mais', style: Theme.of(context).textTheme.bodySmall),
           ],
-        )
+        ),
       ],
     );
   }

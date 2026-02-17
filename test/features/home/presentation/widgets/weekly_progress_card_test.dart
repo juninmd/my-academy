@@ -10,9 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   setUp(() async {
     await initializeDateFormatting('pt_BR', null);
-    SharedPreferences.setMockInitialValues({
-      'weekly_workout_goal': 5,
-    });
+    SharedPreferences.setMockInitialValues({'weekly_workout_goal': 5});
   });
 
   testWidgets('WeeklyProgressCard displays correct progress', (tester) async {
@@ -28,13 +26,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          allExerciseLogsProvider.overrideWith((ref) => Future.value([todayLog])),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: const WeeklyProgressCard(),
+          allExerciseLogsProvider.overrideWith(
+            (ref) => Future.value([todayLog]),
           ),
-        ),
+        ],
+        child: const MaterialApp(home: Scaffold(body: WeeklyProgressCard())),
       ),
     );
 
@@ -48,9 +44,7 @@ void main() {
   });
 
   testWidgets('WeeklyProgressCard shows completion message', (tester) async {
-    SharedPreferences.setMockInitialValues({
-      'weekly_workout_goal': 1,
-    });
+    SharedPreferences.setMockInitialValues({'weekly_workout_goal': 1});
 
     final now = DateTime.now();
     final todayLog = ExerciseLogEntity(
@@ -64,13 +58,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          allExerciseLogsProvider.overrideWith((ref) => Future.value([todayLog])),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: const WeeklyProgressCard(),
+          allExerciseLogsProvider.overrideWith(
+            (ref) => Future.value([todayLog]),
           ),
-        ),
+        ],
+        child: const MaterialApp(home: Scaffold(body: WeeklyProgressCard())),
       ),
     );
 

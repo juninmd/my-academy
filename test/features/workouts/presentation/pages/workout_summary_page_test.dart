@@ -4,12 +4,14 @@ import 'package:my_academy/features/workouts/presentation/pages/workout_summary_
 
 void main() {
   testWidgets('WorkoutSummaryPage displays summary', (tester) async {
-    await tester.pumpWidget(const MaterialApp(
-      home: WorkoutSummaryPage(
-        duration: Duration(minutes: 60),
-        sessionLogs: {},
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: WorkoutSummaryPage(
+          duration: Duration(minutes: 60),
+          sessionLogs: {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle(); // Animation
 
     expect(find.text('Treino Concluído!'), findsOneWidget);

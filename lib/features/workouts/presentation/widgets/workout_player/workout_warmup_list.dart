@@ -36,20 +36,29 @@ class WorkoutWarmupList extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                   final newSets = List<Map<String, dynamic>>.from(sets);
-                   newSets[index] = {...set, 'completed': !isCompleted};
-                   warmupSetsNotifier.value = newSets;
+                  final newSets = List<Map<String, dynamic>>.from(sets);
+                  newSets[index] = {...set, 'completed': !isCompleted};
+                  warmupSetsNotifier.value = newSets;
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
-                    color: isCompleted
-                      ? Colors.orange.withValues(alpha: 0.2)
-                      : Theme.of(context).cardTheme.color,
+                    color:
+                        isCompleted
+                            ? Colors.orange.withValues(alpha: 0.2)
+                            : Theme.of(context).cardTheme.color,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: isCompleted ? Colors.orange : Theme.of(context).dividerColor.withValues(alpha: 0.1),
+                      color:
+                          isCompleted
+                              ? Colors.orange
+                              : Theme.of(
+                                context,
+                              ).dividerColor.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Row(

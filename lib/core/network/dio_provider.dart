@@ -64,6 +64,15 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 });
 
 String _getBaseUrl() {
+  if (kReleaseMode) {
+    if (kIsWeb) {
+      // TODO: Replace with your production API URL
+      return 'https://api.production.com';
+    }
+    // For mobile release, you might also want a production URL
+    // return 'https://api.production.com';
+  }
+
   if (kIsWeb) return 'http://localhost:9000';
 
   // Android Emulator

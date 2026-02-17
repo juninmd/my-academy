@@ -15,10 +15,7 @@ class StreakCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.orange.shade800,
-            Colors.deepOrange.shade600,
-          ],
+          colors: [Colors.orange.shade800, Colors.deepOrange.shade600],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

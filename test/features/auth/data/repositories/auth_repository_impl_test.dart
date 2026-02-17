@@ -19,7 +19,12 @@ void main() {
     repository = AuthRepositoryImpl(mockDataSource);
   });
 
-  const userDto = UserDto(id: '1', email: 'email', name: 'name', photoUrl: 'url');
+  const userDto = UserDto(
+    id: '1',
+    email: 'email',
+    name: 'name',
+    photoUrl: 'url',
+  );
 
   group('signInWithGoogle', () {
     test('should return user when successful', () async {
@@ -29,7 +34,9 @@ void main() {
     });
 
     test('should return failure when exception occurs', () async {
-      when(mockDataSource.signInWithGoogle()).thenThrow(const AuthFailure('error'));
+      when(
+        mockDataSource.signInWithGoogle(),
+      ).thenThrow(const AuthFailure('error'));
       final result = await repository.signInWithGoogle();
       expect(result, const Left(AuthFailure('error')));
     });
@@ -56,14 +63,16 @@ void main() {
       expect(result, const Right(userDto));
     });
 
-     test('should return null when no user', () async {
+    test('should return null when no user', () async {
       when(mockDataSource.getCurrentUser()).thenAnswer((_) async => null);
       final result = await repository.getCurrentUser();
       expect(result, const Right(null));
     });
 
     test('should return failure when exception occurs', () async {
-      when(mockDataSource.getCurrentUser()).thenThrow(const AuthFailure('error'));
+      when(
+        mockDataSource.getCurrentUser(),
+      ).thenThrow(const AuthFailure('error'));
       final result = await repository.getCurrentUser();
       expect(result, const Left(AuthFailure('error')));
     });

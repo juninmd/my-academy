@@ -43,7 +43,9 @@ class BodyWeightDialog extends HookConsumerWidget {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Peso atualizado para ${currentWeight.value} kg'),
+                  content: Text(
+                    'Peso atualizado para ${currentWeight.value} kg',
+                  ),
                 ),
               );
             }

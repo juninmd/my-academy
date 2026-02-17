@@ -29,42 +29,51 @@ void main() {
   const user = UserEntity(id: 'u1', email: 'e', name: 'n');
 
   test('workoutGroups provider returns groups when success', () async {
-    final groups = [const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: [])];
-    when(mockRepository.getWorkoutGroups('u1')).thenAnswer((_) async => Right(groups));
+    final groups = [
+      const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: []),
+    ];
+    when(
+      mockRepository.getWorkoutGroups('u1'),
+    ).thenAnswer((_) async => Right(groups));
 
     final container = ProviderContainer(
-      overrides: [
-        workoutRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [workoutRepositoryProvider.overrideWithValue(mockRepository)],
     );
 
-    final sub = container.listen(workoutGroupsProvider('u1').future, (prev, next) {});
-
-    expect(
-      await container.read(workoutGroupsProvider('u1').future),
-      groups,
+    final sub = container.listen(
+      workoutGroupsProvider('u1').future,
+      (prev, next) {},
     );
+
+    expect(await container.read(workoutGroupsProvider('u1').future), groups);
 
     sub.close();
   });
 
   test('workoutGroupByIdProvider returns group when found', () async {
-    final group = const WorkoutGroupEntity(id: 1, name: 'g1', userId: 'u1', workouts: []);
-    when(mockRepository.getWorkoutGroup(any, any)).thenAnswer((_) async => Right(group));
+    final group = const WorkoutGroupEntity(
+      id: 1,
+      name: 'g1',
+      userId: 'u1',
+      workouts: [],
+    );
+    when(
+      mockRepository.getWorkoutGroup(any, any),
+    ).thenAnswer((_) async => Right(group));
 
     final container = ProviderContainer(
       overrides: [
-         authProvider.overrideWith(() => MockAuthNotifier(user)),
-         workoutRepositoryProvider.overrideWithValue(mockRepository),
+        authProvider.overrideWith(() => MockAuthNotifier(user)),
+        workoutRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
 
-    final sub = container.listen(workoutGroupByIdProvider(1).future, (prev, next) {});
-
-    expect(
-      await container.read(workoutGroupByIdProvider(1).future),
-      group,
+    final sub = container.listen(
+      workoutGroupByIdProvider(1).future,
+      (prev, next) {},
     );
+
+    expect(await container.read(workoutGroupByIdProvider(1).future), group);
 
     sub.close();
   });

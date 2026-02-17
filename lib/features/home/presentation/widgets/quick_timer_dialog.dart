@@ -57,57 +57,58 @@ class QuickTimerDialog extends HookConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-             const SizedBox(height: 16),
-             LinearProgressIndicator(
-               value: selectedDuration.value > 0
-                   ? remaining.value / selectedDuration.value
-                   : 0,
-             ),
-             const SizedBox(height: 24),
-             Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 IconButton.filled(
-                   onPressed: () {
-                     remaining.value += 10;
-                     selectedDuration.value += 10;
-                   },
-                   icon: const Icon(Icons.add_circle_outline),
-                   tooltip: '+10s',
-                 ),
-                 const SizedBox(width: 16),
-                 IconButton.filled(
-                   onPressed: stopTimer,
-                   icon: const Icon(Icons.stop),
-                   style: IconButton.styleFrom(backgroundColor: Colors.red),
-                 ),
-               ],
-             ),
-
+            const SizedBox(height: 16),
+            LinearProgressIndicator(
+              value:
+                  selectedDuration.value > 0
+                      ? remaining.value / selectedDuration.value
+                      : 0,
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton.filled(
+                  onPressed: () {
+                    remaining.value += 10;
+                    selectedDuration.value += 10;
+                  },
+                  icon: const Icon(Icons.add_circle_outline),
+                  tooltip: '+10s',
+                ),
+                const SizedBox(width: 16),
+                IconButton.filled(
+                  onPressed: stopTimer,
+                  icon: const Icon(Icons.stop),
+                  style: IconButton.styleFrom(backgroundColor: Colors.red),
+                ),
+              ],
+            ),
           ] else ...[
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: options.map((sec) {
-                return ChoiceChip(
-                  label: Text('${sec}s'),
-                  selected: selectedDuration.value == sec,
-                  onSelected: (sel) {
-                    if (sel) selectedDuration.value = sec;
-                  },
-                );
-              }).toList(),
+              children:
+                  options.map((sec) {
+                    return ChoiceChip(
+                      label: Text('${sec}s'),
+                      selected: selectedDuration.value == sec,
+                      onSelected: (sel) {
+                        if (sel) selectedDuration.value = sec;
+                      },
+                    );
+                  }).toList(),
             ),
-             const SizedBox(height: 24),
-             SizedBox(
-               width: double.infinity,
-               child: FilledButton.icon(
-                 onPressed: () => startTimer(selectedDuration.value),
-                 icon: const Icon(Icons.play_arrow),
-                 label: const Text('Iniciar'),
-               ),
-             ),
-          ]
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => startTimer(selectedDuration.value),
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Iniciar'),
+              ),
+            ),
+          ],
         ],
       ),
       actions: [

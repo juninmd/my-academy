@@ -1,6 +1,6 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
-import '../../lib/features/workouts/domain/entities/exercise_log_entity.dart';
-import '../../lib/features/workouts/domain/entities/set_log_entity.dart';
+import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
+import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
 
 // Mock data generator
 List<ExerciseLogEntity> generateLogs(int count) {
@@ -12,8 +12,8 @@ List<ExerciseLogEntity> generateLogs(int count) {
         Duration(hours: index % (24 * 14)),
       ), // Spread over 2 weeks, with hours
       sets: [
-        SetLogEntity(reps: 10, weight: 100),
-        SetLogEntity(reps: 8, weight: 110),
+        const SetLogEntity(reps: 10, weight: 100),
+        const SetLogEntity(reps: 8, weight: 110),
       ],
       userId: 'user1',
     );

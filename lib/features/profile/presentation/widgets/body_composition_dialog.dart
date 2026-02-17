@@ -90,7 +90,8 @@ class BodyCompositionDialog extends HookWidget {
         }
       }
 
-      final fatPercentage = BodyCompositionCalculator.calculateBodyFatPercentage(density);
+      final fatPercentage =
+          BodyCompositionCalculator.calculateBodyFatPercentage(density);
       result.value = fatPercentage;
     }
 
@@ -120,9 +121,15 @@ class BodyCompositionDialog extends HookWidget {
             SegmentedButton<int>(
               segments: const [
                 ButtonSegment(
-                    value: 0, label: Text('Homem'), icon: Icon(Icons.male)),
+                  value: 0,
+                  label: Text('Homem'),
+                  icon: Icon(Icons.male),
+                ),
                 ButtonSegment(
-                    value: 1, label: Text('Mulher'), icon: Icon(Icons.female)),
+                  value: 1,
+                  label: Text('Mulher'),
+                  icon: Icon(Icons.female),
+                ),
               ],
               selected: {genderIndex.value},
               onSelectionChanged: (newSelection) {
@@ -146,8 +153,10 @@ class BodyCompositionDialog extends HookWidget {
 
             _buildInput(context, 'Idade (anos)', ageController),
             const Divider(),
-            Text('Dobras Cutâneas (mm)',
-                style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Dobras Cutâneas (mm)',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
 
             // Fields logic
@@ -189,7 +198,9 @@ class BodyCompositionDialog extends HookWidget {
                     ),
                     Text(
                       '${result.value!.toStringAsFixed(1)}%',
-                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displayMedium?.copyWith(
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.bold,
                       ),
@@ -199,10 +210,7 @@ class BodyCompositionDialog extends HookWidget {
               ),
 
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: calculate,
-              child: const Text('Calcular'),
-            ),
+            ElevatedButton(onPressed: calculate, child: const Text('Calcular')),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Fechar'),
@@ -213,7 +221,11 @@ class BodyCompositionDialog extends HookWidget {
     );
   }
 
-  Widget _buildInput(BuildContext context, String label, TextEditingController controller) {
+  Widget _buildInput(
+    BuildContext context,
+    String label,
+    TextEditingController controller,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextField(
@@ -222,7 +234,10 @@ class BodyCompositionDialog extends HookWidget {
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
         ),
       ),
     );

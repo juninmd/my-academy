@@ -32,21 +32,21 @@ void main() {
         overrides: [
           authNotifierProvider.overrideWith(() => MockAuthNotifier(user)),
           // Provide specific override for the current month view
-          workoutSessionsProvider('user1', now.month, now.year).overrideWith(
-            (ref) async {
-              return [
-                WorkoutSessionEntity(
-                  workoutGroupId: 1,
-                  date: now,
-                  checked: true,
-                  userId: 'user1',
-                ),
-              ];
-            },
-          ),
-          workoutGroupsProvider('user1').overrideWith(
-            (ref) async => <WorkoutGroupEntity>[],
-          ),
+          workoutSessionsProvider('user1', now.month, now.year).overrideWith((
+            ref,
+          ) async {
+            return [
+              WorkoutSessionEntity(
+                workoutGroupId: 1,
+                date: now,
+                checked: true,
+                userId: 'user1',
+              ),
+            ];
+          }),
+          workoutGroupsProvider(
+            'user1',
+          ).overrideWith((ref) async => <WorkoutGroupEntity>[]),
           allExerciseLogsProvider.overrideWith(
             (ref) async => <ExerciseLogEntity>[],
           ),

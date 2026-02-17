@@ -9,37 +9,36 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets('PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: PlateCalculatorDialog(
-            targetWeight: 100,
-            barWeight: 20,
+  testWidgets(
+    'PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const ProviderScope(
+          child: MaterialApp(
+            home: PlateCalculatorDialog(targetWeight: 100, barWeight: 20),
           ),
         ),
-      ),
-    );
+      );
 
-    // Initial state: Target 100, Bar 20. Side = (100 - 20) / 2 = 40.
-    // Plates for 40 using [25, 20, 15, 10, 5, 2.5, 1.25]:
-    // 40 / 25 = 1 (rem 15)
-    // 15 / 15 = 1 (rem 0)
-    // So: 1x25, 1x15.
+      // Initial state: Target 100, Bar 20. Side = (100 - 20) / 2 = 40.
+      // Plates for 40 using [25, 20, 15, 10, 5, 2.5, 1.25]:
+      // 40 / 25 = 1 (rem 15)
+      // 15 / 15 = 1 (rem 0)
+      // So: 1x25, 1x15.
 
-    expect(find.text('Peso por lado: 40.00 kg'), findsOneWidget);
-    expect(find.text('25.0 kg'), findsOneWidget);
-    expect(find.text('15.0 kg'), findsOneWidget);
-  });
+      expect(find.text('Peso por lado: 40.00 kg'), findsOneWidget);
+      expect(find.text('25.0 kg'), findsOneWidget);
+      expect(find.text('15.0 kg'), findsOneWidget);
+    },
+  );
 
-  testWidgets('PlateCalculatorDialog updates calculation on input change', (WidgetTester tester) async {
+  testWidgets('PlateCalculatorDialog updates calculation on input change', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       const ProviderScope(
         child: MaterialApp(
-          home: PlateCalculatorDialog(
-            targetWeight: 60,
-            barWeight: 20,
-          ),
+          home: PlateCalculatorDialog(targetWeight: 60, barWeight: 20),
         ),
       ),
     );

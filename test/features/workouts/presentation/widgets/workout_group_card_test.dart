@@ -13,12 +13,9 @@ void main() {
       image: null,
     );
 
-    await tester.pumpWidget(MaterialApp(
-      home: WorkoutGroupCard(
-        workoutGroup: group,
-        onTap: () {},
-      ),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(home: WorkoutGroupCard(workoutGroup: group, onTap: () {})),
+    );
 
     expect(find.text('Leg Day'), findsOneWidget);
   });

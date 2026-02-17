@@ -12,11 +12,11 @@ void main() {
       email: 'john@example.com',
     );
 
-    await tester.pumpWidget(const ProviderScope(
-      child: MaterialApp(
-        home: StudentDetailsPage(student: student),
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: MaterialApp(home: StudentDetailsPage(student: student)),
       ),
-    ));
+    );
 
     await tester.pumpAndSettle();
 

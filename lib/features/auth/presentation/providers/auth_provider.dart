@@ -63,13 +63,13 @@ class AuthNotifier extends _$AuthNotifier {
     final result = await repository.updateDisplayName(name);
 
     if (result.isRight()) {
-       // Refresh the user state
-       state = const AsyncValue.loading();
-       final userResult = await repository.getCurrentUser();
-       state = userResult.fold(
-         (failure) => AsyncValue.error(failure.message, StackTrace.current),
-         AsyncValue.data,
-       );
+      // Refresh the user state
+      state = const AsyncValue.loading();
+      final userResult = await repository.getCurrentUser();
+      state = userResult.fold(
+        (failure) => AsyncValue.error(failure.message, StackTrace.current),
+        AsyncValue.data,
+      );
     }
   }
 }

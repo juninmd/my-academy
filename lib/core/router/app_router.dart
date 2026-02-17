@@ -51,8 +51,8 @@ GoRouter router(Ref ref) {
         final isOnboardingComplete = onboardingState.value ?? false;
 
         if (!isOnboardingComplete) {
-           if (!isOnboardingPage) return '/onboarding';
-           return null;
+          if (!isOnboardingPage) return '/onboarding';
+          return null;
         }
 
         if (isOnboardingPage) return '/home';
@@ -64,7 +64,10 @@ GoRouter router(Ref ref) {
     },
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
-      GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingPage()),
+      GoRoute(
+        path: '/onboarding',
+        builder: (context, state) => const OnboardingPage(),
+      ),
       GoRoute(
         path: '/history',
         builder: (context, state) => const WorkoutHistoryPage(),

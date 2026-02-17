@@ -179,7 +179,7 @@ class StudentAddPage extends HookConsumerWidget {
               const SizedBox(height: 24),
 
               // Informações Pessoais Section
-              _SectionHeader(
+              const _SectionHeader(
                 icon: Icons.person_outline,
                 title: 'Informações Pessoais',
               ),
@@ -195,8 +195,7 @@ class StudentAddPage extends HookConsumerWidget {
                     tooltip: 'Verificar existência',
                     onPressed: checkEmail,
                   ),
-                  helperText:
-                      'Clique na lupa para buscar se o aluno já existe',
+                  helperText: 'Clique na lupa para buscar se o aluno já existe',
                 ),
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -240,17 +239,20 @@ class StudentAddPage extends HookConsumerWidget {
               const SizedBox(height: 24),
 
               // Agenda Section
-              _SectionHeader(
+              const _SectionHeader(
                 icon: Icons.calendar_today_outlined,
                 title: 'Horários de Treino',
               ),
               const SizedBox(height: 12),
 
-              _ScheduleSelector(),
+              const _ScheduleSelector(),
               const SizedBox(height: 24),
 
               // Notes Section
-              _SectionHeader(icon: Icons.notes_outlined, title: 'Observações'),
+              const _SectionHeader(
+                icon: Icons.notes_outlined,
+                title: 'Observações',
+              ),
               const SizedBox(height: 12),
 
               TextFormField(

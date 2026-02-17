@@ -7,7 +7,9 @@ void main() {
   group('WorkoutEntity', () {
     test('should have correct props', () {
       const exercise = ExerciseEntity(id: 1, name: 'Exercise 1');
-      const series = [WorkoutSeriesEntity(repetitions: 10, weight: 20, rest: 60)];
+      const series = [
+        WorkoutSeriesEntity(repetitions: 10, weight: 20, rest: 60),
+      ];
       const workout = WorkoutEntity(
         id: 1,
         exerciseId: 10,
@@ -25,15 +27,7 @@ void main() {
       expect(workout.exercise, exercise);
       expect(workout.series, series);
       expect(workout.isFinished, true);
-      expect(workout.props, [
-        1,
-        10,
-        2,
-        'Do it well',
-        exercise,
-        series,
-        true,
-      ]);
+      expect(workout.props, [1, 10, 2, 'Do it well', exercise, series, true]);
     });
   });
 }

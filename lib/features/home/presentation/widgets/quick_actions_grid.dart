@@ -40,47 +40,49 @@ class QuickActionsGrid extends StatelessWidget {
         icon: Icons.calculate_outlined,
         label: 'Anilhas',
         color: Colors.blue,
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => const PlateCalculatorDialog(targetWeight: 0),
-        ),
+        onTap:
+            () => showDialog(
+              context: context,
+              builder:
+                  (context) => const PlateCalculatorDialog(targetWeight: 0),
+            ),
       ),
       _QuickAction(
         icon: Icons.fitness_center,
         label: '1RM',
         color: Colors.red,
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => const OneRepMaxCalculatorDialog(),
-        ),
+        onTap:
+            () => showDialog(
+              context: context,
+              builder: (context) => const OneRepMaxCalculatorDialog(),
+            ),
       ),
       _QuickAction(
         icon: Icons.timer_outlined,
         label: 'Timer',
         color: Colors.orange,
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => const QuickTimerDialog(),
-        ),
+        onTap:
+            () => showDialog(
+              context: context,
+              builder: (context) => const QuickTimerDialog(),
+            ),
       ),
       _QuickAction(
         icon: Icons.monitor_weight_outlined,
         label: 'Peso',
         color: Colors.purple,
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => const BodyWeightDialog(),
-        ),
+        onTap:
+            () => showDialog(
+              context: context,
+              builder: (context) => const BodyWeightDialog(),
+            ),
       ),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Acesso Rápido',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('Acesso Rápido', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
         GridView.count(
           crossAxisCount: 4,
@@ -128,10 +130,7 @@ class _QuickAction extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

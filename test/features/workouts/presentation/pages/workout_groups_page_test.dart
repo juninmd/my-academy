@@ -15,17 +15,19 @@ class FakeAuthNotifier extends AuthNotifier {
 
 void main() {
   testWidgets('WorkoutGroupsPage displays empty state', (tester) async {
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        authNotifierProvider.overrideWith(() => FakeAuthNotifier(
-          const UserEntity(id: 'u1', email: 'e', name: 'n')
-        )),
-        workoutGroupsProvider.overrideWith((ref, id) async => []),
-      ],
-      child: const MaterialApp(
-        home: WorkoutGroupsPage(),
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authNotifierProvider.overrideWith(
+            () => FakeAuthNotifier(
+              const UserEntity(id: 'u1', email: 'e', name: 'n'),
+            ),
+          ),
+          workoutGroupsProvider.overrideWith((ref, id) async => []),
+        ],
+        child: const MaterialApp(home: WorkoutGroupsPage()),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Nenhum treino encontrado'), findsOneWidget);

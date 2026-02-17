@@ -22,7 +22,7 @@ class WorkoutHistoryPage extends ConsumerWidget {
       ),
       body: allLogsAsync.when(
         data: (logs) {
-           // Create exercise map for lookup
+          // Create exercise map for lookup
           final exerciseMap = <int, String>{};
           if (exercisesAsync.hasValue) {
             final exercises = exercisesAsync.value;
@@ -36,7 +36,8 @@ class WorkoutHistoryPage extends ConsumerWidget {
           if (logs.isEmpty) {
             return CommonEmptyState(
               title: 'Nenhum treino registrado',
-              message: 'Complete seu primeiro treino para ver seu histórico aqui.',
+              message:
+                  'Complete seu primeiro treino para ver seu histórico aqui.',
               icon: Icons.history,
               actionLabel: 'Iniciar Treino',
               onAction: () => context.push('/workouts/create'),
@@ -46,11 +47,7 @@ class WorkoutHistoryPage extends ConsumerWidget {
           // Group logs by Date
           final groupedLogs = <DateTime, List<ExerciseLogEntity>>{};
           for (final log in logs) {
-            final date = DateTime(
-              log.date.year,
-              log.date.month,
-              log.date.day,
-            );
+            final date = DateTime(log.date.year, log.date.month, log.date.day);
             if (!groupedLogs.containsKey(date)) {
               groupedLogs[date] = [];
             }
@@ -58,8 +55,8 @@ class WorkoutHistoryPage extends ConsumerWidget {
           }
 
           // Sort dates descending
-          final sortedDates = groupedLogs.keys.toList()
-            ..sort((a, b) => b.compareTo(a));
+          final sortedDates =
+              groupedLogs.keys.toList()..sort((a, b) => b.compareTo(a));
 
           return ListView.builder(
             padding: const EdgeInsets.all(16),

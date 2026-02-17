@@ -29,7 +29,9 @@ void main() {
   const user = UserEntity(id: 'u1', email: 'e', name: 'n');
 
   test('exerciseStatsProvider returns logs when success', () async {
-    when(mockRepository.getExerciseLogs(any, any)).thenAnswer((_) async => const Right([]));
+    when(
+      mockRepository.getExerciseLogs(any, any),
+    ).thenAnswer((_) async => const Right([]));
 
     final container = ProviderContainer(
       overrides: [
@@ -38,12 +40,12 @@ void main() {
       ],
     );
 
-    final sub = container.listen(exerciseStatsProvider(1).future, (prev, next) {});
-
-    expect(
-      await container.read(exerciseStatsProvider(1).future),
-      isEmpty,
+    final sub = container.listen(
+      exerciseStatsProvider(1).future,
+      (prev, next) {},
     );
+
+    expect(await container.read(exerciseStatsProvider(1).future), isEmpty);
 
     sub.close();
   });

@@ -13,13 +13,11 @@ void main() {
       series: [],
     );
 
-    await tester.pumpWidget(MaterialApp(
-      home: WorkoutCard(
-        workout: workout,
-        onTap: () {},
-        onLongPress: () {},
+    await tester.pumpWidget(
+      MaterialApp(
+        home: WorkoutCard(workout: workout, onTap: () {}, onLongPress: () {}),
       ),
-    ));
+    );
 
     expect(find.text('Bench Press'), findsOneWidget);
   });

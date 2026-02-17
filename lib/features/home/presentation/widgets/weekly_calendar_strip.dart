@@ -25,7 +25,10 @@ class WeeklyCalendarStrip extends ConsumerWidget {
     // If today is Sunday (7), 7%7 = 0. We subtract 0. Correct.
     // If today is Monday (1), 1%7 = 1. We subtract 1. Last Sunday. Correct.
 
-    final weekDays = List.generate(7, (index) => firstDayOfWeek.add(Duration(days: index)));
+    final weekDays = List.generate(
+      7,
+      (index) => firstDayOfWeek.add(Duration(days: index)),
+    );
 
     final logsAsync = ref.watch(allExerciseLogsProvider);
 
@@ -40,29 +43,49 @@ class WeeklyCalendarStrip extends ConsumerWidget {
         children: [
           Text(
             'Sua Semana',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: weekDays.map((date) {
-              final isToday = date.day == now.day && date.month == now.month && date.year == now.year;
+            children:
+                weekDays.map((date) {
+                  final isToday =
+                      date.day == now.day &&
+                      date.month == now.month &&
+                      date.year == now.year;
 
-              return logsAsync.when(
-                data: (logs) {
-                   final hasLog = logs.any((log) =>
-                      log.date.year == date.year &&
-                      log.date.month == date.month &&
-                      log.date.day == date.day
-                   );
-                   return _DayCell(date: date, isToday: isToday, hasWorkout: hasLog);
-                },
-                loading: () => _DayCell(date: date, isToday: isToday, hasWorkout: false, isLoading: true),
-                error: (e, s) => _DayCell(date: date, isToday: isToday, hasWorkout: false),
-              );
-            }).toList(),
+                  return logsAsync.when(
+                    data: (logs) {
+                      final hasLog = logs.any(
+                        (log) =>
+                            log.date.year == date.year &&
+                            log.date.month == date.month &&
+                            log.date.day == date.day,
+                      );
+                      return _DayCell(
+                        date: date,
+                        isToday: isToday,
+                        hasWorkout: hasLog,
+                      );
+                    },
+                    loading:
+                        () => _DayCell(
+                          date: date,
+                          isToday: isToday,
+                          hasWorkout: false,
+                          isLoading: true,
+                        ),
+                    error:
+                        (e, s) => _DayCell(
+                          date: date,
+                          isToday: isToday,
+                          hasWorkout: false,
+                        ),
+                  );
+                }).toList(),
           ),
         ],
       ),
@@ -102,35 +125,55 @@ class _DayCell extends StatelessWidget {
           width: 32,
           height: 32,
           decoration: BoxDecoration(
-            color: isToday
-                ? colorScheme.primary
-                : hasWorkout
+            color:
+                isToday
+                    ? colorScheme.primary
+                    : hasWorkout
                     ? colorScheme.tertiaryContainer
                     : Colors.transparent,
             shape: BoxShape.circle,
-            border: isToday ? null : Border.all(
-              color: hasWorkout ? Colors.transparent : Colors.grey.withValues(alpha: 0.2),
-            ),
+            border:
+                isToday
+                    ? null
+                    : Border.all(
+                      color:
+                          hasWorkout
+                              ? Colors.transparent
+                              : Colors.grey.withValues(alpha: 0.2),
+                    ),
           ),
           child: Center(
-            child: isLoading
-              ? SizedBox(width: 10, height: 10, child: CircularProgressIndicator(strokeWidth: 2, color: colorScheme.onSurface))
-              : Text(
-                '${date.day}',
-                style: TextStyle(
-                  color: isToday
-                      ? colorScheme.onPrimary
-                      : hasWorkout
-                          ? colorScheme.onTertiaryContainer
-                          : colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            child:
+                isLoading
+                    ? SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: colorScheme.onSurface,
+                      ),
+                    )
+                    : Text(
+                      '${date.day}',
+                      style: TextStyle(
+                        color:
+                            isToday
+                                ? colorScheme.onPrimary
+                                : hasWorkout
+                                ? colorScheme.onTertiaryContainer
+                                : colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
           ),
         ),
         const SizedBox(height: 4),
         if (hasWorkout)
-          Icon(Icons.circle, size: 6, color: isToday ? colorScheme.primary : colorScheme.tertiary)
+          Icon(
+            Icons.circle,
+            size: 6,
+            color: isToday ? colorScheme.primary : colorScheme.tertiary,
+          )
         else
           const SizedBox(height: 6),
       ],

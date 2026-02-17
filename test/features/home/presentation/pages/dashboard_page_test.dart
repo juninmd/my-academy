@@ -8,9 +8,6 @@ import 'package:my_academy/features/home/domain/entities/workout_summary_entity.
 import 'package:my_academy/features/home/presentation/pages/dashboard_page.dart';
 import 'package:my_academy/features/home/presentation/providers/home_provider.dart';
 import 'package:my_academy/features/home/presentation/providers/dashboard_stats_provider.dart';
-import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
-import 'package:my_academy/features/workouts/domain/entities/exercise_entity.dart';
-import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_create_provider.dart';
 
@@ -26,29 +23,35 @@ void main() {
     await initializeDateFormatting('pt_BR', null);
   });
 
-  testWidgets('DashboardPage renders static elements and Tools section', (WidgetTester tester) async {
+  testWidgets('DashboardPage renders static elements and Tools section', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          authNotifierProvider.overrideWith(() => FakeAuthNotifier(
-            const UserEntity(id: 'u1', email: 'e', name: 'User')
-          )),
-          workoutSummaryProvider.overrideWith((ref) async => const WorkoutSummaryEntity(
-            counter: 5,
-            hasWorkoutToday: false,
-          )),
-          allExerciseLogsProvider.overrideWith((ref) async => []), // No logs for history
-          dashboardStatsProvider.overrideWith((ref) async => DashboardStats(
-            workoutsThisWeek: 2,
-            weeklyGoal: 4,
-            volumeThisWeek: 500, // Reduced to avoid 'k' formatting
-            streak: 3,
-          )),
+          authNotifierProvider.overrideWith(
+            () => FakeAuthNotifier(
+              const UserEntity(id: 'u1', email: 'e', name: 'User'),
+            ),
+          ),
+          workoutSummaryProvider.overrideWith(
+            (ref) async =>
+                const WorkoutSummaryEntity(counter: 5, hasWorkoutToday: false),
+          ),
+          allExerciseLogsProvider.overrideWith(
+            (ref) async => [],
+          ), // No logs for history
+          dashboardStatsProvider.overrideWith(
+            (ref) async => DashboardStats(
+              workoutsThisWeek: 2,
+              weeklyGoal: 4,
+              volumeThisWeek: 500, // Reduced to avoid 'k' formatting
+              streak: 3,
+            ),
+          ),
           exercisesProvider.overrideWith((ref) async => []),
         ],
-        child: const MaterialApp(
-          home: DashboardPage(),
-        ),
+        child: const MaterialApp(home: DashboardPage()),
       ),
     );
 

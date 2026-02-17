@@ -30,7 +30,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       id: _mockUserId,
       email: 'mock@example.com',
       name: 'Mock User',
-      photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
+      photoUrl: 'https://i.pravatar.cc/150?u=',
     );
   }
 
@@ -51,7 +51,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       id: _mockUserId,
       email: 'mock@example.com',
       name: 'Mock User',
-      photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
+      photoUrl: 'https://i.pravatar.cc/150?u=',
     );
   }
 
@@ -61,5 +61,11 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       '[MockAuthRemoteDataSource] getAuthToken() called - returning mock token',
     );
     return _mockToken;
+  }
+
+  @override
+  Future<void> updateDisplayName(String name) async {
+    logger.i('[MockAuthRemoteDataSource] updateDisplayName($name) called');
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 }

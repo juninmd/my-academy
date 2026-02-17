@@ -36,9 +36,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     int groupId,
   ) async {
     try {
-      final response = await _apiClient.get(
-        'workouts-groups/$groupId',
-      );
+      final response = await _apiClient.get('workouts-groups/$groupId');
       final data = response as Map<String, dynamic>;
       return Right(_mapGroup(data));
     } catch (e) {
@@ -137,7 +135,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     WorkoutGroupEntity group,
   ) async {
     try {
-       final Map<String, dynamic> json = {
+      final Map<String, dynamic> json = {
         'name': group.name,
         'image': group.image,
         'userId': group.userId,
@@ -165,19 +163,24 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   }
 
   Map<String, dynamic> _mapWorkoutToJson(WorkoutEntity workout) {
-     return {
-        // preserve ID if it exists, otherwise backend handles it?
-        // usually for nested relations, if we want to update, we send ID.
-        // if we want to create, no ID.
-        if (workout.id != null) 'id': workout.id,
-        'exerciseId': workout.exerciseId,
-        'description': workout.description,
-        'series': workout.series.map((s) => {
-           'repetitions': s.repetitions,
-           'weight': s.weight,
-           'rest': s.rest,
-        }).toList(),
-     };
+    return {
+      // preserve ID if it exists, otherwise backend handles it?
+      // usually for nested relations, if we want to update, we send ID.
+      // if we want to create, no ID.
+      if (workout.id != null) 'id': workout.id,
+      'exerciseId': workout.exerciseId,
+      'description': workout.description,
+      'series':
+          workout.series
+              .map(
+                (s) => {
+                  'repetitions': s.repetitions,
+                  'weight': s.weight,
+                  'rest': s.rest,
+                },
+              )
+              .toList(),
+    };
   }
 
   WorkoutGroupEntity _mapGroup(Map<String, dynamic> json) => WorkoutGroupEntity(

@@ -25,88 +25,108 @@ class WorkoutDetailsPage extends ConsumerWidget {
 
           // Summary Calculations
           final totalExercises = group.workouts.length;
-          final totalSets = group.workouts.fold(0, (sum, w) => sum + w.series.length);
+          final totalSets = group.workouts.fold(
+            0,
+            (sum, w) => sum + w.series.length,
+          );
           // Est duration: ~45s per set + rest time per set
           // If rest is 0, assume 60s
           final totalSeconds = group.workouts.fold(0, (sum, w) {
-            return sum + w.series.fold(0, (sSum, s) => sSum + 45 + (s.rest > 0 ? s.rest : 60));
+            return sum +
+                w.series.fold(
+                  0,
+                  (sSum, s) => sSum + 45 + (s.rest > 0 ? s.rest : 60),
+                );
           });
           final estMinutes = (totalSeconds / 60).round();
 
           return NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverAppBar(
-                expandedHeight: 200,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(group.name),
-                  background: group.image != null
-                      ? CachedNetworkImage(
-                          imageUrl: group.image!,
-                          fit: BoxFit.cover,
-                          color: Colors.black45,
-                          colorBlendMode: BlendMode.darken,
-                          errorWidget: (c, e, s) => Container(
-                            color: Theme.of(context).colorScheme.primaryContainer,
-                          ),
-                        )
-                      : Container(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                ),
-                actions: [
-                  PopupMenuButton(
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Text('Editar'),
-                      ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Deletar'),
-                      ),
-                    ],
-                    onSelected: (value) async {
-                      if (value == 'edit') {
-                        context.go('/workouts/create', extra: group);
-                      } else if (value == 'delete') {
-                        final confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Deletar Treino'),
-                            content: const Text(
-                                'Tem certeza que deseja deletar este treino?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: const Text('Cancelar'),
+            headerSliverBuilder:
+                (context, innerBoxIsScrolled) => [
+                  SliverAppBar(
+                    expandedHeight: 200,
+                    pinned: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(group.name),
+                      background:
+                          group.image != null
+                              ? CachedNetworkImage(
+                                imageUrl: group.image!,
+                                fit: BoxFit.cover,
+                                color: Colors.black45,
+                                colorBlendMode: BlendMode.darken,
+                                errorWidget:
+                                    (c, e, s) => Container(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.primaryContainer,
+                                    ),
+                              )
+                              : Container(
+                                color: Theme.of(context).colorScheme.primary,
                               ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                child: const Text('Deletar',
-                                    style: TextStyle(color: Colors.red)),
+                    ),
+                    actions: [
+                      PopupMenuButton(
+                        itemBuilder:
+                            (context) => [
+                              const PopupMenuItem(
+                                value: 'edit',
+                                child: Text('Editar'),
+                              ),
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Text('Deletar'),
                               ),
                             ],
-                          ),
-                        );
+                        onSelected: (value) async {
+                          if (value == 'edit') {
+                            context.go('/workouts/create', extra: group);
+                          } else if (value == 'delete') {
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: const Text('Deletar Treino'),
+                                    content: const Text(
+                                      'Tem certeza que deseja deletar este treino?',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.pop(context, false),
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed:
+                                            () => Navigator.pop(context, true),
+                                        child: const Text(
+                                          'Deletar',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                            );
 
-                        if (confirm == true && context.mounted) {
-                          final repo = ref.read(workoutRepositoryProvider);
-                          await repo.deleteWorkoutGroup(groupId);
+                            if (confirm == true && context.mounted) {
+                              final repo = ref.read(workoutRepositoryProvider);
+                              await repo.deleteWorkoutGroup(groupId);
 
-                          final user = ref.read(authNotifierProvider).value;
-                          if (user != null) {
-                            ref.invalidate(workoutGroupsProvider(user.id));
+                              final user = ref.read(authNotifierProvider).value;
+                              if (user != null) {
+                                ref.invalidate(workoutGroupsProvider(user.id));
+                              }
+
+                              if (context.mounted) context.pop();
+                            }
                           }
-
-                          if (context.mounted) context.pop();
-                        }
-                      }
-                    },
+                        },
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
             body: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
@@ -136,19 +156,14 @@ class WorkoutDetailsPage extends ConsumerWidget {
                 ),
                 if (group.workouts.isEmpty)
                   const SliverFillRemaining(
-                    child: Center(
-                      child: Text('Nenhum exercício neste treino'),
-                    ),
+                    child: Center(child: Text('Nenhum exercício neste treino')),
                   )
                 else
                   SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final workout = group.workouts[index];
-                        return _WorkoutListItem(workout: workout, index: index);
-                      },
-                      childCount: group.workouts.length,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final workout = group.workouts[index];
+                      return _WorkoutListItem(workout: workout, index: index);
+                    }, childCount: group.workouts.length),
                   ),
                 const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
               ],
@@ -196,10 +211,7 @@ class _SummaryItem extends StatelessWidget {
           value,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
@@ -258,14 +270,15 @@ class _WorkoutListItem extends StatelessWidget {
                   color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: workout.exercise?.image != null
-                    ? CachedNetworkImage(
-                        imageUrl: workout.exercise!.image!,
-                        fit: BoxFit.cover,
-                        errorWidget: (c, e, s) =>
-                            const Icon(Icons.fitness_center),
-                      )
-                    : const Icon(Icons.fitness_center),
+                child:
+                    workout.exercise?.image != null
+                        ? CachedNetworkImage(
+                          imageUrl: workout.exercise!.image!,
+                          fit: BoxFit.cover,
+                          errorWidget:
+                              (c, e, s) => const Icon(Icons.fitness_center),
+                        )
+                        : const Icon(Icons.fitness_center),
               ),
               const SizedBox(width: 16),
 
@@ -322,8 +335,11 @@ class _WorkoutListItem extends StatelessWidget {
 }
 
 class _DetailBadge extends StatelessWidget {
-  const _DetailBadge(
-      {required this.icon, required this.text, required this.color});
+  const _DetailBadge({
+    required this.icon,
+    required this.text,
+    required this.color,
+  });
 
   final IconData icon;
   final String text;

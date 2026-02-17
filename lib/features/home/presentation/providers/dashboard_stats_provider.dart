@@ -16,7 +16,9 @@ class DashboardStats {
   });
 }
 
-final dashboardStatsProvider = FutureProvider.autoDispose<DashboardStats>((ref) async {
+final dashboardStatsProvider = FutureProvider.autoDispose<DashboardStats>((
+  ref,
+) async {
   final logs = await ref.watch(allExerciseLogsProvider.future);
   final settings = ref.watch(settingsProvider);
 
@@ -24,12 +26,18 @@ final dashboardStatsProvider = FutureProvider.autoDispose<DashboardStats>((ref) 
   final now = DateTime.now();
   // Start of week (Monday)
   final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-  final startOfMonday = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+  final startOfMonday = DateTime(
+    startOfWeek.year,
+    startOfWeek.month,
+    startOfWeek.day,
+  );
 
-  final logsThisWeek = logs.where((l) => l.date.isAfter(startOfMonday)).toList();
-  final uniqueDaysThisWeek = logsThisWeek
-      .map((l) => DateTime(l.date.year, l.date.month, l.date.day))
-      .toSet();
+  final logsThisWeek =
+      logs.where((l) => l.date.isAfter(startOfMonday)).toList();
+  final uniqueDaysThisWeek =
+      logsThisWeek
+          .map((l) => DateTime(l.date.year, l.date.month, l.date.day))
+          .toSet();
   final workoutsCount = uniqueDaysThisWeek.length;
 
   // 2. Volume This Week
@@ -42,11 +50,12 @@ final dashboardStatsProvider = FutureProvider.autoDispose<DashboardStats>((ref) 
 
   // 3. Current Streak
   int streak = 0;
-  final uniqueDaysAll = logs
-      .map((l) => DateTime(l.date.year, l.date.month, l.date.day))
-      .toSet()
-      .toList()
-    ..sort((a, b) => b.compareTo(a)); // Descending
+  final uniqueDaysAll =
+      logs
+          .map((l) => DateTime(l.date.year, l.date.month, l.date.day))
+          .toSet()
+          .toList()
+        ..sort((a, b) => b.compareTo(a)); // Descending
 
   if (uniqueDaysAll.isNotEmpty) {
     final todayDate = DateTime(now.year, now.month, now.day);

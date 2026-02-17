@@ -37,14 +37,14 @@ void main() {
   });
 
   test('fromEntity should return a valid UserDto', () {
-      const entity = UserEntity(
-        id: '1',
-        email: 'test@test.com',
-        name: 'Test',
-        photoUrl: 'url',
-        role: 'student',
-      );
-      final result = UserDto.fromEntity(entity);
-      expect(result, userDto);
+    const entity = UserEntity(
+      id: '1',
+      email: 'test@test.com',
+      name: 'Test',
+      photoUrl: 'url',
+      role: 'student',
+    );
+    final result = UserDto.fromEntity(entity);
+    expect(result, userDto);
   });
 }

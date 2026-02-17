@@ -7,14 +7,11 @@ void main() {
     const title = 'Test Title';
     const message = 'Test Message';
 
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: CommonEmptyState(
-          title: title,
-          message: message,
-        ),
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: CommonEmptyState(title: title, message: message)),
       ),
-    ));
+    );
 
     expect(find.text(title), findsOneWidget);
     expect(find.text(message), findsOneWidget);
@@ -25,32 +22,38 @@ void main() {
   testWidgets('CommonEmptyState displays icon when provided', (tester) async {
     const icon = Icons.star;
 
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: CommonEmptyState(
-          title: 'Title',
-          message: 'Message',
-          icon: icon,
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CommonEmptyState(
+            title: 'Title',
+            message: 'Message',
+            icon: icon,
+          ),
         ),
       ),
-    ));
+    );
 
     expect(find.byIcon(icon), findsOneWidget);
   });
 
-  testWidgets('CommonEmptyState displays action button when provided', (tester) async {
+  testWidgets('CommonEmptyState displays action button when provided', (
+    tester,
+  ) async {
     bool actionPressed = false;
 
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: CommonEmptyState(
-          title: 'Title',
-          message: 'Message',
-          actionLabel: 'Click Me',
-          onAction: () => actionPressed = true,
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CommonEmptyState(
+            title: 'Title',
+            message: 'Message',
+            actionLabel: 'Click Me',
+            onAction: () => actionPressed = true,
+          ),
         ),
       ),
-    ));
+    );
 
     expect(find.text('Click Me'), findsOneWidget);
     await tester.tap(find.text('Click Me'));

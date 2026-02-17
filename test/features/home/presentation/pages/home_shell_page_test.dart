@@ -18,9 +18,9 @@ void main() {
   testWidgets('HomeShellPage displays navigation bar', (tester) async {
     when(mockShell.currentIndex).thenReturn(0);
 
-    await tester.pumpWidget(MaterialApp(
-      home: HomeShellPage(navigationShell: mockShell),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(home: HomeShellPage(navigationShell: mockShell)),
+    );
 
     expect(find.text('Dashboard'), findsOneWidget);
     expect(find.text('Treinos'), findsOneWidget);

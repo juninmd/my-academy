@@ -4,11 +4,11 @@ import 'package:my_academy/features/home/presentation/widgets/weekly_goal_widget
 
 void main() {
   testWidgets('WeeklyGoalWidget displays correct info', (tester) async {
-    await tester.pumpWidget(const MaterialApp(
-      home: Scaffold(
-        body: WeeklyGoalWidget(completedDays: 3, targetDays: 5),
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: WeeklyGoalWidget(completedDays: 3, targetDays: 5)),
       ),
-    ));
+    );
 
     expect(find.text('Meta Semanal'), findsOneWidget);
     expect(find.text('3 / 5 treinos'), findsOneWidget);

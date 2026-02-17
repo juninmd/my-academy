@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final favoritesProvider = AsyncNotifierProvider<FavoritesNotifier, Set<int>>(FavoritesNotifier.new);
+final favoritesProvider = AsyncNotifierProvider<FavoritesNotifier, Set<int>>(
+  FavoritesNotifier.new,
+);
 
 class FavoritesNotifier extends AsyncNotifier<Set<int>> {
   static const _key = 'favorite_exercises';

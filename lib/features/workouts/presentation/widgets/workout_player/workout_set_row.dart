@@ -32,14 +32,16 @@ class WorkoutSetRow extends HookWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: log.isCompleted
-            ? Colors.green.withValues(alpha: 0.05)
-            : Theme.of(context).cardTheme.color,
+        color:
+            log.isCompleted
+                ? Colors.green.withValues(alpha: 0.05)
+                : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: log.isCompleted
-              ? Colors.green.withValues(alpha: 0.3)
-              : Theme.of(context).dividerColor.withValues(alpha: 0.1),
+          color:
+              log.isCompleted
+                  ? Colors.green.withValues(alpha: 0.3)
+                  : Theme.of(context).dividerColor.withValues(alpha: 0.1),
         ),
       ),
       child: Column(
@@ -59,16 +61,19 @@ class WorkoutSetRow extends HookWidget {
               ),
               if (lastSet != null)
                 GestureDetector(
-                  onTap: !log.isCompleted
-                      ? () {
-                          onChanged(SetLogState(
-                            actualReps: lastSet!.reps,
-                            actualWeight: lastSet!.weight,
-                            rpe: log.rpe,
-                            isCompleted: log.isCompleted,
-                          ));
-                        }
-                      : null,
+                  onTap:
+                      !log.isCompleted
+                          ? () {
+                            onChanged(
+                              SetLogState(
+                                actualReps: lastSet!.reps,
+                                actualWeight: lastSet!.weight,
+                                rpe: log.rpe,
+                                isCompleted: log.isCompleted,
+                              ),
+                            );
+                          }
+                          : null,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -105,20 +110,22 @@ class WorkoutSetRow extends HookWidget {
                   value: log.actualReps,
                   enabled: !log.isCompleted,
                   onChanged: (val) {
-                    onChanged(SetLogState(
-                      actualReps: val,
-                      actualWeight: log.actualWeight,
-                      rpe: log.rpe,
-                      isCompleted: log.isCompleted,
-                    ));
+                    onChanged(
+                      SetLogState(
+                        actualReps: val,
+                        actualWeight: log.actualWeight,
+                        rpe: log.rpe,
+                        isCompleted: log.isCompleted,
+                      ),
+                    );
                   },
                 ),
               ),
               const SizedBox(width: 8),
               // Weight Input
               Expanded(
-                 flex: 2,
-                 child: NumberInputControl(
+                flex: 2,
+                child: NumberInputControl(
                   label: 'kg',
                   labelSuffix: Material(
                     color: Colors.transparent,
@@ -128,12 +135,13 @@ class WorkoutSetRow extends HookWidget {
                         showModalBottomSheet(
                           context: context,
                           showDragHandle: true,
-                          builder: (context) => Padding(
-                            padding: const EdgeInsets.only(bottom: 24.0),
-                            child: PlateCalculatorContent(
-                              targetWeight: log.actualWeight.toDouble(),
-                            ),
-                          ),
+                          builder:
+                              (context) => Padding(
+                                padding: const EdgeInsets.only(bottom: 24.0),
+                                child: PlateCalculatorContent(
+                                  targetWeight: log.actualWeight.toDouble(),
+                                ),
+                              ),
                         );
                       },
                       child: Padding(
@@ -150,12 +158,14 @@ class WorkoutSetRow extends HookWidget {
                   enabled: !log.isCompleted,
                   step: 1,
                   onChanged: (val) {
-                    onChanged(SetLogState(
-                      actualReps: log.actualReps,
-                      actualWeight: val,
-                      rpe: log.rpe,
-                      isCompleted: log.isCompleted,
-                    ));
+                    onChanged(
+                      SetLogState(
+                        actualReps: log.actualReps,
+                        actualWeight: val,
+                        rpe: log.rpe,
+                        isCompleted: log.isCompleted,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -163,49 +173,55 @@ class WorkoutSetRow extends HookWidget {
 
               // RPE Selector
               Padding(
-                padding: const EdgeInsets.only(top: 24), // Align with input fields
+                padding: const EdgeInsets.only(
+                  top: 24,
+                ), // Align with input fields
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    onTap: log.isCompleted
-                        ? null
-                        : () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => RpeSelectorSheet(
-                                onSelected: (rpe) {
-                                  onChanged(SetLogState(
-                                    actualReps: log.actualReps,
-                                    actualWeight: log.actualWeight,
-                                    rpe: rpe,
-                                    isCompleted: log.isCompleted,
-                                  ));
-                                },
-                              ),
-                            );
-                          },
+                    onTap:
+                        log.isCompleted
+                            ? null
+                            : () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder:
+                                    (context) => RpeSelectorSheet(
+                                      onSelected: (rpe) {
+                                        onChanged(
+                                          SetLogState(
+                                            actualReps: log.actualReps,
+                                            actualWeight: log.actualWeight,
+                                            rpe: rpe,
+                                            isCompleted: log.isCompleted,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                              );
+                            },
                     borderRadius: BorderRadius.circular(8),
                     child: Container(
                       width: 50,
                       height: 48, // Match height of NumberInputControl roughly
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       decoration: BoxDecoration(
-                        color: log.rpe != null
-                            ? Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.1)
-                            : Theme.of(context)
-                                .disabledColor
-                                .withValues(alpha: 0.05),
+                        color:
+                            log.rpe != null
+                                ? Theme.of(
+                                  context,
+                                ).colorScheme.primary.withValues(alpha: 0.1)
+                                : Theme.of(
+                                  context,
+                                ).disabledColor.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: log.rpe != null
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.3)
-                              : Colors.transparent,
+                          color:
+                              log.rpe != null
+                                  ? Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.3)
+                                  : Colors.transparent,
                         ),
                       ),
                       child: Column(
@@ -215,9 +231,10 @@ class WorkoutSetRow extends HookWidget {
                             'RPE',
                             style: TextStyle(
                               fontSize: 9,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -227,9 +244,10 @@ class WorkoutSetRow extends HookWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: log.rpe != null
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).colorScheme.onSurface,
+                              color:
+                                  log.rpe != null
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ],
@@ -250,9 +268,10 @@ class WorkoutSetRow extends HookWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: log.isCompleted
-                        ? Colors.green
-                        : Colors.grey.withValues(alpha: 0.2),
+                    color:
+                        log.isCompleted
+                            ? Colors.green
+                            : Colors.grey.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(

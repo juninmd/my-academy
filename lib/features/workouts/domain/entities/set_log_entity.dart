@@ -1,11 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class SetLogEntity extends Equatable {
-  const SetLogEntity({
-    required this.reps,
-    required this.weight,
-    this.rpe,
-  });
+  const SetLogEntity({required this.reps, required this.weight, this.rpe});
 
   final int reps;
   final int weight;
@@ -15,11 +11,7 @@ class SetLogEntity extends Equatable {
   List<Object?> get props => [reps, weight, rpe];
 
   Map<String, dynamic> toJson() {
-    return {
-      'reps': reps,
-      'weight': weight,
-      'rpe': rpe,
-    };
+    return {'reps': reps, 'weight': weight, 'rpe': rpe};
   }
 
   factory SetLogEntity.fromJson(Map<String, dynamic> json) {

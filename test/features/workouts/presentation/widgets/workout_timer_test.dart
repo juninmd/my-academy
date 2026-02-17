@@ -7,11 +7,9 @@ void main() {
   testWidgets('WorkoutTimer updates UI when notifier changes', (tester) async {
     final notifier = TimerNotifier();
 
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: WorkoutTimer(notifier: notifier),
-      ),
-    ));
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: WorkoutTimer(notifier: notifier))),
+    );
 
     // Initial state
     expect(find.text('00:00'), findsOneWidget);

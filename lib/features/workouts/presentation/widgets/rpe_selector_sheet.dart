@@ -22,9 +22,9 @@ class RpeSelectorSheet extends StatelessWidget {
             children: [
               Text(
                 'Intensidade (RPE)',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
@@ -35,7 +35,9 @@ class RpeSelectorSheet extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Quão difícil foi essa série?',
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 24),
           GridView.builder(
@@ -81,11 +83,17 @@ class RpeSelectorSheet extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Fácil', style: TextStyle(color: Colors.green, fontSize: 12)),
-              Text('Moderado', style: TextStyle(color: Colors.orange, fontSize: 12)),
+            children: [
+              Text(
+                'Fácil',
+                style: TextStyle(color: Colors.green, fontSize: 12),
+              ),
+              Text(
+                'Moderado',
+                style: TextStyle(color: Colors.orange, fontSize: 12),
+              ),
               Text('Máximo', style: TextStyle(color: Colors.red, fontSize: 12)),
             ],
           ),
@@ -94,7 +102,9 @@ class RpeSelectorSheet extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Guia de Esforço:',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 12),
           _buildGuideRow(context, '10', 'Falha Concêntrica / 0 RIR'),
@@ -130,10 +140,7 @@ class RpeSelectorSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Text(
-            desc,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          Text(desc, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );

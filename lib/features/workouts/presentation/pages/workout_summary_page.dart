@@ -48,23 +48,25 @@ class WorkoutSummaryPage extends HookWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 40),
-              const Icon(Icons.emoji_events, size: 80, color: Colors.amber)
-                  .animate()
-                  .scale(duration: 600.ms, curve: Curves.elasticOut),
+              const Icon(
+                Icons.emoji_events,
+                size: 80,
+                color: Colors.amber,
+              ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
               const SizedBox(height: 24),
               Text(
                 'Treino Concluído!',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ).animate().fadeIn(delay: 300.ms),
               const SizedBox(height: 8),
               Text(
                 'Ótimo trabalho hoje.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.grey,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
                 textAlign: TextAlign.center,
               ).animate().fadeIn(delay: 400.ms),
               const SizedBox(height: 32),
@@ -78,7 +80,10 @@ class WorkoutSummaryPage extends HookWidget {
                   children: [
                     const Text(
                       'Você levantou o equivalente a',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -135,7 +140,14 @@ class WorkoutSummaryPage extends HookWidget {
                       min: 1,
                       max: 5,
                       divisions: 4,
-                      label: ['Fácil', 'Moderado', 'Bom', 'Intenso', 'Insano'][intensity.value.toInt() - 1],
+                      label:
+                          [
+                            'Fácil',
+                            'Moderado',
+                            'Bom',
+                            'Intenso',
+                            'Insano',
+                          ][intensity.value.toInt() - 1],
                       onChanged: (v) => intensity.value = v,
                     ),
                   ),
@@ -144,8 +156,17 @@ class WorkoutSummaryPage extends HookWidget {
               ),
               Center(
                 child: Text(
-                  ['Fácil', 'Moderado', 'Bom', 'Intenso', 'Insano'][intensity.value.toInt() - 1],
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  [
+                    'Fácil',
+                    'Moderado',
+                    'Bom',
+                    'Intenso',
+                    'Insano',
+                  ][intensity.value.toInt() - 1],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
               const SizedBox(height: 48),
@@ -156,22 +177,24 @@ class WorkoutSummaryPage extends HookWidget {
               ),
               const SizedBox(height: 16),
               ...sessionLogs.values.map((log) {
-                 // Note: Ideally we would have the Exercise Name passed here,
-                 // but for now we might only have ID.
-                 // In a real app we'd pass a rich object or fetch it.
-                 // For this demo, we'll genericize it or assume we passed names.
-                 // Refactoring WorkoutPlayerPage to pass names is complex,
-                 // so we will just show "Exercício" or ID if name unavailable.
-                 // Wait, I can't easily get the name here without passing it.
-                 // I'll update ExerciseSessionLog to include name.
-                 return Card(
-                   margin: const EdgeInsets.only(bottom: 12),
-                   child: ListTile(
-                     leading: const CircleAvatar(child: Icon(Icons.check)),
-                     title: Text(log.exerciseName ?? 'Exercício ${log.exerciseId}'),
-                     subtitle: Text('${log.setLogs.length} séries concluídas'),
-                   ),
-                 );
+                // Note: Ideally we would have the Exercise Name passed here,
+                // but for now we might only have ID.
+                // In a real app we'd pass a rich object or fetch it.
+                // For this demo, we'll genericize it or assume we passed names.
+                // Refactoring WorkoutPlayerPage to pass names is complex,
+                // so we will just show "Exercício" or ID if name unavailable.
+                // Wait, I can't easily get the name here without passing it.
+                // I'll update ExerciseSessionLog to include name.
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: ListTile(
+                    leading: const CircleAvatar(child: Icon(Icons.check)),
+                    title: Text(
+                      log.exerciseName ?? 'Exercício ${log.exerciseId}',
+                    ),
+                    subtitle: Text('${log.setLogs.length} séries concluídas'),
+                  ),
+                );
               }),
               const SizedBox(height: 40),
               SizedBox(
@@ -228,10 +251,7 @@ class _SummaryStat extends StatelessWidget {
           value,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

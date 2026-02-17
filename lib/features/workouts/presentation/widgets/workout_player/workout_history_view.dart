@@ -19,17 +19,15 @@ class WorkoutHistoryView extends HookConsumerWidget {
         if (logs.isEmpty) {
           return const CommonEmptyState(
             title: 'Sem Histórico',
-            message: 'Complete este exercício pela primeira vez para ver seu progresso aqui.',
+            message:
+                'Complete este exercício pela primeira vez para ver seu progresso aqui.',
             icon: Icons.history,
           );
         }
         return Column(
           children: [
             if (logs.length >= 2)
-              SizedBox(
-                height: 200,
-                child: ProgressChart(logs: logs),
-              ),
+              SizedBox(height: 200, child: ProgressChart(logs: logs)),
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.only(bottom: 100, top: 16),
@@ -38,15 +36,22 @@ class WorkoutHistoryView extends HookConsumerWidget {
                 itemBuilder: (context, index) {
                   final log = logs[index];
                   return ListTile(
-                    title: Text(DateFormat('dd/MM/yyyy HH:mm').format(log.date)),
+                    title: Text(
+                      DateFormat('dd/MM/yyyy HH:mm').format(log.date),
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ...log.sets.asMap().entries.map((e) => Text(
-                          'Série ${e.key + 1}: ${e.value.reps} reps @ ${e.value.weight}kg (RPE: ${e.value.rpe ?? "-"})',
-                        )),
+                        ...log.sets.asMap().entries.map(
+                          (e) => Text(
+                            'Série ${e.key + 1}: ${e.value.reps} reps @ ${e.value.weight}kg (RPE: ${e.value.rpe ?? "-"})',
+                          ),
+                        ),
                         if (log.notes != null && log.notes!.isNotEmpty)
-                           Text('Notas: ${log.notes}', style: const TextStyle(fontStyle: FontStyle.italic)),
+                          Text(
+                            'Notas: ${log.notes}',
+                            style: const TextStyle(fontStyle: FontStyle.italic),
+                          ),
                       ],
                     ),
                   );
