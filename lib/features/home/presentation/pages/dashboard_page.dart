@@ -22,12 +22,8 @@ class DashboardPage extends ConsumerWidget {
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
-    if (hour < 12) {
-      return 'Bom dia';
-    }
-    if (hour < 18) {
-      return 'Boa tarde';
-    }
+    if (hour < 12) return 'Bom dia';
+    if (hour < 18) return 'Boa tarde';
     return 'Boa noite';
   }
 
@@ -440,9 +436,8 @@ class DashboardPage extends ConsumerWidget {
                                 // Show Last Workout if available
                                 logsAsync.when(
                                   data: (logs) {
-                                    if (logs.isEmpty) {
+                                    if (logs.isEmpty)
                                       return const SizedBox.shrink();
-                                    }
 
                                     // Find latest date
                                     final latestLog = logs.reduce(
