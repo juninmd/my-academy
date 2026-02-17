@@ -73,6 +73,6 @@ void main() {
 
     // Verify "Treino Rápido" card is shown instead of "Descanso Merecido"
     expect(find.text('Treino Rápido'), findsWidgets);
-    expect(find.text('Iniciar uma sessão sem plano definido'), findsOneWidget);
+    expect(find.text('Sem planos? Inicie agora.'), findsOneWidget);
   });
 }
