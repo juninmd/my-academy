@@ -22,6 +22,8 @@ class StudentAddPage extends HookConsumerWidget {
 
     final colorScheme = Theme.of(context).colorScheme;
     final studentRepository = ref.watch(studentRepositoryProvider);
+    // Watch auth to ensure user is loaded
+    final authState = ref.watch(authNotifierProvider);
 
     Future<void> checkEmail() async {
       final email = emailController.text.trim();
@@ -55,7 +57,7 @@ class StudentAddPage extends HookConsumerWidget {
     Future<void> handleSubmit() async {
       if (!formKey.currentState!.validate()) return;
 
-      final user = ref.read(authNotifierProvider).value;
+      final user = authState.value;
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
