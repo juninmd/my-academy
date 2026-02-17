@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_academy/core/exceptions/failure.dart';
 import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
@@ -54,6 +55,26 @@ void main() {
   testWidgets('StudentAddPage adds student', (tester) async {
     final fakeRepository = FakeStudentRepository();
 
+    final router = GoRouter(
+      initialLocation: '/home',
+      routes: [
+        GoRoute(
+          path: '/home',
+          builder:
+              (context, state) => Scaffold(
+                body: TextButton(
+                  onPressed: () => context.push('/add'),
+                  child: const Text('Go Add'),
+                ),
+              ),
+        ),
+        GoRoute(
+          path: '/add',
+          builder: (context, state) => const StudentAddPage(),
+        ),
+      ],
+    );
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -64,11 +85,15 @@ void main() {
           ),
           studentRepositoryProvider.overrideWithValue(fakeRepository),
         ],
-        child: const MaterialApp(home: StudentAddPage()),
+        child: MaterialApp.router(routerConfig: router),
       ),
     );
 
     // Wait for auth provider to settle
+    await tester.pumpAndSettle();
+
+    // Navigate to Add Page
+    await tester.tap(find.text('Go Add'));
     await tester.pumpAndSettle();
 
     expect(find.text('Adicionar Aluno'), findsAtLeastNWidgets(1));

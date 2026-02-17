@@ -9,11 +9,13 @@ class WorkoutSummaryPage extends HookWidget {
   const WorkoutSummaryPage({
     required this.duration,
     required this.sessionLogs,
+    this.newRecords = const [],
     super.key,
   });
 
   final Duration duration;
   final Map<int, ExerciseSessionLog> sessionLogs;
+  final List<String> newRecords;
 
   String _getWeightEquivalence(int weightKg) {
     if (weightKg < 100) return 'um Lobo Grande 🐺';
@@ -69,6 +71,47 @@ class WorkoutSummaryPage extends HookWidget {
                 ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
                 textAlign: TextAlign.center,
               ).animate().fadeIn(delay: 400.ms),
+              if (newRecords.isNotEmpty) ...[
+                const SizedBox(height: 32),
+                Text(
+                  'Recordes Quebrados! 🏆',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber,
+                  ),
+                  textAlign: TextAlign.center,
+                ).animate().slideY(begin: 0.2, end: 0, delay: 500.ms).fadeIn(),
+                const SizedBox(height: 16),
+                ...newRecords.map(
+                  (record) => Card(
+                    color: Colors.amber.withValues(alpha: 0.1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: BorderSide(
+                        color: Colors.amber.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              record,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ).animate().scale(delay: 600.ms),
+                ),
+              ],
               const SizedBox(height: 32),
               Container(
                 padding: const EdgeInsets.all(16),
@@ -197,15 +240,38 @@ class WorkoutSummaryPage extends HookWidget {
                 );
               }),
               const SizedBox(height: 40),
-              SizedBox(
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate back to home, clearing stack
-                    context.go('/home');
-                  },
-                  child: const Text('Voltar ao Início'),
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 56,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Compartilhamento em breve!'),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.share),
+                        label: const Text('Compartilhar'),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: SizedBox(
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Navigate back to home, clearing stack
+                          context.go('/home');
+                        },
+                        child: const Text('Início'),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
