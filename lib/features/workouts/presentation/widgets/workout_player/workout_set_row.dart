@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../domain/entities/workout_series_entity.dart';
 import '../../../domain/entities/set_log_entity.dart';
 import '../../../domain/entities/session_log_entity.dart';
+import '../number_input_control.dart';
 import '../plate_calculator_dialog.dart';
 import '../rpe_selector_sheet.dart';
 
@@ -29,14 +29,14 @@ class WorkoutSetRow extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color:
             log.isCompleted
                 ? Colors.green.withValues(alpha: 0.05)
                 : Theme.of(context).cardTheme.color,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color:
               log.isCompleted
@@ -53,7 +53,7 @@ class WorkoutSetRow extends HookWidget {
               Text(
                 'SÉRIE ${index + 1}',
                 style: const TextStyle(
-                  fontSize: 11,
+                  fontSize: 10,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 1.0,
                   color: Colors.grey,
@@ -63,7 +63,7 @@ class WorkoutSetRow extends HookWidget {
                 Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(4),
                     onTap:
                         !log.isCompleted
                             ? () {
@@ -79,32 +79,38 @@ class WorkoutSetRow extends HookWidget {
                             : null,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                        horizontal: 6,
+                        vertical: 2,
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Theme.of(context).colorScheme.primary
                               .withValues(alpha: 0.3),
                         ),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             Icons.history,
-                            size: 14,
+                            size: 12,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${lastSet!.reps}x ${lastSet!.weight}kg',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 11,
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.copy,
+                            size: 10,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ],
                       ),
@@ -113,17 +119,17 @@ class WorkoutSetRow extends HookWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           // Main Input Row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Reps Input
               Expanded(
-                flex: 3,
-                child: _SetInputControl(
-                  label: 'REPS',
+                flex: 2,
+                child: NumberInputControl(
+                  label: 'Reps',
                   value: log.actualReps,
                   enabled: !log.isCompleted,
                   onChanged: (val) {
@@ -138,14 +144,42 @@ class WorkoutSetRow extends HookWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               // Weight Input
               Expanded(
-                flex: 4,
-                child: _SetInputControl(
-                  label: 'KG',
+                flex: 2,
+                child: NumberInputControl(
+                  label: 'kg',
+                  labelSuffix: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          showDragHandle: true,
+                          builder:
+                              (context) => Padding(
+                                padding: const EdgeInsets.only(bottom: 24.0),
+                                child: PlateCalculatorContent(
+                                  targetWeight: log.actualWeight.toDouble(),
+                                ),
+                              ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.calculate,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
                   value: log.actualWeight,
                   enabled: !log.isCompleted,
+                  step: 1,
                   onChanged: (val) {
                     onChanged(
                       SetLogState(
@@ -156,103 +190,91 @@ class WorkoutSetRow extends HookWidget {
                       ),
                     );
                   },
-                  suffix: IconButton(
-                    icon: Icon(
-                      Icons.calculate_outlined,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    padding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        showDragHandle: true,
-                        builder:
-                            (context) => Padding(
-                              padding: const EdgeInsets.only(bottom: 24.0),
-                              child: PlateCalculatorContent(
-                                targetWeight: log.actualWeight.toDouble(),
-                              ),
-                            ),
-                      );
-                    },
-                  ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
 
-              // RPE Selector (Pill)
+              // RPE Selector
               Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: InkWell(
-                  onTap:
-                      log.isCompleted
-                          ? null
-                          : () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder:
-                                  (context) => RpeSelectorSheet(
-                                    onSelected: (rpe) {
-                                      onChanged(
-                                        SetLogState(
-                                          actualReps: log.actualReps,
-                                          actualWeight: log.actualWeight,
-                                          rpe: rpe,
-                                          isCompleted: log.isCompleted,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                            );
-                          },
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    width: 44,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color:
-                          log.rpe != null
-                              ? Theme.of(
-                                context,
-                              ).colorScheme.primary.withValues(alpha: 0.1)
-                              : Theme.of(
-                                context,
-                              ).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
+                padding: const EdgeInsets.only(
+                  top: 24,
+                ), // Align with input fields
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap:
+                        log.isCompleted
+                            ? null
+                            : () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder:
+                                    (context) => RpeSelectorSheet(
+                                      onSelected: (rpe) {
+                                        onChanged(
+                                          SetLogState(
+                                            actualReps: log.actualReps,
+                                            actualWeight: log.actualWeight,
+                                            rpe: rpe,
+                                            isCompleted: log.isCompleted,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                              );
+                            },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: 50,
+                      height: 48, // Match height of NumberInputControl roughly
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      decoration: BoxDecoration(
                         color:
                             log.rpe != null
                                 ? Theme.of(
                                   context,
-                                ).colorScheme.primary.withValues(alpha: 0.3)
-                                : Colors.transparent,
+                                ).colorScheme.primary.withValues(alpha: 0.1)
+                                : Theme.of(
+                                  context,
+                                ).disabledColor.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color:
+                              log.rpe != null
+                                  ? Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withValues(alpha: 0.3)
+                                  : Colors.transparent,
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'RPE',
-                          style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.outline,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'RPE',
+                            style: TextStyle(
+                              fontSize: 9,
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          log.rpe?.toString() ?? '-',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                log.rpe != null
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
+                          const SizedBox(height: 2),
+                          Text(
+                            log.rpe?.toString() ?? '-',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  log.rpe != null
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -261,184 +283,29 @@ class WorkoutSetRow extends HookWidget {
               const SizedBox(width: 12),
 
               // Completion Button
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: InkWell(
-                  onTap: onCompleted,
-                  borderRadius: BorderRadius.circular(12),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color:
-                          log.isCompleted
-                              ? Colors.green
-                              : Theme.of(
-                                context,
-                              ).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.check,
-                      size: 28,
-                      color:
-                          log.isCompleted
-                              ? Colors.white
-                              : Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+              InkWell(
+                onTap: onCompleted,
+                borderRadius: BorderRadius.circular(8),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color:
+                        log.isCompleted
+                            ? Colors.green
+                            : Colors.grey.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.check,
+                    color: log.isCompleted ? Colors.white : Colors.grey,
                   ),
                 ),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SetInputControl extends HookWidget {
-  const _SetInputControl({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-    this.enabled = true,
-    this.suffix,
-  });
-
-  final String label;
-  final int value;
-  final ValueChanged<int> onChanged;
-  final bool enabled;
-  final Widget? suffix;
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = useTextEditingController(text: value.toString());
-    final focusNode = useFocusNode();
-
-    // Update text when value changes externally
-    useEffect(() {
-      if (int.tryParse(controller.text) != value) {
-        controller.text = value.toString();
-        // Keep cursor at end if focused
-        if (focusNode.hasFocus) {
-          controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: controller.text.length),
-          );
-        }
-      }
-      return null;
-    }, [value]);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          height: 54,
-          decoration: BoxDecoration(
-            color:
-                enabled
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).disabledColor.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Theme.of(
-                context,
-              ).colorScheme.outline.withValues(alpha: 0.2),
-            ),
-          ),
-          child: Row(
-            children: [
-              _ControlButton(
-                icon: Icons.remove,
-                onPressed: enabled ? () => onChanged(value - 1) : null,
-              ),
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  enabled: enabled,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onChanged: (v) {
-                    final val = int.tryParse(v);
-                    if (val != null) {
-                      onChanged(val);
-                    }
-                  },
-                  onTap: () {
-                    if (controller.text == '0') {
-                      controller.clear();
-                    }
-                  },
-                ),
-              ),
-              _ControlButton(
-                icon: Icons.add,
-                onPressed: enabled ? () => onChanged(value + 1) : null,
-              ),
-              if (suffix != null) ...[
-                Container(
-                  width: 1,
-                  height: 24,
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.outline.withValues(alpha: 0.2),
-                ),
-                suffix!,
-              ],
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ControlButton extends StatelessWidget {
-  const _ControlButton({required this.icon, this.onPressed});
-
-  final IconData icon;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 36,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(8),
-        child: Center(
-          child: Icon(
-            icon,
-            size: 18,
-            color:
-                onPressed != null
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).disabledColor,
-          ),
-        ),
       ),
     );
   }

@@ -23,8 +23,9 @@ class NextWorkoutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color:
-                Theme.of(context).colorScheme.secondary.withValues(alpha: 0.3),
+            color: Theme.of(
+              context,
+            ).colorScheme.secondary.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -85,56 +86,6 @@ class NextWorkoutCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Icon(
-                Icons.format_list_bulleted,
-                size: 16,
-                color: Colors.white.withValues(alpha: 0.7),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '${workoutGroup.workouts.length} Exercícios',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          if (workoutGroup.workouts.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children:
-                    workoutGroup.workouts.take(5).map((workout) {
-                      return Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1),
-                          ),
-                        ),
-                        child: Text(
-                          workout.exercise?.name ?? 'Exercício',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-              ),
-            ),
-          ],
           const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,

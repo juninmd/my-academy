@@ -45,7 +45,8 @@ echo "Getting dependencies..."
 flutter pub get
 
 echo "Building web app (release)..."
-flutter build web --release --no-tree-shake-icons
+flutter clean
+flutter build web --release --base-href "/" --no-tree-shake-icons
 
 echo "Build complete!"
 ls -la build/web
