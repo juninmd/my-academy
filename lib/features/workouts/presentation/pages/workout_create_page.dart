@@ -6,6 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/workout_group_entity.dart';
+import '../../domain/utils/muscle_group_mapper.dart';
+import '../providers/favorites_provider.dart';
+import '../providers/workout_provider.dart';
 import '../providers/workout_create_provider.dart';
 import '../widgets/workout_series_dialog.dart';
 import '../widgets/workout_edit_series_dialog.dart';
@@ -201,6 +204,8 @@ class WorkoutCreatePage extends HookConsumerWidget {
   }
 }
 
+enum FilterType { all, recent }
+
 class _ExercisePickerSheet extends HookConsumerWidget {
   const _ExercisePickerSheet();
 
@@ -208,7 +213,15 @@ class _ExercisePickerSheet extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchController = useTextEditingController();
     final searchTerm = useState('');
+    final filterType = useState(FilterType.all);
+    final selectedMuscleGroup = useState<String?>(null);
+    final showFavoritesOnly = useState(false);
+
     final exercisesAsync = ref.watch(exercisesProvider);
+    final logsAsync = ref.watch(allExerciseLogsProvider);
+    final favoritesAsync = ref.watch(favoritesProvider);
+    final favorites = favoritesAsync.value ?? {};
+
     final notifier = ref.read(workoutCreateNotifierProvider.notifier);
     final draftGroup = ref.watch(workoutCreateNotifierProvider);
 
@@ -242,10 +255,96 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                 onChanged: (val) => searchTerm.value = val,
               ),
             ),
+            SizedBox(
+              height: 40,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  FilterChip(
+                    label: const Text('Todos'),
+                    selected:
+                        filterType.value == FilterType.all &&
+                        !showFavoritesOnly.value &&
+                        selectedMuscleGroup.value == null,
+                    onSelected: (selected) {
+                      if (selected) {
+                        filterType.value = FilterType.all;
+                        showFavoritesOnly.value = false;
+                        selectedMuscleGroup.value = null;
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  FilterChip(
+                    label: const Text('Recentes'),
+                    selected: filterType.value == FilterType.recent,
+                    onSelected: (selected) {
+                      filterType.value =
+                          selected ? FilterType.recent : FilterType.all;
+                      if (selected) {
+                        showFavoritesOnly.value = false;
+                        selectedMuscleGroup.value = null;
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  FilterChip(
+                    label: const Text('Favoritos'),
+                    selected: showFavoritesOnly.value,
+                    avatar: Icon(
+                      showFavoritesOnly.value
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      size: 16,
+                      color: showFavoritesOnly.value ? Colors.red : null,
+                    ),
+                    onSelected: (selected) {
+                      showFavoritesOnly.value = selected;
+                      if (selected) {
+                        filterType.value = FilterType.all;
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 1,
+                    height: 24,
+                    color: Theme.of(context).dividerColor,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                  ),
+                  ...[
+                    'Peito',
+                    'Costas',
+                    'Pernas',
+                    'Ombros',
+                    'Bíceps',
+                    'Tríceps',
+                    'Core',
+                    'Outros',
+                  ].map((group) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: FilterChip(
+                        label: Text(group),
+                        selected: selectedMuscleGroup.value == group,
+                        onSelected: (selected) {
+                          selectedMuscleGroup.value = selected ? group : null;
+                          if (selected) {
+                            filterType.value = FilterType.all;
+                          }
+                        },
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
             Expanded(
               child: exercisesAsync.when(
                 data: (exercises) {
-                  final filtered =
+                  var filtered =
                       exercises
                           .where(
                             (e) => e.name.toLowerCase().contains(
@@ -253,6 +352,34 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                             ),
                           )
                           .toList();
+
+                  final recentIds =
+                      logsAsync.value?.map((l) => l.exerciseId).toSet() ?? {};
+
+                  if (filterType.value == FilterType.recent) {
+                    filtered =
+                        filtered
+                            .where((e) => recentIds.contains(e.id))
+                            .toList();
+                  }
+
+                  if (showFavoritesOnly.value) {
+                    filtered =
+                        filtered
+                            .where((e) => favorites.contains(e.id))
+                            .toList();
+                  }
+
+                  if (selectedMuscleGroup.value != null) {
+                    filtered =
+                        filtered
+                            .where(
+                              (e) =>
+                                  MuscleGroupMapper.getMuscleGroup(e.name) ==
+                                  selectedMuscleGroup.value,
+                            )
+                            .toList();
+                  }
 
                   if (filtered.isEmpty) {
                     return const Center(

@@ -534,23 +534,68 @@ class _ExercisePlayerView extends HookConsumerWidget {
                             ),
                           ],
                         ),
-                        if (warmupSets.value.isEmpty &&
-                            (workout.series.firstOrNull?.weight ?? 0) > 0)
-                          ActionChip(
-                            avatar: const Icon(
-                              Icons.fitness_center,
-                              size: 16,
-                              color: Colors.orange,
-                            ),
-                            label: const Text('Aquecer'),
-                            onPressed: generateWarmup,
-                            backgroundColor: Colors.orange.withValues(
-                              alpha: 0.1,
-                            ),
-                            side: BorderSide(
-                              color: Colors.orange.withValues(alpha: 0.5),
-                            ),
-                          ),
+                        Row(
+                          children: [
+                            if (historyLogsAsync.value != null &&
+                                historyLogsAsync.value!.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: ActionChip(
+                                  avatar: const Icon(Icons.copy, size: 16),
+                                  label: const Text('Repetir'),
+                                  onPressed: () {
+                                    final lastLog = historyLogsAsync.value!.first;
+                                    final newLogs = Map<int, SetLogState>.from(
+                                      logs.value,
+                                    );
+                                    bool updated = false;
+
+                                    for (var entry in newLogs.entries) {
+                                      if (entry.key < lastLog.sets.length) {
+                                        final lastSet = lastLog.sets[entry.key];
+                                        if (!entry.value.isCompleted) {
+                                          newLogs[entry.key] = SetLogState(
+                                            actualReps: lastSet.reps,
+                                            actualWeight: lastSet.weight,
+                                            rpe: entry.value.rpe,
+                                            isCompleted: false,
+                                          );
+                                          updated = true;
+                                        }
+                                      }
+                                    }
+
+                                    if (updated) {
+                                      logs.value = newLogs;
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Cargas copiadas!'),
+                                          duration: Duration(seconds: 1),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            if (warmupSets.value.isEmpty &&
+                                (workout.series.firstOrNull?.weight ?? 0) > 0)
+                              ActionChip(
+                                avatar: const Icon(
+                                  Icons.fitness_center,
+                                  size: 16,
+                                  color: Colors.orange,
+                                ),
+                                label: const Text('Aquecer'),
+                                onPressed: generateWarmup,
+                                backgroundColor: Colors.orange.withValues(
+                                  alpha: 0.1,
+                                ),
+                                side: BorderSide(
+                                  color: Colors.orange.withValues(alpha: 0.5),
+                                ),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),

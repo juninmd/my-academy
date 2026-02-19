@@ -60,38 +60,61 @@ class WorkoutSetRow extends HookWidget {
                 ),
               ),
               if (lastSet != null)
-                GestureDetector(
-                  onTap:
-                      !log.isCompleted
-                          ? () {
-                            onChanged(
-                              SetLogState(
-                                actualReps: lastSet!.reps,
-                                actualWeight: lastSet!.weight,
-                                rpe: log.rpe,
-                                isCompleted: log.isCompleted,
-                              ),
-                            );
-                          }
-                          : null,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.history,
-                        size: 12,
-                        color: Theme.of(context).colorScheme.primary,
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(4),
+                    onTap:
+                        !log.isCompleted
+                            ? () {
+                              onChanged(
+                                SetLogState(
+                                  actualReps: lastSet!.reps,
+                                  actualWeight: lastSet!.weight,
+                                  rpe: log.rpe,
+                                  isCompleted: log.isCompleted,
+                                ),
+                              );
+                            }
+                            : null,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${lastSet!.reps}x ${lastSet!.weight}kg',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary
+                              .withValues(alpha: 0.3),
                         ),
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                    ],
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.history,
+                            size: 12,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '${lastSet!.reps}x ${lastSet!.weight}kg',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.copy,
+                            size: 10,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
             ],
