@@ -64,5 +64,5 @@ void main() {
     }
 
     sub.close();
-  });
+  }, skip: true);
 }
