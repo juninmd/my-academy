@@ -93,6 +93,7 @@ class AddCustomExerciseDialog extends HookConsumerWidget {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                // ignore: deprecated_member_use
                 value: selectedGroup.value,
                 decoration: const InputDecoration(
                   labelText: 'Grupo Muscular (Referência)',

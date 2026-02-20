@@ -437,8 +437,9 @@ class DashboardPage extends ConsumerWidget {
                                 // Show Last Workout if available
                                 logsAsync.when(
                                   data: (logs) {
-                                    if (logs.isEmpty)
+                                    if (logs.isEmpty) {
                                       return const SizedBox.shrink();
+                                    }
 
                                     // Find latest date
                                     final latestLog = logs.reduce(

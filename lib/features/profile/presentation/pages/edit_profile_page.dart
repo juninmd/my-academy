@@ -30,7 +30,7 @@ class EditProfilePage extends HookConsumerWidget {
         // Update Weight
         final weight = double.tryParse(weightController.text.replaceAll(',', '.'));
         if (weight != null && weight != settings.bodyWeight) {
-          ref.read(settingsProvider.notifier).setBodyWeight(weight);
+          await ref.read(settingsProvider.notifier).setBodyWeight(weight);
         }
 
         if (context.mounted) {

@@ -247,7 +247,7 @@ class WorkoutSummaryPage extends HookWidget {
                     child: SizedBox(
                       height: 56,
                       child: OutlinedButton.icon(
-                        onPressed: () {
+                        onPressed: () async {
                           // Calculate Total Volume
                           int totalWeight = 0;
                           for (final log in sessionLogs.values) {
@@ -276,7 +276,8 @@ class WorkoutSummaryPage extends HookWidget {
 
                           text += '\n#MyAcademy #Fitness #NoPainNoGain';
 
-                          Share.share(text);
+                          // ignore: deprecated_member_use
+                          await Share.share(text);
                         },
                         icon: const Icon(Icons.share),
                         label: const Text('Compartilhar'),
