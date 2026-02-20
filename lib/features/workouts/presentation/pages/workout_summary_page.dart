@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../domain/entities/session_log_entity.dart';
 
@@ -246,12 +247,37 @@ class WorkoutSummaryPage extends HookWidget {
                     child: SizedBox(
                       height: 56,
                       child: OutlinedButton.icon(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Compartilhamento em breve!'),
-                            ),
-                          );
+                        onPressed: () async {
+                          // Calculate Total Volume
+                          int totalWeight = 0;
+                          for (final log in sessionLogs.values) {
+                            for (final set in log.setLogs.values) {
+                              if (set.isCompleted) {
+                                totalWeight +=
+                                    set.actualWeight * set.actualReps;
+                              }
+                            }
+                          }
+
+                          final durationStr = _formatDuration(duration);
+                          final volumeStr = (totalWeight / 1000)
+                              .toStringAsFixed(1);
+
+                          String text = '🔥 Treino Concluído no MyAcademy!\n\n';
+                          text += '⏱️ Duração: $durationStr\n';
+                          text += '💪 Volume Total: ${volumeStr}ton\n';
+
+                          if (newRecords.isNotEmpty) {
+                            text += '\n🏆 Recordes:\n';
+                            for (final rec in newRecords) {
+                              text += '- $rec\n';
+                            }
+                          }
+
+                          text += '\n#MyAcademy #Fitness #NoPainNoGain';
+
+                          // ignore: deprecated_member_use
+                          await Share.share(text);
                         },
                         icon: const Icon(Icons.share),
                         label: const Text('Compartilhar'),

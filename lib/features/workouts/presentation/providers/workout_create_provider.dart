@@ -4,6 +4,7 @@ import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../../domain/entities/workout_series_entity.dart';
 import 'workout_provider.dart';
+import 'custom_exercise_provider.dart';
 
 part 'workout_create_provider.g.dart';
 
@@ -96,8 +97,16 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
 @riverpod
 Future<List<ExerciseEntity>> exercises(Ref ref) async {
   final repository = ref.watch(workoutRepositoryProvider);
-  final result = await repository.getExercises();
-  return result.fold((failure) => [], (list) => list);
+  final customRepository = ref.watch(customExerciseRepositoryProvider);
+
+  final apiResult = await repository.getExercises();
+  final apiExercises =
+      apiResult.fold((failure) => <ExerciseEntity>[], (list) => list);
+
+  final customExercises = await customRepository.getCustomExercises();
+
+  // Combine lists (Custom first)
+  return [...customExercises, ...apiExercises];
 }
 
 // Alias for backward compatibility
