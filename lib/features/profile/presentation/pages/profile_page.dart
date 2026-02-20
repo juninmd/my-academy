@@ -10,6 +10,7 @@ import '../../../workouts/presentation/providers/workout_create_provider.dart';
 import '../providers/settings_provider.dart';
 import '../widgets/body_composition_dialog.dart';
 import '../widgets/consistency_heatmap.dart';
+import 'edit_profile_page.dart';
 import '../widgets/personal_best_widget.dart';
 import '../widgets/muscle_split_chart.dart';
 
@@ -22,17 +23,6 @@ class ProfilePage extends HookConsumerWidget {
     final user = userState.value;
     final settings = ref.watch(settingsProvider);
     final exercisesAsync = ref.watch(exercisesProvider);
-    final isEditing = useState(false);
-
-    final nameController = useTextEditingController(text: user?.name ?? '');
-    final emailController = useTextEditingController(text: user?.email ?? '');
-
-    // For updates when user changes
-    useEffect(() {
-      nameController.text = user?.name ?? '';
-      emailController.text = user?.email ?? '';
-      return null;
-    }, [user]);
 
     if (user == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -684,49 +674,18 @@ class ProfilePage extends HookConsumerWidget {
                   Text('Conta', style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 16),
 
-                  if (isEditing.value) ...[
-                    TextField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome',
-                        prefixIcon: Icon(Icons.person_outline),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              isEditing.value = false;
-                              nameController.text = user.name ?? '';
-                            },
-                            child: const Text('Cancelar'),
-                          ),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const EditProfilePage(),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              isEditing.value = false;
-                              ref
-                                  .read(authNotifierProvider.notifier)
-                                  .updateName(nameController.text);
-                            },
-                            child: const Text('Salvar'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ] else
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        isEditing.value = true;
-                      },
-                      icon: const Icon(Icons.edit_outlined),
-                      label: const Text('Editar Nome'),
-                    ),
+                      );
+                    },
+                    icon: const Icon(Icons.edit_outlined),
+                    label: const Text('Editar Perfil'),
+                  ),
 
                   const SizedBox(height: 16),
 

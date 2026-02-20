@@ -9,6 +9,7 @@ import '../../domain/utils/muscle_group_mapper.dart';
 import '../providers/favorites_provider.dart';
 import '../providers/workout_create_provider.dart';
 import '../providers/workout_provider.dart';
+import '../widgets/add_custom_exercise_dialog.dart';
 
 enum FilterType { all, recent }
 
@@ -34,48 +35,11 @@ class ExerciseLibraryPage extends HookConsumerWidget {
         onPressed: () {
           showDialog(
             context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: const Text('Solicitar Novo Exercício'),
-                  content: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Não encontrou o que procurava? Digite o nome do exercício abaixo e nós o adicionaremos em breve.',
-                      ),
-                      SizedBox(height: 16),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Nome do Exercício',
-                          border: OutlineInputBorder(),
-                        ),
-                        autofocus: true,
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancelar'),
-                    ),
-                    FilledButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Solicitação enviada com sucesso!'),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      },
-                      child: const Text('Enviar'),
-                    ),
-                  ],
-                ),
+            builder: (context) => const AddCustomExerciseDialog(),
           );
         },
-        icon: const Icon(Icons.add_task),
-        label: const Text('Solicitar'),
+        icon: const Icon(Icons.add),
+        label: const Text('Criar Exercício'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

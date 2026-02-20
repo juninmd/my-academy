@@ -16,6 +16,7 @@ import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../../workouts/presentation/providers/workout_create_provider.dart';
 import '../../../workouts/presentation/widgets/workout_history_card.dart';
+import '../../domain/starter_plans.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -510,17 +511,238 @@ class DashboardPage extends ConsumerWidget {
                                   child: groupsAsync.when(
                                     data: (groups) {
                                       if (groups.isEmpty) {
-                                        return Center(
-                                          child: OutlinedButton.icon(
-                                            onPressed:
-                                                () => context.push(
-                                                  '/workouts/create',
+                                      return exercisesAsync.when(
+                                        data: (exercises) {
+                                          final starters =
+                                              StarterPlans.getPlans(exercises);
+                                          if (starters.isEmpty) {
+                                            return Center(
+                                              child: OutlinedButton.icon(
+                                                onPressed:
+                                                    () => context.push(
+                                                      '/workouts/create',
+                                                    ),
+                                                icon: const Icon(Icons.add),
+                                                label: const Text(
+                                                  'Criar Novo Plano',
                                                 ),
-                                            icon: const Icon(Icons.add),
-                                            label: const Text(
-                                              'Criar Novo Plano',
+                                                ),
+                                            );
+                                          }
+                                          return ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: starters.length + 1,
+                                            itemBuilder: (context, index) {
+                                              if (index == starters.length) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                        right: 16,
+                                                      ),
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1,
+                                                    child: Card(
+                                                      clipBehavior:
+                                                          Clip.antiAlias,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                      16,
+                                                                    ),
+                                                          ),
+                                                      child: InkWell(
+                                                        onTap:
+                                                            () => context.push(
+                                                              '/workouts/create',
+                                                            ),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.add,
+                                                              size: 32,
+                                                              color:
+                                                                  Theme.of(
+                                                                        context,
+                                                                      )
+                                                                      .colorScheme
+                                                                      .primary,
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 8,
+                                                            ),
+                                                            const Text(
+                                                              'Criar Novo',
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              final plan = starters[index];
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 12,
+                                                ),
+                                                child: AspectRatio(
+                                                  aspectRatio: 1.2,
+                                                  child: Card(
+                                                    elevation: 2,
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(16),
+                                                        ),
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        ref
+                                                            .read(
+                                                              workoutCreateProvider
+                                                                  .notifier,
+                                                            )
+                                                            .loadGroup(plan);
+                                                        context.push(
+                                                          '/workouts/create',
+                                                        );
+                                                      },
+                                                      child: Stack(
+                                                        fit: StackFit.expand,
+                                                        children: [
+                                                          if (plan.image !=
+                                                              null)
+                                                            Opacity(
+                                                              opacity: 0.3,
+                                                              child: Image
+                                                                  .asset(
+                                                                    plan
+                                                                        .image!,
+                                                                    fit:
+                                                                        BoxFit
+                                                                            .cover,
+                                                                    errorBuilder:
+                                                                        (
+                                                                          c,
+                                                                          e,
+                                                                          s,
+                                                                        ) =>
+                                                                            const SizedBox(),
+                                                                  ),
+                                                            ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(12),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .symmetric(
+                                                                            horizontal:
+                                                                                8,
+                                                                            vertical:
+                                                                                4,
+                                                                          ),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                        color:
+                                                                            Theme.of(
+                                                                                  context,
+                                                                                )
+                                                                                .colorScheme
+                                                                                .primary,
+                                                                        borderRadius:
+                                                                            BorderRadius
+                                                                                .circular(
+                                                                                  8,
+                                                                                ),
+                                                                      ),
+                                                                  child:
+                                                                      const Text(
+                                                                        'TEMPLATE',
+                                                                        style:
+                                                                            TextStyle(
+                                                                              fontSize:
+                                                                                  10,
+                                                                              color:
+                                                                                  Colors.white,
+                                                                              fontWeight:
+                                                                                  FontWeight.bold,
+                                                                            ),
+                                                                      ),
+                                                                ),
+                                                                const Spacer(),
+                                                                Text(
+                                                                  plan.name,
+                                                                  style: Theme.of(
+                                                                        context,
+                                                                      )
+                                                                      .textTheme
+                                                                      .titleMedium
+                                                                      ?.copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                      ),
+                                                                  maxLines: 2,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 4,
+                                                                ),
+                                                                Text(
+                                                                  '${plan.workouts.length} exercícios',
+                                                                  style:
+                                                                      Theme.of(
+                                                                            context,
+                                                                          )
+                                                                          .textTheme
+                                                                          .bodySmall,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        loading:
+                                            () => const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
                                             ),
-                                          ),
+                                        error:
+                                            (e, s) => Center(
+                                              child: OutlinedButton.icon(
+                                                onPressed:
+                                                    () => context.push(
+                                                      '/workouts/create',
+                                                    ),
+                                                icon: const Icon(Icons.add),
+                                                label: const Text(
+                                                  'Criar Novo Plano',
+                                                ),
+                                              ),
+                                            ),
                                         );
                                       }
                                       return ListView.builder(
