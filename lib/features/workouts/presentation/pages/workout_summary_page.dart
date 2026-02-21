@@ -50,122 +50,129 @@ class WorkoutSummaryPage extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 40),
-              const Icon(
-                Icons.emoji_events,
-                size: 80,
-                color: Colors.amber,
-              ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
-              const SizedBox(height: 24),
-              Text(
-                'Treino Concluído!',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ).animate().fadeIn(delay: 300.ms),
-              const SizedBox(height: 8),
-              Text(
-                'Ótimo trabalho hoje.',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
-                textAlign: TextAlign.center,
-              ).animate().fadeIn(delay: 400.ms),
-              if (newRecords.isNotEmpty) ...[
-                const SizedBox(height: 32),
-                Text(
-                  'Recordes Quebrados! 🏆',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.amber,
-                  ),
-                  textAlign: TextAlign.center,
-                ).animate().slideY(begin: 0.2, end: 0, delay: 500.ms).fadeIn(),
-                const SizedBox(height: 16),
-                ...newRecords.map(
-                  (record) => Card(
-                    color: Colors.amber.withValues(alpha: 0.1),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: BorderSide(
-                        color: Colors.amber.withValues(alpha: 0.3),
-                      ),
+              const SizedBox(height: 16),
+              // Shareable Card Section
+              RepaintBoundary(
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Theme.of(context).colorScheme.primaryContainer,
+                        Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              record,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.emoji_events,
+                        size: 64,
+                        color: Colors.amber,
+                      ).animate().scale(duration: 600.ms, curve: Curves.elasticOut),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Treino Concluído!',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
                             ),
+                        textAlign: TextAlign.center,
+                      ).animate().fadeIn(delay: 300.ms),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Ótimo trabalho hoje.',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ).animate().fadeIn(delay: 400.ms),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _SummaryStat(
+                            label: 'Tempo',
+                            value: _formatDuration(duration),
+                            icon: Icons.timer_outlined,
+                            color: Colors.blue,
+                          ),
+                          Container(width: 1, height: 40, color: Theme.of(context).dividerColor),
+                          _SummaryStat(
+                            label: 'Volume',
+                            value: '${(totalWeight / 1000).toStringAsFixed(1)}t',
+                            icon: Icons.fitness_center,
+                            color: Colors.orange,
+                          ),
+                          Container(width: 1, height: 40, color: Theme.of(context).dividerColor),
+                          _SummaryStat(
+                            label: 'Séries',
+                            value: '$totalSets',
+                            icon: Icons.list_alt,
+                            color: Colors.green,
                           ),
                         ],
-                      ),
-                    ),
-                  ).animate().scale(delay: 600.ms),
-                ),
-              ],
-              const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.orange.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Você levantou o equivalente a',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _getWeightEquivalence(totalWeight),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ).animate().scale(delay: 600.ms),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _SummaryStat(
-                    label: 'Tempo',
-                    value: _formatDuration(duration),
-                    icon: Icons.timer_outlined,
-                    color: Colors.blue,
+                      ).animate().slideY(begin: 0.2, end: 0, delay: 500.ms).fadeIn(),
+                      const SizedBox(height: 24),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Equivalente a levantar',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _getWeightEquivalence(totalWeight),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.deepOrange,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ).animate().scale(delay: 600.ms),
+
+                      if (newRecords.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        const Divider(),
+                        const SizedBox(height: 16),
+                        const Row(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             Icon(Icons.military_tech, color: Colors.amber),
+                             SizedBox(width: 8),
+                             Text('Novos Recordes', style: TextStyle(fontWeight: FontWeight.bold)),
+                           ],
+                        ),
+                        const SizedBox(height: 8),
+                        ...newRecords.take(3).map((record) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Text(record, textAlign: TextAlign.center, style: const TextStyle(fontSize: 12)),
+                        )),
+                        if (newRecords.length > 3)
+                          Text('+${newRecords.length - 3} outros', style: const TextStyle(fontSize: 10, color: Colors.grey)),
+                      ],
+                    ],
                   ),
-                  _SummaryStat(
-                    label: 'Volume',
-                    value: '${(totalWeight / 1000).toStringAsFixed(1)}t',
-                    icon: Icons.fitness_center,
-                    color: Colors.orange,
-                  ),
-                  _SummaryStat(
-                    label: 'Séries',
-                    value: '$totalSets',
-                    icon: Icons.list_alt,
-                    color: Colors.green,
-                  ),
-                ],
-              ).animate().slideY(begin: 0.2, end: 0, delay: 500.ms).fadeIn(),
+                ),
+              ),
+
               const SizedBox(height: 48),
 
               // Intensity Slider
@@ -175,72 +182,40 @@ class WorkoutSummaryPage extends HookWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  const Text('😎'),
-                  Expanded(
-                    child: Slider(
-                      value: intensity.value,
-                      min: 1,
-                      max: 5,
-                      divisions: 4,
-                      label:
-                          [
-                            'Fácil',
-                            'Moderado',
-                            'Bom',
-                            'Intenso',
-                            'Insano',
-                          ][intensity.value.toInt() - 1],
-                      onChanged: (v) => intensity.value = v,
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                   color: Theme.of(context).cardColor,
+                   borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text('😎', style: TextStyle(fontSize: 20)),
+                        Expanded(
+                          child: Slider(
+                            value: intensity.value,
+                            min: 1,
+                            max: 5,
+                            divisions: 4,
+                            label: ['Fácil', 'Moderado', 'Bom', 'Intenso', 'Insano'][intensity.value.toInt() - 1],
+                            onChanged: (v) => intensity.value = v,
+                          ),
+                        ),
+                        const Text('🥵', style: TextStyle(fontSize: 20)),
+                      ],
                     ),
-                  ),
-                  const Text('🥵'),
-                ],
-              ),
-              Center(
-                child: Text(
-                  [
-                    'Fácil',
-                    'Moderado',
-                    'Bom',
-                    'Intenso',
-                    'Insano',
-                  ][intensity.value.toInt() - 1],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                    Text(
+                        ['Fácil', 'Moderado', 'Bom', 'Intenso', 'Insano'][intensity.value.toInt() - 1],
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary),
+                      ),
+                  ],
                 ),
               ),
+
               const SizedBox(height: 48),
 
-              Text(
-                'Resumo dos Exercícios',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16),
-              ...sessionLogs.values.map((log) {
-                // Note: Ideally we would have the Exercise Name passed here,
-                // but for now we might only have ID.
-                // In a real app we'd pass a rich object or fetch it.
-                // For this demo, we'll genericize it or assume we passed names.
-                // Refactoring WorkoutPlayerPage to pass names is complex,
-                // so we will just show "Exercício" or ID if name unavailable.
-                // Wait, I can't easily get the name here without passing it.
-                // I'll update ExerciseSessionLog to include name.
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: ListTile(
-                    leading: const CircleAvatar(child: Icon(Icons.check)),
-                    title: Text(
-                      log.exerciseName ?? 'Exercício ${log.exerciseId}',
-                    ),
-                    subtitle: Text('${log.setLogs.length} séries concluídas'),
-                  ),
-                );
-              }),
-              const SizedBox(height: 40),
               Row(
                 children: [
                   Expanded(
@@ -248,24 +223,12 @@ class WorkoutSummaryPage extends HookWidget {
                       height: 56,
                       child: OutlinedButton.icon(
                         onPressed: () async {
-                          // Calculate Total Volume
-                          int totalWeight = 0;
-                          for (final log in sessionLogs.values) {
-                            for (final set in log.setLogs.values) {
-                              if (set.isCompleted) {
-                                totalWeight +=
-                                    set.actualWeight * set.actualReps;
-                              }
-                            }
-                          }
-
                           final durationStr = _formatDuration(duration);
-                          final volumeStr = (totalWeight / 1000)
-                              .toStringAsFixed(1);
-
+                          final volumeStr = (totalWeight / 1000).toStringAsFixed(1);
                           String text = '🔥 Treino Concluído no MyAcademy!\n\n';
                           text += '⏱️ Duração: $durationStr\n';
                           text += '💪 Volume Total: ${volumeStr}ton\n';
+                          text += '🏋️ Equivalente a: ${_getWeightEquivalence(totalWeight)}\n';
 
                           if (newRecords.isNotEmpty) {
                             text += '\n🏆 Recordes:\n';
@@ -273,9 +236,7 @@ class WorkoutSummaryPage extends HookWidget {
                               text += '- $rec\n';
                             }
                           }
-
                           text += '\n#MyAcademy #Fitness #NoPainNoGain';
-
                           // ignore: deprecated_member_use
                           await Share.share(text);
                         },
@@ -290,15 +251,19 @@ class WorkoutSummaryPage extends HookWidget {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate back to home, clearing stack
                           context.go('/home');
                         },
-                        child: const Text('Início'),
+                        style: ElevatedButton.styleFrom(
+                           backgroundColor: Theme.of(context).colorScheme.primary,
+                           foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Concluir', style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -330,20 +295,13 @@ class _SummaryStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color, size: 28),
-        ),
-        const SizedBox(height: 8),
+        Icon(icon, color: color, size: 24),
+        const SizedBox(height: 4),
         Text(
           value,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(label, style: Theme.of(context).textTheme.labelSmall),
       ],
     );
   }

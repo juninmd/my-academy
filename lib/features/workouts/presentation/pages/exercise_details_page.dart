@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../domain/entities/exercise_entity.dart';
@@ -11,7 +12,7 @@ import '../providers/workout_provider.dart';
 import '../widgets/progress_chart.dart';
 import '../widgets/exercise_personal_records_widget.dart';
 
-class ExerciseDetailsPage extends ConsumerWidget {
+class ExerciseDetailsPage extends HookConsumerWidget {
   const ExerciseDetailsPage({required this.exercise, super.key});
 
   final ExerciseEntity exercise;
@@ -19,6 +20,7 @@ class ExerciseDetailsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final logsAsync = ref.watch(exerciseLogsProvider(exercise.id));
+    final chartMetric = useState(ChartMetric.oneRM);
 
     return Scaffold(
       body: CustomScrollView(
@@ -27,85 +29,50 @@ class ExerciseDetailsPage extends ConsumerWidget {
             expandedHeight: 250,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(exercise.name),
-              background:
-                  exercise.image != null
-                      ? CachedNetworkImage(
-                        imageUrl: exercise.image!,
-                        fit: BoxFit.cover,
-                        color: Colors.black45,
-                        colorBlendMode: BlendMode.darken,
-                      )
-                      : Container(color: Theme.of(context).primaryColor),
-            ),
-          ),
-          // Personal Records Section
-          SliverToBoxAdapter(
-            child: logsAsync.when(
-              data: (logs) => ExercisePersonalRecordsWidget(logs: logs),
-              loading: () => const SizedBox.shrink(),
-              error: (e, s) => const SizedBox.shrink(),
+              title: Text(
+                exercise.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  shadows: [Shadow(blurRadius: 10, color: Colors.black)],
+                ),
+              ),
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  if (exercise.image != null)
+                    CachedNetworkImage(
+                      imageUrl: exercise.image!,
+                      fit: BoxFit.cover,
+                    )
+                  else
+                    Container(color: Theme.of(context).primaryColor),
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.black87],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
+          // Personal Records Section
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (exercise.tips.isNotEmpty) ...[
-                    Text(
-                      'Dicas',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    ...exercise.tips.map(
-                      (tip) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.check_circle_outline,
-                              size: 20,
-                              color: Colors.green,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(child: Text(tip)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                  if (exercise.mistakes.isNotEmpty) ...[
-                    Text(
-                      'Erros Comuns',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    ...exercise.mistakes.map(
-                      (mistake) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.error_outline,
-                              size: 20,
-                              color: Colors.redAccent,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(child: Text(mistake)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                ],
-              ),
+            child: logsAsync.when(
+              data: (logs) {
+                if (logs.isEmpty) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: ExercisePersonalRecordsWidget(logs: logs),
+                );
+              },
+              loading: () => const SizedBox(height: 100),
+              error: (e, s) => const SizedBox.shrink(),
             ),
           ),
 
@@ -117,18 +84,50 @@ class ExerciseDetailsPage extends ConsumerWidget {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16.0,
-                    vertical: 8.0,
+                    vertical: 24.0,
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        'Progresso 1RM Estimado',
-                        style: Theme.of(context).textTheme.titleLarge,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Progresso',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          SegmentedButton<ChartMetric>(
+                            segments: const [
+                              ButtonSegment(
+                                value: ChartMetric.oneRM,
+                                label: Text('1RM', style: TextStyle(fontSize: 12)),
+                                icon: Icon(Icons.show_chart, size: 16),
+                              ),
+                              ButtonSegment(
+                                value: ChartMetric.volume,
+                                label: Text('Volume', style: TextStyle(fontSize: 12)),
+                                icon: Icon(Icons.bar_chart, size: 16),
+                              ),
+                            ],
+                            selected: {chartMetric.value},
+                            onSelectionChanged: (Set<ChartMetric> newSelection) {
+                              chartMetric.value = newSelection.first;
+                            },
+                            style: ButtonStyle(
+                              visualDensity: VisualDensity.compact,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
-                      SizedBox(height: 200, child: ProgressChart(logs: logs)),
-                      const SizedBox(height: 24),
+                      SizedBox(
+                        height: 220,
+                        child: ProgressChart(
+                          logs: logs,
+                          metric: chartMetric.value,
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -138,11 +137,42 @@ class ExerciseDetailsPage extends ConsumerWidget {
             ),
           ),
 
+          // Tips & Mistakes
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (exercise.tips.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    _InfoSection(
+                      title: 'Dicas de Execução',
+                      items: exercise.tips,
+                      icon: Icons.lightbulb_outline,
+                      color: Colors.amber,
+                    ),
+                  ],
+                  if (exercise.mistakes.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    _InfoSection(
+                      title: 'Erros Comuns',
+                      items: exercise.mistakes,
+                      icon: Icons.error_outline,
+                      color: Colors.redAccent,
+                    ),
+                  ],
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
+          ),
+
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                'Histórico',
+                'Histórico de Treinos',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -153,14 +183,28 @@ class ExerciseDetailsPage extends ConsumerWidget {
             data: (logs) {
               if (logs.isEmpty) {
                 return const SliverFillRemaining(
-                  child: Center(child: Text('Nenhum registro encontrado.')),
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.history, size: 64, color: Colors.grey),
+                        SizedBox(height: 16),
+                        Text('Nenhum registro encontrado.'),
+                      ],
+                    ),
+                  ),
                 );
               }
+              // Sort logs descending (newest first)
+              final sortedLogs = List<ExerciseLogEntity>.from(logs)
+                ..sort((a, b) => b.date.compareTo(a.date));
+
               return SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-                  final log = logs[index];
+                  final log = sortedLogs[index];
                   return _LogCard(log: log);
-                }, childCount: logs.length),
+                }, childCount: sortedLogs.length),
               );
             },
             loading:
@@ -181,6 +225,69 @@ class ExerciseDetailsPage extends ConsumerWidget {
   }
 }
 
+class _InfoSection extends StatelessWidget {
+  const _InfoSection({
+    required this.title,
+    required this.items,
+    required this.icon,
+    required this.color,
+  });
+
+  final String title;
+  final List<String> items;
+  final IconData icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.05),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...items.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('• ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _LogCard extends StatelessWidget {
   const _LogCard({required this.log});
   final ExerciseLogEntity log;
@@ -190,6 +297,7 @@ class _LogCard extends StatelessWidget {
     // Find best set (highest 1RM)
     SetLogEntity? bestSet;
     double max1RM = 0;
+    double totalVolume = 0;
 
     for (final set in log.sets) {
       final rm = OneRepMaxCalculator.calculateEpley(
@@ -200,73 +308,168 @@ class _LogCard extends StatelessWidget {
         max1RM = rm;
         bestSet = set;
       }
+      totalVolume += set.weight * set.reps;
     }
 
     final dateFormat = DateFormat('dd/MM/yyyy • HH:mm');
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              dateFormat.format(log.date),
-              style: Theme.of(context).textTheme.bodySmall,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
+        ),
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          title: Text(
+            dateFormat.format(log.date),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 8),
-            if (bestSet != null)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              children: [
+                _StatBadge(
+                  icon: Icons.layers,
+                  text: '${log.sets.length} séries',
+                  color: Colors.blue,
+                ),
+                const SizedBox(width: 12),
+                if (bestSet != null)
+                  _StatBadge(
+                    icon: Icons.star,
+                    text: '${bestSet.weight}kg x ${bestSet.reps}',
+                    color: Colors.amber,
+                  ),
+                const SizedBox(width: 12),
+                _StatBadge(
+                  icon: Icons.fitness_center,
+                  text: '${(totalVolume/1000).toStringAsFixed(1)}t',
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+          ),
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Melhor Série',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  const Divider(),
+                  ...log.sets.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final set = entry.value;
+                    final isBest = set == bestSet;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 24,
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(
+                                color: Theme.of(context).disabledColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  '${set.weight} kg',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 8),
+                                const Text('x'),
+                                const SizedBox(width: 8),
+                                Text('${set.reps} reps'),
+                              ],
+                            ),
+                          ),
+                          if (isBest)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.amber.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: const Text(
+                                'PR',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                      Text(
-                        '${bestSet.weight.toStringAsFixed(1)}kg x ${bestSet.reps}',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                    );
+                  }),
+                  if (log.notes != null && log.notes!.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainer,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Notas',
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(log.notes!),
+                        ],
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.secondaryContainer.withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      children: [
-                        const Text('1RM Est.'),
-                        Text(
-                          '${max1RM.toStringAsFixed(1)}kg',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ],
               ),
-            if (log.notes != null && log.notes!.isNotEmpty) ...[
-              const Divider(height: 24),
-              Text('Notas:', style: Theme.of(context).textTheme.labelSmall),
-              Text(log.notes!),
-            ],
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _StatBadge extends StatelessWidget {
+  const _StatBadge({
+    required this.icon,
+    required this.text,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: color),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
     );
   }
 }

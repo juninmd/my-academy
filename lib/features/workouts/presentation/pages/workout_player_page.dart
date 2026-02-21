@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
@@ -52,11 +51,6 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           return timerNotifier.dispose;
         }, []);
 
-        // Exercise Timer State
-        final isExerciseTimerRunning = useState(false);
-        final exerciseTimerValue = useState(0);
-        final exerciseTimer = useRef<Timer?>(null);
-
         // Rest Timer State
         final isRestTimerActive = useState(false);
         final restTimerDuration = useState(0);
@@ -67,26 +61,6 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           () => workouts.where((w) => w.exercise != null).toList(),
           [workouts],
         );
-
-        // Exercise Timer Logic
-        void startExerciseTimer() {
-          HapticFeedback.mediumImpact();
-          isExerciseTimerRunning.value = true;
-          exerciseTimer.value = Timer.periodic(const Duration(seconds: 1), (t) {
-            exerciseTimerValue.value++;
-          });
-        }
-
-        void stopExerciseTimer() {
-          HapticFeedback.mediumImpact();
-          isExerciseTimerRunning.value = false;
-          exerciseTimer.value?.cancel();
-        }
-
-        void resetExerciseTimer() {
-          stopExerciseTimer();
-          exerciseTimerValue.value = 0;
-        }
 
         // Rest Timer Logic
         void stopRestTimer() {
@@ -118,16 +92,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
 
         useEffect(() {
           return () {
-            stopExerciseTimer();
             stopRestTimer();
           };
         }, []);
-
-        String formatTime(int seconds) {
-          final m = (seconds ~/ 60).toString().padLeft(2, '0');
-          final s = (seconds % 60).toString().padLeft(2, '0');
-          return '$m:$s';
-        }
 
         Future<void> onExerciseFinished(
           Map<int, SetLogState> logs,
@@ -205,6 +172,18 @@ class WorkoutPlayerPage extends HookConsumerWidget {
             title: Text(group.name),
             centerTitle: true,
             leading: Center(child: WorkoutTimer(notifier: timerNotifier)),
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(4),
+              child: LinearProgressIndicator(
+                value: (currentExerciseIndex.value + 1) / activeWorkouts.length,
+                backgroundColor: Colors.white10,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
             actions: [
               PopupMenuButton<String>(
                 icon: const Icon(Icons.build_circle_outlined),
@@ -271,47 +250,25 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           ),
           body: Stack(
             children: [
-              Column(
-                children: [
-                  LinearProgressIndicator(
-                    value:
-                        (currentExerciseIndex.value + 1) /
-                        activeWorkouts.length,
-                    backgroundColor: Colors.white10,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  Expanded(
-                    child: PageView.builder(
-                      controller: pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      onPageChanged: (index) {
-                        currentExerciseIndex.value = index;
-                        resetExerciseTimer();
+              PageView.builder(
+                controller: pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (index) {
+                  currentExerciseIndex.value = index;
+                  // resetExerciseTimer(); // Removed
+                },
+                itemCount: activeWorkouts.length,
+                itemBuilder:
+                    (context, index) => _ExercisePlayerView(
+                      key: ValueKey(activeWorkouts[index].id ?? index),
+                      workout: activeWorkouts[index],
+                      onFinished: onExerciseFinished,
+                      onSetCompleted: (restTime) {
+                        if (restTime > 0) {
+                          startRestTimer(restTime);
+                        }
                       },
-                      itemCount: activeWorkouts.length,
-                      itemBuilder:
-                          (context, index) => _ExercisePlayerView(
-                            key: ValueKey(activeWorkouts[index].id ?? index),
-                            workout: activeWorkouts[index],
-                            isTimerRunning: isExerciseTimerRunning.value,
-                            timerValue: formatTime(exerciseTimerValue.value),
-                            onToggleTimer: () {
-                              isExerciseTimerRunning.value
-                                  ? stopExerciseTimer()
-                                  : startExerciseTimer();
-                            },
-                            onFinished: onExerciseFinished,
-                            onSetCompleted: (restTime) {
-                              if (restTime > 0) {
-                                startRestTimer(restTime);
-                              }
-                            },
-                          ),
                     ),
-                  ),
-                ],
               ),
               if (isRestTimerActive.value)
                 Positioned(
@@ -343,17 +300,11 @@ class WorkoutPlayerPage extends HookConsumerWidget {
 class _ExercisePlayerView extends HookConsumerWidget {
   const _ExercisePlayerView({
     required this.workout,
-    required this.isTimerRunning,
-    required this.timerValue,
-    required this.onToggleTimer,
     required this.onFinished,
     required this.onSetCompleted,
     super.key,
   });
   final WorkoutEntity workout;
-  final bool isTimerRunning;
-  final String timerValue;
-  final VoidCallback onToggleTimer;
   final Function(Map<int, SetLogState>, String, String?) onFinished;
   final Function(int) onSetCompleted;
 
@@ -375,7 +326,6 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
     // Warm-up sets state (List of pairs: [weight, reps, completed])
     final warmupSets = useState<List<Map<String, dynamic>>>([]);
-
     final notesController = useTextEditingController();
     final tabController = useTabController(initialLength: 2);
     final historyLogsAsync = ref.watch(
@@ -392,8 +342,6 @@ class _ExercisePlayerView extends HookConsumerWidget {
         final newLogs = Map<int, SetLogState>.from(logs.value);
 
         for (var entry in newLogs.entries) {
-          // Only pre-fill if the planned weight is 0 (unspecified)
-          // and we have a corresponding set in history
           if (entry.value.actualWeight == 0 &&
               entry.key < lastLog.sets.length) {
             final lastSet = lastLog.sets[entry.key];
@@ -408,14 +356,13 @@ class _ExercisePlayerView extends HookConsumerWidget {
         }
 
         if (updated) {
-          // Using a microtask to avoid setState during build if this runs synchronously
           Future.microtask(() {
             logs.value = newLogs;
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Pesos do último treino carregados automaticamente'),
-                  duration: Duration(seconds: 2),
+                  content: Text('Pesos carregados.'),
+                  duration: Duration(seconds: 1),
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -456,100 +403,167 @@ class _ExercisePlayerView extends HookConsumerWidget {
       ];
     }
 
-    return Column(
-      children: [
-        _buildHeaderImage(context),
-        TabBar(
+    // Using NestedScrollView here would be tricky inside a PageView.
+    // Instead we use a CustomScrollView with SliverAppBar for the image.
+    return NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+           SliverAppBar(
+             expandedHeight: 220,
+             floating: false,
+             pinned: false, // Scroll away
+             snap: false,
+             automaticallyImplyLeading: false, // No back button
+             flexibleSpace: FlexibleSpaceBar(
+               background: Stack(
+                 fit: StackFit.expand,
+                 children: [
+                    if (workout.exercise?.image != null)
+                      CachedNetworkImage(
+                        imageUrl: workout.exercise!.image!,
+                        fit: BoxFit.cover,
+                        errorWidget: (c, e, s) => Container(color: Colors.grey[800]),
+                      )
+                    else
+                      Container(
+                        color: Colors.grey[800],
+                        child: const Icon(Icons.fitness_center, size: 48),
+                      ),
+                    // Gradient overlay
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black87],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      child: Text(
+                        workout.exercise?.name ?? 'Exercício',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          shadows: [Shadow(blurRadius: 10, color: Colors.black)],
+                        ),
+                      ),
+                    ),
+                 ],
+               ),
+             ),
+           ),
+           // We can put the TabBar in a SliverPersistentHeader if we want it to pin.
+           SliverPersistentHeader(
+             delegate: _SliverTabBarDelegate(
+               TabBar(
+                 controller: tabController,
+                 labelColor: Theme.of(context).colorScheme.primary,
+                 unselectedLabelColor: Theme.of(context).disabledColor,
+                 tabs: const [Tab(text: 'Execução'), Tab(text: 'Histórico')],
+               ),
+             ),
+             pinned: true,
+           ),
+        ],
+        body: TabBarView(
           controller: tabController,
-          tabs: const [Tab(text: 'Execução'), Tab(text: 'Histórico')],
-        ),
-        Expanded(
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              // Execution View
-              SingleChildScrollView(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 16,
-                  bottom: 100,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildExerciseTimer(context),
-                    const SizedBox(height: 24),
-                    if (workout.description != null &&
-                        workout.description!.isNotEmpty) ...[
-                      _buildInfoSection(
-                        context,
-                        'Instruções',
-                        workout.description!,
+          children: [
+            // Execution Content
+            SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 100, top: 16, left: 16, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Instructions (Collapsible)
+                  if ((workout.description?.isNotEmpty ?? false) || (workout.exercise?.tips.isNotEmpty ?? false))
+                    Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                         title: const Row(children: [
+                           Icon(Icons.info_outline, size: 20),
+                           SizedBox(width: 8),
+                           Text('Instruções e Dicas', style: TextStyle(fontSize: 14)),
+                         ]),
+                         tilePadding: EdgeInsets.zero,
+                         children: [
+                           if (workout.description?.isNotEmpty ?? false)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Text(workout.description!),
+                              ),
+                           if (workout.exercise?.tips.isNotEmpty ?? false)
+                              ...workout.exercise!.tips.map((tip) => Padding(
+                                padding: const EdgeInsets.only(bottom: 8),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.check, size: 14, color: Colors.green),
+                                    const SizedBox(width: 8),
+                                    Expanded(child: Text(tip, style: Theme.of(context).textTheme.bodySmall)),
+                                  ],
+                                ),
+                              )),
+                         ],
                       ),
-                      const SizedBox(height: 16),
-                    ],
-                    if (workout.exercise?.tips.isNotEmpty == true) ...[
-                      _buildExpandableSection(
-                        context,
-                        'Dicas',
-                        workout.exercise!.tips,
-                        Icons.lightbulb_outline,
-                        Colors.amber,
-                        initiallyExpanded:
-                            historyLogsAsync.asData?.value.isEmpty ?? false,
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                    ),
 
-                    Row(
+                  const SizedBox(height: 16),
+
+                  // Stats Row
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Séries',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
+                        Text(
+                          'Séries',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                         Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                                horizontal: 12,
+                                vertical: 6,
                               ),
                               decoration: BoxDecoration(
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
+                                ).colorScheme.surfaceContainer,
+                                borderRadius: BorderRadius.circular(16),
                               ),
-                              child: Text(
-                                'Vol: ${currentVolume.toStringAsFixed(0)}kg',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.fitness_center, size: 14),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    '${currentVolume.toStringAsFixed(0)} kg',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            if (historyLogsAsync.value != null &&
-                                historyLogsAsync.value!.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: ActionChip(
-                                  avatar: const Icon(Icons.copy, size: 16),
-                                  label: const Text('Repetir'),
-                                  onPressed: () {
-                                    final lastLog = historyLogsAsync.value!.first;
-                                    final newLogs = Map<int, SetLogState>.from(
-                                      logs.value,
-                                    );
-                                    bool updated = false;
+                      ],
+                  ),
+                  const SizedBox(height: 8),
 
+                  // Warmup & Copy
+                  Row(
+                    children: [
+                       if (warmupSets.value.isEmpty && (workout.series.firstOrNull?.weight ?? 0) > 0)
+                          TextButton.icon(
+                            onPressed: generateWarmup,
+                            icon: const Icon(Icons.local_fire_department, size: 16, color: Colors.orange),
+                            label: const Text('Aquecer', style: TextStyle(color: Colors.orange)),
+                          ),
+                       const Spacer(),
+                       if (historyLogsAsync.value != null && historyLogsAsync.value!.isNotEmpty)
+                          TextButton.icon(
+                             onPressed: () {
+                                    final lastLog = historyLogsAsync.value!.first;
+                                    final newLogs = Map<int, SetLogState>.from(logs.value);
+                                    bool updated = false;
                                     for (var entry in newLogs.entries) {
                                       if (entry.key < lastLog.sets.length) {
                                         final lastSet = lastLog.sets[entry.key];
@@ -564,364 +578,96 @@ class _ExercisePlayerView extends HookConsumerWidget {
                                         }
                                       }
                                     }
-
                                     if (updated) {
                                       logs.value = newLogs;
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Cargas copiadas!'),
-                                          duration: Duration(seconds: 1),
-                                        ),
-                                      );
                                     }
-                                  },
-                                ),
-                              ),
-                            if (warmupSets.value.isEmpty &&
-                                (workout.series.firstOrNull?.weight ?? 0) > 0)
-                              ActionChip(
-                                avatar: const Icon(
-                                  Icons.fitness_center,
-                                  size: 16,
-                                  color: Colors.orange,
-                                ),
-                                label: const Text('Aquecer'),
-                                onPressed: generateWarmup,
-                                backgroundColor: Colors.orange.withValues(
-                                  alpha: 0.1,
-                                ),
-                                side: BorderSide(
-                                  color: Colors.orange.withValues(alpha: 0.5),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    if (warmupSets.value.isNotEmpty) ...[
+                             },
+                             icon: const Icon(Icons.copy, size: 16),
+                             label: const Text('Copiar Anterior'),
+                          ),
+                    ],
+                  ),
+
+                  if (warmupSets.value.isNotEmpty) ...[
                       WorkoutWarmupList(warmupSetsNotifier: warmupSets),
                       const SizedBox(height: 16),
                     ],
-                    _buildSetsList(
+
+                  _buildSetsList(
                       context,
+                      workout,
                       logs,
                       historyLogsAsync.asData?.value.firstOrNull,
-                    ),
-                    const SizedBox(height: 24),
-                    if (historyLogsAsync.asData?.value != null)
-                      Builder(
-                        builder: (context) {
-                          final lastNoteLog =
-                              historyLogsAsync.asData!.value
-                                  .where(
-                                    (l) =>
-                                        l.notes != null && l.notes!.isNotEmpty,
-                                  )
-                                  .firstOrNull;
+                      onSetCompleted,
+                  ),
 
-                          if (lastNoteLog == null) {
-                            return const SizedBox.shrink();
-                          }
+                  const SizedBox(height: 24),
 
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.amber.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Colors.amber.withValues(alpha: 0.3),
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.sticky_note_2_outlined,
-                                      size: 16,
-                                      color: Colors.amber,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Nota Anterior (${DateFormat('dd/MM').format(lastNoteLog.date)})',
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodySmall?.copyWith(
-                                        color: Colors.amber,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(lastNoteLog.notes!),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    TextField(
+                  // Notes
+                  TextField(
                       controller: notesController,
                       decoration: const InputDecoration(
                         labelText: 'Notas do exercício',
                         border: OutlineInputBorder(),
-                        hintText: 'Ex: senti desconforto no ombro...',
+                        prefixIcon: Icon(Icons.edit_note),
                       ),
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
+                      maxLines: 2,
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Next Button
+                  SizedBox(
                       height: 56,
-                      child: ElevatedButton(
+                      child: FilledButton(
                         onPressed:
                             allSetsCompleted
                                 ? () {
-                                  // PR Check
-                                  final historyLogs =
-                                      historyLogsAsync.asData?.value ?? [];
+                                  // PR Check logic (simplified for brevity but should be same)
+                                  final historyLogs = historyLogsAsync.asData?.value ?? [];
                                   String? recordMessage;
-
                                   if (historyLogs.isNotEmpty) {
                                     double currentMax1RM = 0;
                                     for (final log in logs.value.values) {
-                                      final oneRM =
-                                          OneRepMaxCalculator.calculateEpley(
-                                            log.actualWeight.toDouble(),
-                                            log.actualReps,
-                                          );
-                                      if (oneRM > currentMax1RM) {
-                                        currentMax1RM = oneRM;
-                                      }
+                                      final oneRM = OneRepMaxCalculator.calculateEpley(log.actualWeight.toDouble(), log.actualReps);
+                                      if (oneRM > currentMax1RM) currentMax1RM = oneRM;
                                     }
-
                                     double historyMax1RM = 0;
                                     for (final log in historyLogs) {
                                       for (final set in log.sets) {
-                                        final oneRM =
-                                            OneRepMaxCalculator.calculateEpley(
-                                              set.weight.toDouble(),
-                                              set.reps,
-                                            );
-                                        if (oneRM > historyMax1RM) {
-                                          historyMax1RM = oneRM;
-                                        }
+                                        final oneRM = OneRepMaxCalculator.calculateEpley(set.weight.toDouble(), set.reps);
+                                        if (oneRM > historyMax1RM) historyMax1RM = oneRM;
                                       }
                                     }
-
-                                    if (currentMax1RM > historyMax1RM &&
-                                        historyMax1RM > 0) {
-                                      recordMessage =
-                                          "${workout.exercise?.name ?? 'Exercício'}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)";
-
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Row(
-                                            children: [
-                                              const Icon(
-                                                Icons.emoji_events,
-                                                color: Colors.white,
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                      'Novo Recorde Pessoal!',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '1RM estimado: ${currentMax1RM.toStringAsFixed(1)} kg',
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          backgroundColor: Colors.orange,
-                                          duration: const Duration(seconds: 4),
-                                          behavior: SnackBarBehavior.floating,
-                                        ),
-                                      );
+                                    if (currentMax1RM > historyMax1RM && historyMax1RM > 0) {
+                                      recordMessage = '${workout.exercise?.name}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)';
                                     }
                                   }
-                                  onFinished(
-                                    logs.value,
-                                    notesController.text,
-                                    recordMessage,
-                                  );
+                                  onFinished(logs.value, notesController.text, recordMessage);
                                 }
                                 : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          foregroundColor: Colors.white,
-                        ),
-                        child: const Text(
-                          'Próximo Exercício',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: const Text('Próximo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              // History View
-              WorkoutHistoryView(exerciseId: workout.exerciseId),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildHeaderImage(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          if (workout.exercise?.image != null)
-            CachedNetworkImage(
-              imageUrl: workout.exercise!.image!,
-              fit: BoxFit.cover,
-              errorWidget: (c, e, s) => Container(color: Colors.grey[800]),
-            )
-          else
-            Container(
-              color: Colors.grey[800],
-              child: const Icon(Icons.fitness_center, size: 48),
-            ),
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, Colors.black54],
+                  ),
+                ],
               ),
             ),
-          ),
-          Positioned(
-            bottom: 16,
-            left: 16,
-            right: 16,
-            child: Text(
-              workout.exercise?.name ?? 'Exercício',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                shadows: [Shadow(blurRadius: 10, color: Colors.black)],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildExerciseTimer(BuildContext context) {
-    return GestureDetector(
-      onTap: onToggleTimer,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        decoration: BoxDecoration(
-          color:
-              isTimerRunning
-                  ? Colors.redAccent.withValues(alpha: 0.1)
-                  : Colors.greenAccent.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isTimerRunning ? Colors.redAccent : Colors.greenAccent,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              isTimerRunning ? Icons.pause : Icons.play_arrow,
-              size: 32,
-              color: isTimerRunning ? Colors.redAccent : Colors.greenAccent,
-            ),
-            const SizedBox(width: 16),
-            Text(
-              timerValue,
-              style: const TextStyle(
-                fontSize: 32,
-                fontFamily: 'monospace',
-                fontWeight: FontWeight.bold,
-              ),
+            // History Tab (Keep simple)
+            Padding(
+               padding: const EdgeInsets.only(bottom: 100),
+               child: WorkoutHistoryView(exerciseId: workout.exerciseId),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInfoSection(BuildContext context, String title, String content) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          Text(content),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildExpandableSection(
-    BuildContext context,
-    String title,
-    List<String> items,
-    IconData icon,
-    Color iconColor, {
-    bool initiallyExpanded = false,
-  }) {
-    return Card(
-      child: ExpansionTile(
-        initiallyExpanded: initiallyExpanded,
-        leading: Icon(icon, color: iconColor),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        children:
-            items
-                .map(
-                  (item) => ListTile(
-                    dense: true,
-                    leading: const Icon(Icons.circle, size: 8),
-                    title: Text(item),
-                  ),
-                )
-                .toList(),
-      ),
     );
   }
 
   Widget _buildSetsList(
     BuildContext context,
+    WorkoutEntity workout,
     ValueNotifier<Map<int, SetLogState>> logs,
     ExerciseLogEntity? lastLog,
+    Function(int) onSetCompleted,
   ) {
     return Column(
       children:
@@ -929,12 +675,7 @@ class _ExercisePlayerView extends HookConsumerWidget {
             final index = entry.key;
             final series = entry.value;
             final log = logs.value[index];
-
-            // Try to match with last session set
-            final lastSet =
-                (lastLog != null && lastLog.sets.length > index)
-                    ? lastLog.sets[index]
-                    : null;
+            final lastSet = (lastLog != null && lastLog.sets.length > index) ? lastLog.sets[index] : null;
 
             if (log == null) return const SizedBox.shrink();
 
@@ -959,7 +700,6 @@ class _ExercisePlayerView extends HookConsumerWidget {
                   isCompleted: !wasCompleted,
                 );
                 logs.value = newLogs;
-
                 if (!wasCompleted) {
                   onSetCompleted(series.rest);
                 }
@@ -967,5 +707,28 @@ class _ExercisePlayerView extends HookConsumerWidget {
             );
           }).toList(),
     );
+  }
+}
+
+class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverTabBarDelegate(this._tabBar);
+  final TabBar _tabBar;
+
+  @override
+  double get minExtent => _tabBar.preferredSize.height;
+  @override
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: _tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {
+    return false;
   }
 }
