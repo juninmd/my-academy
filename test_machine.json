@@ -1,0 +1,774 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 91.0.0 (95.0.0 available)
+  analyzer 8.4.1 (10.1.0 available)
+  analyzer_buffer 0.1.11 (0.3.1 available)
+  build_runner 2.10.5 (2.11.1 available)
+  built_value 8.12.3 (8.12.4 available)
+  characters 1.4.0 (1.4.1 available)
+  dart_style 3.1.3 (3.1.5 available)
+  ffi 2.1.5 (2.2.0 available)
+  fl_chart 0.63.0 (1.1.1 available)
+  flutter_riverpod 3.1.0 (3.2.1 available)
+  go_router 17.0.1 (17.1.0 available)
+  google_fonts 6.3.3 (8.0.2 available)
+  google_sign_in 6.3.0 (7.2.0 available)
+  google_sign_in_android 6.2.1 (7.2.9 available)
+  google_sign_in_ios 5.9.0 (6.3.0 available)
+  google_sign_in_platform_interface 2.5.0 (3.1.0 available)
+  google_sign_in_web 0.12.4+4 (1.1.2 available)
+  hooks 1.0.0 (1.0.1 available)
+  hooks_riverpod 3.1.0 (3.2.1 available)
+  json_annotation 4.10.0 (4.11.0 available)
+  matcher 0.12.17 (0.12.18 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.17.0 (1.18.1 available)
+  objective_c 9.2.5 (9.3.0 available)
+  petitparser 7.0.1 (7.0.2 available)
+  riverpod 3.1.0 (3.2.1 available)
+  riverpod_analyzer_utils 1.0.0-dev.8 (1.0.0-dev.9 available)
+  riverpod_annotation 4.0.0 (4.0.2 available)
+  riverpod_generator 4.0.0+1 (4.0.3 available)
+  source_span 1.10.1 (1.10.2 available)
+  test 1.26.3 (1.29.0 available)
+  test_api 0.7.7 (0.7.9 available)
+  test_core 0.6.12 (0.6.15 available)
+  timezone 0.10.1 (0.11.0 available)
+  uuid 4.5.2 (4.5.3 available)
+  vector_graphics_compiler 1.1.20 (1.2.0 available)
+! vector_math 2.2.0 (overridden)
+Got dependencies!
+36 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+{"protocolVersion":"0.1.1","runnerVersion":"1.26.3","pid":5362,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"/app/test/utils/body_composition_calculator_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading /app/test/utils/body_composition_calculator_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":2}
+{"suite":{"id":2,"platform":"vm","path":"/app/test/utils/constants_test.dart"},"type":"suite","time":9}
+{"test":{"id":3,"name":"loading /app/test/utils/constants_test.dart","suiteID":2,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":9}
+{"count":68,"time":14,"type":"allSuites"}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":2957}
+{"group":{"id":4,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":2961}
+{"group":{"id":5,"suiteID":0,"parentID":4,"name":"BodyCompositionCalculator","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":5,"column":3,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"group","time":2961}
+{"group":{"id":6,"suiteID":0,"parentID":5,"name":"BodyCompositionCalculator calculateBodyDensityMen","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":6,"column":5,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"group","time":2961}
+{"test":{"id":7,"name":"BodyCompositionCalculator calculateBodyDensityMen should calculate correct body density for men","suiteID":0,"groupIDs":[4,5,6],"metadata":{"skip":false,"skipReason":null},"line":7,"column":7,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"testStart","time":2961}
+{"testID":7,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2986}
+{"group":{"id":8,"suiteID":0,"parentID":5,"name":"BodyCompositionCalculator calculateBodyDensityWomen","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":39,"column":5,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"group","time":2987}
+{"test":{"id":9,"name":"BodyCompositionCalculator calculateBodyDensityWomen should calculate correct body density for women","suiteID":0,"groupIDs":[4,5,8],"metadata":{"skip":false,"skipReason":null},"line":40,"column":7,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"testStart","time":2987}
+{"testID":9,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2990}
+{"group":{"id":10,"suiteID":0,"parentID":5,"name":"BodyCompositionCalculator calculateBodyDensityMen3Site","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":72,"column":5,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"group","time":2990}
+{"test":{"id":11,"name":"BodyCompositionCalculator calculateBodyDensityMen3Site should calculate correct body density for men (3 site)","suiteID":0,"groupIDs":[4,5,10],"metadata":{"skip":false,"skipReason":null},"line":73,"column":7,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"testStart","time":2991}
+{"testID":11,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2994}
+{"group":{"id":12,"suiteID":0,"parentID":5,"name":"BodyCompositionCalculator calculateBodyDensityWomen3Site","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":97,"column":5,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"group","time":2994}
+{"test":{"id":13,"name":"BodyCompositionCalculator calculateBodyDensityWomen3Site should calculate correct body density for women (3 site)","suiteID":0,"groupIDs":[4,5,12],"metadata":{"skip":false,"skipReason":null},"line":98,"column":7,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"testStart","time":2994}
+{"testID":13,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":2997}
+{"group":{"id":14,"suiteID":0,"parentID":5,"name":"BodyCompositionCalculator calculateBodyFatPercentage","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":122,"column":5,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"group","time":2997}
+{"test":{"id":15,"name":"BodyCompositionCalculator calculateBodyFatPercentage should calculate correct body fat percentage from density","suiteID":0,"groupIDs":[4,5,14],"metadata":{"skip":false,"skipReason":null},"line":123,"column":7,"url":"file:///app/test/utils/body_composition_calculator_test.dart"},"type":"testStart","time":2997}
+{"testID":15,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3000}
+{"suite":{"id":16,"platform":"vm","path":"/app/test/utils/one_rep_max_calculator_test.dart"},"type":"suite","time":3026}
+{"test":{"id":17,"name":"loading /app/test/utils/one_rep_max_calculator_test.dart","suiteID":16,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3027}
+{"testID":3,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":3215}
+{"group":{"id":18,"suiteID":2,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":3216}
+{"test":{"id":19,"name":"constants should have correct values","suiteID":2,"groupIDs":[18],"metadata":{"skip":false,"skipReason":null},"line":5,"column":3,"url":"file:///app/test/utils/constants_test.dart"},"type":"testStart","time":3216}
+{"testID":19,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3238}
+{"suite":{"id":20,"platform":"vm","path":"/app/test/features/home/data/repositories/home_repository_impl_test.dart"},"type":"suite","time":3250}
+{"test":{"id":21,"name":"loading /app/test/features/home/data/repositories/home_repository_impl_test.dart","suiteID":20,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3250}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":17,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":3908}
+{"group":{"id":22,"suiteID":16,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":3909}
+{"group":{"id":23,"suiteID":16,"parentID":22,"name":"OneRepMaxCalculator","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":5,"column":3,"url":"file:///app/test/utils/one_rep_max_calculator_test.dart"},"type":"group","time":3909}
+{"test":{"id":24,"name":"OneRepMaxCalculator calculateEpley returns correct value for standard input","suiteID":16,"groupIDs":[22,23],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/utils/one_rep_max_calculator_test.dart"},"type":"testStart","time":3909}
+{"testID":24,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3935}
+{"test":{"id":25,"name":"OneRepMaxCalculator calculateEpley returns weight for 1 rep","suiteID":16,"groupIDs":[22,23],"metadata":{"skip":false,"skipReason":null},"line":13,"column":5,"url":"file:///app/test/utils/one_rep_max_calculator_test.dart"},"type":"testStart","time":3936}
+{"testID":25,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3940}
+{"test":{"id":26,"name":"OneRepMaxCalculator calculateEpley handles zero inputs","suiteID":16,"groupIDs":[22,23],"metadata":{"skip":false,"skipReason":null},"line":18,"column":5,"url":"file:///app/test/utils/one_rep_max_calculator_test.dart"},"type":"testStart","time":3940}
+{"testID":26,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":3945}
+{"suite":{"id":27,"platform":"vm","path":"/app/test/features/home/domain/entities/workout_summary_entity_test.dart"},"type":"suite","time":3958}
+{"test":{"id":28,"name":"loading /app/test/features/home/domain/entities/workout_summary_entity_test.dart","suiteID":27,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":3958}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":21,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":4514}
+{"group":{"id":29,"suiteID":20,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":4515}
+{"test":{"id":30,"name":"should return summary when successful","suiteID":20,"groupIDs":[29],"metadata":{"skip":false,"skipReason":null},"line":24,"column":3,"url":"file:///app/test/features/home/data/repositories/home_repository_impl_test.dart"},"type":"testStart","time":4515}
+{"testID":30,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4553}
+{"test":{"id":31,"name":"should return failure when exception","suiteID":20,"groupIDs":[29],"metadata":{"skip":false,"skipReason":null},"line":30,"column":3,"url":"file:///app/test/features/home/data/repositories/home_repository_impl_test.dart"},"type":"testStart","time":4554}
+{"testID":31,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4559}
+{"suite":{"id":32,"platform":"vm","path":"/app/test/features/home/presentation/providers/home_provider_test.dart"},"type":"suite","time":4573}
+{"test":{"id":33,"name":"loading /app/test/features/home/presentation/providers/home_provider_test.dart","suiteID":32,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":4573}
+{"testID":28,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":4894}
+{"group":{"id":34,"suiteID":27,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":4894}
+{"test":{"id":35,"name":"WorkoutSummaryEntity supports value equality","suiteID":27,"groupIDs":[34],"metadata":{"skip":false,"skipReason":null},"line":5,"column":3,"url":"file:///app/test/features/home/domain/entities/workout_summary_entity_test.dart"},"type":"testStart","time":4894}
+{"testID":35,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":4921}
+{"suite":{"id":36,"platform":"vm","path":"/app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart"},"type":"suite","time":4935}
+{"test":{"id":37,"name":"loading /app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart","suiteID":36,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":4935}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":33,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":5642}
+{"group":{"id":38,"suiteID":32,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":5643}
+{"test":{"id":39,"name":"workoutSummary provider returns entity when success","suiteID":32,"groupIDs":[38],"metadata":{"skip":false,"skipReason":null},"line":26,"column":3,"url":"file:///app/test/features/home/presentation/providers/home_provider_test.dart"},"type":"testStart","time":5643}
+{"testID":39,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":5719}
+{"test":{"id":40,"name":"workoutSummary provider throws when failure","suiteID":32,"groupIDs":[38],"metadata":{"skip":false,"skipReason":null},"line":46,"column":3,"url":"file:///app/test/features/home/presentation/providers/home_provider_test.dart"},"type":"testStart","time":5720}
+{"testID":37,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":6076}
+{"group":{"id":41,"suiteID":36,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":6076}
+{"test":{"id":42,"name":"WeeklyGoalWidget displays correct info","suiteID":36,"groupIDs":[41],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/home/presentation/widgets/weekly_goal_widget_test.dart"},"type":"testStart","time":6076}
+{"testID":42,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":6727}
+{"suite":{"id":43,"platform":"vm","path":"/app/test/features/home/presentation/widgets/weekly_progress_card_test.dart"},"type":"suite","time":6742}
+{"test":{"id":44,"name":"loading /app/test/features/home/presentation/widgets/weekly_progress_card_test.dart","suiteID":43,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":6742}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":44,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":7837}
+{"group":{"id":45,"suiteID":43,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":7838}
+{"test":{"id":46,"name":"WeeklyProgressCard displays correct progress","suiteID":43,"groupIDs":[45],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":16,"root_column":3,"root_url":"file:///app/test/features/home/presentation/widgets/weekly_progress_card_test.dart"},"type":"testStart","time":7838}
+{"testID":46,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8650}
+{"test":{"id":47,"name":"WeeklyProgressCard shows completion message","suiteID":43,"groupIDs":[45],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":46,"root_column":3,"root_url":"file:///app/test/features/home/presentation/widgets/weekly_progress_card_test.dart"},"type":"testStart","time":8650}
+{"testID":47,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":8712}
+{"suite":{"id":48,"platform":"vm","path":"/app/test/features/home/presentation/widgets/quick_timer_dialog_test.dart"},"type":"suite","time":8728}
+{"test":{"id":49,"name":"loading /app/test/features/home/presentation/widgets/quick_timer_dialog_test.dart","suiteID":48,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":8728}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":49,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":9658}
+{"group":{"id":50,"suiteID":48,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":9659}
+{"test":{"id":51,"name":"QuickTimerDialog starts timer","suiteID":48,"groupIDs":[50],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":7,"root_column":3,"root_url":"file:///app/test/features/home/presentation/widgets/quick_timer_dialog_test.dart"},"type":"testStart","time":9659}
+{"testID":51,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":10640}
+{"suite":{"id":52,"platform":"vm","path":"/app/test/features/home/presentation/widgets/body_weight_dialog_test.dart"},"type":"suite","time":10655}
+{"test":{"id":53,"name":"loading /app/test/features/home/presentation/widgets/body_weight_dialog_test.dart","suiteID":52,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":10656}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":53,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":11765}
+{"group":{"id":54,"suiteID":52,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":11766}
+{"test":{"id":55,"name":"BodyWeightDialog updates weight","suiteID":52,"groupIDs":[54],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///app/test/features/home/presentation/widgets/body_weight_dialog_test.dart"},"type":"testStart","time":11766}
+{"testID":55,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":12686}
+{"suite":{"id":56,"platform":"vm","path":"/app/test/features/home/presentation/pages/dashboard_page_test.dart"},"type":"suite","time":12703}
+{"test":{"id":57,"name":"loading /app/test/features/home/presentation/pages/dashboard_page_test.dart","suiteID":56,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":12703}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":57,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":13875}
+{"group":{"id":58,"suiteID":56,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":13876}
+{"test":{"id":59,"name":"(setUpAll)","suiteID":56,"groupIDs":[58],"metadata":{"skip":false,"skipReason":null},"line":22,"column":3,"url":"file:///app/test/features/home/presentation/pages/dashboard_page_test.dart"},"type":"testStart","time":13876}
+{"testID":59,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":13927}
+{"test":{"id":60,"name":"DashboardPage renders static elements and Tools section","suiteID":56,"groupIDs":[58],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":26,"root_column":3,"root_url":"file:///app/test/features/home/presentation/pages/dashboard_page_test.dart"},"type":"testStart","time":13928}
+{"testID":60,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":15074}
+{"test":{"id":61,"name":"(tearDownAll)","suiteID":56,"groupIDs":[58],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":15075}
+{"testID":61,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":15091}
+{"suite":{"id":62,"platform":"vm","path":"/app/test/features/home/presentation/pages/home_shell_page_test.dart"},"type":"suite","time":15111}
+{"test":{"id":63,"name":"loading /app/test/features/home/presentation/pages/home_shell_page_test.dart","suiteID":62,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":15111}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":63,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":16083}
+{"group":{"id":64,"suiteID":62,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":16084}
+{"test":{"id":65,"name":"HomeShellPage displays navigation bar","suiteID":62,"groupIDs":[64],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":18,"root_column":3,"root_url":"file:///app/test/features/home/presentation/pages/home_shell_page_test.dart"},"type":"testStart","time":16084}
+{"testID":65,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════\nThe following NoSuchMethodError was thrown building KeyedSubtree-[GlobalKey#2f4bc]:\nClass '_FakeStatefulElement_4' has no instance getter '_parent'.\nReceiver: Instance of '_FakeStatefulElement_4'\nTried calling: _parent\n\nThe relevant error-causing widget was:\n  Scaffold Scaffold:file:///app/lib/features/home/presentation/pages/home_shell_page.dart:10:41\n\nWhen the exception was thrown, this was the stack:\n#0      _FakeStatefulElement_4._parent (file:///app/test/features/home/presentation/pages/home_shell_page_test.mocks.dart:62:7)\n#1      Element._debugCheckForCycles (package:flutter/src/widgets/framework.dart:4608:21)\n#2      Element.inflateWidget.<anonymous closure> (package:flutter/src/widgets/framework.dart:4579:9)\n...     Normal element mounting (25 frames)\n#27     Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)\n#28     MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)\n#29     MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)\n...     Normal element mounting (370 frames)\n#399    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)\n#400    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7269:36)\n#401    MultiChildRenderObjectElement.mount (package:flutter/src/widgets/framework.dart:7285:32)\n...     Normal element mounting (465 frames)\n#866    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4590:20)\n#867    Element.updateChild (package:flutter/src/widgets/framework.dart:4053:20)\n#868    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#869    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#870    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)\n#871    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)\n#872    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#873    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#874    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)\n#875    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#876    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)\n#877    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#878    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#879    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#880    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)\n#881    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)\n#882    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#883    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#884    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)\n#885    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#886    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)\n#887    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#888    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#889    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)\n#890    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#891    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)\n#892    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#893    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#894    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#895    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)\n#896    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#897    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#898    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)\n#899    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#900    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)\n#901    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#902    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#903    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#904    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)\n#905    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#906    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#907    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#908    ProxyElement.update (package:flutter/src/widgets/framework.dart:6152:5)\n#909    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#910    _RawViewElement._updateChild (package:flutter/src/widgets/view.dart:481:16)\n#911    _RawViewElement.update (package:flutter/src/widgets/view.dart:568:5)\n#912    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#913    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#914    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#915    StatelessElement.update (package:flutter/src/widgets/framework.dart:5898:5)\n#916    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#917    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5844:16)\n#918    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5985:11)\n#919    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#920    StatefulElement.update (package:flutter/src/widgets/framework.dart:6010:5)\n#921    Element.updateChild (package:flutter/src/widgets/framework.dart:4037:15)\n#922    RootElement._rebuild (package:flutter/src/widgets/binding.dart:1782:16)\n#923    RootElement.update (package:flutter/src/widgets/binding.dart:1760:5)\n#924    RootElement.performRebuild (package:flutter/src/widgets/binding.dart:1774:7)\n#925    Element.rebuild (package:flutter/src/widgets/framework.dart:5532:7)\n#926    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2750:15)\n#927    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2807:11)\n#928    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3111:18)\n#929    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)\n#930    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)\n#931    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)\n#932    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)\n#933    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)\n#936    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)\n#937    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)\n#938    WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)\n#941    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)\n#942    WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)\n#943    main.<anonymous closure> (file:///app/test/features/home/presentation/pages/home_shell_page_test.dart:21:18)\n#944    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)\n<asynchronous suspension>\n#945    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided 5 frames from dart:async and package:stack_trace)\n\n════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":16975}
+{"testID":65,"error":"Test failed. See exception logs above.\nThe test description was: HomeShellPage displays navigation bar","stackTrace":"","isFailure":false,"type":"error","time":16983}
+{"testID":65,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":16983}
+{"suite":{"id":66,"platform":"vm","path":"/app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"suite","time":16999}
+{"test":{"id":67,"name":"loading /app/test/features/auth/data/datasources/auth_remote_data_source_test.dart","suiteID":66,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":16999}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":67,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":17947}
+{"group":{"id":68,"suiteID":66,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":17948}
+{"group":{"id":69,"suiteID":66,"parentID":68,"name":"signInWithGoogle","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":100,"column":3,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"group","time":17948}
+{"test":{"id":70,"name":"signInWithGoogle should return UserDto when successful","suiteID":66,"groupIDs":[68,69],"metadata":{"skip":false,"skipReason":null},"line":101,"column":5,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"testStart","time":17948}
+{"testID":70,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":17999}
+{"test":{"id":71,"name":"signInWithGoogle should throw AuthFailure when Google Sign In is canceled","suiteID":66,"groupIDs":[68,69],"metadata":{"skip":false,"skipReason":null},"line":129,"column":5,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"testStart","time":18000}
+{"testID":71,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18008}
+{"group":{"id":72,"suiteID":66,"parentID":68,"name":"signOut","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":136,"column":3,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"group","time":18008}
+{"test":{"id":73,"name":"signOut should call signOut on dependencies","suiteID":66,"groupIDs":[68,72],"metadata":{"skip":false,"skipReason":null},"line":137,"column":5,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"testStart","time":18008}
+{"testID":73,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18016}
+{"group":{"id":74,"suiteID":66,"parentID":68,"name":"getCurrentUser","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":152,"column":3,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"group","time":18016}
+{"test":{"id":75,"name":"getCurrentUser should return UserDto when user is logged in","suiteID":66,"groupIDs":[68,74],"metadata":{"skip":false,"skipReason":null},"line":153,"column":5,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"testStart","time":18016}
+{"testID":75,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18020}
+{"test":{"id":76,"name":"getCurrentUser should return null when user is not logged in","suiteID":66,"groupIDs":[68,74],"metadata":{"skip":false,"skipReason":null},"line":166,"column":5,"url":"file:///app/test/features/auth/data/datasources/auth_remote_data_source_test.dart"},"type":"testStart","time":18020}
+{"testID":76,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18023}
+{"suite":{"id":77,"platform":"vm","path":"/app/test/features/auth/data/models/user_dto_test.dart"},"type":"suite","time":18037}
+{"test":{"id":78,"name":"loading /app/test/features/auth/data/models/user_dto_test.dart","suiteID":77,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":18037}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":78,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":18931}
+{"group":{"id":79,"suiteID":77,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":18932}
+{"test":{"id":80,"name":"fromJson should return a valid model","suiteID":77,"groupIDs":[79],"metadata":{"skip":false,"skipReason":null},"line":14,"column":3,"url":"file:///app/test/features/auth/data/models/user_dto_test.dart"},"type":"testStart","time":18932}
+{"testID":80,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18959}
+{"test":{"id":81,"name":"toJson should return a JSON map","suiteID":77,"groupIDs":[79],"metadata":{"skip":false,"skipReason":null},"line":27,"column":3,"url":"file:///app/test/features/auth/data/models/user_dto_test.dart"},"type":"testStart","time":18959}
+{"testID":81,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18963}
+{"test":{"id":82,"name":"fromEntity should return a valid UserDto","suiteID":77,"groupIDs":[79],"metadata":{"skip":false,"skipReason":null},"line":39,"column":3,"url":"file:///app/test/features/auth/data/models/user_dto_test.dart"},"type":"testStart","time":18964}
+{"testID":82,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":18966}
+{"suite":{"id":83,"platform":"vm","path":"/app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"suite","time":18981}
+{"test":{"id":84,"name":"loading /app/test/features/auth/data/repositories/auth_repository_impl_test.dart","suiteID":83,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":18982}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":84,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":19876}
+{"group":{"id":85,"suiteID":83,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":19876}
+{"group":{"id":86,"suiteID":83,"parentID":85,"name":"signInWithGoogle","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":29,"column":3,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"group","time":19877}
+{"test":{"id":87,"name":"signInWithGoogle should return user when successful","suiteID":83,"groupIDs":[85,86],"metadata":{"skip":false,"skipReason":null},"line":30,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19877}
+{"testID":87,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19917}
+{"test":{"id":88,"name":"signInWithGoogle should return failure when exception occurs","suiteID":83,"groupIDs":[85,86],"metadata":{"skip":false,"skipReason":null},"line":36,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19917}
+{"testID":88,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19921}
+{"group":{"id":89,"suiteID":83,"parentID":85,"name":"signOut","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":45,"column":3,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"group","time":19921}
+{"test":{"id":90,"name":"signOut should return void when successful","suiteID":83,"groupIDs":[85,89],"metadata":{"skip":false,"skipReason":null},"line":46,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19921}
+{"testID":90,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19925}
+{"test":{"id":91,"name":"signOut should return failure when exception occurs","suiteID":83,"groupIDs":[85,89],"metadata":{"skip":false,"skipReason":null},"line":52,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19925}
+{"testID":91,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19928}
+{"group":{"id":92,"suiteID":83,"parentID":85,"name":"getCurrentUser","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":59,"column":3,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"group","time":19928}
+{"test":{"id":93,"name":"getCurrentUser should return user when successful","suiteID":83,"groupIDs":[85,92],"metadata":{"skip":false,"skipReason":null},"line":60,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19928}
+{"testID":93,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19933}
+{"test":{"id":94,"name":"getCurrentUser should return null when no user","suiteID":83,"groupIDs":[85,92],"metadata":{"skip":false,"skipReason":null},"line":66,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19934}
+{"testID":94,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19937}
+{"test":{"id":95,"name":"getCurrentUser should return failure when exception occurs","suiteID":83,"groupIDs":[85,92],"metadata":{"skip":false,"skipReason":null},"line":72,"column":5,"url":"file:///app/test/features/auth/data/repositories/auth_repository_impl_test.dart"},"type":"testStart","time":19937}
+{"testID":95,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":19940}
+{"suite":{"id":96,"platform":"vm","path":"/app/test/features/auth/domain/entities/user_entity_test.dart"},"type":"suite","time":19954}
+{"test":{"id":97,"name":"loading /app/test/features/auth/domain/entities/user_entity_test.dart","suiteID":96,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":19954}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":97,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":20833}
+{"group":{"id":98,"suiteID":96,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":20833}
+{"group":{"id":99,"suiteID":96,"parentID":98,"name":"UserEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":5,"column":3,"url":"file:///app/test/features/auth/domain/entities/user_entity_test.dart"},"type":"group","time":20834}
+{"test":{"id":100,"name":"UserEntity should have correct props","suiteID":96,"groupIDs":[98,99],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/auth/domain/entities/user_entity_test.dart"},"type":"testStart","time":20834}
+{"testID":100,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":20861}
+{"suite":{"id":101,"platform":"vm","path":"/app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"suite","time":20875}
+{"test":{"id":102,"name":"loading /app/test/features/auth/presentation/providers/auth_provider_test.dart","suiteID":101,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":20876}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":102,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":21812}
+{"group":{"id":103,"suiteID":101,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":21813}
+{"group":{"id":104,"suiteID":101,"parentID":103,"name":"AuthNotifier","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":21,"column":3,"url":"file:///app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"group","time":21813}
+{"test":{"id":105,"name":"AuthNotifier build should return user when getCurrentUser is successful","suiteID":101,"groupIDs":[103,104],"metadata":{"skip":false,"skipReason":null},"line":22,"column":5,"url":"file:///app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"testStart","time":21813}
+{"testID":105,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21901}
+{"test":{"id":106,"name":"AuthNotifier build should return null when getCurrentUser fails","suiteID":101,"groupIDs":[103,104],"metadata":{"skip":false,"skipReason":null},"line":43,"column":5,"url":"file:///app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"testStart","time":21901}
+{"testID":106,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21906}
+{"test":{"id":107,"name":"AuthNotifier signInWithGoogle should update state with user on success","suiteID":101,"groupIDs":[103,104],"metadata":{"skip":false,"skipReason":null},"line":58,"column":5,"url":"file:///app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"testStart","time":21906}
+{"testID":107,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21914}
+{"test":{"id":108,"name":"AuthNotifier signInWithGoogle should update state with error on failure","suiteID":101,"groupIDs":[103,104],"metadata":{"skip":false,"skipReason":null},"line":87,"column":5,"url":"file:///app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"testStart","time":21914}
+{"testID":108,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21922}
+{"test":{"id":109,"name":"AuthNotifier signOut should update state to null","suiteID":101,"groupIDs":[103,104],"metadata":{"skip":false,"skipReason":null},"line":117,"column":5,"url":"file:///app/test/features/auth/presentation/providers/auth_provider_test.dart"},"type":"testStart","time":21922}
+{"testID":109,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":21927}
+{"suite":{"id":110,"platform":"vm","path":"/app/test/features/auth/presentation/pages/login_page_test.dart"},"type":"suite","time":21941}
+{"test":{"id":111,"name":"loading /app/test/features/auth/presentation/pages/login_page_test.dart","suiteID":110,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":21941}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":111,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":22988}
+{"group":{"id":112,"suiteID":110,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":22989}
+{"test":{"id":113,"name":"LoginPage renders correctly","suiteID":110,"groupIDs":[112],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":14,"root_column":3,"root_url":"file:///app/test/features/auth/presentation/pages/login_page_test.dart"},"type":"testStart","time":22989}
+{"testID":113,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":24037}
+{"suite":{"id":114,"platform":"vm","path":"/app/test/features/calendar/data/repositories/calendar_repository_test.dart"},"type":"suite","time":24055}
+{"test":{"id":115,"name":"loading /app/test/features/calendar/data/repositories/calendar_repository_test.dart","suiteID":114,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":24055}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":115,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":25187}
+{"group":{"id":116,"suiteID":114,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":25188}
+{"group":{"id":117,"suiteID":114,"parentID":116,"name":"getSessions","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":19,"column":3,"url":"file:///app/test/features/calendar/data/repositories/calendar_repository_test.dart"},"type":"group","time":25188}
+{"test":{"id":118,"name":"getSessions should return list of sessions when successful","suiteID":114,"groupIDs":[116,117],"metadata":{"skip":false,"skipReason":null},"line":20,"column":5,"url":"file:///app/test/features/calendar/data/repositories/calendar_repository_test.dart"},"type":"testStart","time":25188}
+{"testID":118,"error":"Expected: <true>\n  Actual: <false>\n","stackTrace":"package:matcher                                                              expect\npackage:flutter_test/src/widget_tester.dart 473:18                           expect\ntest/features/calendar/data/repositories/calendar_repository_test.dart 35:7  main.<fn>.<fn>\n","isFailure":true,"type":"error","time":25251}
+{"testID":118,"result":"failure","skipped":false,"hidden":false,"type":"testDone","time":25251}
+{"test":{"id":119,"name":"getSessions should return failure when exception","suiteID":114,"groupIDs":[116,117],"metadata":{"skip":false,"skipReason":null},"line":42,"column":5,"url":"file:///app/test/features/calendar/data/repositories/calendar_repository_test.dart"},"type":"testStart","time":25252}
+{"testID":119,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":25256}
+{"suite":{"id":120,"platform":"vm","path":"/app/test/features/calendar/domain/entities/workout_session_entity_test.dart"},"type":"suite","time":25271}
+{"test":{"id":121,"name":"loading /app/test/features/calendar/domain/entities/workout_session_entity_test.dart","suiteID":120,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":25272}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":121,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":26214}
+{"group":{"id":122,"suiteID":120,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":26214}
+{"group":{"id":123,"suiteID":120,"parentID":122,"name":"WorkoutSessionEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":5,"column":3,"url":"file:///app/test/features/calendar/domain/entities/workout_session_entity_test.dart"},"type":"group","time":26215}
+{"test":{"id":124,"name":"WorkoutSessionEntity should have correct props","suiteID":120,"groupIDs":[122,123],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/calendar/domain/entities/workout_session_entity_test.dart"},"type":"testStart","time":26215}
+{"testID":124,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":26243}
+{"suite":{"id":125,"platform":"vm","path":"/app/test/features/calendar/presentation/pages/calendar_page_test.dart"},"type":"suite","time":26257}
+{"test":{"id":126,"name":"loading /app/test/features/calendar/presentation/pages/calendar_page_test.dart","suiteID":125,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":26257}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":126,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":28620}
+{"group":{"id":127,"suiteID":125,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":28620}
+{"test":{"id":128,"name":"CalendarPage renders correctly","suiteID":125,"groupIDs":[127],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":20,"root_column":3,"root_url":"file:///app/test/features/calendar/presentation/pages/calendar_page_test.dart"},"type":"testStart","time":28620}
+{"testID":128,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":29943}
+{"suite":{"id":129,"platform":"vm","path":"/app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"suite","time":29962}
+{"test":{"id":130,"name":"loading /app/test/features/workouts/data/repositories/workout_repository_test.dart","suiteID":129,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":29962}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":130,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":30915}
+{"group":{"id":131,"suiteID":129,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":30916}
+{"group":{"id":132,"suiteID":129,"parentID":131,"name":"getWorkoutGroups","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":20,"column":3,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"group","time":30916}
+{"test":{"id":133,"name":"getWorkoutGroups should return list of workout groups when successful","suiteID":129,"groupIDs":[131,132],"metadata":{"skip":false,"skipReason":null},"line":21,"column":5,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"testStart","time":30916}
+{"testID":133,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30959}
+{"test":{"id":134,"name":"getWorkoutGroups should return failure when exception","suiteID":129,"groupIDs":[131,132],"metadata":{"skip":false,"skipReason":null},"line":46,"column":5,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"testStart","time":30960}
+{"testID":134,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30965}
+{"group":{"id":135,"suiteID":129,"parentID":131,"name":"getExercises","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":55,"column":3,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"group","time":30966}
+{"test":{"id":136,"name":"getExercises should return list of exercises when successful","suiteID":129,"groupIDs":[131,135],"metadata":{"skip":false,"skipReason":null},"line":56,"column":5,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"testStart","time":30966}
+{"testID":136,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30970}
+{"group":{"id":137,"suiteID":129,"parentID":131,"name":"getExerciseLogs","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":78,"column":3,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"group","time":30970}
+{"test":{"id":138,"name":"getExerciseLogs should return logs","suiteID":129,"groupIDs":[131,137],"metadata":{"skip":false,"skipReason":null},"line":79,"column":5,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"testStart","time":30970}
+{"testID":138,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30984}
+{"group":{"id":139,"suiteID":129,"parentID":131,"name":"saveExerciseLog","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":96,"column":3,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"group","time":30984}
+{"test":{"id":140,"name":"saveExerciseLog should return saved log","suiteID":129,"groupIDs":[131,139],"metadata":{"skip":false,"skipReason":null},"line":97,"column":5,"url":"file:///app/test/features/workouts/data/repositories/workout_repository_test.dart"},"type":"testStart","time":30984}
+{"testID":140,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":30989}
+{"suite":{"id":141,"platform":"vm","path":"/app/test/features/workouts/domain/entities/set_log_entity_test.dart"},"type":"suite","time":31004}
+{"test":{"id":142,"name":"loading /app/test/features/workouts/domain/entities/set_log_entity_test.dart","suiteID":141,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":31004}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":142,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":31888}
+{"group":{"id":143,"suiteID":141,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":31889}
+{"group":{"id":144,"suiteID":141,"parentID":143,"name":"SetLogEntity","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":5,"column":3,"url":"file:///app/test/features/workouts/domain/entities/set_log_entity_test.dart"},"type":"group","time":31889}
+{"test":{"id":145,"name":"SetLogEntity should have correct props","suiteID":141,"groupIDs":[143,144],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/workouts/domain/entities/set_log_entity_test.dart"},"type":"testStart","time":31889}
+{"testID":145,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31915}
+{"test":{"id":146,"name":"SetLogEntity toJson and fromJson should work correctly","suiteID":141,"groupIDs":[143,144],"metadata":{"skip":false,"skipReason":null},"line":15,"column":5,"url":"file:///app/test/features/workouts/domain/entities/set_log_entity_test.dart"},"type":"testStart","time":31915}
+{"testID":146,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":31920}
+{"suite":{"id":147,"platform":"vm","path":"/app/test/features/workouts/domain/entities/workout_group_entity_test.dart"},"type":"suite","time":31934}
+{"test":{"id":148,"name":"loading /app/test/features/workouts/domain/entities/workout_group_entity_test.dart","suiteID":147,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":31934}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":148,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":32827}
+{"group":{"id":149,"suiteID":147,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":32827}
+{"group":{"id":150,"suiteID":147,"parentID":149,"name":"WorkoutGroupEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":6,"column":3,"url":"file:///app/test/features/workouts/domain/entities/workout_group_entity_test.dart"},"type":"group","time":32827}
+{"test":{"id":151,"name":"WorkoutGroupEntity should have correct props","suiteID":147,"groupIDs":[149,150],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///app/test/features/workouts/domain/entities/workout_group_entity_test.dart"},"type":"testStart","time":32827}
+{"testID":151,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":32854}
+{"suite":{"id":152,"platform":"vm","path":"/app/test/features/workouts/domain/entities/exercise_entity_test.dart"},"type":"suite","time":32869}
+{"test":{"id":153,"name":"loading /app/test/features/workouts/domain/entities/exercise_entity_test.dart","suiteID":152,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":32869}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":153,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":33754}
+{"group":{"id":154,"suiteID":152,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":33755}
+{"group":{"id":155,"suiteID":152,"parentID":154,"name":"ExerciseEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":5,"column":3,"url":"file:///app/test/features/workouts/domain/entities/exercise_entity_test.dart"},"type":"group","time":33755}
+{"test":{"id":156,"name":"ExerciseEntity should have correct props","suiteID":152,"groupIDs":[154,155],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/workouts/domain/entities/exercise_entity_test.dart"},"type":"testStart","time":33755}
+{"testID":156,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":33782}
+{"suite":{"id":157,"platform":"vm","path":"/app/test/features/workouts/domain/entities/exercise_log_entity_test.dart"},"type":"suite","time":33796}
+{"test":{"id":158,"name":"loading /app/test/features/workouts/domain/entities/exercise_log_entity_test.dart","suiteID":157,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":33797}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":158,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":34687}
+{"group":{"id":159,"suiteID":157,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":34688}
+{"group":{"id":160,"suiteID":157,"parentID":159,"name":"ExerciseLogEntity","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":6,"column":3,"url":"file:///app/test/features/workouts/domain/entities/exercise_log_entity_test.dart"},"type":"group","time":34688}
+{"test":{"id":161,"name":"ExerciseLogEntity should have correct props","suiteID":157,"groupIDs":[159,160],"metadata":{"skip":false,"skipReason":null},"line":7,"column":5,"url":"file:///app/test/features/workouts/domain/entities/exercise_log_entity_test.dart"},"type":"testStart","time":34688}
+{"testID":161,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":34717}
+{"test":{"id":162,"name":"ExerciseLogEntity toJson and fromJson should work correctly","suiteID":157,"groupIDs":[159,160],"metadata":{"skip":false,"skipReason":null},"line":28,"column":5,"url":"file:///app/test/features/workouts/domain/entities/exercise_log_entity_test.dart"},"type":"testStart","time":34717}
+{"testID":162,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":34735}
+{"suite":{"id":163,"platform":"vm","path":"/app/test/features/workouts/domain/entities/workout_series_entity_test.dart"},"type":"suite","time":34751}
+{"test":{"id":164,"name":"loading /app/test/features/workouts/domain/entities/workout_series_entity_test.dart","suiteID":163,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":34751}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":164,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":35615}
+{"group":{"id":165,"suiteID":163,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":35615}
+{"group":{"id":166,"suiteID":163,"parentID":165,"name":"WorkoutSeriesEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":5,"column":3,"url":"file:///app/test/features/workouts/domain/entities/workout_series_entity_test.dart"},"type":"group","time":35615}
+{"test":{"id":167,"name":"WorkoutSeriesEntity should have correct props","suiteID":163,"groupIDs":[165,166],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/workouts/domain/entities/workout_series_entity_test.dart"},"type":"testStart","time":35616}
+{"testID":167,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":35642}
+{"suite":{"id":168,"platform":"vm","path":"/app/test/features/workouts/domain/entities/session_log_entity_test.dart"},"type":"suite","time":35656}
+{"test":{"id":169,"name":"loading /app/test/features/workouts/domain/entities/session_log_entity_test.dart","suiteID":168,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":35656}
+{"testID":40,"error":"TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts","stackTrace":"dart:isolate  _RawReceivePort._handleMessage\n","isFailure":false,"type":"error","time":35731}
+{"testID":40,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":35732}
+{"suite":{"id":170,"platform":"vm","path":"/app/test/features/workouts/domain/entities/workout_entity_test.dart"},"type":"suite","time":35747}
+{"test":{"id":171,"name":"loading /app/test/features/workouts/domain/entities/workout_entity_test.dart","suiteID":170,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":35747}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":169,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":36515}
+{"group":{"id":172,"suiteID":168,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":36516}
+{"group":{"id":173,"suiteID":168,"parentID":172,"name":"SetLogState","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":5,"column":3,"url":"file:///app/test/features/workouts/domain/entities/session_log_entity_test.dart"},"type":"group","time":36516}
+{"test":{"id":174,"name":"SetLogState should hold correct values","suiteID":168,"groupIDs":[172,173],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/workouts/domain/entities/session_log_entity_test.dart"},"type":"testStart","time":36517}
+{"testID":174,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36541}
+{"group":{"id":175,"suiteID":168,"parentID":172,"name":"ExerciseSessionLog","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":21,"column":3,"url":"file:///app/test/features/workouts/domain/entities/session_log_entity_test.dart"},"type":"group","time":36541}
+{"test":{"id":176,"name":"ExerciseSessionLog should hold correct values","suiteID":168,"groupIDs":[172,175],"metadata":{"skip":false,"skipReason":null},"line":22,"column":5,"url":"file:///app/test/features/workouts/domain/entities/session_log_entity_test.dart"},"type":"testStart","time":36541}
+{"testID":176,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36546}
+{"suite":{"id":177,"platform":"vm","path":"/app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart"},"type":"suite","time":36560}
+{"test":{"id":178,"name":"loading /app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart","suiteID":177,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":36560}
+{"testID":171,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":36940}
+{"group":{"id":179,"suiteID":170,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":36940}
+{"group":{"id":180,"suiteID":170,"parentID":179,"name":"WorkoutEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":7,"column":3,"url":"file:///app/test/features/workouts/domain/entities/workout_entity_test.dart"},"type":"group","time":36941}
+{"test":{"id":181,"name":"WorkoutEntity should have correct props","suiteID":170,"groupIDs":[179,180],"metadata":{"skip":false,"skipReason":null},"line":8,"column":5,"url":"file:///app/test/features/workouts/domain/entities/workout_entity_test.dart"},"type":"testStart","time":36941}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":181,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":36970}
+{"suite":{"id":182,"platform":"vm","path":"/app/test/features/workouts/presentation/providers/workout_provider_test.dart"},"type":"suite","time":36985}
+{"test":{"id":183,"name":"loading /app/test/features/workouts/presentation/providers/workout_provider_test.dart","suiteID":182,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":36985}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":178,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":37457}
+{"group":{"id":184,"suiteID":177,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":37457}
+{"test":{"id":185,"name":"exerciseStatsProvider returns logs when success","suiteID":177,"groupIDs":[184],"metadata":{"skip":false,"skipReason":null},"line":31,"column":3,"url":"file:///app/test/features/workouts/presentation/providers/exercise_stats_provider_test.dart"},"type":"testStart","time":37458}
+{"testID":185,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":37553}
+{"suite":{"id":186,"platform":"vm","path":"/app/test/features/workouts/presentation/providers/workout_create_provider_test.dart"},"type":"suite","time":37571}
+{"test":{"id":187,"name":"loading /app/test/features/workouts/presentation/providers/workout_create_provider_test.dart","suiteID":186,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":37572}
+{"testID":183,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":37932}
+{"group":{"id":188,"suiteID":182,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":37933}
+{"test":{"id":189,"name":"workoutGroups provider returns groups when success","suiteID":182,"groupIDs":[188],"metadata":{"skip":false,"skipReason":null},"line":31,"column":3,"url":"file:///app/test/features/workouts/presentation/providers/workout_provider_test.dart"},"type":"testStart","time":37933}
+{"testID":189,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":38029}
+{"test":{"id":190,"name":"workoutGroupByIdProvider returns group when found","suiteID":182,"groupIDs":[188],"metadata":{"skip":false,"skipReason":null},"line":53,"column":3,"url":"file:///app/test/features/workouts/presentation/providers/workout_provider_test.dart"},"type":"testStart","time":38029}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":190,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":38056}
+{"suite":{"id":191,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/workout_series_dialog_test.dart"},"type":"suite","time":38071}
+{"test":{"id":192,"name":"loading /app/test/features/workouts/presentation/widgets/workout_series_dialog_test.dart","suiteID":191,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":38072}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":187,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":38583}
+{"group":{"id":193,"suiteID":186,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":38584}
+{"test":{"id":194,"name":"WorkoutCreateNotifier updates state","suiteID":186,"groupIDs":[193],"metadata":{"skip":false,"skipReason":null},"line":7,"column":3,"url":"file:///app/test/features/workouts/presentation/providers/workout_create_provider_test.dart"},"type":"testStart","time":38584}
+{"testID":194,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":38656}
+{"suite":{"id":195,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/progress_chart_test.dart"},"type":"suite","time":38674}
+{"test":{"id":196,"name":"loading /app/test/features/workouts/presentation/widgets/progress_chart_test.dart","suiteID":195,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":38674}
+{"testID":192,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":38987}
+{"group":{"id":197,"suiteID":191,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":38987}
+{"test":{"id":198,"name":"WorkoutSeriesDialog collects data","suiteID":191,"groupIDs":[197],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/workout_series_dialog_test.dart"},"type":"testStart","time":38987}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":196,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":39657}
+{"group":{"id":199,"suiteID":195,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":39658}
+{"test":{"id":200,"name":"ProgressChart renders correctly with data","suiteID":195,"groupIDs":[199],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":8,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/progress_chart_test.dart"},"type":"testStart","time":39658}
+{"testID":198,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":40230}
+{"suite":{"id":201,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart"},"type":"suite","time":40247}
+{"test":{"id":202,"name":"loading /app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart","suiteID":201,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":40247}
+{"testID":200,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":40417}
+{"suite":{"id":203,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/rpe_info_dialog_test.dart"},"type":"suite","time":40433}
+{"test":{"id":204,"name":"loading /app/test/features/workouts/presentation/widgets/rpe_info_dialog_test.dart","suiteID":203,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":40433}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":202,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":41269}
+{"group":{"id":205,"suiteID":201,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":41270}
+{"test":{"id":206,"name":"PlateCalculatorDialog calculates correctly for 100kg target and 20kg bar","suiteID":201,"groupIDs":[205],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":12,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart"},"type":"testStart","time":41270}
+{"testID":204,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":41603}
+{"group":{"id":207,"suiteID":203,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":41603}
+{"test":{"id":208,"name":"RpeInfoDialog displays scale","suiteID":203,"groupIDs":[207],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/rpe_info_dialog_test.dart"},"type":"testStart","time":41603}
+{"testID":206,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":42283}
+{"test":{"id":209,"name":"PlateCalculatorDialog updates calculation on input change","suiteID":201,"groupIDs":[205],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":35,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/plate_calculator_dialog_test.dart"},"type":"testStart","time":42284}
+{"testID":208,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":42359}
+{"suite":{"id":210,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart"},"type":"suite","time":42376}
+{"test":{"id":211,"name":"loading /app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart","suiteID":210,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":42376}
+{"testID":209,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":42565}
+{"suite":{"id":212,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart"},"type":"suite","time":42587}
+{"test":{"id":213,"name":"loading /app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart","suiteID":212,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":42587}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":211,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":43308}
+{"group":{"id":214,"suiteID":210,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":43311}
+{"test":{"id":215,"name":"OneRepMaxDisplay shows estimated 1RM","suiteID":210,"groupIDs":[214],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart"},"type":"testStart","time":43311}
+{"testID":213,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":43660}
+{"group":{"id":216,"suiteID":212,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":43665}
+{"test":{"id":217,"name":"RestTimerWidget displays info and buttons","suiteID":212,"groupIDs":[216],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/rest_timer_widget_test.dart"},"type":"testStart","time":43665}
+{"testID":215,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":43915}
+{"test":{"id":218,"name":"OneRepMaxDisplay hides when 0","suiteID":210,"groupIDs":[214],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":15,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/one_rep_max_display_test.dart"},"type":"testStart","time":43916}
+{"testID":218,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":43959}
+{"suite":{"id":219,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/workout_timer_test.dart"},"type":"suite","time":43978}
+{"test":{"id":220,"name":"loading /app/test/features/workouts/presentation/widgets/workout_timer_test.dart","suiteID":219,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":43978}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":217,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":44497}
+{"suite":{"id":221,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/timer_notifier_test.dart"},"type":"suite","time":44516}
+{"test":{"id":222,"name":"loading /app/test/features/workouts/presentation/widgets/timer_notifier_test.dart","suiteID":221,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":44516}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":220,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":44902}
+{"group":{"id":223,"suiteID":219,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":44903}
+{"test":{"id":224,"name":"WorkoutTimer updates UI when notifier changes","suiteID":219,"groupIDs":[223],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":7,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/workout_timer_test.dart"},"type":"testStart","time":44903}
+{"testID":222,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":45349}
+{"group":{"id":225,"suiteID":221,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":45350}
+{"group":{"id":226,"suiteID":221,"parentID":225,"name":"TimerNotifier","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":6,"column":3,"url":"file:///app/test/features/workouts/presentation/widgets/timer_notifier_test.dart"},"type":"group","time":45350}
+{"test":{"id":227,"name":"TimerNotifier initial value is 0","suiteID":221,"groupIDs":[225,226],"metadata":{"skip":false,"skipReason":null},"line":17,"column":5,"url":"file:///app/test/features/workouts/presentation/widgets/timer_notifier_test.dart"},"type":"testStart","time":45350}
+{"testID":227,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":45384}
+{"test":{"id":228,"name":"TimerNotifier start increments value over time","suiteID":221,"groupIDs":[225,226],"metadata":{"skip":false,"skipReason":null},"line":21,"column":5,"url":"file:///app/test/features/workouts/presentation/widgets/timer_notifier_test.dart"},"type":"testStart","time":45385}
+{"testID":228,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":45401}
+{"test":{"id":229,"name":"TimerNotifier stop pauses the timer","suiteID":221,"groupIDs":[225,226],"metadata":{"skip":false,"skipReason":null},"line":36,"column":5,"url":"file:///app/test/features/workouts/presentation/widgets/timer_notifier_test.dart"},"type":"testStart","time":45401}
+{"testID":229,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":45405}
+{"suite":{"id":230,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart"},"type":"suite","time":45421}
+{"test":{"id":231,"name":"loading /app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart","suiteID":230,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":45422}
+{"testID":224,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":45548}
+{"suite":{"id":232,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/number_input_control_test.dart"},"type":"suite","time":45563}
+{"test":{"id":233,"name":"loading /app/test/features/workouts/presentation/widgets/number_input_control_test.dart","suiteID":232,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":45564}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":231,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":46384}
+{"group":{"id":234,"suiteID":230,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":46385}
+{"test":{"id":235,"name":"OneRepMaxCalculatorDialog calculates 1RM correctly using Epley formula","suiteID":230,"groupIDs":[234],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart"},"type":"testStart","time":46385}
+{"testID":233,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":46770}
+{"group":{"id":236,"suiteID":232,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":46770}
+{"test":{"id":237,"name":"NumberInputControl updates value","suiteID":232,"groupIDs":[236],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/number_input_control_test.dart"},"type":"testStart","time":46770}
+{"testID":235,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":47574}
+{"test":{"id":238,"name":"OneRepMaxCalculatorDialog handles invalid input gracefully","suiteID":230,"groupIDs":[234],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":45,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/one_rep_max_calculator_dialog_test.dart"},"type":"testStart","time":47574}
+{"testID":238,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":47707}
+{"suite":{"id":239,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/workout_card_test.dart"},"type":"suite","time":47728}
+{"test":{"id":240,"name":"loading /app/test/features/workouts/presentation/widgets/workout_card_test.dart","suiteID":239,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":47728}
+{"testID":237,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":47828}
+{"suite":{"id":241,"platform":"vm","path":"/app/test/features/workouts/presentation/widgets/workout_group_card_test.dart"},"type":"suite","time":47846}
+{"test":{"id":242,"name":"loading /app/test/features/workouts/presentation/widgets/workout_group_card_test.dart","suiteID":241,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":47846}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":240,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":48749}
+{"group":{"id":243,"suiteID":239,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":48750}
+{"test":{"id":244,"name":"WorkoutCard displays info","suiteID":239,"groupIDs":[243],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":8,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/workout_card_test.dart"},"type":"testStart","time":48750}
+{"testID":242,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":49153}
+{"group":{"id":245,"suiteID":241,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":49153}
+{"test":{"id":246,"name":"WorkoutGroupCard displays info","suiteID":241,"groupIDs":[245],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":7,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/widgets/workout_group_card_test.dart"},"type":"testStart","time":49153}
+{"testID":244,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":49397}
+{"suite":{"id":247,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/workout_details_page_test.dart"},"type":"suite","time":49413}
+{"test":{"id":248,"name":"loading /app/test/features/workouts/presentation/pages/workout_details_page_test.dart","suiteID":247,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":49414}
+{"testID":246,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":49783}
+{"suite":{"id":249,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/workout_groups_page_test.dart"},"type":"suite","time":49800}
+{"test":{"id":250,"name":"loading /app/test/features/workouts/presentation/pages/workout_groups_page_test.dart","suiteID":249,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":49800}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":248,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":50422}
+{"group":{"id":251,"suiteID":247,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":50423}
+{"test":{"id":252,"name":"WorkoutDetailsPage displays group info","suiteID":247,"groupIDs":[251],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":9,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/workout_details_page_test.dart"},"type":"testStart","time":50423}
+{"testID":250,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":50835}
+{"group":{"id":253,"suiteID":249,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":50835}
+{"test":{"id":254,"name":"WorkoutGroupsPage displays empty state","suiteID":249,"groupIDs":[253],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":17,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/workout_groups_page_test.dart"},"type":"testStart","time":50835}
+{"testID":252,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":51464}
+{"suite":{"id":255,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/analytics_page_test.dart"},"type":"suite","time":51493}
+{"test":{"id":256,"name":"loading /app/test/features/workouts/presentation/pages/analytics_page_test.dart","suiteID":255,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":51493}
+{"testID":254,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":51699}
+{"suite":{"id":257,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/exercise_library_page_test.dart"},"type":"suite","time":51717}
+{"test":{"id":258,"name":"loading /app/test/features/workouts/presentation/pages/exercise_library_page_test.dart","suiteID":257,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":51717}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":256,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":52706}
+{"group":{"id":259,"suiteID":255,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":52707}
+{"test":{"id":260,"name":"AnalyticsPage displays charts and Records tab","suiteID":255,"groupIDs":[259],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":18,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/analytics_page_test.dart"},"type":"testStart","time":52707}
+{"testID":258,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":53129}
+{"group":{"id":261,"suiteID":257,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":53129}
+{"test":{"id":262,"name":"ExerciseLibraryPage shows loading state","suiteID":257,"groupIDs":[261],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":19,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/exercise_library_page_test.dart"},"type":"testStart","time":53129}
+{"testID":260,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":54279}
+{"suite":{"id":263,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/workout_create_page_test.dart"},"type":"suite","time":54299}
+{"test":{"id":264,"name":"loading /app/test/features/workouts/presentation/pages/workout_create_page_test.dart","suiteID":263,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":54299}
+{"testID":262,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":54715}
+{"test":{"id":265,"name":"ExerciseLibraryPage shows list of exercises","suiteID":257,"groupIDs":[261],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":35,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/exercise_library_page_test.dart"},"type":"testStart","time":54716}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":265,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":55034}
+{"test":{"id":266,"name":"ExerciseLibraryPage filters exercises","suiteID":257,"groupIDs":[261],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":49,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/exercise_library_page_test.dart"},"type":"testStart","time":55035}
+{"testID":264,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":55368}
+{"group":{"id":267,"suiteID":263,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":55369}
+{"test":{"id":268,"name":"WorkoutCreatePage displays exercises in picker","suiteID":263,"groupIDs":[267],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":27,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/workout_create_page_test.dart"},"type":"testStart","time":55369}
+{"testID":266,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":55427}
+{"test":{"id":269,"name":"ExerciseLibraryPage shows empty state when no matches","suiteID":257,"groupIDs":[261],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":71,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/exercise_library_page_test.dart"},"type":"testStart","time":55427}
+{"testID":269,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":55665}
+{"suite":{"id":270,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/workout_player_page_test.dart"},"type":"suite","time":55690}
+{"test":{"id":271,"name":"loading /app/test/features/workouts/presentation/pages/workout_player_page_test.dart","suiteID":270,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":55690}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":268,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":57073}
+{"suite":{"id":272,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/exercise_details_page_test.dart"},"type":"suite","time":57095}
+{"test":{"id":273,"name":"loading /app/test/features/workouts/presentation/pages/exercise_details_page_test.dart","suiteID":272,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":57095}
+{"testID":271,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":57103}
+{"group":{"id":274,"suiteID":270,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":57103}
+{"test":{"id":275,"name":"WorkoutPlayerPage displays player with exercise","suiteID":270,"groupIDs":[274],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":11,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/workout_player_page_test.dart"},"type":"testStart","time":57103}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":273,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":58114}
+{"group":{"id":276,"suiteID":272,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":58115}
+{"test":{"id":277,"name":"ExerciseDetailsPage displays exercise info","suiteID":272,"groupIDs":[276],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":10,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/exercise_details_page_test.dart"},"type":"testStart","time":58115}
+{"testID":275,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":58435}
+{"suite":{"id":278,"platform":"vm","path":"/app/test/features/workouts/presentation/pages/workout_summary_page_test.dart"},"type":"suite","time":58467}
+{"test":{"id":279,"name":"loading /app/test/features/workouts/presentation/pages/workout_summary_page_test.dart","suiteID":278,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":58467}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":277,"messageType":"print","message":"══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════\nThe following TestFailure was thrown running a test:\nExpected: exactly one matching candidate\n  Actual: _TextWidgetFinder:<Found 0 widgets with text \"Dicas\": []>\n   Which: means none were found but one was expected\n\nWhen the exception was thrown, this was the stack:\n#4      main.<anonymous closure> (file:///app/test/features/workouts/presentation/pages/exercise_details_page_test.dart:32:5)\n<asynchronous suspension>\n#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)\n<asynchronous suspension>\n#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)\n<asynchronous suspension>\n<asynchronous suspension>\n(elided one frame from package:stack_trace)\n\nThis was caught by the test expectation on the following line:\n  file:///app/test/features/workouts/presentation/pages/exercise_details_page_test.dart line 32\nThe test description was:\n  ExerciseDetailsPage displays exercise info\n════════════════════════════════════════════════════════════════════════════════════════════════════","type":"print","time":59245}
+{"testID":277,"error":"Test failed. See exception logs above.\nThe test description was: ExerciseDetailsPage displays exercise info","stackTrace":"","isFailure":false,"type":"error","time":59246}
+{"testID":277,"result":"error","skipped":false,"hidden":false,"type":"testDone","time":59269}
+{"suite":{"id":280,"platform":"vm","path":"/app/test/features/students/data/repositories/student_repository_test.dart"},"type":"suite","time":59290}
+{"test":{"id":281,"name":"loading /app/test/features/students/data/repositories/student_repository_test.dart","suiteID":280,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":59290}
+{"testID":279,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":59609}
+{"group":{"id":282,"suiteID":278,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":59610}
+{"test":{"id":283,"name":"WorkoutSummaryPage displays summary","suiteID":278,"groupIDs":[282],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/workouts/presentation/pages/workout_summary_page_test.dart"},"type":"testStart","time":59610}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":281,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":60202}
+{"group":{"id":284,"suiteID":280,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":60203}
+{"group":{"id":285,"suiteID":280,"parentID":284,"name":"getStudents","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":21,"column":3,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"group","time":60203}
+{"test":{"id":286,"name":"getStudents should return list of students when successful","suiteID":280,"groupIDs":[284,285],"metadata":{"skip":false,"skipReason":null},"line":22,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60203}
+{"testID":286,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60248}
+{"test":{"id":287,"name":"getStudents should return failure when exception occurs","suiteID":280,"groupIDs":[284,285],"metadata":{"skip":false,"skipReason":null},"line":54,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60248}
+{"testID":287,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60255}
+{"group":{"id":288,"suiteID":280,"parentID":284,"name":"addStudent","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":67,"column":3,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"group","time":60255}
+{"test":{"id":289,"name":"addStudent should return added student when successful","suiteID":280,"groupIDs":[284,288],"metadata":{"skip":false,"skipReason":null},"line":68,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60255}
+{"testID":289,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60261}
+{"group":{"id":290,"suiteID":280,"parentID":284,"name":"checkStudentExists","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":89,"column":3,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"group","time":60261}
+{"test":{"id":291,"name":"checkStudentExists should return student when found","suiteID":280,"groupIDs":[284,290],"metadata":{"skip":false,"skipReason":null},"line":90,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60261}
+{"testID":291,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60265}
+{"test":{"id":292,"name":"checkStudentExists should return null when not found","suiteID":280,"groupIDs":[284,290],"metadata":{"skip":false,"skipReason":null},"line":109,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60265}
+{"testID":292,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60268}
+{"group":{"id":293,"suiteID":280,"parentID":284,"name":"isPersonal","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":121,"column":3,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"group","time":60268}
+{"test":{"id":294,"name":"isPersonal should return true when successful","suiteID":280,"groupIDs":[284,293],"metadata":{"skip":false,"skipReason":null},"line":122,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60268}
+{"testID":294,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60271}
+{"test":{"id":295,"name":"isPersonal should return false when error","suiteID":280,"groupIDs":[284,293],"metadata":{"skip":false,"skipReason":null},"line":128,"column":5,"url":"file:///app/test/features/students/data/repositories/student_repository_test.dart"},"type":"testStart","time":60271}
+{"testID":295,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60274}
+{"suite":{"id":296,"platform":"vm","path":"/app/test/features/students/domain/entities/student_entity_test.dart"},"type":"suite","time":60289}
+{"test":{"id":297,"name":"loading /app/test/features/students/domain/entities/student_entity_test.dart","suiteID":296,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":60289}
+{"testID":283,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":60558}
+{"suite":{"id":298,"platform":"vm","path":"/app/test/features/students/presentation/pages/students_page_test.dart"},"type":"suite","time":60582}
+{"test":{"id":299,"name":"loading /app/test/features/students/presentation/pages/students_page_test.dart","suiteID":298,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":60582}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":297,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":61193}
+{"group":{"id":300,"suiteID":296,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":61193}
+{"group":{"id":301,"suiteID":296,"parentID":300,"name":"StudentEntity","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":5,"column":3,"url":"file:///app/test/features/students/domain/entities/student_entity_test.dart"},"type":"group","time":61194}
+{"test":{"id":302,"name":"StudentEntity should have correct props","suiteID":296,"groupIDs":[300,301],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/features/students/domain/entities/student_entity_test.dart"},"type":"testStart","time":61194}
+{"testID":302,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":61221}
+{"suite":{"id":303,"platform":"vm","path":"/app/test/features/students/presentation/pages/student_add_page_test.dart"},"type":"suite","time":61236}
+{"test":{"id":304,"name":"loading /app/test/features/students/presentation/pages/student_add_page_test.dart","suiteID":303,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":61236}
+{"testID":299,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":61633}
+{"group":{"id":305,"suiteID":298,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":61633}
+{"test":{"id":306,"name":"StudentsPage renders correctly with data","suiteID":298,"groupIDs":[305],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":11,"root_column":3,"root_url":"file:///app/test/features/students/presentation/pages/students_page_test.dart"},"type":"testStart","time":61633}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":304,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":62218}
+{"group":{"id":307,"suiteID":303,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":62219}
+{"test":{"id":308,"name":"StudentAddPage adds student","suiteID":303,"groupIDs":[307],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":55,"root_column":3,"root_url":"file:///app/test/features/students/presentation/pages/student_add_page_test.dart"},"type":"testStart","time":62219}
+{"testID":306,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":62719}
+{"test":{"id":309,"name":"StudentsPage renders correctly when empty","suiteID":298,"groupIDs":[305],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":49,"root_column":3,"root_url":"file:///app/test/features/students/presentation/pages/students_page_test.dart"},"type":"testStart","time":62719}
+{"testID":309,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":62804}
+{"suite":{"id":310,"platform":"vm","path":"/app/test/features/students/presentation/pages/student_details_page_test.dart"},"type":"suite","time":62824}
+{"test":{"id":311,"name":"loading /app/test/features/students/presentation/pages/student_details_page_test.dart","suiteID":310,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":62825}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":311,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":63836}
+{"group":{"id":312,"suiteID":310,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":63837}
+{"test":{"id":313,"name":"StudentDetailsPage displays info","suiteID":310,"groupIDs":[312],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":8,"root_column":3,"root_url":"file:///app/test/features/students/presentation/pages/student_details_page_test.dart"},"type":"testStart","time":63837}
+{"testID":308,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":64139}
+{"suite":{"id":314,"platform":"vm","path":"/app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"suite","time":64161}
+{"test":{"id":315,"name":"loading /app/test/features/profile/presentation/providers/settings_provider_test.dart","suiteID":314,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":64161}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":315,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":65095}
+{"group":{"id":316,"suiteID":314,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":5,"line":null,"column":null,"url":null},"type":"group","time":65096}
+{"group":{"id":317,"suiteID":314,"parentID":316,"name":"SettingsState","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":8,"column":3,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"group","time":65096}
+{"test":{"id":318,"name":"SettingsState copyWith should work correctly","suiteID":314,"groupIDs":[316,317],"metadata":{"skip":false,"skipReason":null},"line":9,"column":5,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"testStart","time":65096}
+{"testID":318,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":65132}
+{"group":{"id":319,"suiteID":314,"parentID":316,"name":"SettingsNotifier","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":23,"column":3,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"group","time":65133}
+{"test":{"id":320,"name":"SettingsNotifier should load default settings","suiteID":314,"groupIDs":[316,319],"metadata":{"skip":false,"skipReason":null},"line":24,"column":5,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"testStart","time":65133}
+{"testID":320,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":65171}
+{"test":{"id":321,"name":"SettingsNotifier should update bar weight","suiteID":314,"groupIDs":[316,319],"metadata":{"skip":false,"skipReason":null},"line":39,"column":5,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"testStart","time":65171}
+{"testID":321,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":65175}
+{"test":{"id":322,"name":"SettingsNotifier should update body weight","suiteID":314,"groupIDs":[316,319],"metadata":{"skip":false,"skipReason":null},"line":50,"column":5,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"testStart","time":65175}
+{"testID":322,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":65180}
+{"test":{"id":323,"name":"SettingsNotifier should update theme mode","suiteID":314,"groupIDs":[316,319],"metadata":{"skip":false,"skipReason":null},"line":61,"column":5,"url":"file:///app/test/features/profile/presentation/providers/settings_provider_test.dart"},"type":"testStart","time":65180}
+{"testID":313,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":65180}
+{"testID":323,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":65183}
+{"suite":{"id":324,"platform":"vm","path":"/app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart"},"type":"suite","time":65199}
+{"test":{"id":325,"name":"loading /app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart","suiteID":324,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":65199}
+{"suite":{"id":326,"platform":"vm","path":"/app/test/features/profile/presentation/pages/profile_page_test.dart"},"type":"suite","time":65207}
+{"test":{"id":327,"name":"loading /app/test/features/profile/presentation/pages/profile_page_test.dart","suiteID":326,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":65207}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":325,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":66130}
+{"group":{"id":328,"suiteID":324,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":66131}
+{"test":{"id":329,"name":"BodyCompositionDialog calculates (7-site)","suiteID":324,"groupIDs":[328],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart"},"type":"testStart","time":66131}
+{"testID":327,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":66926}
+{"group":{"id":330,"suiteID":326,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":66926}
+{"test":{"id":331,"name":"ProfilePage displays info","suiteID":326,"groupIDs":[330],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":33,"root_column":3,"root_url":"file:///app/test/features/profile/presentation/pages/profile_page_test.dart"},"type":"testStart","time":66927}
+{"testID":329,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":68844}
+{"test":{"id":332,"name":"BodyCompositionDialog switches to 3-site method and calculates","suiteID":324,"groupIDs":[328],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":35,"root_column":3,"root_url":"file:///app/test/features/profile/presentation/widgets/body_composition_dialog_test.dart"},"type":"testStart","time":68844}
+{"testID":332,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":69699}
+{"suite":{"id":333,"platform":"vm","path":"/app/test/benchmarks/progress_chart_benchmark_test.dart"},"type":"suite","time":69736}
+{"test":{"id":334,"name":"loading /app/test/benchmarks/progress_chart_benchmark_test.dart","suiteID":333,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":69737}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":331,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":70725}
+{"suite":{"id":335,"platform":"vm","path":"/app/test/core/utils/logger_test.dart"},"type":"suite","time":70765}
+{"test":{"id":336,"name":"loading /app/test/core/utils/logger_test.dart","suiteID":335,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":70765}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":334,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":71565}
+{"group":{"id":337,"suiteID":333,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":71566}
+{"test":{"id":338,"name":"ProgressChart benchmark","suiteID":333,"groupIDs":[337],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":8,"root_column":3,"root_url":"file:///app/test/benchmarks/progress_chart_benchmark_test.dart"},"type":"testStart","time":71566}
+{"testID":336,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":71947}
+{"group":{"id":339,"suiteID":335,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":71947}
+{"test":{"id":340,"name":"logger should be initialized","suiteID":335,"groupIDs":[339],"metadata":{"skip":false,"skipReason":null},"line":6,"column":3,"url":"file:///app/test/core/utils/logger_test.dart"},"type":"testStart","time":71947}
+{"testID":340,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":71977}
+{"suite":{"id":341,"platform":"vm","path":"/app/test/core/exceptions/failure_test.dart"},"type":"suite","time":71992}
+{"test":{"id":342,"name":"loading /app/test/core/exceptions/failure_test.dart","suiteID":341,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":71992}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":342,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":72868}
+{"group":{"id":343,"suiteID":341,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":72869}
+{"group":{"id":344,"suiteID":341,"parentID":343,"name":"Failure","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":5,"column":3,"url":"file:///app/test/core/exceptions/failure_test.dart"},"type":"group","time":72869}
+{"test":{"id":345,"name":"Failure ServerFailure should have correct props","suiteID":341,"groupIDs":[343,344],"metadata":{"skip":false,"skipReason":null},"line":6,"column":5,"url":"file:///app/test/core/exceptions/failure_test.dart"},"type":"testStart","time":72869}
+{"testID":345,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":72894}
+{"test":{"id":346,"name":"Failure NetworkFailure should have correct props","suiteID":341,"groupIDs":[343,344],"metadata":{"skip":false,"skipReason":null},"line":13,"column":5,"url":"file:///app/test/core/exceptions/failure_test.dart"},"type":"testStart","time":72895}
+{"testID":346,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":72898}
+{"test":{"id":347,"name":"Failure CacheFailure should have correct props","suiteID":341,"groupIDs":[343,344],"metadata":{"skip":false,"skipReason":null},"line":20,"column":5,"url":"file:///app/test/core/exceptions/failure_test.dart"},"type":"testStart","time":72898}
+{"testID":347,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":72902}
+{"test":{"id":348,"name":"Failure AuthFailure should have correct props","suiteID":341,"groupIDs":[343,344],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///app/test/core/exceptions/failure_test.dart"},"type":"testStart","time":72902}
+{"testID":348,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":72904}
+{"suite":{"id":349,"platform":"vm","path":"/app/test/core/network/api_client_test.dart"},"type":"suite","time":72919}
+{"test":{"id":350,"name":"loading /app/test/core/network/api_client_test.dart","suiteID":349,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":72919}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":350,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":73853}
+{"group":{"id":351,"suiteID":349,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":null,"column":null,"url":null},"type":"group","time":73854}
+{"group":{"id":352,"suiteID":349,"parentID":351,"name":"ApiClient","metadata":{"skip":false,"skipReason":null},"testCount":7,"line":26,"column":3,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"group","time":73854}
+{"test":{"id":353,"name":"ApiClient get call should return data when successful","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":27,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73855}
+{"testID":353,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73910}
+{"test":{"id":354,"name":"ApiClient get call should throw ServerFailure on DioException","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":42,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73910}
+{"testID":354,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73921}
+{"test":{"id":355,"name":"ApiClient post call should return data when successful","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":60,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73922}
+{"testID":355,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73926}
+{"test":{"id":356,"name":"ApiClient put call should return data when successful","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":79,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73926}
+{"testID":356,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73932}
+{"test":{"id":357,"name":"ApiClient delete call should return data when successful","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":98,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73932}
+{"testID":357,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73936}
+{"test":{"id":358,"name":"ApiClient setAuthToken should set Authorization header","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":117,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73936}
+{"testID":358,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73941}
+{"test":{"id":359,"name":"ApiClient clearAuthToken should remove Authorization header","suiteID":349,"groupIDs":[351,352],"metadata":{"skip":false,"skipReason":null},"line":122,"column":5,"url":"file:///app/test/core/network/api_client_test.dart"},"type":"testStart","time":73941}
+{"testID":359,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":73944}
+{"suite":{"id":360,"platform":"vm","path":"/app/test/core/theme/app_theme_test.dart"},"type":"suite","time":73959}
+{"test":{"id":361,"name":"loading /app/test/core/theme/app_theme_test.dart","suiteID":360,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":73959}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":338,"messageType":"print","message":"BENCHMARK_RESULT: 3160ms for 50 iterations","type":"print","time":76701}
+{"testID":338,"messageType":"print","message":"BENCHMARK_AVG: 63.2ms per iteration","type":"print","time":76701}
+{"testID":338,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":76760}
+{"suite":{"id":362,"platform":"vm","path":"/app/test/core/widgets/common_empty_state_test.dart"},"type":"suite","time":76786}
+{"test":{"id":363,"name":"loading /app/test/core/widgets/common_empty_state_test.dart","suiteID":362,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":76786}
+{"testID":361,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":77110}
+{"group":{"id":364,"suiteID":360,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":77111}
+{"group":{"id":365,"suiteID":360,"parentID":364,"name":"AppTheme","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":10,"column":3,"url":"file:///app/test/core/theme/app_theme_test.dart"},"type":"group","time":77111}
+{"test":{"id":366,"name":"AppTheme colors should be correct","suiteID":360,"groupIDs":[364,365],"metadata":{"skip":false,"skipReason":null},"line":11,"column":5,"url":"file:///app/test/core/theme/app_theme_test.dart"},"type":"testStart","time":77111}
+{"testID":366,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":77141}
+{"suite":{"id":367,"platform":"vm","path":"/app/test/api_connectivity_test.dart"},"type":"suite","time":77160}
+{"test":{"id":368,"name":"loading /app/test/api_connectivity_test.dart","suiteID":367,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":77160}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":363,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":77796}
+{"group":{"id":369,"suiteID":362,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":3,"line":null,"column":null,"url":null},"type":"group","time":77797}
+{"test":{"id":370,"name":"CommonEmptyState displays title and message","suiteID":362,"groupIDs":[369],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":6,"root_column":3,"root_url":"file:///app/test/core/widgets/common_empty_state_test.dart"},"type":"testStart","time":77797}
+{"testID":368,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":78068}
+{"group":{"id":371,"suiteID":367,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":2,"line":null,"column":null,"url":null},"type":"group","time":78070}
+{"group":{"id":372,"suiteID":367,"parentID":371,"name":"API Connectivity Tests","metadata":{"skip":true,"skipReason":null},"testCount":2,"line":6,"column":3,"url":"file:///app/test/api_connectivity_test.dart"},"type":"group","time":78070}
+{"test":{"id":373,"name":"API Connectivity Tests Should be able to connect to API Server","suiteID":367,"groupIDs":[371,372],"metadata":{"skip":true,"skipReason":null},"line":9,"column":5,"url":"file:///app/test/api_connectivity_test.dart"},"type":"testStart","time":78071}
+{"testID":373,"result":"success","skipped":true,"hidden":false,"type":"testDone","time":78071}
+{"test":{"id":374,"name":"API Connectivity Tests Verify WorkoutGroup Endpoint Reachability","suiteID":367,"groupIDs":[371,372],"metadata":{"skip":true,"skipReason":null},"line":31,"column":5,"url":"file:///app/test/api_connectivity_test.dart"},"type":"testStart","time":78073}
+{"testID":374,"result":"success","skipped":true,"hidden":false,"type":"testDone","time":78073}
+{"suite":{"id":375,"platform":"vm","path":"/app/test/widget_test.dart"},"type":"suite","time":78088}
+{"test":{"id":376,"name":"loading /app/test/widget_test.dart","suiteID":375,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":78088}
+{"testID":370,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":78445}
+{"test":{"id":377,"name":"CommonEmptyState displays icon when provided","suiteID":362,"groupIDs":[369],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":22,"root_column":3,"root_url":"file:///app/test/core/widgets/common_empty_state_test.dart"},"type":"testStart","time":78446}
+
+[{"event":"test.startedProcess","params":{"vmServiceUri":null}}]
+{"testID":377,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":78487}
+{"test":{"id":378,"name":"CommonEmptyState displays action button when provided","suiteID":362,"groupIDs":[369],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":40,"root_column":3,"root_url":"file:///app/test/core/widgets/common_empty_state_test.dart"},"type":"testStart","time":78488}
+{"testID":378,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":78659}
+{"testID":376,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":78970}
+{"group":{"id":379,"suiteID":375,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":1,"line":null,"column":null,"url":null},"type":"group","time":78970}
+{"test":{"id":380,"name":"Basic smoke test","suiteID":375,"groupIDs":[379],"metadata":{"skip":false,"skipReason":null},"line":174,"column":5,"url":"package:flutter_test/src/widget_tester.dart","root_line":5,"root_column":3,"root_url":"file:///app/test/widget_test.dart"},"type":"testStart","time":78970}
+{"testID":380,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":79571}
+{"success":false,"type":"done","time":79589}
