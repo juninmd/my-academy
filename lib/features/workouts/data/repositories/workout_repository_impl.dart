@@ -6,6 +6,7 @@ import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../../domain/entities/workout_entity.dart';
+import '../../domain/entities/workout_series_entity.dart';
 import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/repositories/workout_repository.dart';
@@ -123,7 +124,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         'workouts': group.workouts.map(_mapWorkoutToJson).toList(),
       };
 
-      final response = await _apiClient.post('workout-groups', data: json);
+      final response = await _apiClient.post('workouts-groups', data: json);
       return Right(_mapGroup(response));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -143,7 +144,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       };
 
       final response = await _apiClient.put(
-        'workout-groups/${group.id}',
+        'workouts-groups/${group.id}',
         data: json,
       );
       return Right(_mapGroup(response));
@@ -155,7 +156,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   @override
   Future<Either<Failure, Unit>> deleteWorkoutGroup(int groupId) async {
     try {
-      await _apiClient.delete('workout-groups/$groupId');
+      await _apiClient.delete('workouts-groups/$groupId');
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -169,8 +170,9 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       // if we want to create, no ID.
       if (workout.id != null) 'id': workout.id,
       'exerciseId': workout.exerciseId,
+      if (workout.methodId != null) 'methodId': workout.methodId,
       'description': workout.description,
-      'series':
+      'workoutSeries':
           workout.series
               .map(
                 (s) => {
@@ -200,9 +202,22 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   WorkoutEntity _mapWorkout(Map<String, dynamic> json) => WorkoutEntity(
     id: json['id'],
     exerciseId: json['exerciseId'],
+    methodId: json['methodId'],
     description: json['description'],
     exercise: json['exercise'] != null ? _mapExercise(json['exercise']) : null,
-    // map series...
+    series:
+        (json['workoutSeries'] as List<dynamic>? ?? const [])
+            .cast<Map<String, dynamic>>()
+            .map(_mapSeries)
+            .toList(),
+  );
+
+  WorkoutSeriesEntity _mapSeries(Map<String, dynamic> json) => WorkoutSeriesEntity(
+    id: json['id'],
+    workoutId: json['workoutId'],
+    repetitions: json['repetitions'] ?? 0,
+    weight: json['weight'] ?? 0,
+    rest: json['rest'] ?? 0,
   );
 
   ExerciseEntity _mapExercise(Map<String, dynamic> json) => ExerciseEntity(

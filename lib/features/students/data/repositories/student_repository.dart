@@ -26,19 +26,13 @@ class StudentRepositoryImpl implements StudentRepository {
     String userId,
   ) async {
     try {
-      // Changed to use query parameter on /students resource
-      final response = await _apiClient.get('students?personalId=$userId');
+      final response = await _apiClient.get('personals/$userId/students');
       final List<dynamic> data = response;
       return Right(
-        data.map((json) {
-          // Flattened structure from /students
-          return StudentEntity(
-            id: json['id'] ?? '',
-            name: json['name'] ?? '',
-            email: json['email'] ?? '',
-            photoUrl: json['photoUrl'],
-          );
-        }).toList(),
+        data
+            .map((json) => _mapStudentFromPersonalItem(json))
+            .whereType<StudentEntity>()
+            .toList(),
       );
     } catch (e) {
       return Left(ServerFailure(e.toString()));
@@ -51,24 +45,27 @@ class StudentRepositoryImpl implements StudentRepository {
     String personalId,
   ) async {
     try {
-      final data = {
-        'name': student.name,
-        'email': student.email,
-        'photoUrl': student.photoUrl,
-        'personalId': personalId,
-      };
+      final existingResult = await checkStudentExists(student.email);
+      final failureOrStudent = existingResult.fold((left) => left, (right) => right);
+      if (failureOrStudent is Failure) {
+        return Left(failureOrStudent);
+      }
+      final existingStudent = failureOrStudent as StudentEntity?;
 
-      // Post to /students to create a new record
-      final response = await _apiClient.post('students', data: data);
+      if (existingStudent == null) {
+        return const Left(
+          ServerFailure(
+            'Aluno não encontrado. O aluno precisa acessar o app ao menos uma vez.',
+          ),
+        );
+      }
 
-      return Right(
-        StudentEntity(
-          id: response['id'] ?? '',
-          name: response['name'] ?? '',
-          email: response['email'] ?? '',
-          photoUrl: response['photoUrl'],
-        ),
+      await _apiClient.post(
+        'personals',
+        data: {'personalUserId': personalId, 'studentUserId': existingStudent.id},
       );
+
+      return Right(existingStudent);
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -79,18 +76,11 @@ class StudentRepositoryImpl implements StudentRepository {
     String email,
   ) async {
     try {
-      final response = await _apiClient.get('students?email=$email');
+      final response = await _apiClient.get('users?email=$email');
       final List<dynamic> data = response;
       if (data.isNotEmpty) {
         final json = data.first;
-        return Right(
-          StudentEntity(
-            id: json['id'] ?? '',
-            name: json['name'] ?? '',
-            email: json['email'] ?? '',
-            photoUrl: json['photoUrl'],
-          ),
-        );
+        return Right(_mapStudentFromUser(json));
       }
       return const Right(null);
     } catch (e) {
@@ -100,13 +90,34 @@ class StudentRepositoryImpl implements StudentRepository {
 
   @override
   Future<bool> isPersonal(String userId) async {
-    // Check if user exists in 'personals' table
     try {
-      await _apiClient.get('personals/$userId');
-      return true;
+      final response = await _apiClient.get('personals?personalUserId=$userId');
+      return response is List && response.isNotEmpty;
     } catch (_) {
       return false;
     }
+  }
+
+  StudentEntity? _mapStudentFromPersonalItem(dynamic item) {
+    if (item is! Map<String, dynamic>) return null;
+    final json = item;
+    final student = json['student'];
+    if (student is Map<String, dynamic>) {
+      return _mapStudentFromUser(student);
+    }
+    if (json['id'] != null) {
+      return _mapStudentFromUser(json);
+    }
+    return null;
+  }
+
+  StudentEntity _mapStudentFromUser(Map<String, dynamic> json) {
+    return StudentEntity(
+      id: (json['id'] ?? '').toString(),
+      name: (json['name'] ?? '').toString(),
+      email: (json['email'] ?? '').toString(),
+      photoUrl: json['photoUrl']?.toString(),
+    );
   }
 }
 

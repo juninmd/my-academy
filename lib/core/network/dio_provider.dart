@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_client.dart';
 
+const String _apiBaseUrlFromEnv = String.fromEnvironment('API_BASE_URL');
+
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
     BaseOptions(
@@ -64,13 +66,13 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 });
 
 String _getBaseUrl() {
+  final envUrl = _apiBaseUrlFromEnv.trim();
+  if (envUrl.isNotEmpty) {
+    return envUrl;
+  }
+
   if (kReleaseMode) {
-    if (kIsWeb) {
-      // TODO: Replace with your production API URL
-      return 'https://api.production.com';
-    }
-    // For mobile release, you might also want a production URL
-    // return 'https://api.production.com';
+    return 'https://my-academy-api.onrender.com';
   }
 
   if (kIsWeb) return 'http://localhost:9000';
