@@ -19,6 +19,13 @@ if [ -d "$FLUTTER_DIR" ]; then
     if [ -f "$FLUTTER_BIN/flutter" ]; then
         echo "Flutter executable exists. Verifying version..."
         flutter --version || { echo "Flutter version check failed. Re-installing..."; rm -rf "$FLUTTER_DIR"; }
+
+        # Upgrade if existing
+        if [ -d "$FLUTTER_DIR" ]; then
+            echo "Upgrading existing Flutter installation..."
+            flutter channel stable
+            flutter upgrade
+        fi
     else
         echo "Flutter executable missing. Removing directory..."
         rm -rf "$FLUTTER_DIR"
@@ -37,6 +44,7 @@ fi
 echo "Verifying Flutter installation..."
 which flutter
 flutter --version
+flutter doctor -v
 
 echo "Configuring Flutter for web..."
 flutter config --enable-web
