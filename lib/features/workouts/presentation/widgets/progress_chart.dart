@@ -6,10 +6,17 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../../../utils/one_rep_max_calculator.dart';
 
+enum ChartMetric { oneRM, volume }
+
 class ProgressChart extends HookWidget {
-  const ProgressChart({required this.logs, super.key});
+  const ProgressChart({
+    required this.logs,
+    this.metric = ChartMetric.oneRM,
+    super.key,
+  });
 
   final List<ExerciseLogEntity> logs;
+  final ChartMetric metric;
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +31,29 @@ class ProgressChart extends HookWidget {
 
       for (int i = 0; i < sortedLogs.length; i++) {
         final log = sortedLogs[i];
-        double max1RM = 0;
-        for (final set in log.sets) {
-          final rm = OneRepMaxCalculator.calculateEpley(
-            set.weight.toDouble(),
-            set.reps,
-          );
-          if (rm > max1RM) max1RM = rm;
+        double value = 0;
+
+        if (metric == ChartMetric.oneRM) {
+          for (final set in log.sets) {
+            final rm = OneRepMaxCalculator.calculateEpley(
+              set.weight.toDouble(),
+              set.reps,
+            );
+            if (rm > value) value = rm;
+          }
+        } else {
+          // Volume calculation
+          for (final set in log.sets) {
+            value += set.weight * set.reps;
+          }
         }
-        if (max1RM > 0) {
-          points.add(FlSpot(i.toDouble(), max1RM));
+
+        if (value > 0) {
+          points.add(FlSpot(i.toDouble(), value));
         }
       }
       return (sortedLogs: sortedLogs, points: points);
-    }, [logs]);
+    }, [logs, metric]);
 
     final sortedLogs = chartData.sortedLogs;
     final points = chartData.points;
@@ -60,7 +76,7 @@ class ProgressChart extends HookWidget {
             gridData: FlGridData(
               show: true,
               drawVerticalLine: true,
-              horizontalInterval: 10,
+              horizontalInterval: metric == ChartMetric.volume ? 1000 : 10,
               verticalInterval: 1,
               getDrawingHorizontalLine: (value) {
                 return FlLine(
@@ -119,11 +135,23 @@ class ProgressChart extends HookWidget {
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  interval: 10,
+                  interval: metric == ChartMetric.volume ? null : 10,
                   reservedSize: 42,
                   getTitlesWidget: (value, meta) {
+                    if (metric == ChartMetric.volume) {
+                       if (value >= 1000) {
+                         return Text(
+                          '${(value / 1000).toStringAsFixed(1)}k',
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodySmall?.color,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                        );
+                       }
+                    }
                     return Text(
-                      '${value.toInt()}kg',
+                      '${value.toInt()}',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.bodySmall?.color,
                         fontWeight: FontWeight.bold,
@@ -168,8 +196,11 @@ class ProgressChart extends HookWidget {
               touchTooltipData: LineTouchTooltipData(
                 getTooltipItems: (touchedSpots) {
                   return touchedSpots.map((spot) {
+                    final val = metric == ChartMetric.volume
+                        ? '${spot.y.toStringAsFixed(0)} kg'
+                        : '${spot.y.toStringAsFixed(1)} kg';
                     return LineTooltipItem(
-                      '${spot.y.toStringAsFixed(1)} kg',
+                      val,
                       const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

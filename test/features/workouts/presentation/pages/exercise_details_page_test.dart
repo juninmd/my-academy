@@ -29,7 +29,8 @@ void main() {
     await tester.pump(); // wait for future
 
     expect(find.text('Bench Press'), findsOneWidget);
-    expect(find.text('Dicas'), findsOneWidget);
+    // Updated expectation to match the new UI text
+    expect(find.text('Dicas de Execução'), findsOneWidget);
     expect(find.text('Tip 1'), findsOneWidget);
     expect(find.text('Erros Comuns'), findsOneWidget);
     expect(find.text('Mistake 1'), findsOneWidget);
