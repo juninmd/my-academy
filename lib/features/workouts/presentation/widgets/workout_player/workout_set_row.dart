@@ -26,39 +26,124 @@ class WorkoutSetRow extends HookWidget {
   final ValueChanged<SetLogState> onChanged;
   final VoidCallback onCompleted;
 
+  Color _getBackgroundColor(BuildContext context) {
+    if (log.isCompleted) return Colors.green.withValues(alpha: 0.1);
+
+    switch (log.type) {
+      case SetType.warmup:
+        return Colors.orange.withValues(alpha: 0.1);
+      case SetType.dropset:
+        return Colors.purple.withValues(alpha: 0.1);
+      case SetType.failure:
+        return Colors.red.withValues(alpha: 0.1);
+      case SetType.normal:
+      default:
+        return Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface;
+    }
+  }
+
+  Color _getBorderColor(BuildContext context) {
+    if (log.isCompleted) return Colors.green.withValues(alpha: 0.5);
+
+    switch (log.type) {
+      case SetType.warmup:
+        return Colors.orange.withValues(alpha: 0.3);
+      case SetType.dropset:
+        return Colors.purple.withValues(alpha: 0.3);
+      case SetType.failure:
+        return Colors.red.withValues(alpha: 0.3);
+      case SetType.normal:
+      default:
+        return Theme.of(context).dividerColor.withValues(alpha: 0.1);
+    }
+  }
+
+  String _getSetTypeLabel(SetType type) {
+    switch (type) {
+      case SetType.warmup: return 'AQUECIMENTO';
+      case SetType.dropset: return 'DROP SET';
+      case SetType.failure: return 'FALHA';
+      case SetType.normal: return 'NORMAL';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final repsLabel = lastSet != null ? 'Reps (${lastSet!.reps})' : 'Reps';
+    final weightLabel = lastSet != null ? 'kg (${lastSet!.weight})' : 'kg';
+
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color:
-            log.isCompleted
-                ? Colors.green.withValues(alpha: 0.05)
-                : Theme.of(context).cardTheme.color,
+        color: _getBackgroundColor(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color:
-              log.isCompleted
-                  ? Colors.green.withValues(alpha: 0.3)
-                  : Theme.of(context).dividerColor.withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: _getBorderColor(context)),
       ),
       child: Column(
         children: [
-          // Header: Set Info & History
+          // Header: Set Info & Type Selector
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'SÉRIE ${index + 1}',
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0,
-                  color: Colors.grey,
+              PopupMenuButton<SetType>(
+                initialValue: log.type,
+                onSelected: (SetType item) {
+                  onChanged(SetLogState(
+                    actualReps: log.actualReps,
+                    actualWeight: log.actualWeight,
+                    rpe: log.rpe,
+                    isCompleted: log.isCompleted,
+                    type: item,
+                  ));
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'SÉRIE ${index + 1}',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    if (log.type != SetType.normal)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: _getBorderColor(context),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          _getSetTypeLabel(log.type),
+                          style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    const Icon(Icons.arrow_drop_down, size: 14, color: Colors.grey),
+                  ],
                 ),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<SetType>>[
+                  const PopupMenuItem<SetType>(
+                    value: SetType.normal,
+                    child: Text('Normal'),
+                  ),
+                  const PopupMenuItem<SetType>(
+                    value: SetType.warmup,
+                    child: Text('Aquecimento'),
+                  ),
+                  const PopupMenuItem<SetType>(
+                    value: SetType.dropset,
+                    child: Text('Drop Set'),
+                  ),
+                  const PopupMenuItem<SetType>(
+                    value: SetType.failure,
+                    child: Text('Falha'),
+                  ),
+                ],
               ),
+
               if (lastSet != null)
                 Material(
                   color: Colors.transparent,
@@ -73,6 +158,7 @@ class WorkoutSetRow extends HookWidget {
                                   actualWeight: lastSet!.weight,
                                   rpe: log.rpe,
                                   isCompleted: log.isCompleted,
+                                  type: log.type,
                                 ),
                               );
                             }
@@ -99,18 +185,12 @@ class WorkoutSetRow extends HookWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            '${lastSet!.reps}x ${lastSet!.weight}kg',
+                            'Copiar',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 10,
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.copy,
-                            size: 10,
-                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ],
                       ),
@@ -129,7 +209,7 @@ class WorkoutSetRow extends HookWidget {
               Expanded(
                 flex: 2,
                 child: NumberInputControl(
-                  label: 'Reps',
+                  label: repsLabel,
                   value: log.actualReps,
                   enabled: !log.isCompleted,
                   onChanged: (val) {
@@ -139,6 +219,7 @@ class WorkoutSetRow extends HookWidget {
                         actualWeight: log.actualWeight,
                         rpe: log.rpe,
                         isCompleted: log.isCompleted,
+                        type: log.type,
                       ),
                     );
                   },
@@ -149,7 +230,7 @@ class WorkoutSetRow extends HookWidget {
               Expanded(
                 flex: 2,
                 child: NumberInputControl(
-                  label: 'kg',
+                  label: weightLabel,
                   labelSuffix: Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -187,6 +268,7 @@ class WorkoutSetRow extends HookWidget {
                         actualWeight: val,
                         rpe: log.rpe,
                         isCompleted: log.isCompleted,
+                        type: log.type,
                       ),
                     );
                   },
@@ -217,6 +299,7 @@ class WorkoutSetRow extends HookWidget {
                                             actualWeight: log.actualWeight,
                                             rpe: rpe,
                                             isCompleted: log.isCompleted,
+                                            type: log.type,
                                           ),
                                         );
                                       },
