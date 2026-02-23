@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../domain/entities/workout_series_entity.dart';
-import '../../../domain/entities/set_log_entity.dart';
 import '../../../domain/entities/session_log_entity.dart';
 import '../number_input_control.dart';
 import '../plate_calculator_dialog.dart';
@@ -37,7 +36,6 @@ class WorkoutSetRow extends HookWidget {
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.1);
       case SetType.normal:
-      default:
         return Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface;
     }
   }
@@ -53,7 +51,6 @@ class WorkoutSetRow extends HookWidget {
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.3);
       case SetType.normal:
-      default:
         return Theme.of(context).dividerColor.withValues(alpha: 0.1);
     }
   }

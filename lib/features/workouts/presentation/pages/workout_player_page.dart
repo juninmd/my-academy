@@ -12,7 +12,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
-import '../../domain/entities/set_log_entity.dart';
 import '../providers/workout_provider.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/rest_timer_widget.dart';
@@ -124,6 +123,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                           reps: l.actualReps,
                           weight: l.actualWeight,
                           rpe: l.rpe,
+                          type: l.type,
                         ),
                       )
                       .toList(),
