@@ -20,7 +20,6 @@ class WorkoutHistoryView extends HookConsumerWidget {
       case SetType.failure:
         return Colors.red;
       case SetType.normal:
-      default:
         return Colors.grey;
     }
   }
@@ -34,7 +33,6 @@ class WorkoutHistoryView extends HookConsumerWidget {
       case SetType.failure:
         return 'Falha';
       case SetType.normal:
-      default:
         return '';
     }
   }

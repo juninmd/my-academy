@@ -37,7 +37,6 @@ class WorkoutSetRow extends HookWidget {
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.1);
       case SetType.normal:
-      default:
         return Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface;
     }
   }
@@ -53,7 +52,6 @@ class WorkoutSetRow extends HookWidget {
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.3);
       case SetType.normal:
-      default:
         return Theme.of(context).dividerColor.withValues(alpha: 0.1);
     }
   }
