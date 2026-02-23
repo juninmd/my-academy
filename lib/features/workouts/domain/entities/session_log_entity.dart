@@ -1,4 +1,5 @@
 import 'set_log_entity.dart';
+export 'set_log_entity.dart';
 
 class SetLogState {
   SetLogState({
