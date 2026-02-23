@@ -1,9 +1,4 @@
-enum SetType {
-  normal,
-  warmup,
-  dropset,
-  failure
-}
+import 'set_log_entity.dart';
 
 class SetLogState {
   SetLogState({

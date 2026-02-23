@@ -9,7 +9,16 @@ void main() {
       expect(setLog.reps, 10);
       expect(setLog.weight, 100);
       expect(setLog.rpe, 9);
-      expect(setLog.props, [10, 100, 9]);
+      expect(setLog.type, SetType.normal);
+      expect(setLog.props, [10, 100, 9, SetType.normal]);
+    });
+
+    test('should allow custom type', () {
+      const setLog = SetLogEntity(
+          reps: 10, weight: 100, rpe: 9, type: SetType.dropset);
+
+      expect(setLog.type, SetType.dropset);
+      expect(setLog.props, [10, 100, 9, SetType.dropset]);
     });
 
     test('toJson and fromJson should work correctly', () {

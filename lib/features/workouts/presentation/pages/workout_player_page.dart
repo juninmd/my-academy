@@ -124,6 +124,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                           reps: l.actualReps,
                           weight: l.actualWeight,
                           rpe: l.rpe,
+                          type: l.type,
                         ),
                       )
                       .toList(),
