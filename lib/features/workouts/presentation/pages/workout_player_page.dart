@@ -262,6 +262,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     (context, index) => _ExercisePlayerView(
                       key: ValueKey(activeWorkouts[index].id ?? index),
                       workout: activeWorkouts[index],
+                      isLast: index == activeWorkouts.length - 1,
                       onFinished: onExerciseFinished,
                       onSetCompleted: (restTime) {
                         if (restTime > 0) {
@@ -282,6 +283,10 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                       restTimerRemaining.value += 10;
                       restTimerDuration.value += 10;
                     },
+                    onAdd30Seconds: () {
+                      restTimerRemaining.value += 30;
+                      restTimerDuration.value += 30;
+                    },
                     onSkip: stopRestTimer,
                   ),
                 ),
@@ -300,11 +305,13 @@ class WorkoutPlayerPage extends HookConsumerWidget {
 class _ExercisePlayerView extends HookConsumerWidget {
   const _ExercisePlayerView({
     required this.workout,
+    required this.isLast,
     required this.onFinished,
     required this.onSetCompleted,
     super.key,
   });
   final WorkoutEntity workout;
+  final bool isLast;
   final Function(Map<int, SetLogState>, String, String?) onFinished;
   final Function(int) onSetCompleted;
 
@@ -331,6 +338,17 @@ class _ExercisePlayerView extends HookConsumerWidget {
     final historyLogsAsync = ref.watch(
       exerciseLogsProvider(workout.exerciseId),
     );
+
+    final previousNote = useMemoized(() {
+      final history = historyLogsAsync.value;
+      if (history == null) return null;
+      for (final log in history) {
+        if (log.notes != null && log.notes!.isNotEmpty) {
+          return log.notes;
+        }
+      }
+      return null;
+    }, [historyLogsAsync.value]);
 
     // Smart Pre-fill Logic
     useEffect(() {
@@ -603,6 +621,47 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
                   const SizedBox(height: 24),
 
+                  if (previousNote != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.amber.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.sticky_note_2,
+                                size: 16,
+                                color: Colors.amber[800],
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Nota Anterior',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber[800],
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            previousNote,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+
                   // Notes
                   TextField(
                       controller: notesController,
@@ -618,36 +677,93 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
                   // Next Button
                   SizedBox(
-                      height: 56,
-                      child: FilledButton(
-                        onPressed:
-                            allSetsCompleted
-                                ? () {
+                    height: 56,
+                    child: FilledButton(
+                      onPressed:
+                          allSetsCompleted
+                              ? () {
+                                final finishAction = () {
                                   // PR Check logic (simplified for brevity but should be same)
-                                  final historyLogs = historyLogsAsync.asData?.value ?? [];
+                                  final historyLogs =
+                                      historyLogsAsync.asData?.value ?? [];
                                   String? recordMessage;
                                   if (historyLogs.isNotEmpty) {
                                     double currentMax1RM = 0;
                                     for (final log in logs.value.values) {
-                                      final oneRM = OneRepMaxCalculator.calculateEpley(log.actualWeight.toDouble(), log.actualReps);
-                                      if (oneRM > currentMax1RM) currentMax1RM = oneRM;
+                                      final oneRM =
+                                          OneRepMaxCalculator.calculateEpley(
+                                            log.actualWeight.toDouble(),
+                                            log.actualReps,
+                                          );
+                                      if (oneRM > currentMax1RM) {
+                                        currentMax1RM = oneRM;
+                                      }
                                     }
                                     double historyMax1RM = 0;
                                     for (final log in historyLogs) {
                                       for (final set in log.sets) {
-                                        final oneRM = OneRepMaxCalculator.calculateEpley(set.weight.toDouble(), set.reps);
-                                        if (oneRM > historyMax1RM) historyMax1RM = oneRM;
+                                        final oneRM =
+                                            OneRepMaxCalculator.calculateEpley(
+                                              set.weight.toDouble(),
+                                              set.reps,
+                                            );
+                                        if (oneRM > historyMax1RM) {
+                                          historyMax1RM = oneRM;
+                                        }
                                       }
                                     }
-                                    if (currentMax1RM > historyMax1RM && historyMax1RM > 0) {
-                                      recordMessage = '${workout.exercise?.name}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)';
+                                    if (currentMax1RM > historyMax1RM &&
+                                        historyMax1RM > 0) {
+                                      recordMessage =
+                                          '${workout.exercise?.name}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)';
                                     }
                                   }
-                                  onFinished(logs.value, notesController.text, recordMessage);
+                                  onFinished(
+                                    logs.value,
+                                    notesController.text,
+                                    recordMessage,
+                                  );
+                                };
+
+                                if (isLast) {
+                                  showDialog(
+                                    context: context,
+                                    builder:
+                                        (context) => AlertDialog(
+                                          title: const Text(
+                                            'Finalizar Treino?',
+                                          ),
+                                          content: const Text(
+                                            'Deseja encerrar e salvar o treino agora?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => context.pop(),
+                                              child: const Text('Cancelar'),
+                                            ),
+                                            FilledButton(
+                                              onPressed: () {
+                                                context.pop();
+                                                finishAction();
+                                              },
+                                              child: const Text('Finalizar'),
+                                            ),
+                                          ],
+                                        ),
+                                  );
+                                } else {
+                                  finishAction();
                                 }
-                                : null,
-                        child: const Text('Próximo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                              }
+                              : null,
+                      child: Text(
+                        isLast ? 'Finalizar Treino' : 'Próximo',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                    ),
                   ),
                 ],
               ),

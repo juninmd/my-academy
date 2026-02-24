@@ -66,8 +66,8 @@ class WorkoutSetRow extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final repsLabel = lastSet != null ? 'Reps (${lastSet!.reps})' : 'Reps';
-    final weightLabel = lastSet != null ? 'kg (${lastSet!.weight})' : 'kg';
+    final repsLabel = 'Reps';
+    final weightLabel = 'kg';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -196,7 +196,26 @@ class WorkoutSetRow extends HookWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 8),
+
+          if (lastSet != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 4),
+              child: Row(
+                children: [
+                   Icon(Icons.history, size: 12, color: Theme.of(context).disabledColor),
+                   const SizedBox(width: 4),
+                   Text(
+                     'Último: ${lastSet!.weight}kg x ${lastSet!.reps}${lastSet!.rpe != null ? " @ RPE ${lastSet!.rpe}" : ""}',
+                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                       color: Theme.of(context).disabledColor,
+                       fontStyle: FontStyle.italic,
+                     ),
+                   ),
+                ],
+              ),
+            ),
+
+          const SizedBox(height: 4),
 
           // Main Input Row
           Row(

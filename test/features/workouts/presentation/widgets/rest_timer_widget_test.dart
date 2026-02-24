@@ -25,7 +25,7 @@ void main() {
     await tester.tap(find.text('Pular'));
     expect(skipped, true);
 
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.text('+10'));
     expect(added, true);
   });
 }
