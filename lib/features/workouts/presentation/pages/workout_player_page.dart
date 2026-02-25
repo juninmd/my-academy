@@ -350,6 +350,14 @@ class _ExercisePlayerView extends HookConsumerWidget {
       return null;
     }, [historyLogsAsync.value]);
 
+    // Pre-fill notes from previous session
+    useEffect(() {
+      if (previousNote != null && notesController.text.isEmpty) {
+        notesController.text = previousNote;
+      }
+      return null;
+    }, [previousNote]);
+
     // Smart Pre-fill Logic
     useEffect(() {
       if (historyLogsAsync.asData != null &&
@@ -621,56 +629,16 @@ class _ExercisePlayerView extends HookConsumerWidget {
 
                   const SizedBox(height: 24),
 
-                  if (previousNote != null)
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.amber.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Colors.amber.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.sticky_note_2,
-                                size: 16,
-                                color: Colors.amber[800],
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Nota Anterior',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.amber[800],
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            previousNote,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-
                   // Notes
                   TextField(
-                      controller: notesController,
-                      decoration: const InputDecoration(
-                        labelText: 'Notas do exercício',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.edit_note),
-                      ),
-                      maxLines: 2,
+                    controller: notesController,
+                    decoration: const InputDecoration(
+                      labelText: 'Notas do exercício',
+                      hintText: 'Configurações do banco, pegada, etc.',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.edit_note),
+                    ),
+                    maxLines: 2,
                   ),
 
                   const SizedBox(height: 32),

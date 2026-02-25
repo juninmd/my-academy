@@ -247,33 +247,6 @@ class WorkoutSetRow extends HookWidget {
                 flex: 2,
                 child: NumberInputControl(
                   label: weightLabel,
-                  labelSuffix: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          showDragHandle: true,
-                          builder:
-                              (context) => Padding(
-                                padding: const EdgeInsets.only(bottom: 24.0),
-                                child: PlateCalculatorContent(
-                                  targetWeight: log.actualWeight.toDouble(),
-                                ),
-                              ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.calculate,
-                          size: 18,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    ),
-                  ),
                   value: log.actualWeight,
                   enabled: !log.isCompleted,
                   step: 1,
@@ -290,7 +263,42 @@ class WorkoutSetRow extends HookWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
+
+              // Plate Calculator Button
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: IconButton(
+                  icon: const Icon(Icons.calculate_outlined, size: 20),
+                  tooltip: 'Calculadora de Anilhas',
+                  visualDensity: VisualDensity.compact,
+                  style: IconButton.styleFrom(
+                    backgroundColor:
+                        Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.1),
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      showDragHandle: true,
+                      builder:
+                          (context) => Padding(
+                            padding: const EdgeInsets.only(bottom: 24.0),
+                            child: PlateCalculatorContent(
+                              targetWeight: log.actualWeight.toDouble(),
+                            ),
+                          ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(width: 4),
 
               // RPE Selector
               Padding(
