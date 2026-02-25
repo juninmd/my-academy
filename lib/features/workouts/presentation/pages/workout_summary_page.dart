@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../domain/entities/session_log_entity.dart';
+import '../widgets/confetti_overlay.dart';
 
 class WorkoutSummaryPage extends HookWidget {
   const WorkoutSummaryPage({
@@ -44,11 +45,12 @@ class WorkoutSummaryPage extends HookWidget {
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: ConfettiOverlay(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
               // Shareable Card Section
@@ -268,7 +270,7 @@ class WorkoutSummaryPage extends HookWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 
   String _formatDuration(Duration d) {
