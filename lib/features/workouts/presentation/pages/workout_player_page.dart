@@ -2,6 +2,7 @@ import '../widgets/workout_player/workout_set_row.dart';
 import '../widgets/workout_player/workout_history_view.dart';
 import '../widgets/workout_player/workout_warmup_list.dart';
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -753,43 +754,89 @@ class _ExercisePlayerView extends HookConsumerWidget {
     ExerciseLogEntity? lastLog,
     Function(int) onSetCompleted,
   ) {
+    final sortedIndices = logs.value.keys.toList()..sort();
+
     return Column(
-      children:
-          workout.series.asMap().entries.map((entry) {
-            final index = entry.key;
-            final series = entry.value;
-            final log = logs.value[index];
-            final lastSet = (lastLog != null && lastLog.sets.length > index) ? lastLog.sets[index] : null;
+      children: [
+        ...sortedIndices.map((index) {
+          final log = logs.value[index]!;
+          // Use the planned series if within range, otherwise null (extra set)
+          final series =
+              index < workout.series.length ? workout.series[index] : null;
+          final lastSet =
+              (lastLog != null && lastLog.sets.length > index)
+                  ? lastLog.sets[index]
+                  : null;
 
-            if (log == null) return const SizedBox.shrink();
+          return WorkoutSetRow(
+            key: ValueKey('set_row_$index'),
+            index: index,
+            series: series,
+            log: log,
+            lastSet: lastSet,
+            onChanged: (newLog) {
+              final newLogs = Map<int, SetLogState>.from(logs.value);
+              newLogs[index] = newLog;
+              logs.value = newLogs;
+            },
+            onCompleted: () {
+              HapticFeedback.mediumImpact();
+              final newLogs = Map<int, SetLogState>.from(logs.value);
+              final wasCompleted = log.isCompleted;
+              newLogs[index] = SetLogState(
+                actualReps: log.actualReps,
+                actualWeight: log.actualWeight,
+                rpe: log.rpe,
+                isCompleted: !wasCompleted,
+                type: log.type,
+              );
+              logs.value = newLogs;
+              if (!wasCompleted && series != null) {
+                onSetCompleted(series.rest);
+              }
+            },
+            onDelete: () {
+              final currentLogs = Map<int, SetLogState>.from(logs.value);
+              currentLogs.remove(index);
 
-            return WorkoutSetRow(
-              index: index,
-              series: series,
-              log: log,
-              lastSet: lastSet,
-              onChanged: (newLog) {
-                final newLogs = Map<int, SetLogState>.from(logs.value);
-                newLogs[index] = newLog;
-                logs.value = newLogs;
-              },
-              onCompleted: () {
-                HapticFeedback.mediumImpact();
-                final newLogs = Map<int, SetLogState>.from(logs.value);
-                final wasCompleted = log.isCompleted;
-                newLogs[index] = SetLogState(
-                  actualReps: log.actualReps,
-                  actualWeight: log.actualWeight,
-                  rpe: log.rpe,
-                  isCompleted: !wasCompleted,
-                );
-                logs.value = newLogs;
-                if (!wasCompleted) {
-                  onSetCompleted(series.rest);
-                }
-              },
-            );
-          }).toList(),
+              // Re-index subsequent logs to maintain continuity
+              final newLogs = <int, SetLogState>{};
+              final keys = currentLogs.keys.toList()..sort();
+              for (int i = 0; i < keys.length; i++) {
+                newLogs[i] = currentLogs[keys[i]]!;
+              }
+              logs.value = newLogs;
+            },
+          );
+        }),
+        const SizedBox(height: 12),
+        Center(
+          child: TextButton.icon(
+            onPressed: () {
+              final currentLogs = Map<int, SetLogState>.from(logs.value);
+              final nextIndex =
+                  currentLogs.isEmpty
+                      ? 0
+                      : currentLogs.keys.reduce(math.max) + 1;
+              final lastLog =
+                  nextIndex > 0 ? currentLogs[nextIndex - 1] : null;
+
+              currentLogs[nextIndex] = SetLogState(
+                actualReps: lastLog?.actualReps ?? 0,
+                actualWeight: lastLog?.actualWeight ?? 0,
+                rpe: null,
+                isCompleted: false,
+              );
+              logs.value = currentLogs;
+            },
+            icon: const Icon(Icons.add_circle_outline),
+            label: const Text('Adicionar Série'),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
