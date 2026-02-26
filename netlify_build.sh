@@ -46,7 +46,7 @@ flutter pub get
 
 echo "Building web app (release)..."
 flutter clean
-flutter build web --release --no-tree-shake-icons
+flutter build web --release --base-href "/" --no-tree-shake-icons
 
 echo "Build complete!"
 ls -la build/web
