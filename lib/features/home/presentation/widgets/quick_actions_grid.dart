@@ -5,6 +5,7 @@ import '../../../workouts/presentation/widgets/plate_calculator_dialog.dart';
 import '../../../workouts/presentation/widgets/one_rep_max_calculator_dialog.dart';
 import 'quick_timer_dialog.dart';
 import 'body_weight_dialog.dart';
+import 'quick_note_dialog.dart';
 
 class QuickActionsGrid extends StatelessWidget {
   const QuickActionsGrid({super.key});
@@ -75,6 +76,16 @@ class QuickActionsGrid extends StatelessWidget {
             () => showDialog(
               context: context,
               builder: (context) => const BodyWeightDialog(),
+            ),
+      ),
+      _QuickAction(
+        icon: Icons.edit_note,
+        label: 'Diário',
+        color: Colors.pink,
+        onTap:
+            () => showDialog(
+              context: context,
+              builder: (context) => const QuickNoteDialog(),
             ),
       ),
     ];

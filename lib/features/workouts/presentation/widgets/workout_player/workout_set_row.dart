@@ -15,15 +15,17 @@ class WorkoutSetRow extends HookWidget {
     required this.onChanged,
     required this.onCompleted,
     this.lastSet,
+    this.onDelete,
     super.key,
   });
 
   final int index;
-  final WorkoutSeriesEntity series;
+  final WorkoutSeriesEntity? series;
   final SetLogState log;
   final SetLogEntity? lastSet;
   final ValueChanged<SetLogState> onChanged;
   final VoidCallback onCompleted;
+  final VoidCallback? onDelete;
 
   Color _getBackgroundColor(BuildContext context) {
     if (log.isCompleted) return Colors.green.withValues(alpha: 0.1);
@@ -141,59 +143,79 @@ class WorkoutSetRow extends HookWidget {
                 ],
               ),
 
-              if (lastSet != null)
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(4),
-                    onTap:
-                        !log.isCompleted
-                            ? () {
-                              onChanged(
-                                SetLogState(
-                                  actualReps: lastSet!.reps,
-                                  actualWeight: lastSet!.weight,
-                                  rpe: log.rpe,
-                                  isCompleted: log.isCompleted,
-                                  type: log.type,
-                                ),
-                              );
-                            }
-                            : null,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.primary
-                              .withValues(alpha: 0.3),
-                        ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (lastSet != null)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
                         borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.history,
-                            size: 12,
-                            color: Theme.of(context).colorScheme.primary,
+                        onTap:
+                            !log.isCompleted
+                                ? () {
+                                  onChanged(
+                                    SetLogState(
+                                      actualReps: lastSet!.reps,
+                                      actualWeight: lastSet!.weight,
+                                      rpe: log.rpe,
+                                      isCompleted: log.isCompleted,
+                                      type: log.type,
+                                    ),
+                                  );
+                                }
+                                : null,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Copiar',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.primary
+                                  .withValues(alpha: 0.3),
                             ),
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                        ],
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.history,
+                                size: 12,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Copiar',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  if (onDelete != null) ...[
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: onDelete,
+                      borderRadius: BorderRadius.circular(4),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.delete_outline,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ],
           ),
 
