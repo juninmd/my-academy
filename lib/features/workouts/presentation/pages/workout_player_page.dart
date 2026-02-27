@@ -168,90 +168,134 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           }
         }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(group.name),
-            centerTitle: true,
-            leading: Center(child: WorkoutTimer(notifier: timerNotifier)),
-            elevation: 0,
-            scrolledUnderElevation: 0,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(4),
-              child: LinearProgressIndicator(
-                value: (currentExerciseIndex.value + 1) / activeWorkouts.length,
-                backgroundColor: Colors.white10,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme.of(context).colorScheme.primary,
+        Future<bool> showExitConfirmation() async {
+          final shouldExit = await showDialog<bool>(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Sair do Treino?'),
+                content: const Text(
+                  'Se você sair agora, o progresso atual pode não ser salvo completamente. Deseja sair mesmo assim?',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: const Text('Continuar Treinando'),
+                  ),
+                  FilledButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                    child: const Text('Sair'),
+                  ),
+                ],
+              );
+            },
+          );
+          return shouldExit ?? false;
+        }
+
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) return;
+            final shouldPop = await showExitConfirmation();
+            if (shouldPop && context.mounted) {
+              context.pop();
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(group.name),
+              centerTitle: true,
+              leading: Center(child: WorkoutTimer(notifier: timerNotifier)),
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(4),
+                child: LinearProgressIndicator(
+                  value:
+                      (currentExerciseIndex.value + 1) / activeWorkouts.length,
+                  backgroundColor: Colors.white10,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
+              actions: [
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.build_circle_outlined),
+                  tooltip: 'Ferramentas',
+                  onSelected: (value) {
+                    if (value == 'plate') {
+                      showDialog(
+                        context: context,
+                        builder:
+                            (context) =>
+                                const PlateCalculatorDialog(targetWeight: 0),
+                      );
+                    } else if (value == 'timer') {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const QuickTimerDialog(),
+                      );
+                    } else if (value == '1rm') {
+                      showDialog(
+                        context: context,
+                        builder:
+                            (context) => const OneRepMaxCalculatorDialog(),
+                      );
+                    }
+                  },
+                  itemBuilder:
+                      (context) => [
+                        const PopupMenuItem(
+                          value: 'plate',
+                          child: Row(
+                            children: [
+                              Icon(Icons.calculate_outlined),
+                              SizedBox(width: 8),
+                              Text('Calculadora de Anilhas'),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'timer',
+                          child: Row(
+                            children: [
+                              Icon(Icons.timer_outlined),
+                              SizedBox(width: 8),
+                              Text('Cronômetro Rápido'),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: '1rm',
+                          child: Row(
+                            children: [
+                              Icon(Icons.fitness_center),
+                              SizedBox(width: 8),
+                              Text('Calculadora 1RM'),
+                            ],
+                          ),
+                        ),
+                      ],
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final shouldPop = await showExitConfirmation();
+                    if (shouldPop && context.mounted) {
+                      context.pop();
+                    }
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ],
             ),
-            actions: [
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.build_circle_outlined),
-                tooltip: 'Ferramentas',
-                onSelected: (value) {
-                  if (value == 'plate') {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) =>
-                              const PlateCalculatorDialog(targetWeight: 0),
-                    );
-                  } else if (value == 'timer') {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const QuickTimerDialog(),
-                    );
-                  } else if (value == '1rm') {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const OneRepMaxCalculatorDialog(),
-                    );
-                  }
-                },
-                itemBuilder:
-                    (context) => [
-                      const PopupMenuItem(
-                        value: 'plate',
-                        child: Row(
-                          children: [
-                            Icon(Icons.calculate_outlined),
-                            SizedBox(width: 8),
-                            Text('Calculadora de Anilhas'),
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: 'timer',
-                        child: Row(
-                          children: [
-                            Icon(Icons.timer_outlined),
-                            SizedBox(width: 8),
-                            Text('Cronômetro Rápido'),
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem(
-                        value: '1rm',
-                        child: Row(
-                          children: [
-                            Icon(Icons.fitness_center),
-                            SizedBox(width: 8),
-                            Text('Calculadora 1RM'),
-                          ],
-                        ),
-                      ),
-                    ],
-              ),
-              IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.close),
-              ),
-            ],
-          ),
-          body: Stack(
-            children: [
-              PageView.builder(
+            body: Stack(
+              children: [
+                PageView.builder(
                 controller: pageController,
                 physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (index) {
@@ -291,7 +335,8 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     onSkip: stopRestTimer,
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
         );
       },

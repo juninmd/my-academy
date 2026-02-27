@@ -12,6 +12,7 @@ import '../widgets/next_workout_card.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
 import '../widgets/body_weight_tile.dart';
+import '../widgets/daily_note_card.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../../workouts/presentation/providers/workout_create_provider.dart';
@@ -115,7 +116,10 @@ class DashboardPage extends ConsumerWidget {
                       const WeeklyProgressCard(),
                       const SizedBox(height: 16),
                       const BodyWeightTile(),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
+                      // Daily Note Card
+                      const DailyNoteCard(),
+                      const SizedBox(height: 24),
 
                       // Quick Actions Grid
                       const QuickActionsGrid(),
