@@ -126,6 +126,18 @@ class _PlateCalculatorContentState
             ],
           ),
           const SizedBox(height: 24),
+          if (weightOnSide > 0 && plates.isNotEmpty)
+            SizedBox(
+              height: 120,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: BarbellPainter(
+                  plates: plates,
+                  colorScheme: Theme.of(context).colorScheme,
+                ),
+              ),
+            ),
+          const SizedBox(height: 24),
           Text(
             'Peso por lado: ${weightOnSide > 0 ? weightOnSide.toStringAsFixed(2) : 0} kg',
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -148,5 +160,109 @@ class _PlateCalculatorContentState
         ],
       ),
     );
+  }
+}
+
+class BarbellPainter extends CustomPainter {
+  BarbellPainter({required this.plates, required this.colorScheme});
+
+  final Map<double, int> plates;
+  final ColorScheme colorScheme;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    final centerY = size.height / 2;
+
+    // Draw Barbell Shaft
+    paint.color = Colors.grey[400]!;
+    canvas.drawRect(
+      Rect.fromCenter(
+        center: Offset(size.width * 0.1, centerY),
+        width: size.width * 0.2, // Visible part of the bar
+        height: 15,
+      ),
+      paint,
+    );
+
+    // Draw Sleeve (Thicker part)
+    paint.color = Colors.grey[300]!;
+    canvas.drawRect(
+      Rect.fromLTWH(size.width * 0.2, centerY - 12, size.width * 0.8, 24),
+      paint,
+    );
+
+    // Draw Plates
+    double currentX = size.width * 0.2 + 5; // Start slightly after the sleeve start
+
+    // Order plates from largest to smallest (standard loading)
+    final sortedPlates = plates.entries.toList()
+      ..sort((a, b) => b.key.compareTo(a.key));
+
+    for (final entry in sortedPlates) {
+      final weight = entry.key;
+      final count = entry.value;
+
+      // Determine height/color based on weight
+      final height = _getPlateHeight(weight);
+      final color = _getPlateColor(weight);
+
+      for (int i = 0; i < count; i++) {
+        paint.color = color;
+
+        // Plate body
+        canvas.drawRect(
+          Rect.fromCenter(
+            center: Offset(currentX + 5, centerY), // +5 is half width (10)
+            width: 10,
+            height: height,
+          ),
+          paint,
+        );
+
+        // Border/Detail
+        paint.color = Colors.black.withValues(alpha: 0.1);
+        canvas.drawRect(
+           Rect.fromCenter(
+            center: Offset(currentX + 5, centerY),
+            width: 10,
+            height: height,
+          ),
+          Paint()..style = PaintingStyle.stroke..color = Colors.black12..strokeWidth = 1
+        );
+
+        currentX += 12; // 10 width + 2 spacing
+      }
+    }
+
+    // Draw Collar at the end
+    paint.color = Colors.grey[700]!;
+    canvas.drawRect(
+      Rect.fromCenter(center: Offset(currentX + 5, centerY), width: 10, height: 30),
+      paint,
+    );
+  }
+
+  double _getPlateHeight(double weight) {
+    if (weight >= 20) return 100;
+    if (weight >= 15) return 90;
+    if (weight >= 10) return 80;
+    if (weight >= 5) return 60;
+    return 40;
+  }
+
+  Color _getPlateColor(double weight) {
+    if (weight >= 25) return Colors.red;
+    if (weight >= 20) return Colors.blue;
+    if (weight >= 15) return Colors.yellow[700]!;
+    if (weight >= 10) return Colors.green;
+    if (weight >= 5) return Colors.white;
+    if (weight >= 2.5) return Colors.black;
+    return Colors.grey;
+  }
+
+  @override
+  bool shouldRepaint(covariant BarbellPainter oldDelegate) {
+    return oldDelegate.plates != plates;
   }
 }
