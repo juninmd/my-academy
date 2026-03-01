@@ -6,11 +6,13 @@ class DailyNote {
   final DateTime date;
   final String mood; // Emoji
   final String note;
+  final int energyLevel; // 1 to 10
 
   DailyNote({
     required this.date,
     required this.mood,
     required this.note,
+    this.energyLevel = 5,
   });
 
   Map<String, dynamic> toJson() {
@@ -18,6 +20,7 @@ class DailyNote {
       'date': date.toIso8601String(),
       'mood': mood,
       'note': note,
+      'energyLevel': energyLevel,
     };
   }
 
@@ -26,6 +29,7 @@ class DailyNote {
       date: DateTime.parse(json['date']),
       mood: json['mood'],
       note: json['note'],
+      energyLevel: json['energyLevel'] ?? 5,
     );
   }
 }
@@ -46,10 +50,12 @@ class DailyNotesRepository {
     final notes = await getNotes();
 
     // Remove existing note for the same day
-    notes.removeWhere((n) =>
-        n.date.year == note.date.year &&
-        n.date.month == note.date.month &&
-        n.date.day == note.date.day);
+    notes.removeWhere(
+      (n) =>
+          n.date.year == note.date.year &&
+          n.date.month == note.date.month &&
+          n.date.day == note.date.day,
+    );
 
     notes.add(note);
 
@@ -62,10 +68,12 @@ class DailyNotesRepository {
     final notes = await getNotes();
     final now = DateTime.now();
     return notes
-        .where((n) =>
-            n.date.year == now.year &&
-            n.date.month == now.month &&
-            n.date.day == now.day)
+        .where(
+          (n) =>
+              n.date.year == now.year &&
+              n.date.month == now.month &&
+              n.date.day == now.day,
+        )
         .firstOrNull;
   }
 }

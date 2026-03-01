@@ -5,27 +5,26 @@ import 'package:my_academy/features/workouts/presentation/widgets/rest_timer_wid
 void main() {
   testWidgets('RestTimerWidget displays info and buttons', (tester) async {
     bool skipped = false;
-    bool added = false;
+    bool added10 = false;
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: RestTimerWidget(
             remainingSeconds: 30,
             totalSeconds: 60,
-            onAdd10Seconds: () => added = true,
+            onAdd10Seconds: () => added10 = true,
             onSkip: () => skipped = true,
           ),
         ),
       ),
     );
 
-    expect(find.text('30s'), findsOneWidget);
-    expect(find.text('Pular'), findsOneWidget);
+    expect(find.text('30'), findsOneWidget); // Checks remainingSeconds display
 
-    await tester.tap(find.text('Pular'));
+    await tester.tap(find.byIcon(Icons.skip_next_rounded));
     expect(skipped, true);
 
-    await tester.tap(find.text('+10'));
-    expect(added, true);
+    await tester.tap(find.text('+10s'));
+    expect(added10, true);
   });
 }

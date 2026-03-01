@@ -11,12 +11,14 @@ class QuickNoteDialog extends HookConsumerWidget {
     final noteAsync = ref.watch(dailyNotesNotifierProvider);
     final controller = useTextEditingController();
     final selectedMood = useState<String>('💪'); // Default mood
+    final energyLevel = useState<double>(5.0);
 
     // Load existing note if available
     useEffect(() {
       if (noteAsync.value != null) {
         controller.text = noteAsync.value!.note;
         selectedMood.value = noteAsync.value!.mood;
+        energyLevel.value = noteAsync.value!.energyLevel.toDouble();
       }
       return null;
     }, [noteAsync.value]);
@@ -25,63 +27,87 @@ class QuickNoteDialog extends HookConsumerWidget {
 
     return AlertDialog(
       title: const Text('Diário do Atleta'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Como você está se sentindo hoje?',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-          const SizedBox(height: 16),
-          // Mood Selector
-          Center(
-            child: Wrap(
-              spacing: 12,
-              children:
-                  moods.map((mood) {
-                    final isSelected = selectedMood.value == mood;
-                    return InkWell(
-                      onTap: () => selectedMood.value = mood,
-                      borderRadius: BorderRadius.circular(50),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color:
-                              isSelected
-                                  ? Theme.of(
-                                    context,
-                                  ).colorScheme.primaryContainer
-                                  : Colors.transparent,
-                          shape: BoxShape.circle,
-                          border:
-                              isSelected
-                                  ? Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 2,
-                                  )
-                                  : null,
-                        ),
-                        child: Text(mood, style: const TextStyle(fontSize: 24)),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Como você está se sentindo hoje?',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            // Mood Selector
+            Center(
+              child: Wrap(
+                spacing: 12,
+                children: moods.map((mood) {
+                  final isSelected = selectedMood.value == mood;
+                  return InkWell(
+                    onTap: () => selectedMood.value = mood,
+                    borderRadius: BorderRadius.circular(50),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.primaryContainer
+                            : Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: isSelected
+                            ? Border.all(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 2,
+                              )
+                            : null,
                       ),
-                    );
-                  }).toList(),
+                      child: Text(mood, style: const TextStyle(fontSize: 24)),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          TextField(
-            controller: controller,
-            maxLines: 4,
-            decoration: const InputDecoration(
-              labelText: 'Notas',
-              hintText: 'Ex: Dormi mal, ombro dolorido, muita energia...',
-              border: OutlineInputBorder(),
-              alignLabelWithHint: true,
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Nível de Energia:',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '${energyLevel.value.toInt()}/10',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            Slider(
+              value: energyLevel.value,
+              min: 1,
+              max: 10,
+              divisions: 9,
+              label: energyLevel.value.toInt().toString(),
+              onChanged: (value) {
+                energyLevel.value = value;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: controller,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                labelText: 'Notas',
+                hintText: 'Ex: Dormi mal, ombro dolorido, muita energia...',
+                border: OutlineInputBorder(),
+                alignLabelWithHint: true,
+              ),
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -93,7 +119,11 @@ class QuickNoteDialog extends HookConsumerWidget {
             if (controller.text.isNotEmpty) {
               await ref
                   .read(dailyNotesNotifierProvider.notifier)
-                  .saveNote(selectedMood.value, controller.text);
+                  .saveNote(
+                    selectedMood.value,
+                    controller.text,
+                    energyLevel.value.toInt(),
+                  );
 
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
