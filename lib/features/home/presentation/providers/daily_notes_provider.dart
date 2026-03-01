@@ -13,7 +13,7 @@ class DailyNotesNotifier extends AsyncNotifier<DailyNote?> {
     return repository.getNoteForToday();
   }
 
-  Future<void> saveNote(String mood, String text) async {
+  Future<void> saveNote(String mood, String text, int energyLevel) async {
     final repository = ref.read(dailyNotesRepositoryProvider);
     state = const AsyncValue.loading();
     try {
@@ -21,6 +21,7 @@ class DailyNotesNotifier extends AsyncNotifier<DailyNote?> {
         date: DateTime.now(),
         mood: mood,
         note: text,
+        energyLevel: energyLevel,
       );
       await repository.saveNote(note);
       state = AsyncValue.data(note);
@@ -32,5 +33,5 @@ class DailyNotesNotifier extends AsyncNotifier<DailyNote?> {
 
 final dailyNotesNotifierProvider =
     AsyncNotifierProvider<DailyNotesNotifier, DailyNote?>(
-  DailyNotesNotifier.new,
-);
+      DailyNotesNotifier.new,
+    );
