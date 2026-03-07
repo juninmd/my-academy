@@ -42,7 +42,7 @@ final class WorkoutCreateNotifierProvider
 }
 
 String _$workoutCreateNotifierHash() =>
-    r'09efbd08e3602688408d2777e66a24b27e72ddef';
+    r'e97aa9770e488a2636bb249a0f033cd5000394d5';
 
 abstract class _$WorkoutCreateNotifier extends $Notifier<WorkoutGroupEntity> {
   WorkoutGroupEntity build();
@@ -101,4 +101,4 @@ final class ExercisesProvider
   }
 }
 
-String _$exercisesHash() => r'fc12b53d11e117ef2ad61df718e8ceddbd2d945b';
+String _$exercisesHash() => r'ee6ed55beda0ecd9c7a69c50d6c816a94b8ffa29';

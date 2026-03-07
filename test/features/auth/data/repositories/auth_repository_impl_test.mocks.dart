@@ -24,7 +24,6 @@ import 'package:my_academy/features/auth/data/models/user_dto.dart' as _i2;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeUserDto_0 extends _i1.SmartFake implements _i2.UserDto {
   _FakeUserDto_0(Object parent, Invocation parentInvocation)
@@ -85,4 +84,13 @@ class MockAuthRemoteDataSource extends _i1.Mock
             ),
           )
           as _i4.Future<String>);
+
+  @override
+  _i4.Future<void> updateDisplayName(String? name) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateDisplayName, [name]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 }
