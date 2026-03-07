@@ -26,7 +26,6 @@ import 'package:my_academy/features/auth/domain/repositories/auth_repository.dar
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
-// ignore_for_file: invalid_use_of_internal_member
 
 class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
   _FakeEither_0(Object parent, Invocation parentInvocation)
@@ -81,4 +80,17 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
                 ),
           )
           as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity?>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, void>> updateDisplayName(String? name) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateDisplayName, [name]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+              _FakeEither_0<_i5.Failure, void>(
+                this,
+                Invocation.method(#updateDisplayName, [name]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, void>>);
 }
