@@ -86,13 +86,18 @@ void main() {
         ],
       );
 
-      final value = await container.read(exerciseLogsProvider(1).future).catchError((e) => <ExerciseLogEntity>[]);
+      // Listen to the provider to prevent it from being disposed.
+      final sub = container.listen(exerciseLogsProvider(1), (_, __) {});
 
-      expect(value, isEmpty); // In this implementation when an error occurs the future throws but Riverpod autoDispose makes testing the throw directly hard, let's catch it manually or expect async value.
+      // Expect the future to throw an error.
+      await expectLater(
+        container.read(exerciseLogsProvider(1).future),
+        throwsA(isA<ServerFailure>()),
+      );
 
-      // Better way: use read instead of read(.future) to check the AsyncValue directly.
-      final asyncValue = container.read(exerciseLogsProvider(1));
-      expect(asyncValue.isLoading, true);
+      // Verify the provider's state is AsyncError.
+      expect(container.read(exerciseLogsProvider(1)), isA<AsyncError>());
+      sub.close();
     });
   });
 
