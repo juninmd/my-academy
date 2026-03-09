@@ -66,6 +66,15 @@ class WorkoutSetRow extends HookWidget {
     }
   }
 
+  Color _getSetTypeColor(SetType type, BuildContext context) {
+    switch (type) {
+      case SetType.warmup: return Colors.orange;
+      case SetType.dropset: return Colors.purple;
+      case SetType.failure: return Colors.red;
+      case SetType.normal: return Theme.of(context).colorScheme.primary;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final repsLabel = 'Reps';
@@ -85,60 +94,77 @@ class WorkoutSetRow extends HookWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              PopupMenuButton<SetType>(
-                initialValue: log.type,
-                onSelected: (SetType item) {
-                  onChanged(SetLogState(
-                    actualReps: log.actualReps,
-                    actualWeight: log.actualWeight,
-                    rpe: log.rpe,
-                    isCompleted: log.isCompleted,
-                    type: item,
-                  ));
-                },
-                child: Row(
-                  children: [
-                    Text(
-                      'SÉRIE ${index + 1}',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                        color: Colors.grey,
+              Row(
+                children: [
+                  Text(
+                    'SÉRIE ${index + 1}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  PopupMenuButton<SetType>(
+                    initialValue: log.type,
+                    onSelected: (SetType item) {
+                      onChanged(SetLogState(
+                        actualReps: log.actualReps,
+                        actualWeight: log.actualWeight,
+                        rpe: log.rpe,
+                        isCompleted: log.isCompleted,
+                        type: item,
+                      ));
+                    },
+                    tooltip: 'Alterar tipo de série',
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: _getSetTypeColor(log.type, context).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: _getSetTypeColor(log.type, context).withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _getSetTypeLabel(log.type),
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: _getSetTypeColor(log.type, context),
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            size: 14,
+                            color: _getSetTypeColor(log.type, context),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    if (log.type != SetType.normal)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: _getBorderColor(context),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          _getSetTypeLabel(log.type),
-                          style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
-                        ),
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<SetType>>[
+                      const PopupMenuItem<SetType>(
+                        value: SetType.normal,
+                        child: Text('Normal'),
                       ),
-                    const Icon(Icons.arrow_drop_down, size: 14, color: Colors.grey),
-                  ],
-                ),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<SetType>>[
-                  const PopupMenuItem<SetType>(
-                    value: SetType.normal,
-                    child: Text('Normal'),
-                  ),
-                  const PopupMenuItem<SetType>(
-                    value: SetType.warmup,
-                    child: Text('Aquecimento'),
-                  ),
-                  const PopupMenuItem<SetType>(
-                    value: SetType.dropset,
-                    child: Text('Drop Set'),
-                  ),
-                  const PopupMenuItem<SetType>(
-                    value: SetType.failure,
-                    child: Text('Falha'),
+                      const PopupMenuItem<SetType>(
+                        value: SetType.warmup,
+                        child: Text('Aquecimento', style: TextStyle(color: Colors.orange)),
+                      ),
+                      const PopupMenuItem<SetType>(
+                        value: SetType.dropset,
+                        child: Text('Drop Set', style: TextStyle(color: Colors.purple)),
+                      ),
+                      const PopupMenuItem<SetType>(
+                        value: SetType.failure,
+                        child: Text('Falha', style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
                   ),
                 ],
               ),
