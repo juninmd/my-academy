@@ -48,10 +48,15 @@ class ExerciseLibraryPage extends HookConsumerWidget {
             padding: const EdgeInsets.all(16),
             child: TextField(
               controller: searchController,
-              decoration: const InputDecoration(
-                labelText: 'Buscar',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: 'Buscar exercício...',
+                prefixIcon: const Icon(Icons.search),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
               onChanged: (val) => searchTerm.value = val,
             ),
@@ -62,7 +67,7 @@ class ExerciseLibraryPage extends HookConsumerWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                FilterChip(
+                ChoiceChip(
                   label: const Text('Todos'),
                   selected:
                       filterType.value == FilterType.all &&
@@ -77,7 +82,7 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   },
                 ),
                 const SizedBox(width: 8),
-                FilterChip(
+                ChoiceChip(
                   label: const Text('Recentes'),
                   selected: filterType.value == FilterType.recent,
                   onSelected: (selected) {
@@ -90,7 +95,7 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                   },
                 ),
                 const SizedBox(width: 8),
-                FilterChip(
+                ChoiceChip(
                   label: const Text('Favoritos'),
                   selected: showFavoritesOnly.value,
                   avatar: Icon(
@@ -127,7 +132,7 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                 ].map((group) {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
+                    child: ChoiceChip(
                       label: Text(group),
                       selected: selectedMuscleGroup.value == group,
                       onSelected: (selected) {
