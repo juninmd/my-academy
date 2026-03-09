@@ -70,7 +70,7 @@ class WorkoutSetRow extends HookWidget {
     switch (type) {
       case SetType.warmup: return Colors.orange;
       case SetType.dropset: return Colors.purple;
-      case SetType.failure: return Colors.red;
+      case SetType.failure: return Theme.of(context).colorScheme.error;
       case SetType.normal: return Theme.of(context).colorScheme.primary;
     }
   }
@@ -152,17 +152,17 @@ class WorkoutSetRow extends HookWidget {
                         value: SetType.normal,
                         child: Text('Normal'),
                       ),
-                      const PopupMenuItem<SetType>(
+                      PopupMenuItem<SetType>(
                         value: SetType.warmup,
-                        child: Text('Aquecimento', style: TextStyle(color: Colors.orange)),
+                        child: Text('Aquecimento', style: TextStyle(color: _getSetTypeColor(SetType.warmup, context))),
                       ),
-                      const PopupMenuItem<SetType>(
+                      PopupMenuItem<SetType>(
                         value: SetType.dropset,
-                        child: Text('Drop Set', style: TextStyle(color: Colors.purple)),
+                        child: Text('Drop Set', style: TextStyle(color: _getSetTypeColor(SetType.dropset, context))),
                       ),
-                      const PopupMenuItem<SetType>(
+                      PopupMenuItem<SetType>(
                         value: SetType.failure,
-                        child: Text('Falha', style: TextStyle(color: Colors.red)),
+                        child: Text('Falha', style: TextStyle(color: _getSetTypeColor(SetType.failure, context))),
                       ),
                     ],
                   ),
