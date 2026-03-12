@@ -1,75 +1,46 @@
-# My Academy (Minha Academia)
+# 🎓 My Academy (Frontend)
 
-A Flutter application for managing and tracking your workout progress, built with clean architecture and Riverpod.
+[![Flutter](https://img.shields.io/badge/Flutter-Latest-02569B?logo=flutter)](https://flutter.dev/)
+[![Status: Active](https://img.shields.io/badge/Status-Active-brightgreen.svg)]()
+[![Netlify](https://img.shields.io/badge/Netlify-Deployed-00AD9F?logo=netlify)](https://www.netlify.com/)
 
-## Features
+> A modern, responsive education platform frontend built with Flutter. Orchestrated by **Jules-Architect** and **Spark-Frontend**.
 
-*   **Workout Management:** Create, edit, and delete workouts.
-*   **Exercise Library:** Searchable database of exercises with detailed instructions.
-*   **Progress Tracking:** Visualize your 1RM progression and volume trends.
-*   **Calendar:** View workout history and schedule.
-*   **Body Composition:** Track body measurements and calculate fat percentage.
-*   **Social:** Connect with students or coaches (feature in progress).
+## ✨ Features
 
-## Getting Started
+- **Cross-Platform**: Seamless experience across Web, Android, and iOS.
+- **Responsive UI**: Adaptive layout for mobile and desktop views.
+- **API Integration**: Connected to the `my-academy-project` backend.
+- **Offline Ready**: Local caching and data persistence support.
+- **E2E Testing**: Comprehensive integration tests for critical flows.
 
-### Prerequisites
+## 🛠️ Tech Stack
 
-*   Flutter SDK (version >= 3.7.0 < 4.0.0)
-*   Dart SDK (version >= 3.0.0 < 4.0.0)
-*   Firebase Project (setup `google-services.json` and `GoogleService-Info.plist`)
-*   NestJS Backend (optional for local dev, see `backend/README.md`)
+- **Framework**: Flutter (Dart)
+- **Deployment**: Netlify (Web)
+- **CI/CD**: GitHub Actions
+- **State Management**: Provider / Riverpod
 
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/my-academy.git
-    cd my-academy
-    ```
-
-2.  **Install dependencies:**
-    ```bash
-    flutter pub get
-    ```
-
-3.  **Run the application:**
-    ```bash
-    flutter run
-    ```
-
-## Testing
-
-To run the tests:
+## 🚀 Getting Started
 
 ```bash
-flutter test
+# Install dependencies
+flutter pub get
+
+# Run development mode (Web)
+flutter run -d chrome
+
+# Build for production (Web)
+flutter build web
 ```
 
-To run integration tests:
+## 🛡️ Antigravity Protocol
 
-```bash
-flutter test integration_test
-```
+This project adheres to the **Antigravity** code standards:
+- **Clean Architecture**: Separation of concerns between Data, Domain, and Presentation layers.
+- **Strict Linting**: Enforced by `analysis_options.yaml`.
+- **Modular Widgets**: UI components are isolated and reusable.
 
-## Architecture
+---
 
-This project follows a Clean Architecture approach with Feature-First organization:
-
-*   **lib/core:** Core utilities, widgets, and base classes.
-*   **lib/features:** Feature modules (auth, workouts, profile, etc.). Each feature contains:
-    *   **domain:** Entities, use cases, repository interfaces.
-    *   **data:** Data sources (remote/local), repository implementations, DTOs.
-    *   **presentation:** Pages, widgets, providers (Riverpod), state management.
-
-## State Management
-
-We use [Riverpod](https://riverpod.dev/) for state management and dependency injection. [flutter_hooks](https://pub.dev/packages/flutter_hooks) is used for ephemeral UI state.
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+*"Education is the most powerful weapon which you can use to change the world."*
