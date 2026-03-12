@@ -18,6 +18,8 @@ import '../widgets/plate_calculator_dialog.dart';
 import '../widgets/one_rep_max_calculator_dialog.dart';
 import '../../../home/presentation/widgets/quick_timer_dialog.dart';
 import '../widgets/workout_player/exercise_player_view.dart';
+import '../hooks/use_rest_timer.dart';
+import '../widgets/workout_player/exit_confirmation_dialog.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
   const WorkoutPlayerPage({required this.groupId, super.key});
@@ -45,50 +47,12 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           return timerNotifier.dispose;
         }, []);
 
-        // Rest Timer State
-        final isRestTimerActive = useState(false);
-        final restTimerDuration = useState(0);
-        final restTimerRemaining = useState(0);
-        final restTimer = useRef<Timer?>(null);
+        final restTimer = useRestTimer();
 
         final activeWorkouts = useMemoized(
           () => workouts.where((w) => w.exercise != null).toList(),
           [workouts],
         );
-
-        // Rest Timer Logic
-        void stopRestTimer() {
-          isRestTimerActive.value = false;
-          restTimer.value?.cancel();
-        }
-
-        void startRestTimer(int duration) {
-          stopRestTimer();
-          restTimerDuration.value = duration;
-          restTimerRemaining.value = duration;
-          isRestTimerActive.value = true;
-
-          restTimer.value = Timer.periodic(const Duration(seconds: 1), (
-            t,
-          ) async {
-            if (restTimerRemaining.value > 0) {
-              restTimerRemaining.value--;
-              if (restTimerRemaining.value <= 3 &&
-                  restTimerRemaining.value > 0) {
-                await HapticFeedback.selectionClick();
-              }
-            } else {
-              stopRestTimer();
-              await HapticFeedback.heavyImpact();
-            }
-          });
-        }
-
-        useEffect(() {
-          return () {
-            stopRestTimer();
-          };
-        }, []);
 
         Future<void> onExerciseFinished(
           Map<int, SetLogState> logs,
@@ -96,7 +60,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           String? recordBroken,
         ) async {
           await HapticFeedback.heavyImpact();
-          stopRestTimer();
+          restTimer.stop();
 
           if (recordBroken != null) {
             newRecords.value = [...newRecords.value, recordBroken];
@@ -160,39 +124,11 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           }
         }
 
-        Future<bool> showExitConfirmation() async {
-          final shouldExit = await showDialog<bool>(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Sair do Treino?'),
-                content: const Text(
-                  'Se você sair agora, o progresso atual pode não ser salvo completamente. Deseja sair mesmo assim?',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text('Continuar Treinando'),
-                  ),
-                  FilledButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.error,
-                    ),
-                    child: const Text('Sair'),
-                  ),
-                ],
-              );
-            },
-          );
-          return shouldExit ?? false;
-        }
-
         return PopScope(
           canPop: false,
           onPopInvokedWithResult: (didPop, result) async {
             if (didPop) return;
-            final shouldPop = await showExitConfirmation();
+            final shouldPop = await showExitConfirmationDialog(context);
             if (shouldPop && context.mounted) {
               context.pop();
             }
@@ -273,7 +209,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    final shouldPop = await showExitConfirmation();
+                    final shouldPop = await showExitConfirmationDialog(context);
                     if (shouldPop && context.mounted) {
                       context.pop();
                     }
@@ -298,28 +234,28 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     onFinished: onExerciseFinished,
                     onSetCompleted: (restTime) {
                       if (restTime > 0) {
-                        startRestTimer(restTime);
+                        restTimer.start(restTime);
                       }
                     },
                   ),
                 ),
-                if (isRestTimerActive.value)
+                if (restTimer.isActive.value)
                   Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: RestTimerWidget(
-                      remainingSeconds: restTimerRemaining.value,
-                      totalSeconds: restTimerDuration.value,
+                      remainingSeconds: restTimer.remaining.value,
+                      totalSeconds: restTimer.duration.value,
                       onAdd10Seconds: () {
-                        restTimerRemaining.value += 10;
-                        restTimerDuration.value += 10;
+                        restTimer.remaining.value += 10;
+                        restTimer.duration.value += 10;
                       },
                       onAdd30Seconds: () {
-                        restTimerRemaining.value += 30;
-                        restTimerDuration.value += 30;
+                        restTimer.remaining.value += 30;
+                        restTimer.duration.value += 30;
                       },
-                      onSkip: stopRestTimer,
+                      onSkip: restTimer.stop,
                     ),
                   ),
               ],
