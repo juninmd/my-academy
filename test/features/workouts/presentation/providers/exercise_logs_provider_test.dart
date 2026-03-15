@@ -86,8 +86,20 @@ void main() {
         ],
       );
 
+      // Listen to the provider to keep it alive and check for the error state.
+      final sub = container.listen(exerciseLogsProvider(1), (_, __) {});
+
+      // Expect the future to throw an exception, as the provider does.
+      await expectLater(
+        container.read(exerciseLogsProvider(1).future),
+        throwsA(isA<Exception>()),
+      );
+
+      // Verify the provider's state is AsyncError.
       final asyncValue = container.read(exerciseLogsProvider(1));
-      expect(asyncValue.isLoading, true);
+      expect(asyncValue.hasError, isTrue);
+
+      sub.close();
     });
   });
 
