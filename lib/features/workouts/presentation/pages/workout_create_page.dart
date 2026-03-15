@@ -170,7 +170,7 @@ class WorkoutCreatePage extends HookConsumerWidget {
                                   onPressed: () => notifier.removeWorkout(index),
                                 ),
                                 const SizedBox(width: 8),
-                                const Icon(Icons.drag_handle, color: Theme.of(context).disabledColor),
+                                Icon(Icons.drag_handle, color: Theme.of(context).disabledColor),
                               ],
                             ),
                           ),

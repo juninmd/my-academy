@@ -34,6 +34,6 @@ void main() {
     expect(find.text('Tip 1'), findsOneWidget);
     expect(find.text('Erros Comuns'), findsOneWidget);
     expect(find.text('Mistake 1'), findsOneWidget);
-    expect(find.text('Nenhum registro encontrado.'), findsOneWidget);
+    expect(find.text('Nenhum registro encontrado'), findsOneWidget);
   });
 }

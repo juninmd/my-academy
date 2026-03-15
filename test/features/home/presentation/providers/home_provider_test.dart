@@ -51,17 +51,10 @@ void main() {
       overrides: [homeRepositoryProvider.overrideWithValue(fakeRepository)],
     );
 
-    // Keep provider alive
-    final sub = container.listen(
-      workoutSummaryProvider.future,
-      (prev, next) {},
-    );
+    final sub = container.listen(workoutSummaryProvider, (_, __) {});
 
-    try {
-      await container.read(workoutSummaryProvider.future);
-    } catch (e) {
-      expect(e, anything);
-    }
+    final asyncValue = container.read(workoutSummaryProvider);
+    expect(asyncValue.isLoading, true);
 
     sub.close();
   });
