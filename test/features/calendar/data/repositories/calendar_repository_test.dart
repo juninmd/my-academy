@@ -20,7 +20,7 @@ void main() {
     test('should return list of sessions when successful', () async {
       final mockData = [
         {
-          'id': '1',
+          'id': 1,
           'workoutGroupId': 1,
           'date': '2023-01-01T00:00:00.000Z',
           'checked': true,
@@ -33,9 +33,9 @@ void main() {
       final result = await repository.getSessions('u1', 1, 2023);
 
       expect(result.isRight(), true);
-      result.fold((l) => fail('should be right'), (r) {
+      result.fold((l) => fail('should be right: $l'), (r) {
         expect(r.length, 1);
-        expect(r[0].id, '1');
+        expect(r[0].id, 1);
       });
     });
 

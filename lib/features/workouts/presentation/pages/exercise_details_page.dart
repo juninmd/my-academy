@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/widgets/common_empty_state.dart';
 import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/entities/set_log_entity.dart';
@@ -184,14 +185,12 @@ class ExerciseDetailsPage extends HookConsumerWidget {
               if (logs.isEmpty) {
                 return const SliverFillRemaining(
                   hasScrollBody: false,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.history, size: 64, color: Colors.grey),
-                        SizedBox(height: 16),
-                        Text('Nenhum registro encontrado.'),
-                      ],
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 32.0),
+                    child: CommonEmptyState(
+                      icon: Icons.history,
+                      title: 'Nenhum registro encontrado',
+                      message: 'O histórico de treinos aparecerá aqui.',
                     ),
                   ),
                 );

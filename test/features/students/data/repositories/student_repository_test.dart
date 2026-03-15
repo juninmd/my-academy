@@ -26,19 +26,17 @@ void main() {
           'name': 'Student 1',
           'email': 's1@test.com',
           'photoUrl': 'url1',
-          'personalId': 'trainer1',
         },
         {
           'id': '2',
           'name': 'Student 2',
           'email': 's2@test.com',
           'photoUrl': 'url2',
-          'personalId': 'trainer1',
         },
       ];
 
       when(
-        mockApiClient.get('students?personalId=trainer1'),
+        mockApiClient.get('personals/trainer1/students'),
       ).thenAnswer((_) async => mockData);
 
       final result = await repository.getStudents('trainer1');
@@ -67,17 +65,23 @@ void main() {
   group('addStudent', () {
     test('should return added student when successful', () async {
       const student = StudentEntity(id: '', name: 'New', email: 'new@test.com');
-      final mockResponse = {
-        'id': '123',
-        'name': 'New',
-        'email': 'new@test.com',
-        'photoUrl': null,
-        'personalId': 'trainer1',
-      };
+
+      final mockStudentSearchResponse = [
+        {
+          'id': '123',
+          'name': 'New',
+          'email': 'new@test.com',
+          'photoUrl': null,
+        },
+      ];
 
       when(
-        mockApiClient.post('students', data: anyNamed('data')),
-      ).thenAnswer((_) async => mockResponse);
+        mockApiClient.get('users?email=new@test.com'),
+      ).thenAnswer((_) async => mockStudentSearchResponse);
+
+      when(
+        mockApiClient.post('personals', data: anyNamed('data')),
+      ).thenAnswer((_) async => {});
 
       final result = await repository.addStudent(student, 'trainer1');
 
@@ -94,11 +98,10 @@ void main() {
           'name': 'New',
           'email': 'new@test.com',
           'photoUrl': null,
-          'personalId': 'trainer1',
         },
       ];
       when(
-        mockApiClient.get('students?email=new@test.com'),
+        mockApiClient.get('users?email=new@test.com'),
       ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.checkStudentExists('new@test.com');
@@ -109,7 +112,7 @@ void main() {
     test('should return null when not found', () async {
       final mockResponse = [];
       when(
-        mockApiClient.get('students?email=new@test.com'),
+        mockApiClient.get('users?email=new@test.com'),
       ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.checkStudentExists('new@test.com');
@@ -120,13 +123,13 @@ void main() {
 
   group('isPersonal', () {
     test('should return true when successful', () async {
-      when(mockApiClient.get('personals/123')).thenAnswer((_) async => {});
+      when(mockApiClient.get('personals?personalUserId=123')).thenAnswer((_) async => [{}]);
       final result = await repository.isPersonal('123');
       expect(result, true);
     });
 
     test('should return false when error', () async {
-      when(mockApiClient.get('personals/123')).thenThrow(Exception());
+      when(mockApiClient.get('personals?personalUserId=123')).thenThrow(Exception());
       final result = await repository.isPersonal('123');
       expect(result, false);
     });
