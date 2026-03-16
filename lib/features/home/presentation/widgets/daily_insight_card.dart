@@ -54,12 +54,7 @@ class DailyInsightCard extends ConsumerWidget {
 
                   if (muscleCounts.isNotEmpty) {
                     // Find the most trained muscle
-                    var mostTrained = muscleCounts.keys.first;
-                    for (final key in muscleCounts.keys) {
-                      if (muscleCounts[key]! > muscleCounts[mostTrained]!) {
-                        mostTrained = key;
-                      }
-                    }
+                    final mostTrained = muscleCounts.keys.reduce((a, b) => muscleCounts[a]! > muscleCounts[b]! ? a : b);
                     insightText = "Você treinou $mostTrained ontem. Considere descansar essa região hoje!";
                     insightIcon = Icons.info_outline;
                     insightColor = Colors.blue;
