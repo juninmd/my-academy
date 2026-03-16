@@ -11,12 +11,15 @@ import '../providers/dashboard_stats_provider.dart';
 import '../widgets/next_workout_card.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../widgets/weekly_progress_card.dart';
+import '../widgets/recent_progress_chart.dart';
 import '../widgets/body_weight_tile.dart';
 import '../widgets/daily_note_card.dart';
+import '../widgets/daily_insight_card.dart';
 import '../../../workouts/domain/entities/workout_group_entity.dart';
 import '../../../workouts/presentation/providers/workout_provider.dart';
 import '../../../workouts/presentation/providers/workout_create_provider.dart';
 import '../../../workouts/presentation/widgets/workout_history_card.dart';
+import '../../../workouts/domain/utils/muscle_group_mapper.dart';
 import '../../domain/starter_plans.dart';
 
 class DashboardPage extends ConsumerWidget {
@@ -113,10 +116,18 @@ class DashboardPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: 24),
 
+                      const RecentProgressChart(),
+                      const SizedBox(height: 24),
+
                       const WeeklyProgressCard(),
                       const SizedBox(height: 16),
                       const BodyWeightTile(),
                       const SizedBox(height: 16),
+
+                      // Daily Insight
+                      const DailyInsightCard(),
+                      const SizedBox(height: 16),
+
                       // Daily Note Card
                       const DailyNoteCard(),
                       const SizedBox(height: 24),
@@ -321,13 +332,16 @@ class DashboardPage extends ConsumerWidget {
   }
 
   Widget _buildActiveWorkoutCard(BuildContext context, dynamic summary) {
+    final workoutName = summary.workoutName ?? 'Treino Personalizado';
+    final inferredMuscle = MuscleGroupMapper.getMuscleGroup(workoutName);
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
             Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.tertiary,
+            Theme.of(context).colorScheme.primaryContainer,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -335,87 +349,133 @@ class DashboardPage extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+            blurRadius: 16,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Positioned(
+            right: -20,
+            top: -20,
+            child: Icon(
+              Icons.fitness_center,
+              size: 120,
+              color: Colors.white.withValues(alpha: 0.1),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.fitness_center, size: 32, color: Colors.white),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.play_arrow_rounded, size: 32, color: Colors.white),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          'TREINO DE HOJE',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'HOJE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  if (inferredMuscle != 'Outros')
+                    Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        inferredMuscle.toUpperCase(),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  const Text(
+                    'Sessão Programada',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                workoutName,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      height: 1.1,
+                    ),
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    if (summary.workoutGroupId != null) {
+                      context.go('/workouts/${summary.workoutGroupId}');
+                    }
+                  },
+                  icon: Icon(Icons.bolt, color: Theme.of(context).colorScheme.primary),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    elevation: 4,
+                    shadowColor: Colors.black.withValues(alpha: 0.2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  label: const Text(
+                    'INICIAR AGORA',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                    ),
                   ),
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'Próximo Treino',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            summary.workoutName ?? 'Treino Personalizado',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            height: 54,
-            child: ElevatedButton(
-              onPressed: () {
-                if (summary.workoutGroupId != null) {
-                  context.go('/workouts/${summary.workoutGroupId}');
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Theme.of(context).colorScheme.primary,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: const Text(
-                'INICIAR TREINO',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0,
-                ),
-              ),
-            ),
           ),
         ],
       ),
@@ -624,7 +684,7 @@ class _SummaryCards extends StatelessWidget {
         : stats.volumeThisWeek.toStringAsFixed(0);
 
     return SizedBox(
-      height: 120,
+      height: 130,
       child: ListView(
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
@@ -634,7 +694,8 @@ class _SummaryCards extends StatelessWidget {
             value: '${stats.workoutsThisWeek}/${stats.weeklyGoal}',
             icon: Icons.check_circle_outline,
             color: Colors.blue,
-            width: 150,
+            gradientColors: [Colors.blue.shade800, Colors.blue.shade400],
+            width: 160,
           ),
           const SizedBox(width: 12),
           _StatCard(
@@ -642,16 +703,17 @@ class _SummaryCards extends StatelessWidget {
             value: '$volumeDisplay kg',
             icon: Icons.fitness_center,
             color: Colors.orange,
-            width: 170,
+            gradientColors: [Colors.orange.shade800, Colors.orange.shade400],
+            width: 180,
           ),
           const SizedBox(width: 12),
-          // We can add a Duration card here if we had the data
            _StatCard(
             label: 'Sequência',
             value: '${stats.streak} dias',
             icon: Icons.local_fire_department,
             color: Colors.red,
-             width: 150,
+            gradientColors: [Colors.red.shade800, Colors.red.shade400],
+            width: 160,
           ),
         ],
       ),
@@ -665,6 +727,7 @@ class _StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.color,
+    required this.gradientColors,
     required this.width,
   });
 
@@ -672,66 +735,89 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final List<Color> gradientColors;
   final double width;
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () => context.push('/analytics'),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         child: Container(
           width: width,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.surface,
-                Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-              ],
+              colors: isDark
+                ? [Theme.of(context).colorScheme.surface, Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)]
+                : [Colors.white, Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: Theme.of(context).dividerColor.withValues(alpha: 0.05),
+              color: color.withValues(alpha: 0.2),
+              width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                color: color.withValues(alpha: 0.15),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 18),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  label,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: gradientColors,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: gradientColors.last.withValues(alpha: 0.4),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Icon(icon, color: Colors.white, size: 20),
                   ),
-                  overflow: TextOverflow.ellipsis,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  letterSpacing: -0.5,
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
             ],
           ),
         ),

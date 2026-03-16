@@ -59,24 +59,36 @@ class WeeklyProgressCard extends ConsumerWidget {
         final workoutsCount = uniqueDays.length;
         final progress = (workoutsCount / weeklyGoal).clamp(0.0, 1.0);
 
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+
         return Card(
           margin: EdgeInsets.zero,
-          elevation: 4,
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context).colorScheme.surface,
-                ],
+                colors: isDark
+                  ? [Theme.of(context).colorScheme.surface, Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.8)]
+                  : [Colors.white, Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 16,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: Column(
               children: [
@@ -86,18 +98,25 @@ class WeeklyProgressCard extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Meta Semanal',
-                            style: Theme.of(
-                              context,
-                            ).textTheme.titleMedium?.copyWith(
-                              color:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                            ),
+                          Row(
+                            children: [
+                              Icon(Icons.track_changes, color: Theme.of(context).colorScheme.primary, size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Meta Semanal',
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.titleMedium?.copyWith(
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 12),
                           Text(
                             workoutsCount >= weeklyGoal
                                 ? 'Objetivo Concluído! 🎉'
@@ -105,63 +124,78 @@ class WeeklyProgressCard extends ConsumerWidget {
                             style: Theme.of(
                               context,
                             ).textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.w900,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              letterSpacing: -0.5,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           Text(
                             workoutsCount >= weeklyGoal
                                 ? 'Você está voando baixo!'
                                 : 'Mantenha o foco, você consegue.',
-                            style: Theme.of(context).textTheme.bodyMedium,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: CircularProgressIndicator(
-                            value: 1,
-                            strokeWidth: 8,
-                            color:
-                                Theme.of(
-                                  context,
-                                ).colorScheme.surfaceContainerHighest,
+                    const SizedBox(width: 24),
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+                            blurRadius: 12,
+                            spreadRadius: 2,
                           ),
-                        ),
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: CircularProgressIndicator(
-                            value: progress,
-                            strokeWidth: 8,
-                            strokeCap: StrokeCap.round,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              '$workoutsCount/$weeklyGoal',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                        ],
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CircularProgressIndicator(
+                              value: 1,
+                              strokeWidth: 8,
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CircularProgressIndicator(
+                              value: progress,
+                              strokeWidth: 8,
+                              strokeCap: StrokeCap.round,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '$workoutsCount/$weeklyGoal',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
                 // Days Strip
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,46 +264,58 @@ class _DayDot extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Container(
-          width: 32,
-          height: 32,
+          width: 36,
+          height: 36,
           decoration: BoxDecoration(
-            color:
-                hasWorkout
-                    ? Theme.of(context).colorScheme.primary
-                    : isToday
-                    ? Theme.of(context).colorScheme.primaryContainer
-                    : Colors.transparent,
+            gradient: hasWorkout
+                ? LinearGradient(
+                    colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.tertiary],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            color: hasWorkout
+                ? null
+                : isToday
+                    ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.5)
+                    : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: Border.all(
-              color:
-                  hasWorkout || isToday
-                      ? Colors.transparent
-                      : Theme.of(
-                        context,
-                      ).colorScheme.outline.withValues(alpha: 0.2),
+              color: hasWorkout
+                  ? Colors.transparent
+                  : isToday
+                      ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
+                      : Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+              width: isToday ? 2 : 1,
             ),
             shape: BoxShape.circle,
+            boxShadow: hasWorkout
+                ? [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
-          child:
-              hasWorkout
-                  ? Icon(
-                    Icons.check,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  )
-                  : Center(
-                    child: Text(
-                      date.day.toString(),
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight:
-                            isToday ? FontWeight.bold : FontWeight.normal,
-                        color:
-                            isToday
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.onSurface,
-                      ),
+          child: hasWorkout
+              ? Icon(
+                  Icons.check_rounded,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                )
+              : Center(
+                  child: Text(
+                    date.day.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: isToday ? FontWeight.w900 : FontWeight.w600,
+                      color: isToday
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
+                ),
         ),
       ],
     );
