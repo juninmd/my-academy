@@ -548,4 +548,3 @@ class ExercisePlayerView extends HookConsumerWidget {
               final currentLogs = Map<int, SetLogState>.from(logs.value);
               final nextIndex = currentLogs.isEmpty
               final nextIndex = currentLogs.length;
-}
