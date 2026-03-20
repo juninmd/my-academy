@@ -548,9 +548,6 @@ class ExercisePlayerView extends HookConsumerWidget {
               final currentLogs = Map<int, SetLogState>.from(logs.value);
               final nextIndex = currentLogs.isEmpty
               final nextIndex = currentLogs.length;
-                rpe: null,
-                isCompleted: false,
-              );
               logs.value = currentLogs;
             },
             icon: const Icon(Icons.add_circle_outline),
