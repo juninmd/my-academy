@@ -164,7 +164,7 @@ class _PlateCalculatorContentState
 }
 
 class BarbellPainter extends CustomPainter {
-  BarbellPainter({required this.plates, required this.colorScheme});
+  BarbellPainter({required this.plates});
 
   final Map<double, int> plates;
   final ColorScheme colorScheme;
