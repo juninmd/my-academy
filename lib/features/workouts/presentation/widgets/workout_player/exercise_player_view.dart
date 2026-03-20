@@ -548,9 +548,6 @@ class ExercisePlayerView extends HookConsumerWidget {
               final currentLogs = Map<int, SetLogState>.from(logs.value);
               final nextIndex = currentLogs.isEmpty
               final nextIndex = currentLogs.length;
-            label: const Text('Adicionar Série'),
-            style: TextButton.styleFrom(
-              foregroundColor: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
