@@ -23,7 +23,7 @@ class DailyNoteCard extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
             ),
           ),
           child: InkWell(
