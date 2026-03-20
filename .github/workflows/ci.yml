@@ -17,26 +17,27 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: pnpm/action-setup@v2
+    - uses: pnpm/action-setup@v4
       with:
         version: 9
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
+        cache-dependency-path: 'api/pnpm-lock.yaml'
 
     - name: Install dependencies
-      run: pnpm install
+      run: cd api && pnpm install
 
     - name: Lint
-      run: pnpm run lint
+      run: cd api && pnpm run lint
 
     - name: Build
-      run: pnpm run build
+      run: cd api && pnpm run build
 
     - name: Test
-      run: pnpm run test:cov
+      run: cd api && pnpm run test:cov
