@@ -51,7 +51,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       id: _mockUserId,
       email: 'mock@example.com',
       name: 'Mock User',
-      photoUrl: 'https://i.pravatar.cc/150?u=',
+      photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
     );
   }
 
