@@ -86,18 +86,29 @@ void main() {
         ],
       );
 
-      // Listen to the provider to keep it alive and check for the error state.
-      final sub = container.listen(exerciseLogsProvider(1), (_, __) {});
-
-      // Expect the future to throw an exception, as the provider does.
-      await expectLater(
-        container.read(exerciseLogsProvider(1).future),
-        throwsA(isA<Exception>()),
+      // Use a listener to check for the error state directly instead of reading the future.
+      // Reading `.future` on an autoDispose provider that throws an exception can cause
+      // uncaught asynchronous errors in the test environment if not handled carefully,
+      // leading to test timeouts.
+      Object? capturedError;
+      final sub = container.listen(
+        exerciseLogsProvider(1),
+        (previous, next) {
+          if (next.hasError) {
+            capturedError = next.error;
+          }
+        },
+        fireImmediately: true,
       );
 
-      // Verify the provider's state is AsyncError.
-      final asyncValue = container.read(exerciseLogsProvider(1));
-      expect(asyncValue.hasError, isTrue);
+      // Wait a tiny bit for the microtask to complete and the provider to resolve
+      await Future.delayed(Duration.zero);
+
+      expect(capturedError, isNotNull);
+      expect(capturedError, isA<Exception>());
+
+      final state = container.read(exerciseLogsProvider(1));
+      expect(state.hasError, isTrue);
 
       sub.close();
     });
@@ -150,9 +161,28 @@ void main() {
         ],
       );
 
-      // Better way: use read instead of read(.future) to check the AsyncValue directly.
-      final asyncValue = container.read(allExerciseLogsProvider);
-      expect(asyncValue.isLoading, true);
+      // Use a listener to check for the error state directly instead of reading the future.
+      Object? capturedError;
+      final sub = container.listen(
+        allExerciseLogsProvider,
+        (previous, next) {
+          if (next.hasError) {
+            capturedError = next.error;
+          }
+        },
+        fireImmediately: true,
+      );
+
+      // Wait a tiny bit for the microtask to complete and the provider to resolve
+      await Future.delayed(Duration.zero);
+
+      expect(capturedError, isNotNull);
+      expect(capturedError, isA<Exception>());
+
+      final state = container.read(allExerciseLogsProvider);
+      expect(state.hasError, isTrue);
+
+      sub.close();
     });
   });
 }

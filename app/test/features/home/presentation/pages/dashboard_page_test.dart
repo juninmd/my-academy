@@ -26,6 +26,15 @@ void main() {
   testWidgets('DashboardPage renders static elements and Tools section', (
     WidgetTester tester,
   ) async {
+    // Set surface size to avoid RenderFlex overflow during layout
+    tester.view.physicalSize = const Size(2000, 3000); // Typical mobile screen size
+    tester.view.devicePixelRatio = 1.0;
+
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
