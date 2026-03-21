@@ -78,6 +78,14 @@ describe('WorkoutsGroupsService', () => {
             create: expect.any(Array),
           },
         }),
+        include: {
+          workouts: {
+            include: {
+              workoutSeries: true,
+              exercise: true,
+            },
+          },
+        },
       });
     });
 
@@ -106,6 +114,14 @@ describe('WorkoutsGroupsService', () => {
             create: [],
           },
         }),
+        include: {
+          workouts: {
+            include: {
+              workoutSeries: true,
+              exercise: true,
+            },
+          },
+        },
       });
     });
 
@@ -259,6 +275,14 @@ describe('WorkoutsGroupsService', () => {
       expect(await service.findAll('user1')).toBe(result);
       expect(prisma.workoutsGroups.findMany).toHaveBeenCalledWith({
         where: { userId: 'user1' },
+        include: {
+          workouts: {
+            include: {
+              workoutSeries: true,
+              exercise: true,
+            },
+          },
+        },
       });
     });
   });
