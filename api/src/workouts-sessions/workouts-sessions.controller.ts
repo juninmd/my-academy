@@ -44,7 +44,7 @@ export class WorkoutsSessionsController {
     return this.workoutsSessionsService.findSummary(idUser);
   }
 
-  @Get(':id')
+  @Get('single/:id')
   findOne(@Param('id') id: string) {
     return this.workoutsSessionsService.findOne(+id);
   }

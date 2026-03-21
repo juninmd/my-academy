@@ -20,11 +20,29 @@ export class WorkoutsGroupsService {
           create: this.mapWorkoutsCreate(workouts),
         },
       },
+      include: {
+        workouts: {
+          include: {
+            workoutSeries: true,
+            exercise: true,
+          },
+        },
+      },
     });
   }
 
   async findAll(userId: string): Promise<WorkoutsGroup[]> {
-    return this.prismaService.workoutsGroups.findMany({ where: { userId } });
+    return this.prismaService.workoutsGroups.findMany({
+      where: { userId },
+      include: {
+        workouts: {
+          include: {
+            workoutSeries: true,
+            exercise: true,
+          },
+        },
+      },
+    });
   }
 
   async findAllExercises(id: number): Promise<WorkoutsGroup> {
@@ -78,6 +96,7 @@ export class WorkoutsGroupsService {
           workouts: {
             include: {
               workoutSeries: true,
+              exercise: true,
             },
           },
         },

@@ -84,7 +84,7 @@ export class WorkoutsSessionsService {
 
     const iAmStudent = await this.prismaService.personals.findFirst({
       where: {
-        personalUserId: idUser,
+        studentUserId: idUser,
       },
       include: { PersonalUser: true },
     });
