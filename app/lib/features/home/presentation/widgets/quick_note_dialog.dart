@@ -41,30 +41,39 @@ class QuickNoteDialog extends HookConsumerWidget {
             Center(
               child: Wrap(
                 spacing: 12,
-                children: moods.map((mood) {
-                  final isSelected = selectedMood.value == mood;
-                  return InkWell(
-                    onTap: () => selectedMood.value = mood,
-                    borderRadius: BorderRadius.circular(50),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.primaryContainer
-                            : Colors.transparent,
-                        shape: BoxShape.circle,
-                        border: isSelected
-                            ? Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 2,
-                              )
-                            : null,
-                      ),
-                      child: Text(mood, style: const TextStyle(fontSize: 24)),
-                    ),
-                  );
-                }).toList(),
+                children:
+                    moods.map((mood) {
+                      final isSelected = selectedMood.value == mood;
+                      return InkWell(
+                        onTap: () => selectedMood.value = mood,
+                        borderRadius: BorderRadius.circular(50),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color:
+                                isSelected
+                                    ? Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer
+                                    : Colors.transparent,
+                            shape: BoxShape.circle,
+                            border:
+                                isSelected
+                                    ? Border.all(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 2,
+                                    )
+                                    : null,
+                          ),
+                          child: Text(
+                            mood,
+                            style: const TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      );
+                    }).toList(),
               ),
             ),
             const SizedBox(height: 24),

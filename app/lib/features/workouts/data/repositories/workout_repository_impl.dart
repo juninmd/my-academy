@@ -212,13 +212,14 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
             .toList(),
   );
 
-  WorkoutSeriesEntity _mapSeries(Map<String, dynamic> json) => WorkoutSeriesEntity(
-    id: json['id'],
-    workoutId: json['workoutId'],
-    repetitions: json['repetitions'] ?? 0,
-    weight: json['weight'] ?? 0,
-    rest: json['rest'] ?? 0,
-  );
+  WorkoutSeriesEntity _mapSeries(Map<String, dynamic> json) =>
+      WorkoutSeriesEntity(
+        id: json['id'],
+        workoutId: json['workoutId'],
+        repetitions: json['repetitions'] ?? 0,
+        weight: json['weight'] ?? 0,
+        rest: json['rest'] ?? 0,
+      );
 
   ExerciseEntity _mapExercise(Map<String, dynamic> json) => ExerciseEntity(
     id: json['id'],

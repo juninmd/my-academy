@@ -15,7 +15,9 @@ class EditProfilePage extends HookConsumerWidget {
     final settings = ref.watch(settingsProvider);
 
     final nameController = useTextEditingController(text: user?.name ?? '');
-    final weightController = useTextEditingController(text: settings.bodyWeight.toString());
+    final weightController = useTextEditingController(
+      text: settings.bodyWeight.toString(),
+    );
 
     final isLoading = useState(false);
 
@@ -24,11 +26,15 @@ class EditProfilePage extends HookConsumerWidget {
       try {
         // Update Name
         if (nameController.text.trim() != user?.name) {
-          await ref.read(authNotifierProvider.notifier).updateName(nameController.text.trim());
+          await ref
+              .read(authNotifierProvider.notifier)
+              .updateName(nameController.text.trim());
         }
 
         // Update Weight
-        final weight = double.tryParse(weightController.text.replaceAll(',', '.'));
+        final weight = double.tryParse(
+          weightController.text.replaceAll(',', '.'),
+        );
         if (weight != null && weight != settings.bodyWeight) {
           await ref.read(settingsProvider.notifier).setBodyWeight(weight);
         }
@@ -41,9 +47,9 @@ class EditProfilePage extends HookConsumerWidget {
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao atualizar: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Erro ao atualizar: $e')));
         }
       } finally {
         isLoading.value = false;
@@ -51,9 +57,7 @@ class EditProfilePage extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Editar Perfil'),
-      ),
+      appBar: AppBar(title: const Text('Editar Perfil')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -62,9 +66,12 @@ class EditProfilePage extends HookConsumerWidget {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
                   child: Text(
-                    (user?.name?.isNotEmpty == true) ? user!.name![0].toUpperCase() : '?',
+                    (user?.name?.isNotEmpty == true)
+                        ? user!.name![0].toUpperCase()
+                        : '?',
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                 ),
@@ -77,7 +84,11 @@ class EditProfilePage extends HookConsumerWidget {
                       color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],
@@ -94,7 +105,9 @@ class EditProfilePage extends HookConsumerWidget {
             const SizedBox(height: 24),
             TextField(
               controller: weightController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Peso Corporal (kg)',
                 prefixIcon: Icon(Icons.monitor_weight_outlined),
@@ -107,9 +120,14 @@ class EditProfilePage extends HookConsumerWidget {
               height: 56,
               child: FilledButton(
                 onPressed: isLoading.value ? null : save,
-                child: isLoading.value
-                  ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white))
-                  : const Text('Salvar Alterações'),
+                child:
+                    isLoading.value
+                        ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(color: Colors.white),
+                        )
+                        : const Text('Salvar Alterações'),
               ),
             ),
           ],

@@ -65,17 +65,17 @@ class ShareableWorkoutCard extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Treino Concluído!',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ).animate().fadeIn(delay: 300.ms),
             const SizedBox(height: 8),
             Text(
               'Ótimo trabalho hoje.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.grey,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
               textAlign: TextAlign.center,
             ).animate().fadeIn(delay: 400.ms),
             const SizedBox(height: 24),
@@ -155,7 +155,9 @@ class ShareableWorkoutCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              ...newRecords.take(3).map(
+              ...newRecords
+                  .take(3)
+                  .map(
                     (record) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Text(

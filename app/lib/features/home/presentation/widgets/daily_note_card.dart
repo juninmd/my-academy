@@ -23,7 +23,9 @@ class DailyNoteCard extends ConsumerWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.1),
             ),
           ),
           child: InkWell(
@@ -45,16 +47,15 @@ class DailyNoteCard extends ConsumerWidget {
                       const SizedBox(width: 8),
                       Text(
                         'Diário de Hoje',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const Spacer(),
-                      Text(
-                        note.mood,
-                        style: const TextStyle(fontSize: 18),
-                      ),
+                      Text(note.mood, style: const TextStyle(fontSize: 18)),
                     ],
                   ),
                   const SizedBox(height: 8),

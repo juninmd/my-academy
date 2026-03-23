@@ -34,17 +34,18 @@ class CustomExerciseRepository {
       exercises.add(exercise);
     }
 
-    final jsonList = exercises.map((e) {
-      final json = {
-        'id': e.id,
-        'name': e.name,
-        'image': e.image,
-        'description': e.description,
-        'tips': e.tips,
-        'mistakes': e.mistakes,
-      };
-      return jsonEncode(json);
-    }).toList();
+    final jsonList =
+        exercises.map((e) {
+          final json = {
+            'id': e.id,
+            'name': e.name,
+            'image': e.image,
+            'description': e.description,
+            'tips': e.tips,
+            'mistakes': e.mistakes,
+          };
+          return jsonEncode(json);
+        }).toList();
 
     await prefs.setStringList(_storageKey, jsonList);
   }

@@ -38,7 +38,8 @@ class WorkoutSetRow extends HookWidget {
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.1);
       case SetType.normal:
-        return Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface;
+        return Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surface;
     }
   }
 
@@ -59,19 +60,27 @@ class WorkoutSetRow extends HookWidget {
 
   String _getSetTypeLabel(SetType type) {
     switch (type) {
-      case SetType.warmup: return 'AQUECIMENTO';
-      case SetType.dropset: return 'DROP SET';
-      case SetType.failure: return 'FALHA';
-      case SetType.normal: return 'NORMAL';
+      case SetType.warmup:
+        return 'AQUECIMENTO';
+      case SetType.dropset:
+        return 'DROP SET';
+      case SetType.failure:
+        return 'FALHA';
+      case SetType.normal:
+        return 'NORMAL';
     }
   }
 
   Color _getSetTypeColor(SetType type, BuildContext context) {
     switch (type) {
-      case SetType.warmup: return Colors.orange;
-      case SetType.dropset: return Colors.purple;
-      case SetType.failure: return Theme.of(context).colorScheme.error;
-      case SetType.normal: return Theme.of(context).colorScheme.primary;
+      case SetType.warmup:
+        return Colors.orange;
+      case SetType.dropset:
+        return Colors.purple;
+      case SetType.failure:
+        return Theme.of(context).colorScheme.error;
+      case SetType.normal:
+        return Theme.of(context).colorScheme.primary;
     }
   }
 
@@ -109,22 +118,33 @@ class WorkoutSetRow extends HookWidget {
                   PopupMenuButton<SetType>(
                     initialValue: log.type,
                     onSelected: (SetType item) {
-                      onChanged(SetLogState(
-                        actualReps: log.actualReps,
-                        actualWeight: log.actualWeight,
-                        rpe: log.rpe,
-                        isCompleted: log.isCompleted,
-                        type: item,
-                      ));
+                      onChanged(
+                        SetLogState(
+                          actualReps: log.actualReps,
+                          actualWeight: log.actualWeight,
+                          rpe: log.rpe,
+                          isCompleted: log.isCompleted,
+                          type: item,
+                        ),
+                      );
                     },
                     tooltip: 'Alterar tipo de série',
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: _getSetTypeColor(log.type, context).withValues(alpha: 0.1),
+                        color: _getSetTypeColor(
+                          log.type,
+                          context,
+                        ).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: _getSetTypeColor(log.type, context).withValues(alpha: 0.3),
+                          color: _getSetTypeColor(
+                            log.type,
+                            context,
+                          ).withValues(alpha: 0.3),
                         ),
                       ),
                       child: Row(
@@ -147,24 +167,49 @@ class WorkoutSetRow extends HookWidget {
                         ],
                       ),
                     ),
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<SetType>>[
-                      const PopupMenuItem<SetType>(
-                        value: SetType.normal,
-                        child: Text('Normal'),
-                      ),
-                      PopupMenuItem<SetType>(
-                        value: SetType.warmup,
-                        child: Text('Aquecimento', style: TextStyle(color: _getSetTypeColor(SetType.warmup, context))),
-                      ),
-                      PopupMenuItem<SetType>(
-                        value: SetType.dropset,
-                        child: Text('Drop Set', style: TextStyle(color: _getSetTypeColor(SetType.dropset, context))),
-                      ),
-                      PopupMenuItem<SetType>(
-                        value: SetType.failure,
-                        child: Text('Falha', style: TextStyle(color: _getSetTypeColor(SetType.failure, context))),
-                      ),
-                    ],
+                    itemBuilder:
+                        (BuildContext context) => <PopupMenuEntry<SetType>>[
+                          const PopupMenuItem<SetType>(
+                            value: SetType.normal,
+                            child: Text('Normal'),
+                          ),
+                          PopupMenuItem<SetType>(
+                            value: SetType.warmup,
+                            child: Text(
+                              'Aquecimento',
+                              style: TextStyle(
+                                color: _getSetTypeColor(
+                                  SetType.warmup,
+                                  context,
+                                ),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem<SetType>(
+                            value: SetType.dropset,
+                            child: Text(
+                              'Drop Set',
+                              style: TextStyle(
+                                color: _getSetTypeColor(
+                                  SetType.dropset,
+                                  context,
+                                ),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem<SetType>(
+                            value: SetType.failure,
+                            child: Text(
+                              'Falha',
+                              style: TextStyle(
+                                color: _getSetTypeColor(
+                                  SetType.failure,
+                                  context,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                   ),
                 ],
               ),
@@ -198,8 +243,9 @@ class WorkoutSetRow extends HookWidget {
                           ),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Theme.of(context).colorScheme.primary
-                                  .withValues(alpha: 0.3),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.3),
                             ),
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -250,15 +296,19 @@ class WorkoutSetRow extends HookWidget {
               padding: const EdgeInsets.only(top: 4, bottom: 4),
               child: Row(
                 children: [
-                   Icon(Icons.history, size: 12, color: Theme.of(context).disabledColor),
-                   const SizedBox(width: 4),
-                   Text(
-                     'Último: ${lastSet!.weight}kg x ${lastSet!.reps}${lastSet!.rpe != null ? " @ RPE ${lastSet!.rpe}" : ""}',
-                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                       color: Theme.of(context).disabledColor,
-                       fontStyle: FontStyle.italic,
-                     ),
-                   ),
+                  Icon(
+                    Icons.history,
+                    size: 12,
+                    color: Theme.of(context).disabledColor,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Último: ${lastSet!.weight}kg x ${lastSet!.reps}${lastSet!.rpe != null ? " @ RPE ${lastSet!.rpe}" : ""}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).disabledColor,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -321,10 +371,9 @@ class WorkoutSetRow extends HookWidget {
                   tooltip: 'Calculadora de Anilhas',
                   visualDensity: VisualDensity.compact,
                   style: IconButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(
-                          context,
-                        ).colorScheme.primary.withValues(alpha: 0.1),
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1),
                     foregroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

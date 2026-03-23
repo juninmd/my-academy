@@ -68,24 +68,26 @@ class WorkoutCreatePage extends HookConsumerWidget {
             child:
                 draftGroup.workouts.isEmpty
                     ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.list_alt,
-                              size: 64,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.list_alt,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Nenhum exercício adicionado',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyLarge?.copyWith(
                               color: Theme.of(context).colorScheme.outline,
                             ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'Nenhum exercício adicionado',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                          ),
+                        ],
+                      ),
+                    )
                     : ReorderableListView.builder(
                       padding: const EdgeInsets.only(bottom: 80),
                       itemCount: draftGroup.workouts.length,
@@ -167,10 +169,14 @@ class WorkoutCreatePage extends HookConsumerWidget {
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.delete_outline),
-                                  onPressed: () => notifier.removeWorkout(index),
+                                  onPressed:
+                                      () => notifier.removeWorkout(index),
                                 ),
                                 const SizedBox(width: 8),
-                                Icon(Icons.drag_handle, color: Theme.of(context).disabledColor),
+                                Icon(
+                                  Icons.drag_handle,
+                                  color: Theme.of(context).disabledColor,
+                                ),
                               ],
                             ),
                           ),

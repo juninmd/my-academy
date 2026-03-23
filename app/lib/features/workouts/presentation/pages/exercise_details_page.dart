@@ -101,20 +101,28 @@ class ExerciseDetailsPage extends HookConsumerWidget {
                             segments: const [
                               ButtonSegment(
                                 value: ChartMetric.oneRM,
-                                label: Text('1RM', style: TextStyle(fontSize: 12)),
+                                label: Text(
+                                  '1RM',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                                 icon: Icon(Icons.show_chart, size: 16),
                               ),
                               ButtonSegment(
                                 value: ChartMetric.volume,
-                                label: Text('Volume', style: TextStyle(fontSize: 12)),
+                                label: Text(
+                                  'Volume',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                                 icon: Icon(Icons.bar_chart, size: 16),
                               ),
                             ],
                             selected: {chartMetric.value},
-                            onSelectionChanged: (Set<ChartMetric> newSelection) {
+                            onSelectionChanged: (
+                              Set<ChartMetric> newSelection,
+                            ) {
                               chartMetric.value = newSelection.first;
                             },
-                            style: ButtonStyle(
+                            style: const ButtonStyle(
                               visualDensity: VisualDensity.compact,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
@@ -242,7 +250,9 @@ class _InfoSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color ?? Theme.of(context).colorScheme.surface,
+        color:
+            Theme.of(context).cardTheme.color ??
+            Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Theme.of(context).dividerColor.withValues(alpha: 0.05),
@@ -287,14 +297,17 @@ class _InfoSection extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 12),
                 decoration: BoxDecoration(
                   border: Border(
-                    left: BorderSide(color: color.withValues(alpha: 0.3), width: 3),
+                    left: BorderSide(
+                      color: color.withValues(alpha: 0.3),
+                      width: 3,
+                    ),
                   ),
                 ),
                 child: Text(
                   item,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    height: 1.4,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(height: 1.4),
                 ),
               ),
             ),
@@ -346,9 +359,9 @@ class _LogCard extends StatelessWidget {
           tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           title: Text(
             dateFormat.format(log.date),
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8.0),
@@ -369,7 +382,7 @@ class _LogCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 _StatBadge(
                   icon: Icons.fitness_center,
-                  text: '${(totalVolume/1000).toStringAsFixed(1)}t',
+                  text: '${(totalVolume / 1000).toStringAsFixed(1)}t',
                   color: Colors.grey,
                 ),
               ],
@@ -405,7 +418,9 @@ class _LogCard extends StatelessWidget {
                               children: [
                                 Text(
                                   '${set.weight} kg',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 const Text('x'),
@@ -416,7 +431,10 @@ class _LogCard extends StatelessWidget {
                           ),
                           if (isBest)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: Colors.amber.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(4),
@@ -483,10 +501,7 @@ class _StatBadge extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: color),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text(text, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

@@ -75,16 +75,17 @@ class WorkoutPlayerPage extends HookConsumerWidget {
               userId: userId,
               exerciseId: currentWorkout.exerciseId,
               date: DateTime.now(),
-              sets: logs.values
-                  .map(
-                    (l) => SetLogEntity(
-                      reps: l.actualReps,
-                      weight: l.actualWeight,
-                      rpe: l.rpe,
-                      type: l.type,
-                    ),
-                  )
-                  .toList(),
+              sets:
+                  logs.values
+                      .map(
+                        (l) => SetLogEntity(
+                          reps: l.actualReps,
+                          weight: l.actualWeight,
+                          rpe: l.rpe,
+                          type: l.type,
+                        ),
+                      )
+                      .toList(),
               notes: notes,
             );
             await ref
@@ -113,11 +114,12 @@ class WorkoutPlayerPage extends HookConsumerWidget {
             if (context.mounted) {
               await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => WorkoutSummaryPage(
-                    duration: Duration(seconds: timerNotifier.value),
-                    sessionLogs: newSessionLogs,
-                    newRecords: newRecords.value,
-                  ),
+                  builder:
+                      (context) => WorkoutSummaryPage(
+                        duration: Duration(seconds: timerNotifier.value),
+                        sessionLogs: newSessionLogs,
+                        newRecords: newRecords.value,
+                      ),
                 ),
               );
             }
@@ -159,8 +161,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     if (value == 'plate') {
                       showDialog(
                         context: context,
-                        builder: (context) =>
-                            const PlateCalculatorDialog(targetWeight: 0),
+                        builder:
+                            (context) =>
+                                const PlateCalculatorDialog(targetWeight: 0),
                       );
                     } else if (value == 'timer') {
                       showDialog(
@@ -174,38 +177,39 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                       );
                     }
                   },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'plate',
-                      child: Row(
-                        children: [
-                          Icon(Icons.calculate_outlined),
-                          SizedBox(width: 8),
-                          Text('Calculadora de Anilhas'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'timer',
-                      child: Row(
-                        children: [
-                          Icon(Icons.timer_outlined),
-                          SizedBox(width: 8),
-                          Text('Cronômetro Rápido'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: '1rm',
-                      child: Row(
-                        children: [
-                          Icon(Icons.fitness_center),
-                          SizedBox(width: 8),
-                          Text('Calculadora 1RM'),
-                        ],
-                      ),
-                    ),
-                  ],
+                  itemBuilder:
+                      (context) => [
+                        const PopupMenuItem(
+                          value: 'plate',
+                          child: Row(
+                            children: [
+                              Icon(Icons.calculate_outlined),
+                              SizedBox(width: 8),
+                              Text('Calculadora de Anilhas'),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'timer',
+                          child: Row(
+                            children: [
+                              Icon(Icons.timer_outlined),
+                              SizedBox(width: 8),
+                              Text('Cronômetro Rápido'),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: '1rm',
+                          child: Row(
+                            children: [
+                              Icon(Icons.fitness_center),
+                              SizedBox(width: 8),
+                              Text('Calculadora 1RM'),
+                            ],
+                          ),
+                        ),
+                      ],
                 ),
                 IconButton(
                   onPressed: () async {
@@ -227,17 +231,18 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     currentExerciseIndex.value = index;
                   },
                   itemCount: activeWorkouts.length,
-                  itemBuilder: (context, index) => ExercisePlayerView(
-                    key: ValueKey(activeWorkouts[index].id ?? index),
-                    workout: activeWorkouts[index],
-                    isLast: index == activeWorkouts.length - 1,
-                    onFinished: onExerciseFinished,
-                    onSetCompleted: (restTime) {
-                      if (restTime > 0) {
-                        restTimer.start(restTime);
-                      }
-                    },
-                  ),
+                  itemBuilder:
+                      (context, index) => ExercisePlayerView(
+                        key: ValueKey(activeWorkouts[index].id ?? index),
+                        workout: activeWorkouts[index],
+                        isLast: index == activeWorkouts.length - 1,
+                        onFinished: onExerciseFinished,
+                        onSetCompleted: (restTime) {
+                          if (restTime > 0) {
+                            restTimer.start(restTime);
+                          }
+                        },
+                      ),
                 ),
                 if (restTimer.isActive.value)
                   Positioned(
@@ -263,8 +268,9 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           ),
         );
       },
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading:
+          () =>
+              const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (e, s) => Scaffold(body: Center(child: Text('Erro: $e'))),
     );
   }

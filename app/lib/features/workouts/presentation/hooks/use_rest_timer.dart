@@ -36,9 +36,7 @@ RestTimerState useRestTimer() {
     restTimerRemaining.value = duration;
     isRestTimerActive.value = true;
 
-    restTimer.value = Timer.periodic(const Duration(seconds: 1), (
-      t,
-    ) async {
+    restTimer.value = Timer.periodic(const Duration(seconds: 1), (t) async {
       if (restTimerRemaining.value > 0) {
         restTimerRemaining.value--;
         if (restTimerRemaining.value <= 3 && restTimerRemaining.value > 0) {

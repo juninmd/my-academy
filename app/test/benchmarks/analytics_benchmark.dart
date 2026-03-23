@@ -1,4 +1,5 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
+import 'package:flutter/foundation.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
 import 'package:my_academy/features/workouts/domain/entities/set_log_entity.dart';
 
@@ -90,7 +91,7 @@ class OptimizedVolumeCalculationBenchmark extends BenchmarkBase {
 
 void main() {
   final logs = generateLogs(10000); // 10k logs
-  print('Running benchmarks with 10,000 logs...');
+  debugPrint('Running benchmarks with 10,000 logs...');
   VolumeCalculationBenchmark(logs).report();
   OptimizedVolumeCalculationBenchmark(logs).report();
 }

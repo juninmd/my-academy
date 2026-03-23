@@ -20,16 +20,19 @@ class StarterPlans {
 
     // 1. Full Body A
     final supino = find('Supino Reto') ?? find('Supino') ?? find('Chest');
-    final agachamento = find('Agachamento') ?? find('Squat') ?? find('Leg Press');
+    final agachamento =
+        find('Agachamento') ?? find('Squat') ?? find('Leg Press');
     final remada = find('Remada') ?? find('Row') ?? find('Costas');
-    final desenvolvimento = find('Desenvolvimento') ?? find('Press') ?? find('Ombros');
+    final desenvolvimento =
+        find('Desenvolvimento') ?? find('Press') ?? find('Ombros');
 
     if (supino != null && agachamento != null && remada != null) {
       plans.add(
         WorkoutGroupEntity(
           name: 'Full Body Iniciante',
           userId: '',
-          image: 'assets/images/bg1.jpg', // Assuming this asset exists or use generic
+          image:
+              'assets/images/bg1.jpg', // Assuming this asset exists or use generic
           workouts: [
             _createWorkout(agachamento, 3, 10),
             _createWorkout(supino, 3, 10),
@@ -78,7 +81,8 @@ class StarterPlans {
           image: 'assets/images/bg3.jpg',
           workouts: [
             _createWorkout(agachamento ?? legPress!, 4, 8),
-            if (legPress != null && agachamento != null) _createWorkout(legPress, 3, 12),
+            if (legPress != null && agachamento != null)
+              _createWorkout(legPress, 3, 12),
             _createWorkout(extensora, 3, 15),
             if (flexora != null) _createWorkout(flexora, 4, 12),
             if (panturrilha != null) _createWorkout(panturrilha, 4, 15),
@@ -90,7 +94,11 @@ class StarterPlans {
     return plans;
   }
 
-  static WorkoutEntity _createWorkout(ExerciseEntity exercise, int sets, int reps) {
+  static WorkoutEntity _createWorkout(
+    ExerciseEntity exercise,
+    int sets,
+    int reps,
+  ) {
     return WorkoutEntity(
       exerciseId: exercise.id,
       exercise: exercise,

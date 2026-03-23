@@ -46,7 +46,10 @@ class StudentRepositoryImpl implements StudentRepository {
   ) async {
     try {
       final existingResult = await checkStudentExists(student.email);
-      final failureOrStudent = existingResult.fold((left) => left, (right) => right);
+      final failureOrStudent = existingResult.fold(
+        (left) => left,
+        (right) => right,
+      );
       if (failureOrStudent is Failure) {
         return Left(failureOrStudent);
       }
@@ -62,7 +65,10 @@ class StudentRepositoryImpl implements StudentRepository {
 
       await _apiClient.post(
         'personals',
-        data: {'personalUserId': personalId, 'studentUserId': existingStudent.id},
+        data: {
+          'personalUserId': personalId,
+          'studentUserId': existingStudent.id,
+        },
       );
 
       return Right(existingStudent);

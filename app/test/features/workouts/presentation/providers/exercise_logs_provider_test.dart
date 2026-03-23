@@ -1,12 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
-import 'package:my_academy/features/workouts/domain/repositories/workout_repository.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
 import 'package:my_academy/core/exceptions/failure.dart';
 
@@ -48,7 +46,7 @@ void main() {
       );
 
       // We need to listen to it so it doesn't get auto-disposed before resolution
-      final sub = container.listen(exerciseLogsProvider(1).future, (_, __) {});
+      final sub = container.listen(exerciseLogsProvider(1).future, (_, _) {});
 
       final result = await container.read(exerciseLogsProvider(1).future);
       expect(result, isEmpty);
@@ -67,7 +65,7 @@ void main() {
         ],
       );
 
-      final sub = container.listen(exerciseLogsProvider(1).future, (_, __) {});
+      final sub = container.listen(exerciseLogsProvider(1).future, (_, _) {});
 
       final result = await container.read(exerciseLogsProvider(1).future);
       expect(result, logs);
@@ -77,7 +75,7 @@ void main() {
     test('throws exception when repository returns failure', () async {
       when(
         mockRepository.getExerciseLogs('u1', 1),
-      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+      ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
         overrides: [
@@ -91,15 +89,11 @@ void main() {
       // uncaught asynchronous errors in the test environment if not handled carefully,
       // leading to test timeouts.
       Object? capturedError;
-      final sub = container.listen(
-        exerciseLogsProvider(1),
-        (previous, next) {
-          if (next.hasError) {
-            capturedError = next.error;
-          }
-        },
-        fireImmediately: true,
-      );
+      final sub = container.listen(exerciseLogsProvider(1), (previous, next) {
+        if (next.hasError) {
+          capturedError = next.error;
+        }
+      }, fireImmediately: true);
 
       // Wait a tiny bit for the microtask to complete and the provider to resolve
       await Future.delayed(Duration.zero);
@@ -123,7 +117,7 @@ void main() {
         ],
       );
 
-      final sub = container.listen(allExerciseLogsProvider.future, (_, __) {});
+      final sub = container.listen(allExerciseLogsProvider.future, (_, _) {});
 
       final result = await container.read(allExerciseLogsProvider.future);
       expect(result, isEmpty);
@@ -142,7 +136,7 @@ void main() {
         ],
       );
 
-      final sub = container.listen(allExerciseLogsProvider.future, (_, __) {});
+      final sub = container.listen(allExerciseLogsProvider.future, (_, _) {});
 
       final result = await container.read(allExerciseLogsProvider.future);
       expect(result, logs);
@@ -152,7 +146,7 @@ void main() {
     test('throws exception when repository returns failure', () async {
       when(
         mockRepository.getAllExerciseLogs('u1'),
-      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+      ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
         overrides: [
@@ -163,15 +157,11 @@ void main() {
 
       // Use a listener to check for the error state directly instead of reading the future.
       Object? capturedError;
-      final sub = container.listen(
-        allExerciseLogsProvider,
-        (previous, next) {
-          if (next.hasError) {
-            capturedError = next.error;
-          }
-        },
-        fireImmediately: true,
-      );
+      final sub = container.listen(allExerciseLogsProvider, (previous, next) {
+        if (next.hasError) {
+          capturedError = next.error;
+        }
+      }, fireImmediately: true);
 
       // Wait a tiny bit for the microtask to complete and the provider to resolve
       await Future.delayed(Duration.zero);

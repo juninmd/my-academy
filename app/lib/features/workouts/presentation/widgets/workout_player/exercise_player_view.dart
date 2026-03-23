@@ -144,71 +144,71 @@ class ExercisePlayerView extends HookConsumerWidget {
     }
 
     return NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        SliverAppBar(
-          expandedHeight: 220,
-          floating: false,
-          pinned: false,
-          snap: false,
-          automaticallyImplyLeading: false,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Stack(
-              fit: StackFit.expand,
-              children: [
-                if (workout.exercise?.image != null)
-                  CachedNetworkImage(
-                    imageUrl: workout.exercise!.image!,
-                    fit: BoxFit.cover,
-                    errorWidget: (c, e, s) =>
-                        Container(color: Colors.grey[800]),
-                  )
-                else
-                  Container(
-                    color: Colors.grey[800],
-                    child: const Icon(Icons.fitness_center, size: 48),
-                  ),
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black87],
+      headerSliverBuilder:
+          (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              expandedHeight: 220,
+              floating: false,
+              pinned: false,
+              snap: false,
+              automaticallyImplyLeading: false,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    if (workout.exercise?.image != null)
+                      CachedNetworkImage(
+                        imageUrl: workout.exercise!.image!,
+                        fit: BoxFit.cover,
+                        errorWidget:
+                            (c, e, s) => Container(color: Colors.grey[800]),
+                      )
+                    else
+                      Container(
+                        color: Colors.grey[800],
+                        child: const Icon(Icons.fitness_center, size: 48),
+                      ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black87],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: Text(
-                    workout.exercise?.name ?? 'Exercício',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      shadows: [Shadow(blurRadius: 10, color: Colors.black)],
+                    Positioned(
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      child: Text(
+                        workout.exercise?.name ?? 'Exercício',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(blurRadius: 10, color: Colors.black),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        SliverPersistentHeader(
-          delegate: SliverTabBarDelegate(
-            TabBar(
-              controller: tabController,
-              labelColor: Theme.of(context).colorScheme.primary,
-              unselectedLabelColor: Theme.of(context).disabledColor,
-              tabs: const [
-                Tab(text: 'Execução'),
-                Tab(text: 'Histórico'),
-              ],
+            SliverPersistentHeader(
+              delegate: SliverTabBarDelegate(
+                TabBar(
+                  controller: tabController,
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  unselectedLabelColor: Theme.of(context).disabledColor,
+                  tabs: const [Tab(text: 'Execução'), Tab(text: 'Histórico')],
+                ),
+              ),
+              pinned: true,
             ),
-          ),
-          pinned: true,
-        ),
-      ],
+          ],
       body: TabBarView(
         controller: tabController,
         children: [
@@ -261,9 +261,8 @@ class ExercisePlayerView extends HookConsumerWidget {
                                   Expanded(
                                     child: Text(
                                       tip,
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.bodySmall,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
                                     ),
                                   ),
                                 ],
@@ -388,78 +387,80 @@ class ExercisePlayerView extends HookConsumerWidget {
                 SizedBox(
                   height: 56,
                   child: FilledButton(
-                    onPressed: allSetsCompleted
-                        ? () {
-                            final finishAction = () {
-                              final historyLogs =
-                                  historyLogsAsync.asData?.value ?? [];
-                              String? recordMessage;
-                              if (historyLogs.isNotEmpty) {
-                                double currentMax1RM = 0;
-                                for (final log in logs.value.values) {
-                                  final oneRM =
-                                      OneRepMaxCalculator.calculateEpley(
-                                        log.actualWeight.toDouble(),
-                                        log.actualReps,
-                                      );
-                                  if (oneRM > currentMax1RM) {
-                                    currentMax1RM = oneRM;
-                                  }
-                                }
-                                double historyMax1RM = 0;
-                                for (final log in historyLogs) {
-                                  for (final set in log.sets) {
+                    onPressed:
+                        allSetsCompleted
+                            ? () {
+                              void finishAction() {
+                                final historyLogs =
+                                    historyLogsAsync.asData?.value ?? [];
+                                String? recordMessage;
+                                if (historyLogs.isNotEmpty) {
+                                  double currentMax1RM = 0;
+                                  for (final log in logs.value.values) {
                                     final oneRM =
                                         OneRepMaxCalculator.calculateEpley(
-                                          set.weight.toDouble(),
-                                          set.reps,
+                                          log.actualWeight.toDouble(),
+                                          log.actualReps,
                                         );
-                                    if (oneRM > historyMax1RM) {
-                                      historyMax1RM = oneRM;
+                                    if (oneRM > currentMax1RM) {
+                                      currentMax1RM = oneRM;
                                     }
                                   }
+                                  double historyMax1RM = 0;
+                                  for (final log in historyLogs) {
+                                    for (final set in log.sets) {
+                                      final oneRM =
+                                          OneRepMaxCalculator.calculateEpley(
+                                            set.weight.toDouble(),
+                                            set.reps,
+                                          );
+                                      if (oneRM > historyMax1RM) {
+                                        historyMax1RM = oneRM;
+                                      }
+                                    }
+                                  }
+                                  if (currentMax1RM > historyMax1RM &&
+                                      historyMax1RM > 0) {
+                                    recordMessage =
+                                        '${workout.exercise?.name}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)';
+                                  }
                                 }
-                                if (currentMax1RM > historyMax1RM &&
-                                    historyMax1RM > 0) {
-                                  recordMessage =
-                                      '${workout.exercise?.name}: ${currentMax1RM.toStringAsFixed(1)}kg (1RM)';
-                                }
+                                onFinished(
+                                  logs.value,
+                                  notesController.text,
+                                  recordMessage,
+                                );
                               }
-                              onFinished(
-                                logs.value,
-                                notesController.text,
-                                recordMessage,
-                              );
-                            };
 
-                            if (isLast) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Finalizar Treino?'),
-                                  content: const Text(
-                                    'Deseja encerrar e salvar o treino agora?',
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => context.pop(),
-                                      child: const Text('Cancelar'),
-                                    ),
-                                    FilledButton(
-                                      onPressed: () {
-                                        context.pop();
-                                        finishAction();
-                                      },
-                                      child: const Text('Finalizar'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              finishAction();
+                              if (isLast) {
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (context) => AlertDialog(
+                                        title: const Text('Finalizar Treino?'),
+                                        content: const Text(
+                                          'Deseja encerrar e salvar o treino agora?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => context.pop(),
+                                            child: const Text('Cancelar'),
+                                          ),
+                                          FilledButton(
+                                            onPressed: () {
+                                              context.pop();
+                                              finishAction();
+                                            },
+                                            child: const Text('Finalizar'),
+                                          ),
+                                        ],
+                                      ),
+                                );
+                              } else {
+                                finishAction();
+                              }
                             }
-                          }
-                        : null,
+                            : null,
                     child: Text(
                       isLast ? 'Finalizar Treino' : 'Próximo',
                       style: const TextStyle(
@@ -494,12 +495,12 @@ class ExercisePlayerView extends HookConsumerWidget {
       children: [
         ...sortedIndices.map((index) {
           final log = logs.value[index]!;
-          final series = index < workout.series.length
-              ? workout.series[index]
-              : null;
-          final lastSet = (lastLog != null && lastLog.sets.length > index)
-              ? lastLog.sets[index]
-              : null;
+          final series =
+              index < workout.series.length ? workout.series[index] : null;
+          final lastSet =
+              (lastLog != null && lastLog.sets.length > index)
+                  ? lastLog.sets[index]
+                  : null;
 
           return WorkoutSetRow(
             key: ValueKey('set_row_$index'),
@@ -546,9 +547,10 @@ class ExercisePlayerView extends HookConsumerWidget {
           child: TextButton.icon(
             onPressed: () {
               final currentLogs = Map<int, SetLogState>.from(logs.value);
-              final nextIndex = currentLogs.isEmpty
-                  ? 0
-                  : currentLogs.keys.reduce(math.max) + 1;
+              final nextIndex =
+                  currentLogs.isEmpty
+                      ? 0
+                      : currentLogs.keys.reduce(math.max) + 1;
               final lastLog = nextIndex > 0 ? currentLogs[nextIndex - 1] : null;
 
               currentLogs[nextIndex] = SetLogState(

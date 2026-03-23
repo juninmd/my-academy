@@ -27,12 +27,12 @@ class WorkoutGroupCard extends StatelessWidget {
     }
 
     // Sort logic to prioritize primary groups over "Outros"
-    final sortedMuscles = targetedMuscles.toList()
-      ..sort((a, b) {
-        if (a == 'Outros') return 1;
-        if (b == 'Outros') return -1;
-        return a.compareTo(b);
-      });
+    final sortedMuscles =
+        targetedMuscles.toList()..sort((a, b) {
+          if (a == 'Outros') return 1;
+          if (b == 'Outros') return -1;
+          return a.compareTo(b);
+        });
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -47,17 +47,19 @@ class WorkoutGroupCard extends StatelessWidget {
             if (workoutGroup.image != null && workoutGroup.image!.isNotEmpty)
               workoutGroup.image!.startsWith('http')
                   ? CachedNetworkImage(
-                      imageUrl: workoutGroup.image!,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, error, stackTrace) =>
-                          Container(color: Colors.grey[800]),
-                    )
+                    imageUrl: workoutGroup.image!,
+                    fit: BoxFit.cover,
+                    errorWidget:
+                        (context, error, stackTrace) =>
+                            Container(color: Colors.grey[800]),
+                  )
                   : Image.asset(
-                      workoutGroup.image!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Container(color: Colors.grey[800]),
-                    )
+                    workoutGroup.image!,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) =>
+                            Container(color: Colors.grey[800]),
+                  )
             else
               Container(
                 color: Theme.of(context).colorScheme.primaryContainer,
@@ -103,31 +105,33 @@ class WorkoutGroupCard extends StatelessWidget {
                       Wrap(
                         spacing: 4,
                         runSpacing: 4,
-                        children: sortedMuscles
-                            .take(3)
-                            .map(
-                              (m) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.primary.withValues(alpha: 0.8),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  m,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                        children:
+                            sortedMuscles
+                                .take(3)
+                                .map(
+                                  (m) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withValues(alpha: 0.8),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      m,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                            .toList(),
+                                )
+                                .toList(),
                       ),
                     const SizedBox(height: 8),
                     if (workoutGroup.workouts.isNotEmpty)
