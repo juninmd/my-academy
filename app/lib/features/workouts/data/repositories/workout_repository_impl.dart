@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/workout_group_entity.dart';
-import '../../domain/entities/workout_entity.dart';
-import '../../domain/entities/workout_series_entity.dart';
+
+
 import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
 import '../../domain/repositories/workout_repository.dart';
