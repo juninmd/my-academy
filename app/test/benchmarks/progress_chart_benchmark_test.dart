@@ -52,10 +52,10 @@ void main() {
     }
 
     stopwatch.stop();
-    print(
+    debugPrint(
       'BENCHMARK_RESULT: ${stopwatch.elapsedMilliseconds}ms for $iterations iterations',
     );
-    print(
+    debugPrint(
       'BENCHMARK_AVG: ${stopwatch.elapsedMilliseconds / iterations}ms per iteration',
     );
   });
