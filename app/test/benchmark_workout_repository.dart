@@ -42,7 +42,7 @@ void main() {
     final result = await compute(parseAndMap, jsonString);
 
     stopwatch.stop();
-    print(
+    debugPrint(
       'Full Offload (Decode + Map) of $count items took ${stopwatch.elapsedMilliseconds}ms',
     );
     expect(result.length, count);

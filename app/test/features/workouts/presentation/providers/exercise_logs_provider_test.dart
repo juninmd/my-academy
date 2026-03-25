@@ -1,12 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
-import 'package:my_academy/features/workouts/domain/repositories/workout_repository.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
 import 'package:my_academy/core/exceptions/failure.dart';
 
