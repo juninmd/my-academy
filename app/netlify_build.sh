@@ -48,14 +48,5 @@ echo "Building web app (release)..."
 flutter clean
 flutter build web --release --base-href "/" --no-tree-shake-icons
 
-echo "Generating Netlify configuration files..."
-echo "/* /index.html 200" > build/web/_redirects
-
-cat << 'EOF' > build/web/_headers
-/*
-  Cross-Origin-Opener-Policy: same-origin
-  Cross-Origin-Embedder-Policy: require-corp
-EOF
-
 echo "Build complete!"
 ls -la build/web
