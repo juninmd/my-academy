@@ -21,7 +21,7 @@ class DailyInsightCard extends ConsumerWidget {
           data: (stats) {
             return exercisesAsync.when(
               data: (exercises) {
-                String insightText = "Pronto para o próximo treino? Lembre-se de manter a hidratação.";
+                String insightText = 'Pronto para o próximo treino? Lembre-se de manter a hidratação.';
                 IconData insightIcon = Icons.lightbulb_outline;
                 Color insightColor = Colors.amber;
 
@@ -35,7 +35,7 @@ class DailyInsightCard extends ConsumerWidget {
                 }).toList();
 
                 if (stats.streak > 3) {
-                  insightText = "Você está com uma ofensiva de ${stats.streak} dias! Incrível, mantenha o foco!";
+                  insightText = 'Você está com uma ofensiva de ${stats.streak} dias! Incrível, mantenha o foco!';
                   insightIcon = Icons.local_fire_department;
                   insightColor = Colors.deepOrange;
                 } else if (yesterdayLogs.isNotEmpty) {
@@ -55,16 +55,16 @@ class DailyInsightCard extends ConsumerWidget {
                   if (muscleCounts.isNotEmpty) {
                     // Find the most trained muscle
                     final mostTrained = muscleCounts.keys.reduce((a, b) => muscleCounts[a]! > muscleCounts[b]! ? a : b);
-                    insightText = "Você treinou $mostTrained ontem. Considere descansar essa região hoje!";
+                    insightText = 'Você treinou $mostTrained ontem. Considere descansar essa região hoje!';
                     insightIcon = Icons.info_outline;
                     insightColor = Colors.blue;
                   }
                 } else if (stats.workoutsThisWeek >= stats.weeklyGoal) {
-                   insightText = "Meta semanal concluída! Qualquer treino extra agora é puro lucro na sua evolução.";
+                   insightText = 'Meta semanal concluída! Qualquer treino extra agora é puro lucro na sua evolução.';
                    insightIcon = Icons.star_border;
                    insightColor = Colors.purple;
                 } else if (logs.isEmpty) {
-                   insightText = "Seja bem-vindo! Faça seu primeiro treino e comece a registrar seu progresso.";
+                   insightText = 'Seja bem-vindo! Faça seu primeiro treino e comece a registrar seu progresso.';
                    insightIcon = Icons.waving_hand;
                    insightColor = Colors.green;
                 }
@@ -124,15 +124,15 @@ class DailyInsightCard extends ConsumerWidget {
                 );
               },
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
             );
           },
           loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
         );
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

@@ -82,7 +82,7 @@ class DashboardPage extends ConsumerWidget {
                     ],
                   ),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
               ),
               IconButton(
@@ -387,14 +387,14 @@ class DashboardPage extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 16),
-                        const SizedBox(width: 4),
+                        Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 16),
+                        SizedBox(width: 4),
                         Text(
                           'TREINO DE HOJE',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 12,

@@ -46,7 +46,7 @@ void main() {
       );
 
       // We need to listen to it so it doesn't get auto-disposed before resolution
-      final sub = container.listen(exerciseLogsProvider(1).future, (_, __) {});
+      final sub = container.listen(exerciseLogsProvider(1).future, (_, _) {});
 
       final result = await container.read(exerciseLogsProvider(1).future);
       expect(result, isEmpty);
@@ -65,7 +65,7 @@ void main() {
         ],
       );
 
-      final sub = container.listen(exerciseLogsProvider(1).future, (_, __) {});
+      final sub = container.listen(exerciseLogsProvider(1).future, (_, _) {});
 
       final result = await container.read(exerciseLogsProvider(1).future);
       expect(result, logs);
@@ -75,7 +75,7 @@ void main() {
     test('throws exception when repository returns failure', () async {
       when(
         mockRepository.getExerciseLogs('u1', 1),
-      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+      ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
         overrides: [
@@ -121,7 +121,7 @@ void main() {
         ],
       );
 
-      final sub = container.listen(allExerciseLogsProvider.future, (_, __) {});
+      final sub = container.listen(allExerciseLogsProvider.future, (_, _) {});
 
       final result = await container.read(allExerciseLogsProvider.future);
       expect(result, isEmpty);
@@ -140,7 +140,7 @@ void main() {
         ],
       );
 
-      final sub = container.listen(allExerciseLogsProvider.future, (_, __) {});
+      final sub = container.listen(allExerciseLogsProvider.future, (_, _) {});
 
       final result = await container.read(allExerciseLogsProvider.future);
       expect(result, logs);
@@ -150,7 +150,7 @@ void main() {
     test('throws exception when repository returns failure', () async {
       when(
         mockRepository.getAllExerciseLogs('u1'),
-      ).thenAnswer((_) async => Left(ServerFailure('Error')));
+      ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
         overrides: [
