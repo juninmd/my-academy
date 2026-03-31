@@ -392,7 +392,7 @@ class ExercisePlayerView extends HookConsumerWidget {
                         ? () {
                             void finishAction() {
                               final historyLogs =
-                                  historyLogsAsync.asData?.value ?? [];
+                                  historyLogsAsync.value ?? [];
                               String? recordMessage;
                               if (historyLogs.isNotEmpty) {
                                 double currentMax1RM = 0;
