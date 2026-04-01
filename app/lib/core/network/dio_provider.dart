@@ -75,18 +75,18 @@ String _getBaseUrl() {
     return 'https://my-academy-api.onrender.com';
   }
 
-  if (kIsWeb) return 'http://localhost:9000/api';
+  if (kIsWeb) return 'http://localhost:9000/api/';
 
   // Android Emulator
   if (defaultTargetPlatform == TargetPlatform.android) {
-    return 'http://10.0.2.2:9000/api';
+    return 'http://10.0.2.2:9000/api/';
   }
 
   // iOS Simulator
   if (defaultTargetPlatform == TargetPlatform.iOS) {
-    return 'http://localhost:9000/api';
+    return 'http://localhost:9000/api/';
   }
 
   // Fallback
-  return 'http://localhost:9000/api';
+  return 'http://localhost:9000/api/';
 }
