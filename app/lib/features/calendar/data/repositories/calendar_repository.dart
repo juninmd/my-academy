@@ -1,3 +1,4 @@
+import '../../../../core/network/dio_provider.dart';
 import 'package:dartz/dartz.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/exceptions/failure.dart';

@@ -91,47 +91,6 @@ final class GoogleSignInProvider
 
 String _$googleSignInHash() => r'4df13ef226b172967e2ad6fef31c4648f6d52fd9';
 
-@ProviderFor(apiClient)
-final apiClientProvider = ApiClientProvider._();
-
-final class ApiClientProvider
-    extends $FunctionalProvider<ApiClient, ApiClient, ApiClient>
-    with $Provider<ApiClient> {
-  ApiClientProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'apiClientProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$apiClientHash();
-
-  @$internal
-  @override
-  $ProviderElement<ApiClient> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  ApiClient create(Ref ref) {
-    return apiClient(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ApiClient value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ApiClient>(value),
-    );
-  }
-}
-
-String _$apiClientHash() => r'd979c0e43cde02194de441be65d2fe13da7f0c8b';
-
 @ProviderFor(authRemoteDataSource)
 final authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
 
