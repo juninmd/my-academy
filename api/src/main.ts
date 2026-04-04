@@ -20,6 +20,10 @@ async function bootstrap() {
       }),
     );
 
+    app.setGlobalPrefix('api', {
+      exclude: ['docs', 'health'],
+    });
+
     // Habilita CORS
     app.enableCors();
 
@@ -31,7 +35,7 @@ async function bootstrap() {
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('docs', app, document);
 
     app.use(
       '/reference',
