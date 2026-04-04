@@ -94,3 +94,4 @@ lerna-debug.log*
 !.vscode/extensions.json
 prisma/prisma-client
 service-account.json
+opencode.json
