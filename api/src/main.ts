@@ -20,7 +20,9 @@ async function bootstrap() {
       }),
     );
 
-    app.setGlobalPrefix('api');
+    app.setGlobalPrefix('api', {
+      exclude: ['docs', 'health'],
+    });
 
     // Habilita CORS
     app.enableCors();
