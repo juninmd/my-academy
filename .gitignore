@@ -16,9 +16,6 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
 #.vscode/
 
 # Flutter/Dart/Pub related
@@ -42,8 +39,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-google-services.json
+
 # *.g.dart
+!lib/features/onboarding/presentation/providers/onboarding_provider.g.dart
+
+# Android signing — never commit these
+key.properties
+**/*.keystore
+**/*.jks
 
 # Backend related
 node_modules/
@@ -54,31 +57,20 @@ backend/node_modules/
 backend/dist/
 backend/dev.db
 backend/.env
-!lib/features/onboarding/presentation/providers/onboarding_provider.g.dart
-
-.env
-# compiled output
-/dist
-/node_modules
 
 # Logs
 logs
-*.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# OS
-.DS_Store
-
 # Tests
 /coverage
 /.nyc_output
 
 # IDEs and editors
-/.idea
 .project
 .classpath
 .c9/
@@ -92,5 +84,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Prisma generated client
 prisma/prisma-client
 service-account.json

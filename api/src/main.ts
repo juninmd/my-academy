@@ -21,7 +21,14 @@ async function bootstrap() {
     );
 
     // Habilita CORS
-    app.enableCors();
+    const allowedOrigins = (process.env.CORS_ORIGINS || '')
+      .split(',')
+      .map((o) => o.trim())
+      .filter(Boolean);
+    app.enableCors({
+      origin: allowedOrigins.length > 0 ? allowedOrigins : false,
+      credentials: true,
+    });
 
     // Configuração do Swagger
     const config = new DocumentBuilder()
