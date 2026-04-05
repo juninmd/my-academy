@@ -55,15 +55,15 @@ class DefaultFirebaseOptions {
     messagingSenderId: '304188950444',
     projectId: 'body-shape-d78bf',
     authDomain: 'body-shape-d78bf.firebaseapp.com',
-    storageBucket: 'body-shape-d78bf.appspot.com',
+    storageBucket: 'body-shape-d78bf.firebasestorage.app',
     measurementId: 'G-61KYYV3MG9',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCw0YArBvGulZJnG37Q3JHIUoxKtLtvi2w',
-    appId: '1:304188950444:android:6bdc02d7b05d5b01765c09',
+    appId: '1:304188950444:android:9118e7e3159a8b80765c09',
     messagingSenderId: '304188950444',
     projectId: 'body-shape-d78bf',
-    storageBucket: 'body-shape-d78bf.appspot.com',
+    storageBucket: 'body-shape-d78bf.firebasestorage.app',
   );
 }
