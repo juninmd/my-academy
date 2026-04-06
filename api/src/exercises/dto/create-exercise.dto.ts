@@ -41,6 +41,15 @@ export class CreateExerciseDto {
 
   @ApiProperty({
     required: false,
+    description: 'Description of the exercise',
+    example: 'A push exercise targeting the chest.',
+  })
+  @IsOptional()
+  @IsString()
+  readonly description?: string;
+
+  @ApiProperty({
+    required: false,
     enum: ExerciseType,
     description: 'Type of exercise (STRENGTH, CARDIO)',
     example: 'STRENGTH',

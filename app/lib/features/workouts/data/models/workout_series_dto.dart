@@ -7,6 +7,9 @@ class WorkoutSeriesDto {
     required this.rest,
     this.id,
     this.workoutId,
+    this.time,
+    this.distance,
+    this.speed,
   });
 
   final int? id;
@@ -14,6 +17,9 @@ class WorkoutSeriesDto {
   final int repetitions;
   final int weight;
   final int rest;
+  final int? time;
+  final double? distance;
+  final double? speed;
 
   factory WorkoutSeriesDto.fromJson(Map<String, dynamic> json) {
     return WorkoutSeriesDto(
@@ -22,6 +28,9 @@ class WorkoutSeriesDto {
       repetitions: json['repetitions'] as int? ?? 0,
       weight: json['weight'] as int? ?? 0,
       rest: json['rest'] as int? ?? 0,
+      time: json['time'] as int?,
+      distance: (json['distance'] as num?)?.toDouble(),
+      speed: (json['speed'] as num?)?.toDouble(),
     );
   }
 
@@ -32,6 +41,9 @@ class WorkoutSeriesDto {
       'repetitions': repetitions,
       'weight': weight,
       'rest': rest,
+      if (time != null) 'time': time,
+      if (distance != null) 'distance': distance,
+      if (speed != null) 'speed': speed,
     };
   }
 
@@ -42,6 +54,9 @@ class WorkoutSeriesDto {
       repetitions: repetitions,
       weight: weight,
       rest: rest,
+      time: time,
+      distance: distance,
+      speed: speed,
     );
   }
 
@@ -52,6 +67,9 @@ class WorkoutSeriesDto {
       repetitions: entity.repetitions,
       weight: entity.weight,
       rest: entity.rest,
+      time: entity.time,
+      distance: entity.distance,
+      speed: entity.speed,
     );
   }
 }

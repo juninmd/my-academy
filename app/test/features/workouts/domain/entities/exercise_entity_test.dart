@@ -26,6 +26,7 @@ void main() {
         ['Tip 1'],
         ['Mistake 1'],
         'Description',
+        ExerciseType.strength,
       ]);
     });
   });

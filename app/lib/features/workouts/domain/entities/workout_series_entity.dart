@@ -9,15 +9,21 @@ class WorkoutSeriesEntity extends Equatable {
     required this.rest,
     this.id,
     this.workoutId,
+    this.time,
+    this.distance,
+    this.speed,
   });
   final int? id;
   final int? workoutId;
   final int repetitions;
   final int weight; // in kg or unit
   final int rest;
+  final int? time;
+  final double? distance;
+  final double? speed;
 
   @override
-  List<Object?> get props => [id, workoutId, repetitions, weight, rest];
+  List<Object?> get props => [id, workoutId, repetitions, weight, rest, time, distance, speed];
 
   WorkoutSeriesEntity copyWith({
     int? id,
@@ -25,6 +31,9 @@ class WorkoutSeriesEntity extends Equatable {
     int? repetitions,
     int? weight,
     int? rest,
+    int? time,
+    double? distance,
+    double? speed,
   }) {
     return WorkoutSeriesEntity(
       id: id ?? this.id,
@@ -32,6 +41,9 @@ class WorkoutSeriesEntity extends Equatable {
       repetitions: repetitions ?? this.repetitions,
       weight: weight ?? this.weight,
       rest: rest ?? this.rest,
+      time: time ?? this.time,
+      distance: distance ?? this.distance,
+      speed: speed ?? this.speed,
     );
   }
 }

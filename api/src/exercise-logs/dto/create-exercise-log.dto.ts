@@ -22,6 +22,11 @@ export class CreateSetLogDto {
   @IsOptional()
   @IsInt()
   rpe?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  type?: string;
 }
 
 export class CreateExerciseLogDto {
