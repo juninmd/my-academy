@@ -33,14 +33,15 @@ enum SubscriptionStatus {
 }
 
 model Exercises {
-  id        Int          @id @default(autoincrement())
-  name      String       @unique
-  image     String
-  tips      String
-  mistakes  String
-  type      ExerciseType @default(STRENGTH)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  image       String
+  tips        String
+  mistakes    String
+  description String?
+  type        ExerciseType @default(STRENGTH)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   workouts  Workouts[]
   exerciseLogs ExerciseLog[]
 
@@ -71,6 +72,7 @@ model ExerciseLogSet {
   reps          Int
   weight        Int
   rpe           Int?
+  type          String      @default("normal")
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 

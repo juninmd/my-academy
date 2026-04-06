@@ -8,6 +8,7 @@ class ExerciseEntity extends Equatable {
     this.tips = const [],
     this.mistakes = const [],
     this.description,
+    this.type = ExerciseType.strength,
   });
   final int id;
   final String name;
@@ -15,7 +16,13 @@ class ExerciseEntity extends Equatable {
   final List<String> tips;
   final List<String> mistakes;
   final String? description;
+  final ExerciseType type;
 
   @override
-  List<Object?> get props => [id, name, image, tips, mistakes, description];
+  List<Object?> get props => [id, name, image, tips, mistakes, description, type];
+}
+
+enum ExerciseType {
+  strength,
+  cardio,
 }

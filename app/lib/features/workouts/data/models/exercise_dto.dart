@@ -8,6 +8,7 @@ class ExerciseDto {
     this.tips = const [],
     this.mistakes = const [],
     this.description,
+    this.type = ExerciseType.strength,
   });
 
   final int id;
@@ -16,6 +17,7 @@ class ExerciseDto {
   final List<String> tips;
   final List<String> mistakes;
   final String? description;
+  final ExerciseType type;
 
   factory ExerciseDto.fromJson(Map<String, dynamic> json) {
     return ExerciseDto(
@@ -25,6 +27,7 @@ class ExerciseDto {
       tips: json['tips'] != null && (json['tips'] as String).isNotEmpty ? (json['tips'] as String).split(',') : [],
       mistakes: json['mistakes'] != null && (json['mistakes'] as String).isNotEmpty ? (json['mistakes'] as String).split(',') : [],
       description: json['description'] as String?,
+      type: json['type'] == 'CARDIO' ? ExerciseType.cardio : ExerciseType.strength,
     );
   }
 
@@ -36,6 +39,7 @@ class ExerciseDto {
       if (tips.isNotEmpty) 'tips': tips.join(','),
       if (mistakes.isNotEmpty) 'mistakes': mistakes.join(','),
       if (description != null) 'description': description,
+      'type': type == ExerciseType.cardio ? 'CARDIO' : 'STRENGTH',
     };
   }
 
@@ -47,6 +51,7 @@ class ExerciseDto {
       tips: tips,
       mistakes: mistakes,
       description: description,
+      type: type,
     );
   }
 
@@ -58,6 +63,7 @@ class ExerciseDto {
       tips: entity.tips,
       mistakes: entity.mistakes,
       description: entity.description,
+      type: entity.type,
     );
   }
 }

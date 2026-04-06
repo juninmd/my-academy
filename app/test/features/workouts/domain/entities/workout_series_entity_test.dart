@@ -17,7 +17,7 @@ void main() {
       expect(series.repetitions, 12);
       expect(series.weight, 30);
       expect(series.rest, 60);
-      expect(series.props, [1, 2, 12, 30, 60]);
+      expect(series.props, [1, 2, 12, 30, 60, null, null, null]);
     });
   });
 }
