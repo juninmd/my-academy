@@ -110,7 +110,9 @@ describe('UsersService', () => {
 
       const result = await service.findAll('test@example.com');
 
-      expect(prismaMock.users.findMany).toHaveBeenCalledWith({ where: { email: 'test@example.com' } });
+      expect(prismaMock.users.findMany).toHaveBeenCalledWith({
+        where: { email: 'test@example.com' },
+      });
       expect(result).toEqual([mockUser]);
     });
   });
@@ -172,9 +174,7 @@ describe('UsersService', () => {
       const error = new Error('Some error');
       prismaMock.users.update.mockRejectedValue(error);
 
-      await expect(service.update('999', updateUserDto)).rejects.toThrow(
-        Error,
-      );
+      await expect(service.update('999', updateUserDto)).rejects.toThrow(Error);
       expect(prismaMock.users.update).toHaveBeenCalled();
     });
   });

@@ -88,3 +88,4 @@ lerna-debug.log*
 # Prisma generated client
 prisma/prisma-client
 service-account.json
+opencode.json
