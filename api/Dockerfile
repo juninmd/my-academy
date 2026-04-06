@@ -1,8 +1,13 @@
-# Use a imagem oficial do Node.js como base
 FROM node:22-alpine AS builder
 WORKDIR /usr/src/app
+
+# Instala dependências primeiro (layer cacheável)
+# --ignore-scripts evita que o postinstall rode `pnpm run build`
+# antes de copiar o código-fonte
 COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+RUN npm install -g pnpm && pnpm install --frozen-lockfile --ignore-scripts
+
+# Copia código e gera o Prisma client + compila TypeScript
 COPY . .
 RUN pnpm run build
 
