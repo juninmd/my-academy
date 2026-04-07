@@ -9,6 +9,9 @@ RUN npm install -g pnpm && pnpm install --frozen-lockfile --ignore-scripts
 
 # Copia código e gera o Prisma client + compila TypeScript
 COPY . .
+# DATABASE_URL exigido pelo prisma.config.ts durante o `prisma generate`
+# (não conecta ao banco — apenas satisfaz a validação do Prisma 6)
+ENV DATABASE_URL="postgresql://build:build@localhost:5432/build"
 RUN pnpm run build
 
 FROM node:22-alpine
