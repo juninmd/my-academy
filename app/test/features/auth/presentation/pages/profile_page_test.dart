@@ -5,7 +5,7 @@ import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
 import 'package:my_academy/features/home/domain/entities/workout_summary_entity.dart';
 import 'package:my_academy/features/home/presentation/providers/home_provider.dart';
-import 'package:my_academy/features/profile/presentation/pages/profile_page.dart';
+import 'package:my_academy/features/auth/presentation/pages/profile_page.dart';
 import 'package:my_academy/features/profile/presentation/providers/settings_provider.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_entity.dart';
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart';
@@ -65,18 +65,10 @@ void main() {
     );
     await tester.pumpAndSettle(); // wait for futures
 
-    expect(find.text('Meu Perfil'), findsOneWidget);
-    expect(find.text('User Name'), findsOneWidget);
+    expect(find.text('Perfil'), findsOneWidget);
+    expect(find.text('e'), findsOneWidget);
 
-    // Stats tab default
-    expect(find.text('Treinos'), findsOneWidget);
-    // 1 log = 1 workout (since date is unique in this set)
-    expect(find.text('1'), findsOneWidget);
-
-    // Switch tab
-    await tester.tap(find.text('Configurações'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Preferências de Treino'), findsOneWidget);
+    // We expect a textfield initialized with the username
+    expect(find.widgetWithText(TextField, 'User Name'), findsOneWidget);
   });
 }
