@@ -20,7 +20,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = ref.read(authNotifierProvider).value;
       if (user != null) {
-        _nameController.text = user.name;
+        _nameController.text = user.name ?? '';
       }
     });
   }
@@ -33,6 +33,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authNotifierProvider, (previous, next) {
+      if (next.hasValue && next.value != null && !_isEditing) {
+        if (_nameController.text != (next.value?.name ?? '')) {
+          _nameController.text = next.value?.name ?? '';
+        }
+      }
+    });
+
     final authState = ref.watch(authNotifierProvider);
 
     return Scaffold(
