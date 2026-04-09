@@ -89,16 +89,22 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     const SizedBox(width: 8),
                     IconButton(
                       icon: Icon(_isEditing ? Icons.check : Icons.edit),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_isEditing) {
                           // Save changes
-                          ref
+                          await ref
                               .read(authNotifierProvider.notifier)
                               .updateName(_nameController.text);
+                          if (mounted) {
+                            setState(() {
+                              _isEditing = false;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            _isEditing = true;
+                          });
                         }
-                        setState(() {
-                          _isEditing = !_isEditing;
-                        });
                       },
                     ),
                   ],
