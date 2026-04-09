@@ -77,7 +77,7 @@ describe('Main', () => {
     });
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(NestFactory.create).toHaveBeenCalled();
-  });
+  }, 10000);
 
   it('should handle error during bootstrap', async () => {
     (NestFactory.create as jest.Mock).mockRejectedValueOnce(

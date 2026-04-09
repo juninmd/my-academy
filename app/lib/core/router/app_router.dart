@@ -9,7 +9,7 @@ import '../../features/home/presentation/pages/dashboard_page.dart';
 import '../../features/home/presentation/pages/home_shell_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/onboarding/presentation/providers/onboarding_provider.dart';
-import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/auth/presentation/pages/profile_page.dart';
 import '../../features/workouts/domain/entities/exercise_entity.dart';
 import '../../features/workouts/domain/entities/workout_group_entity.dart';
 import '../../features/workouts/presentation/pages/analytics_page.dart';

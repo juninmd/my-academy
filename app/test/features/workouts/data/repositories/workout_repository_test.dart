@@ -7,10 +7,19 @@ import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity
 
 import 'workout_repository_test.mocks.dart';
 
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+
 @GenerateMocks([ApiClient])
 void main() {
   late MockApiClient mockApiClient;
   late WorkoutRepositoryImpl repository;
+
+  setUpAll(() async {
+    Hive.init('test_hive_dir');
+    await Hive.openBox('workouts');
+    await Hive.openBox('exercise_logs');
+  });
 
   setUp(() {
     mockApiClient = MockApiClient();
@@ -46,7 +55,7 @@ void main() {
     test('should return failure when exception', () async {
       when(mockApiClient.get(any)).thenThrow(Exception('Error'));
 
-      final result = await repository.getWorkoutGroups('user1');
+      final result = await repository.getWorkoutGroups('user_doesnt_exist');
 
       expect(result.isLeft(), true);
     });
