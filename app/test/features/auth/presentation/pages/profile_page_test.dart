@@ -69,6 +69,8 @@ void main() {
     expect(find.text('e'), findsOneWidget);
 
     // We expect a textfield initialized with the username
-    expect(find.widgetWithText(TextField, 'User Name'), findsOneWidget);
+    final textField = find.byType(TextField);
+    expect(textField, findsOneWidget);
+    expect(tester.widget<TextField>(textField).controller?.text, 'User Name');
   });
 }
