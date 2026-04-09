@@ -632,22 +632,25 @@ class _DashboardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 28,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          backgroundImage: user?.photoUrl != null
-              ? CachedNetworkImageProvider(user!.photoUrl!)
-              : null,
-          child: user?.photoUrl == null
-              ? Text(
-                  user?.name?.substring(0, 1).toUpperCase() ?? 'U',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                )
-              : null,
+        GestureDetector(
+          onTap: () => context.push('/profile'),
+          child: CircleAvatar(
+            radius: 28,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundImage: user?.photoUrl != null
+                ? CachedNetworkImageProvider(user!.photoUrl!)
+                : null,
+            child: user?.photoUrl == null
+                ? Text(
+                    user?.name?.substring(0, 1).toUpperCase() ?? 'U',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  )
+                : null,
+          ),
         ),
         const SizedBox(width: 16),
         Column(

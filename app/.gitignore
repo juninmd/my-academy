@@ -53,3 +53,4 @@ node_modules/
 dist/
 dev.db
 .env
+test_hive_dir/

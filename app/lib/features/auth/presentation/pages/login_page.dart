@@ -6,17 +6,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
 
-class LoginPage extends ConsumerWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.listen(authNotifierProvider, (previous, next) {
       next.whenOrNull(
         error: (error, stack) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Login failed: $error'),
+              content: Text('Authentication failed: $error'),
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );
@@ -118,7 +133,87 @@ class LoginPage extends ConsumerWidget {
                               const SizedBox(height: 24),
                               if (authState.isLoading)
                                 const CircularProgressIndicator()
-                              else
+                              else ...[
+                                TextField(
+                                  controller: _emailController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Email',
+                                    filled: true,
+                                    fillColor: Colors.white.withValues(alpha: 0.1),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    hintStyle: const TextStyle(color: Colors.white70),
+                                  ),
+                                  style: const TextStyle(color: Colors.white),
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                                const SizedBox(height: 16),
+                                TextField(
+                                  controller: _passwordController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Senha',
+                                    filled: true,
+                                    fillColor: Colors.white.withValues(alpha: 0.1),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    hintStyle: const TextStyle(color: Colors.white70),
+                                  ),
+                                  style: const TextStyle(color: Colors.white),
+                                  obscureText: true,
+                                ),
+                                const SizedBox(height: 24),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Theme.of(context).primaryColor,
+                                      foregroundColor: Colors.white,
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      ref
+                                          .read(authNotifierProvider.notifier)
+                                          .signInWithEmail(
+                                            _emailController.text,
+                                            _passwordController.text,
+                                          );
+                                    },
+                                    child: const Text('Entrar com Email'),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      side: const BorderSide(color: Colors.white),
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      ref
+                                          .read(authNotifierProvider.notifier)
+                                          .signUpWithEmail(
+                                            _emailController.text,
+                                            _passwordController.text,
+                                          );
+                                    },
+                                    child: const Text('Criar Conta'),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                const Text('OU', style: TextStyle(color: Colors.white54)),
+                                const SizedBox(height: 16),
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,
@@ -139,6 +234,7 @@ class LoginPage extends ConsumerWidget {
                                     },
                                   ),
                                 ),
+                              ],
                             ],
                           ),
                         ),

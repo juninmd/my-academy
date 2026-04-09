@@ -8,6 +8,8 @@ import '../models/user_dto.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserDto> signInWithGoogle();
+  Future<UserDto> signInWithEmail(String email, String password);
+  Future<UserDto> signUpWithEmail(String email, String password);
   Future<void> signOut();
   Future<UserDto?> getCurrentUser();
   Future<String> getAuthToken();
@@ -83,6 +85,88 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } catch (e) {
       if (e is AuthFailure) rethrow;
       logger.e('Sign in error', error: e);
+      throw AuthFailure(e.toString());
+    }
+  }
+
+  @override
+  Future<UserDto> signInWithEmail(String email, String password) async {
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+      final User? user = userCredential.user;
+
+      if (user == null) {
+        throw const AuthFailure('Failed to sign in with email/password');
+      }
+
+      final token = await user.getIdToken();
+      if (token == null) {
+        throw const AuthFailure('Failed to retrieve ID Token');
+      }
+
+      _apiClient.setAuthToken(token);
+
+      final userDto = UserDto(
+        id: user.uid,
+        email: user.email!,
+        name: user.displayName ?? 'Sem nome',
+        photoUrl: user.photoURL,
+      );
+
+      // Ideally update backend if needed
+
+      return userDto;
+    } on FirebaseAuthException catch (e) {
+      logger.e('Firebase Email Sign In Error', error: e);
+      throw AuthFailure(e.message ?? 'Authentication failed');
+    } catch (e) {
+      logger.e('Sign in error', error: e);
+      throw AuthFailure(e.toString());
+    }
+  }
+
+  @override
+  Future<UserDto> signUpWithEmail(String email, String password) async {
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      final User? user = userCredential.user;
+
+      if (user == null) {
+        throw const AuthFailure('Failed to sign up with email/password');
+      }
+
+      final token = await user.getIdToken();
+      if (token == null) {
+        throw const AuthFailure('Failed to retrieve ID Token');
+      }
+
+      _apiClient.setAuthToken(token);
+
+      final userDto = UserDto(
+        id: user.uid,
+        email: user.email!,
+        name: user.displayName ?? 'Sem nome',
+        photoUrl: user.photoURL,
+      );
+
+      try {
+        await _apiClient.post('/users', data: userDto.toJson());
+      } catch (e) {
+        if (e is ServerFailure) {
+          // ignore
+        } else {
+          logger.w('Failed to sync user with backend: $e');
+        }
+      }
+
+      return userDto;
+    } on FirebaseAuthException catch (e) {
+      logger.e('Firebase Email Sign Up Error', error: e);
+      throw AuthFailure(e.message ?? 'Registration failed');
+    } catch (e) {
+      logger.e('Sign up error', error: e);
       throw AuthFailure(e.toString());
     }
   }

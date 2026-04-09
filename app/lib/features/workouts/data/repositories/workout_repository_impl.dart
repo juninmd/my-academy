@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/workout_group_entity.dart';
@@ -30,8 +31,24 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
               .cast<Map<String, dynamic>>()
               .map((json) => WorkoutGroupDto.fromJson(json).toEntity())
               .toList();
+
+      final box = Hive.box('workouts');
+      await box.put('groups_$userId', jsonEncode(data));
+
       return Right(groups);
     } catch (e) {
+      try {
+        final box = Hive.box('workouts');
+        final cachedData = box.get('groups_$userId');
+        if (cachedData != null) {
+          final List<dynamic> data = jsonDecode(cachedData as String);
+          final groups = data
+              .cast<Map<String, dynamic>>()
+              .map((json) => WorkoutGroupDto.fromJson(json).toEntity())
+              .toList();
+          return Right(groups);
+        }
+      } catch (_) {}
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -115,9 +132,21 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         options: Options(responseType: ResponseType.plain),
       );
       final String jsonString = response as String;
+
+      final box = Hive.box('exercise_logs');
+      await box.put('logs_$userId', jsonString);
+
       final logs = await compute(_parseExerciseLogs, jsonString);
       return Right(logs);
     } catch (e) {
+      try {
+        final box = Hive.box('exercise_logs');
+        final cachedData = box.get('logs_$userId');
+        if (cachedData != null) {
+          final logs = await compute(_parseExerciseLogs, cachedData as String);
+          return Right(logs);
+        }
+      } catch (_) {}
       return Left(ServerFailure(e.toString()));
     }
   }
