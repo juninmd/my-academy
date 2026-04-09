@@ -139,7 +139,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   decoration: InputDecoration(
                                     hintText: 'Email',
                                     filled: true,
-                                    fillColor: Colors.white.withValues(alpha: 0.1),
+                                    fillColor: Colors.white.withOpacity(0.1),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide.none,
