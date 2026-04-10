@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../../core/network/dio_provider.dart';
+import '../../../../utils/constants.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
+import '../../data/datasources/mock_auth_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -17,6 +19,11 @@ GoogleSignIn googleSignIn(Ref ref) => GoogleSignIn();
 
 @Riverpod(keepAlive: true)
 AuthRemoteDataSource authRemoteDataSource(Ref ref) {
+  if (useMockAuth) {
+    return MockAuthRemoteDataSourceImpl(
+      apiClient: ref.watch(apiClientProvider),
+    );
+  }
   return AuthRemoteDataSourceImpl(
     firebaseAuth: ref.watch(firebaseAuthProvider),
     googleSignIn: ref.watch(googleSignInProvider),

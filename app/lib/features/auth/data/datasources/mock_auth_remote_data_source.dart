@@ -35,6 +35,40 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<UserDto> signInWithEmail(String email, String password) async {
+    logger.i(
+      '[MockAuthRemoteDataSource] signInWithEmail() called - using MOCK auth',
+    );
+    await Future.delayed(const Duration(milliseconds: 800)); // Simulate network
+
+    _apiClient.setAuthToken(_mockToken);
+
+    return UserDto(
+      id: _mockUserId,
+      email: email,
+      name: 'Mock User',
+      photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
+    );
+  }
+
+  @override
+  Future<UserDto> signUpWithEmail(String email, String password) async {
+    logger.i(
+      '[MockAuthRemoteDataSource] signUpWithEmail() called - using MOCK auth',
+    );
+    await Future.delayed(const Duration(milliseconds: 800)); // Simulate network
+
+    _apiClient.setAuthToken(_mockToken);
+
+    return UserDto(
+      id: _mockUserId,
+      email: email,
+      name: 'Mock User',
+      photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
+    );
+  }
+
+  @override
   Future<void> signOut() async {
     logger.i('[MockAuthRemoteDataSource] signOut() called');
     await Future.delayed(const Duration(milliseconds: 200));
