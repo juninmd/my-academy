@@ -30,8 +30,8 @@ async function bootstrap() {
       .map((o) => o.trim())
       .filter(Boolean);
     app.enableCors({
-      origin: allowedOrigins.length > 0 ? allowedOrigins : false,
-      credentials: true,
+      origin: allowedOrigins.length > 0 ? allowedOrigins : '*',
+      credentials: allowedOrigins.length > 0 ? true : false,
     });
 
     // Configuração do Swagger
