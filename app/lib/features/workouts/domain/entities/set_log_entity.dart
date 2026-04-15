@@ -1,11 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum SetType {
-  normal,
-  warmup,
-  dropset,
-  failure
-}
+enum SetType { normal, warmup, dropset, failure }
 
 class SetLogEntity extends Equatable {
   const SetLogEntity({
@@ -37,12 +32,13 @@ class SetLogEntity extends Equatable {
       reps: json['reps'] as int,
       weight: json['weight'] as int,
       rpe: json['rpe'] as int?,
-      type: json['type'] != null
-          ? SetType.values.firstWhere(
-              (e) => e.name == json['type'],
-              orElse: () => SetType.normal,
-            )
-          : SetType.normal,
+      type:
+          json['type'] != null
+              ? SetType.values.firstWhere(
+                (e) => e.name == json['type'],
+                orElse: () => SetType.normal,
+              )
+              : SetType.normal,
     );
   }
 }

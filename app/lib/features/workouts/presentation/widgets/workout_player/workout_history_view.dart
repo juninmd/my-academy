@@ -84,16 +84,15 @@ class WorkoutHistoryView extends HookConsumerWidget {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text(
-                                  '${set.reps} reps @ ${set.weight}kg',
-                                ),
+                                Text('${set.reps} reps @ ${set.weight}kg'),
                                 if (set.rpe != null)
                                   Text(
                                     ' (RPE: ${set.rpe})',
                                     style: TextStyle(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.secondary,
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.secondary,
                                       fontSize: 12,
                                     ),
                                   ),

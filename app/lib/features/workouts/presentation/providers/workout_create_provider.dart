@@ -100,8 +100,10 @@ Future<List<ExerciseEntity>> exercises(Ref ref) async {
   final customRepository = ref.watch(customExerciseRepositoryProvider);
 
   final apiResult = await repository.getExercises();
-  final apiExercises =
-      apiResult.fold((failure) => <ExerciseEntity>[], (list) => list);
+  final apiExercises = apiResult.fold(
+    (failure) => <ExerciseEntity>[],
+    (list) => list,
+  );
 
   final customExercises = await customRepository.getCustomExercises();
 

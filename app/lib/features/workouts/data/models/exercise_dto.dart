@@ -24,10 +24,19 @@ class ExerciseDto {
       id: json['id'] as int,
       name: json['name'] as String,
       image: json['image'] as String?,
-      tips: json['tips'] != null && (json['tips'] as String).isNotEmpty ? (json['tips'] as String).split(',') : [],
-      mistakes: json['mistakes'] != null && (json['mistakes'] as String).isNotEmpty ? (json['mistakes'] as String).split(',') : [],
+      tips:
+          json['tips'] != null && (json['tips'] as String).isNotEmpty
+              ? (json['tips'] as String).split(',')
+              : [],
+      mistakes:
+          json['mistakes'] != null && (json['mistakes'] as String).isNotEmpty
+              ? (json['mistakes'] as String).split(',')
+              : [],
       description: json['description'] as String?,
-      type: json['type'] == 'CARDIO' ? ExerciseType.cardio : ExerciseType.strength,
+      type:
+          json['type'] == 'CARDIO'
+              ? ExerciseType.cardio
+              : ExerciseType.strength,
     );
   }
 

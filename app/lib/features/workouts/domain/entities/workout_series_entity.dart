@@ -23,7 +23,16 @@ class WorkoutSeriesEntity extends Equatable {
   final double? speed;
 
   @override
-  List<Object?> get props => [id, workoutId, repetitions, weight, rest, time, distance, speed];
+  List<Object?> get props => [
+    id,
+    workoutId,
+    repetitions,
+    weight,
+    rest,
+    time,
+    distance,
+    speed,
+  ];
 
   WorkoutSeriesEntity copyWith({
     int? id,

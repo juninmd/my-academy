@@ -42,10 +42,11 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         final cachedData = box.get('groups_$userId');
         if (cachedData != null) {
           final List<dynamic> data = jsonDecode(cachedData as String);
-          final groups = data
-              .cast<Map<String, dynamic>>()
-              .map((json) => WorkoutGroupDto.fromJson(json).toEntity())
-              .toList();
+          final groups =
+              data
+                  .cast<Map<String, dynamic>>()
+                  .map((json) => WorkoutGroupDto.fromJson(json).toEntity())
+                  .toList();
           return Right(groups);
         }
       } catch (_) {}

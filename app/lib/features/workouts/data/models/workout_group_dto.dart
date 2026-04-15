@@ -22,7 +22,8 @@ class WorkoutGroupDto {
       name: json['name'] as String,
       image: json['image'] as String?,
       userId: json['userId'] as String,
-      workouts: (json['workouts'] as List<dynamic>?)
+      workouts:
+          (json['workouts'] as List<dynamic>?)
               ?.cast<Map<String, dynamic>>()
               .map(WorkoutDto.fromJson)
               .toList() ??

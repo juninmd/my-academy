@@ -33,13 +33,13 @@ void main() {
     // let's test a slightly refactored scenario, or just test the
     // navigation behavior directly.
     when(mockShell.key).thenReturn(null);
-    when(mockShell.createElement()).thenAnswer((_) => StatefulElement(mockShell));
+    when(
+      mockShell.createElement(),
+    ).thenAnswer((_) => StatefulElement(mockShell));
     when(mockShell.createState()).thenAnswer((_) => _DummyState());
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: HomeShellPage(navigationShell: mockShell),
-      ),
+      MaterialApp(home: HomeShellPage(navigationShell: mockShell)),
     );
 
     expect(find.text('Dashboard'), findsOneWidget);
