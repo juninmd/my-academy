@@ -67,12 +67,7 @@ void main() {
       const student = StudentEntity(id: '', name: 'New', email: 'new@test.com');
 
       final mockStudentSearchResponse = [
-        {
-          'id': '123',
-          'name': 'New',
-          'email': 'new@test.com',
-          'photoUrl': null,
-        },
+        {'id': '123', 'name': 'New', 'email': 'new@test.com', 'photoUrl': null},
       ];
 
       when(
@@ -93,12 +88,7 @@ void main() {
   group('checkStudentExists', () {
     test('should return student when found', () async {
       final mockResponse = [
-        {
-          'id': '123',
-          'name': 'New',
-          'email': 'new@test.com',
-          'photoUrl': null,
-        },
+        {'id': '123', 'name': 'New', 'email': 'new@test.com', 'photoUrl': null},
       ];
       when(
         mockApiClient.get('users?email=new@test.com'),
@@ -123,13 +113,17 @@ void main() {
 
   group('isPersonal', () {
     test('should return true when successful', () async {
-      when(mockApiClient.get('personals?personalUserId=123')).thenAnswer((_) async => [{}]);
+      when(
+        mockApiClient.get('personals?personalUserId=123'),
+      ).thenAnswer((_) async => [{}]);
       final result = await repository.isPersonal('123');
       expect(result, true);
     });
 
     test('should return false when error', () async {
-      when(mockApiClient.get('personals?personalUserId=123')).thenThrow(Exception());
+      when(
+        mockApiClient.get('personals?personalUserId=123'),
+      ).thenThrow(Exception());
       final result = await repository.isPersonal('123');
       expect(result, false);
     });

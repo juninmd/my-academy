@@ -52,7 +52,9 @@ class RestTimerWidget extends StatelessWidget {
                   value: progress,
                   strokeWidth: 4,
                   backgroundColor: Colors.white.withValues(alpha: 0.1),
-                  valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    colorScheme.primary,
+                  ),
                 ),
                 Text(
                   '$remainingSeconds',

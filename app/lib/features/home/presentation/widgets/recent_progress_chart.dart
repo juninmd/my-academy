@@ -31,19 +31,23 @@ class RecentProgressChart extends ConsumerWidget {
           if (diff >= 0 && diff < 7) {
             double volume = 0;
             for (final set in log.sets) {
-               volume += set.weight * set.reps;
+              volume += set.weight * set.reps;
             }
             dailyVolumes[6 - diff] += volume;
           }
         }
 
         final maxVolume = dailyVolumes.reduce((a, b) => a > b ? a : b);
-        if (maxVolume == 0) return const SizedBox.shrink(); // No activity in last 7 days
+        if (maxVolume == 0)
+          return const SizedBox.shrink(); // No activity in last 7 days
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Progresso Recente', style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Progresso Recente',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 12),
             Card(
               elevation: 4,
@@ -83,13 +87,24 @@ class RecentProgressChart extends ConsumerWidget {
                           barTouchData: BarTouchData(
                             enabled: true,
                             touchTooltipData: BarTouchTooltipData(
-                              tooltipBgColor: Theme.of(context).colorScheme.primaryContainer,
+                              tooltipBgColor:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                               tooltipRoundedRadius: 8,
-                              getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              getTooltipItem: (
+                                group,
+                                groupIndex,
+                                rod,
+                                rodIndex,
+                              ) {
                                 return BarTooltipItem(
                                   '${rod.toY.toInt()} kg',
                                   TextStyle(
-                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimaryContainer,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 );
@@ -102,15 +117,32 @@ class RecentProgressChart extends ConsumerWidget {
                               sideTitles: SideTitles(
                                 showTitles: true,
                                 getTitlesWidget: (value, meta) {
-                                  final date = startOfToday.subtract(Duration(days: 6 - value.toInt()));
+                                  final date = startOfToday.subtract(
+                                    Duration(days: 6 - value.toInt()),
+                                  );
                                   final isToday = value.toInt() == 6;
                                   return Padding(
                                     padding: const EdgeInsets.only(top: 8.0),
                                     child: Text(
-                                      isToday ? 'Hoje' : DateFormat('E', 'pt_BR').format(date).substring(0, 3).toUpperCase(),
+                                      isToday
+                                          ? 'Hoje'
+                                          : DateFormat('E', 'pt_BR')
+                                              .format(date)
+                                              .substring(0, 3)
+                                              .toUpperCase(),
                                       style: TextStyle(
-                                        color: isToday ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurfaceVariant,
-                                        fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                                        color:
+                                            isToday
+                                                ? Theme.of(
+                                                  context,
+                                                ).colorScheme.primary
+                                                : Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurfaceVariant,
+                                        fontWeight:
+                                            isToday
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
                                         fontSize: 10,
                                       ),
                                     ),
@@ -137,9 +169,19 @@ class RecentProgressChart extends ConsumerWidget {
                               barRods: [
                                 BarChartRodData(
                                   toY: dailyVolumes[index],
-                                  color: index == 6 ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                                  color:
+                                      index == 6
+                                          ? Theme.of(
+                                            context,
+                                          ).colorScheme.primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withValues(alpha: 0.5),
                                   width: 16,
-                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(6),
+                                  ),
                                 ),
                               ],
                             );

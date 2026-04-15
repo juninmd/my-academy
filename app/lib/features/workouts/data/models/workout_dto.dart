@@ -25,10 +25,12 @@ class WorkoutDto {
       exerciseId: json['exerciseId'] as int,
       methodId: json['methodId'] as int?,
       description: json['description'] as String?,
-      exercise: json['exercise'] != null
-          ? ExerciseDto.fromJson(json['exercise'] as Map<String, dynamic>)
-          : null,
-      series: (json['workoutSeries'] as List<dynamic>?)
+      exercise:
+          json['exercise'] != null
+              ? ExerciseDto.fromJson(json['exercise'] as Map<String, dynamic>)
+              : null,
+      series:
+          (json['workoutSeries'] as List<dynamic>?)
               ?.cast<Map<String, dynamic>>()
               .map(WorkoutSeriesDto.fromJson)
               .toList() ??
@@ -66,9 +68,10 @@ class WorkoutDto {
       exerciseId: entity.exerciseId,
       methodId: entity.methodId,
       description: entity.description,
-      exercise: entity.exercise != null
-          ? ExerciseDto.fromEntity(entity.exercise!)
-          : null,
+      exercise:
+          entity.exercise != null
+              ? ExerciseDto.fromEntity(entity.exercise!)
+              : null,
       series: entity.series.map((s) => WorkoutSeriesDto.fromEntity(s)).toList(),
     );
   }

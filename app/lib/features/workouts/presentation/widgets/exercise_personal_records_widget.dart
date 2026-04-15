@@ -141,7 +141,8 @@ class _RecordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isNew = date != null && DateTime.now().difference(date!).inDays < 7;
-    final dateStr = date != null ? '${date!.day}/${date!.month}/${date!.year}' : '';
+    final dateStr =
+        date != null ? '${date!.day}/${date!.month}/${date!.year}' : '';
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -149,16 +150,18 @@ class _RecordCard extends StatelessWidget {
         color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isNew
-              ? color.withValues(alpha: 0.5)
-              : Theme.of(context).dividerColor.withValues(alpha: 0.1),
+          color:
+              isNew
+                  ? color.withValues(alpha: 0.5)
+                  : Theme.of(context).dividerColor.withValues(alpha: 0.1),
           width: isNew ? 1.5 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: isNew
-                ? color.withValues(alpha: 0.1)
-                : Colors.black.withValues(alpha: 0.05),
+            color:
+                isNew
+                    ? color.withValues(alpha: 0.1)
+                    : Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -187,7 +190,10 @@ class _RecordCard extends StatelessWidget {
               if (isNew)
                 Container(
                   margin: const EdgeInsets.only(left: 4),
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: color,
                     borderRadius: BorderRadius.circular(4),
@@ -225,9 +231,10 @@ class _RecordCard extends StatelessWidget {
               if (subtitle != null)
                 Text(
                   subtitle!,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(color: Colors.grey, fontSize: 10),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Colors.grey,
+                    fontSize: 10,
+                  ),
                 ),
             ],
           ),

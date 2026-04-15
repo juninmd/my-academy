@@ -69,12 +69,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 Center(
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundImage: user.photoUrl != null
-                        ? NetworkImage(user.photoUrl!)
-                        : null,
-                    child: user.photoUrl == null
-                        ? const Icon(Icons.person, size: 50)
-                        : null,
+                    backgroundImage:
+                        user.photoUrl != null
+                            ? NetworkImage(user.photoUrl!)
+                            : null,
+                    child:
+                        user.photoUrl == null
+                            ? const Icon(Icons.person, size: 50)
+                            : null,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -123,10 +125,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  user.email,
-                  style: const TextStyle(fontSize: 16),
-                ),
+                Text(user.email, style: const TextStyle(fontSize: 16)),
               ],
             ),
           );

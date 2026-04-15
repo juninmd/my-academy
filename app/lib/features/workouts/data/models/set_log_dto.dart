@@ -18,12 +18,13 @@ class SetLogDto {
       reps: json['reps'] as int,
       weight: json['weight'] as int,
       rpe: json['rpe'] as int?,
-      type: json['type'] != null
-          ? SetType.values.firstWhere(
-              (e) => e.name == json['type'],
-              orElse: () => SetType.normal,
-            )
-          : SetType.normal,
+      type:
+          json['type'] != null
+              ? SetType.values.firstWhere(
+                (e) => e.name == json['type'],
+                orElse: () => SetType.normal,
+              )
+              : SetType.normal,
     );
   }
 
@@ -37,12 +38,7 @@ class SetLogDto {
   }
 
   SetLogEntity toEntity() {
-    return SetLogEntity(
-      reps: reps,
-      weight: weight,
-      rpe: rpe,
-      type: type,
-    );
+    return SetLogEntity(reps: reps, weight: weight, rpe: rpe, type: type);
   }
 
   factory SetLogDto.fromEntity(SetLogEntity entity) {

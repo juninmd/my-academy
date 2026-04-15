@@ -38,9 +38,10 @@ class AddCustomExerciseDialog extends HookConsumerWidget {
 
         // Append selected group to description for reference
         final desc = descriptionController.text.trim();
-        final fullDesc = desc.isNotEmpty
-            ? '$desc\n\nGrupo Muscular: ${selectedGroup.value}'
-            : 'Grupo Muscular: ${selectedGroup.value}';
+        final fullDesc =
+            desc.isNotEmpty
+                ? '$desc\n\nGrupo Muscular: ${selectedGroup.value}'
+                : 'Grupo Muscular: ${selectedGroup.value}';
 
         final exercise = ExerciseEntity(
           id: id,
@@ -52,7 +53,9 @@ class AddCustomExerciseDialog extends HookConsumerWidget {
         // I'll append the group to the description for reference.
         // And maybe the user should include keywords in the name.
 
-        await ref.read(customExerciseRepositoryProvider).saveCustomExercise(exercise);
+        await ref
+            .read(customExerciseRepositoryProvider)
+            .saveCustomExercise(exercise);
 
         // Refresh the provider
         ref.invalidate(exercisesProvider);
@@ -65,9 +68,9 @@ class AddCustomExerciseDialog extends HookConsumerWidget {
         }
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao salvar: $e')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Erro ao salvar: $e')));
         }
       } finally {
         isLoading.value = false;
@@ -99,7 +102,10 @@ class AddCustomExerciseDialog extends HookConsumerWidget {
                   labelText: 'Grupo Muscular (Referência)',
                   border: OutlineInputBorder(),
                 ),
-                items: muscleGroups.map((g) => DropdownMenuItem(value: g, child: Text(g))).toList(),
+                items:
+                    muscleGroups
+                        .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                        .toList(),
                 onChanged: (v) => selectedGroup.value = v!,
               ),
               const SizedBox(height: 16),
@@ -127,9 +133,17 @@ class AddCustomExerciseDialog extends HookConsumerWidget {
         ),
         FilledButton(
           onPressed: isLoading.value ? null : save,
-          child: isLoading.value
-            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-            : const Text('Salvar'),
+          child:
+              isLoading.value
+                  ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  )
+                  : const Text('Salvar'),
         ),
       ],
     );

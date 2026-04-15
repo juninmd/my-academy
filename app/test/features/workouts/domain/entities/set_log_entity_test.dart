@@ -15,7 +15,11 @@ void main() {
 
     test('should allow custom type', () {
       const setLog = SetLogEntity(
-          reps: 10, weight: 100, rpe: 9, type: SetType.dropset);
+        reps: 10,
+        weight: 100,
+        rpe: 9,
+        type: SetType.dropset,
+      );
 
       expect(setLog.type, SetType.dropset);
       expect(setLog.props, [10, 100, 9, SetType.dropset]);

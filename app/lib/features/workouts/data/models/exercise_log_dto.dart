@@ -24,7 +24,8 @@ class ExerciseLogDto {
       userId: json['userId'] as String,
       exerciseId: json['exerciseId'] as int,
       date: DateTime.parse(json['date'] as String),
-      sets: (json['sets'] as List?)
+      sets:
+          (json['sets'] as List?)
               ?.map((e) => SetLogDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],

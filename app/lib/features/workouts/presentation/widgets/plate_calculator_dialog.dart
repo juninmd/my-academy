@@ -193,11 +193,12 @@ class BarbellPainter extends CustomPainter {
     );
 
     // Draw Plates
-    double currentX = size.width * 0.2 + 5; // Start slightly after the sleeve start
+    double currentX =
+        size.width * 0.2 + 5; // Start slightly after the sleeve start
 
     // Order plates from largest to smallest (standard loading)
-    final sortedPlates = plates.entries.toList()
-      ..sort((a, b) => b.key.compareTo(a.key));
+    final sortedPlates =
+        plates.entries.toList()..sort((a, b) => b.key.compareTo(a.key));
 
     for (final entry in sortedPlates) {
       final weight = entry.key;
@@ -223,12 +224,15 @@ class BarbellPainter extends CustomPainter {
         // Border/Detail
         paint.color = Colors.black.withValues(alpha: 0.1);
         canvas.drawRect(
-           Rect.fromCenter(
+          Rect.fromCenter(
             center: Offset(currentX + 5, centerY),
             width: 10,
             height: height,
           ),
-          Paint()..style = PaintingStyle.stroke..color = Colors.black12..strokeWidth = 1
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..color = Colors.black12
+            ..strokeWidth = 1,
         );
 
         currentX += 12; // 10 width + 2 spacing
@@ -238,7 +242,11 @@ class BarbellPainter extends CustomPainter {
     // Draw Collar at the end
     paint.color = Colors.grey[700]!;
     canvas.drawRect(
-      Rect.fromCenter(center: Offset(currentX + 5, centerY), width: 10, height: 30),
+      Rect.fromCenter(
+        center: Offset(currentX + 5, centerY),
+        width: 10,
+        height: 30,
+      ),
       paint,
     );
   }

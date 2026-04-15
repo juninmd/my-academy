@@ -139,8 +139,8 @@ class ProgressChart extends HookWidget {
                   reservedSize: 42,
                   getTitlesWidget: (value, meta) {
                     if (metric == ChartMetric.volume) {
-                       if (value >= 1000) {
-                         return Text(
+                      if (value >= 1000) {
+                        return Text(
                           '${(value / 1000).toStringAsFixed(1)}k',
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodySmall?.color,
@@ -148,7 +148,7 @@ class ProgressChart extends HookWidget {
                             fontSize: 10,
                           ),
                         );
-                       }
+                      }
                     }
                     return Text(
                       '${value.toInt()}',
@@ -196,9 +196,10 @@ class ProgressChart extends HookWidget {
               touchTooltipData: LineTouchTooltipData(
                 getTooltipItems: (touchedSpots) {
                   return touchedSpots.map((spot) {
-                    final val = metric == ChartMetric.volume
-                        ? '${spot.y.toStringAsFixed(0)} kg'
-                        : '${spot.y.toStringAsFixed(1)} kg';
+                    final val =
+                        metric == ChartMetric.volume
+                            ? '${spot.y.toStringAsFixed(0)} kg'
+                            : '${spot.y.toStringAsFixed(1)} kg';
                     return LineTooltipItem(
                       val,
                       const TextStyle(

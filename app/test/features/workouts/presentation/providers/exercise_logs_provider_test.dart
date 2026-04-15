@@ -89,15 +89,11 @@ void main() {
       // uncaught asynchronous errors in the test environment if not handled carefully,
       // leading to test timeouts.
       Object? capturedError;
-      final sub = container.listen(
-        exerciseLogsProvider(1),
-        (previous, next) {
-          if (next.hasError) {
-            capturedError = next.error;
-          }
-        },
-        fireImmediately: true,
-      );
+      final sub = container.listen(exerciseLogsProvider(1), (previous, next) {
+        if (next.hasError) {
+          capturedError = next.error;
+        }
+      }, fireImmediately: true);
 
       // Wait a tiny bit for the microtask to complete and the provider to resolve
       await Future.delayed(Duration.zero);
@@ -161,15 +157,11 @@ void main() {
 
       // Use a listener to check for the error state directly instead of reading the future.
       Object? capturedError;
-      final sub = container.listen(
-        allExerciseLogsProvider,
-        (previous, next) {
-          if (next.hasError) {
-            capturedError = next.error;
-          }
-        },
-        fireImmediately: true,
-      );
+      final sub = container.listen(allExerciseLogsProvider, (previous, next) {
+        if (next.hasError) {
+          capturedError = next.error;
+        }
+      }, fireImmediately: true);
 
       // Wait a tiny bit for the microtask to complete and the provider to resolve
       await Future.delayed(Duration.zero);

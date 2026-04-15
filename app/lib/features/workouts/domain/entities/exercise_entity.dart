@@ -19,10 +19,15 @@ class ExerciseEntity extends Equatable {
   final ExerciseType type;
 
   @override
-  List<Object?> get props => [id, name, image, tips, mistakes, description, type];
+  List<Object?> get props => [
+    id,
+    name,
+    image,
+    tips,
+    mistakes,
+    description,
+    type,
+  ];
 }
 
-enum ExerciseType {
-  strength,
-  cardio,
-}
+enum ExerciseType { strength, cardio }

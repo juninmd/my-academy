@@ -8,7 +8,6 @@ import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity
 import 'workout_repository_test.mocks.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 @GenerateMocks([ApiClient])
 void main() {

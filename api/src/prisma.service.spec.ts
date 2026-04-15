@@ -14,7 +14,10 @@ describe('PrismaService', () => {
   const originalEnv = process.env;
 
   beforeEach(async () => {
-    process.env = { ...originalEnv, DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy' };
+    process.env = {
+      ...originalEnv,
+      DATABASE_URL: 'postgresql://dummy:dummy@localhost:5432/dummy',
+    };
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService],
     }).compile();

@@ -139,12 +139,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   decoration: InputDecoration(
                                     hintText: 'Email',
                                     filled: true,
-                                    fillColor: Colors.white.withOpacity(0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: 0.1,
+                                    ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide.none,
                                     ),
-                                    hintStyle: const TextStyle(color: Colors.white70),
+                                    hintStyle: const TextStyle(
+                                      color: Colors.white70,
+                                    ),
                                   ),
                                   style: const TextStyle(color: Colors.white),
                                   keyboardType: TextInputType.emailAddress,
@@ -155,12 +159,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   decoration: InputDecoration(
                                     hintText: 'Senha',
                                     filled: true,
-                                    fillColor: Colors.white.withValues(alpha: 0.1),
+                                    fillColor: Colors.white.withValues(
+                                      alpha: 0.1,
+                                    ),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       borderSide: BorderSide.none,
                                     ),
-                                    hintStyle: const TextStyle(color: Colors.white70),
+                                    hintStyle: const TextStyle(
+                                      color: Colors.white70,
+                                    ),
                                   ),
                                   style: const TextStyle(color: Colors.white),
                                   obscureText: true,
@@ -171,7 +179,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   height: 50,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Theme.of(context).primaryColor,
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
                                       foregroundColor: Colors.white,
                                       textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -195,7 +204,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   child: OutlinedButton(
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: Colors.white,
-                                      side: const BorderSide(color: Colors.white),
+                                      side: const BorderSide(
+                                        color: Colors.white,
+                                      ),
                                       textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -212,7 +223,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   ),
                                 ),
                                 const SizedBox(height: 16),
-                                const Text('OU', style: TextStyle(color: Colors.white54)),
+                                const Text(
+                                  'OU',
+                                  style: TextStyle(color: Colors.white54),
+                                ),
                                 const SizedBox(height: 16),
                                 SizedBox(
                                   width: double.infinity,

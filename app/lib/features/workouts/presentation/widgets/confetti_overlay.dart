@@ -78,8 +78,10 @@ class _ConfettiPainter extends CustomPainter {
     if (progress == 0 || progress == 1) return;
 
     for (final particle in particles) {
-      final dy = (particle.y + (progress * particle.velocity * 2.5)) * size.height;
-      final dx = (particle.x + (progress * particle.horizontalDrift)) * size.width;
+      final dy =
+          (particle.y + (progress * particle.velocity * 2.5)) * size.height;
+      final dx =
+          (particle.x + (progress * particle.horizontalDrift)) * size.width;
 
       // Opacity fade out at the end
       final opacity = (1.0 - progress * 1.5).clamp(0.0, 1.0);
