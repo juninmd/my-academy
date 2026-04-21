@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../domain/entities/session_log_entity.dart';
+import '../providers/workout_provider.dart';
 import '../widgets/confetti_overlay.dart';
 import '../widgets/shareable_workout_card.dart';
 
-class WorkoutSummaryPage extends HookWidget {
+class WorkoutSummaryPage extends HookConsumerWidget {
   const WorkoutSummaryPage({
+    required this.groupId,
     required this.duration,
     required this.sessionLogs,
     this.newRecords = const [],
     super.key,
   });
 
+  final int groupId;
   final Duration duration;
   final Map<int, ExerciseSessionLog> sessionLogs;
   final List<String> newRecords;
@@ -30,7 +34,7 @@ class WorkoutSummaryPage extends HookWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final intensity = useState(3.0);
     int totalSets = 0;
     int totalWeight = 0;
@@ -159,8 +163,39 @@ class WorkoutSummaryPage extends HookWidget {
                       child: SizedBox(
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {
-                            context.go('/home');
+                          onPressed: () async {
+                            try {
+                              final result = await ref
+                                  .read(workoutRepositoryProvider)
+                                  .saveWorkoutSession(groupId, DateTime.now(), sessionLogs);
+
+                              result.fold(
+                                (failure) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Erro ao salvar o treino: ${failure.message}'),
+                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                      ),
+                                    );
+                                  }
+                                },
+                                (_) {
+                                  if (context.mounted) {
+                                    context.go('/home');
+                                  }
+                                },
+                              );
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text('Ocorreu um erro inesperado.'),
+                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                  ),
+                                );
+                              }
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor:

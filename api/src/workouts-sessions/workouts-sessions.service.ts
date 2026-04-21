@@ -40,12 +40,37 @@ export class WorkoutsSessionsService {
         });
     }
 
-    return this.prismaService.workoutSessions.create({
+    const session = await this.prismaService.workoutSessions.create({
       data: {
         date: createworkoutsDto.date,
         workoutGroupId: createworkoutsDto.workoutGroupId,
       },
     });
+
+    if (createworkoutsDto.Workouts && Array.isArray(createworkoutsDto.Workouts)) {
+      for (const workout of createworkoutsDto.Workouts) {
+        if (!workout.exerciseId) continue;
+
+        await this.prismaService.exerciseLog.create({
+          data: {
+            userId: userId,
+            exerciseId: workout.exerciseId,
+            date: createworkoutsDto.date,
+            notes: workout.notes || '',
+            sets: {
+              create: workout.sets?.map((set: any) => ({
+                reps: set.reps,
+                weight: set.weight,
+                rpe: set.rpe || null,
+                type: set.type || 'normal',
+              })) || [],
+            },
+          },
+        });
+      }
+    }
+
+    return session;
   }
 
   async findAll(userId: string, year: number, month: number) {
