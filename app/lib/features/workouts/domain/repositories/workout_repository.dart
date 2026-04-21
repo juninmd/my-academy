@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../entities/exercise_entity.dart';
 import '../entities/exercise_log_entity.dart';
+import '../entities/session_log_entity.dart';
 import '../entities/workout_group_entity.dart';
 
 abstract class WorkoutRepository {
@@ -36,4 +37,10 @@ abstract class WorkoutRepository {
   );
 
   Future<Either<Failure, Unit>> deleteWorkoutGroup(int groupId);
+
+  Future<Either<Failure, Unit>> saveWorkoutSession(
+    int workoutGroupId,
+    DateTime date,
+    Map<int, ExerciseSessionLog> sessionLogs,
+  );
 }

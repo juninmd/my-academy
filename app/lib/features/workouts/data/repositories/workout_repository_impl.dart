@@ -8,6 +8,7 @@ import '../../../../core/network/api_client.dart';
 import '../../domain/entities/workout_group_entity.dart';
 import '../../domain/entities/exercise_entity.dart';
 import '../../domain/entities/exercise_log_entity.dart';
+import '../../domain/entities/session_log_entity.dart';
 import '../../domain/repositories/workout_repository.dart';
 import '../models/workout_group_dto.dart';
 import '../models/exercise_dto.dart';
@@ -205,6 +206,40 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   Future<Either<Failure, Unit>> deleteWorkoutGroup(int groupId) async {
     try {
       await _apiClient.delete('workouts-groups/$groupId');
+      return const Right(unit);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> saveWorkoutSession(
+    int workoutGroupId,
+    DateTime date,
+    Map<int, ExerciseSessionLog> sessionLogs,
+  ) async {
+    try {
+      final workoutsData = sessionLogs.values.map((log) {
+        return {
+          'exerciseId': log.exerciseId,
+          'notes': log.notes,
+          'sets': log.setLogs.values.map((s) => {
+            'reps': s.actualReps,
+            'weight': s.actualWeight,
+            'rpe': s.rpe,
+            'type': s.type.name,
+          }).toList(),
+        };
+      }).toList();
+
+      await _apiClient.post(
+        'workouts-sessions',
+        data: {
+          'workoutGroupId': workoutGroupId,
+          'date': date.toIso8601String(),
+          'Workouts': workoutsData,
+        },
+      );
       return const Right(unit);
     } catch (e) {
       return Left(ServerFailure(e.toString()));

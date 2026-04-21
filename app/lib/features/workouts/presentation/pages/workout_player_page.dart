@@ -68,32 +68,6 @@ class WorkoutPlayerPage extends HookConsumerWidget {
 
           final currentWorkout = activeWorkouts[currentExerciseIndex.value];
 
-          // Save to Repository
-          final userId = ref.read(authProvider).value?.id;
-          if (userId != null) {
-            final logEntity = ExerciseLogEntity(
-              userId: userId,
-              exerciseId: currentWorkout.exerciseId,
-              date: DateTime.now(),
-              sets:
-                  logs.values
-                      .map(
-                        (l) => SetLogEntity(
-                          reps: l.actualReps,
-                          weight: l.actualWeight,
-                          rpe: l.rpe,
-                          type: l.type,
-                        ),
-                      )
-                      .toList(),
-              notes: notes,
-            );
-            await ref
-                .read(workoutRepositoryProvider)
-                .saveExerciseLog(logEntity);
-            ref.invalidate(exerciseLogsProvider(currentWorkout.exerciseId));
-          }
-
           final newSessionLogs = Map<int, ExerciseSessionLog>.from(
             sessionLogs.value,
           );
@@ -116,6 +90,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                 MaterialPageRoute(
                   builder:
                       (context) => WorkoutSummaryPage(
+                        groupId: groupId,
                         duration: Duration(seconds: timerNotifier.value),
                         sessionLogs: newSessionLogs,
                         newRecords: newRecords.value,
