@@ -34,10 +34,13 @@ import { TelegramModule } from './telegram/telegram.module';
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     if (process.env.FIREBASE_ENABLED === 'true') {
-      consumer.apply(PreauthMiddleware).forRoutes({
-        path: '*',
-        method: RequestMethod.ALL,
-      });
+      consumer
+        .apply(PreauthMiddleware)
+        .exclude({ path: 'health', method: RequestMethod.GET }, { path: 'api/health', method: RequestMethod.GET })
+        .forRoutes({
+          path: '*',
+          method: RequestMethod.ALL,
+        });
     }
   }
 }
