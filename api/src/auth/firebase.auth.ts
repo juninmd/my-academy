@@ -16,6 +16,10 @@ export class PreauthMiddleware implements NestMiddleware {
   }
 
   async use(req: Request, res: Response, next: (error?: any) => void) {
+    if (req.url === '/health' || req.url === '/api/health') {
+      return next();
+    }
+
     if (configs.authMoc.enabled === 'true') {
       const decodedToken = JSON.parse(configs.authMoc.json);
       req['user'] = decodedToken;
