@@ -12,6 +12,8 @@ import 'package:my_academy/features/workouts/domain/entities/exercise_entity.dar
     as _i7;
 import 'package:my_academy/features/workouts/domain/entities/exercise_log_entity.dart'
     as _i8;
+import 'package:my_academy/features/workouts/domain/entities/session_log_entity.dart'
+    as _i9;
 import 'package:my_academy/features/workouts/domain/entities/workout_group_entity.dart'
     as _i6;
 import 'package:my_academy/features/workouts/domain/repositories/workout_repository.dart'
@@ -253,6 +255,42 @@ class MockWorkoutRepository extends _i1.Mock implements _i3.WorkoutRepository {
                   _FakeEither_0<_i5.Failure, _i2.Unit>(
                     this,
                     Invocation.method(#deleteWorkoutGroup, [groupId]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
+
+  @override
+  _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> saveWorkoutSession(
+    int? workoutGroupId,
+    DateTime? date,
+    Map<int, _i9.ExerciseSessionLog>? sessionLogs,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveWorkoutSession, [
+              workoutGroupId,
+              date,
+              sessionLogs,
+            ]),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+              _FakeEither_0<_i5.Failure, _i2.Unit>(
+                this,
+                Invocation.method(#saveWorkoutSession, [
+                  workoutGroupId,
+                  date,
+                  sessionLogs,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+                  _FakeEither_0<_i5.Failure, _i2.Unit>(
+                    this,
+                    Invocation.method(#saveWorkoutSession, [
+                      workoutGroupId,
+                      date,
+                      sessionLogs,
+                    ]),
                   ),
                 ),
           )
