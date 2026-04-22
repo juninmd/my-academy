@@ -50,6 +50,44 @@ class MockAuthRemoteDataSource extends _i1.Mock
           as _i4.Future<_i2.UserDto>);
 
   @override
+  _i4.Future<_i2.UserDto> signInWithEmail(String? email, String? password) =>
+      (super.noSuchMethod(
+            Invocation.method(#signInWithEmail, [email, password]),
+            returnValue: _i4.Future<_i2.UserDto>.value(
+              _FakeUserDto_0(
+                this,
+                Invocation.method(#signInWithEmail, [email, password]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<_i2.UserDto>.value(
+              _FakeUserDto_0(
+                this,
+                Invocation.method(#signInWithEmail, [email, password]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.UserDto>);
+
+  @override
+  _i4.Future<_i2.UserDto> signUpWithEmail(String? email, String? password) =>
+      (super.noSuchMethod(
+            Invocation.method(#signUpWithEmail, [email, password]),
+            returnValue: _i4.Future<_i2.UserDto>.value(
+              _FakeUserDto_0(
+                this,
+                Invocation.method(#signUpWithEmail, [email, password]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<_i2.UserDto>.value(
+              _FakeUserDto_0(
+                this,
+                Invocation.method(#signUpWithEmail, [email, password]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.UserDto>);
+
+  @override
   _i4.Future<void> signOut() =>
       (super.noSuchMethod(
             Invocation.method(#signOut, []),

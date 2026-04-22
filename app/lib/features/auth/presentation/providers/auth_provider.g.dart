@@ -137,7 +137,7 @@ final class AuthRemoteDataSourceProvider
 }
 
 String _$authRemoteDataSourceHash() =>
-    r'99e3df8f1b3af3f964e336cf4ffc64a3bd19a936';
+    r'537a6bf28fa6ab34d51413905e551a10253cd8b9';
 
 @ProviderFor(authRepository)
 final authRepositoryProvider = AuthRepositoryProvider._();
@@ -204,7 +204,7 @@ final class AuthNotifierProvider
   AuthNotifier create() => AuthNotifier();
 }
 
-String _$authNotifierHash() => r'640e03818a05226039ab3f31db14b01c4e71b78b';
+String _$authNotifierHash() => r'2cee4373bc2980ec2220293a054cdc1f3d439f47';
 
 abstract class _$AuthNotifier extends $AsyncNotifier<UserEntity?> {
   FutureOr<UserEntity?> build();
