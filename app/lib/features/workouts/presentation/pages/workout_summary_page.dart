@@ -167,15 +167,22 @@ class WorkoutSummaryPage extends HookConsumerWidget {
                             try {
                               final result = await ref
                                   .read(workoutRepositoryProvider)
-                                  .saveWorkoutSession(groupId, DateTime.now(), sessionLogs);
+                                  .saveWorkoutSession(
+                                    groupId,
+                                    DateTime.now(),
+                                    sessionLogs,
+                                  );
 
                               result.fold(
                                 (failure) {
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text('Erro ao salvar o treino: ${failure.message}'),
-                                        backgroundColor: Theme.of(context).colorScheme.error,
+                                        content: Text(
+                                          'Erro ao salvar o treino: ${failure.message}',
+                                        ),
+                                        backgroundColor:
+                                            Theme.of(context).colorScheme.error,
                                       ),
                                     );
                                   }
@@ -190,8 +197,11 @@ class WorkoutSummaryPage extends HookConsumerWidget {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: const Text('Ocorreu um erro inesperado.'),
-                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                    content: const Text(
+                                      'Ocorreu um erro inesperado.',
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
                                   ),
                                 );
                               }

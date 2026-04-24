@@ -61,7 +61,10 @@ class MethodRepositoryImpl implements MethodRepository {
   ) async {
     try {
       final dto = MethodDto.fromEntity(method);
-      final response = await _apiClient.patch('methods/${method.id}', data: dto.toJson());
+      final response = await _apiClient.patch(
+        'methods/${method.id}',
+        data: dto.toJson(),
+      );
       return Right(
         MethodDto.fromJson(response as Map<String, dynamic>).toEntity(),
       );

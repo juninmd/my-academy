@@ -58,7 +58,10 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, UserEntity>> updateUser(UserEntity user) async {
     try {
       final dto = UserDto.fromEntity(user);
-      final response = await _apiClient.patch('users/${user.id}', data: dto.toJson());
+      final response = await _apiClient.patch(
+        'users/${user.id}',
+        data: dto.toJson(),
+      );
       return Right(
         UserDto.fromJson(response as Map<String, dynamic>).toEntity(),
       );

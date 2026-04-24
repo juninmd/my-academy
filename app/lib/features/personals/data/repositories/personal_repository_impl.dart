@@ -14,9 +14,12 @@ class PersonalRepositoryImpl implements PersonalRepository {
   final ApiClient _apiClient;
 
   @override
-  Future<Either<Failure, List<PersonalEntity>>> getPersonals({String? personalUserId}) async {
+  Future<Either<Failure, List<PersonalEntity>>> getPersonals({
+    String? personalUserId,
+  }) async {
     try {
-      final query = personalUserId != null ? '?personalUserId=$personalUserId' : '';
+      final query =
+          personalUserId != null ? '?personalUserId=$personalUserId' : '';
       final response = await _apiClient.get('personals$query');
       final List<dynamic> data = response;
       return Right(
@@ -31,7 +34,9 @@ class PersonalRepositoryImpl implements PersonalRepository {
   }
 
   @override
-  Future<Either<Failure, PersonalEntity>> createPersonal(PersonalEntity personal) async {
+  Future<Either<Failure, PersonalEntity>> createPersonal(
+    PersonalEntity personal,
+  ) async {
     try {
       final dto = PersonalDto.fromEntity(personal);
       final response = await _apiClient.post('personals', data: dto.toJson());
@@ -44,10 +49,15 @@ class PersonalRepositoryImpl implements PersonalRepository {
   }
 
   @override
-  Future<Either<Failure, PersonalEntity>> updatePersonal(PersonalEntity personal) async {
+  Future<Either<Failure, PersonalEntity>> updatePersonal(
+    PersonalEntity personal,
+  ) async {
     try {
       final dto = PersonalDto.fromEntity(personal);
-      final response = await _apiClient.patch('personals/${personal.id}', data: dto.toJson());
+      final response = await _apiClient.patch(
+        'personals/${personal.id}',
+        data: dto.toJson(),
+      );
       return Right(
         PersonalDto.fromJson(response as Map<String, dynamic>).toEntity(),
       );
@@ -73,7 +83,10 @@ PersonalRepository personalRepository(Ref ref) {
 }
 
 @riverpod
-Future<List<PersonalEntity>> personals(Ref ref, {String? personalUserId}) async {
+Future<List<PersonalEntity>> personals(
+  Ref ref, {
+  String? personalUserId,
+}) async {
   final repository = ref.watch(personalRepositoryProvider);
   final result = await repository.getPersonals(personalUserId: personalUserId);
   return result.fold((failure) => [], (list) => list);

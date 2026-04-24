@@ -1,11 +1,7 @@
 import '../../domain/entities/method_entity.dart';
 
 class MethodDto {
-  const MethodDto({
-    this.id,
-    required this.name,
-    this.description,
-  });
+  const MethodDto({this.id, required this.name, this.description});
 
   final int? id;
   final String name;
@@ -28,11 +24,7 @@ class MethodDto {
   }
 
   MethodEntity toEntity() {
-    return MethodEntity(
-      id: id ?? 0,
-      name: name,
-      description: description,
-    );
+    return MethodEntity(id: id ?? 0, name: name, description: description);
   }
 
   factory MethodDto.fromEntity(MethodEntity entity) {
