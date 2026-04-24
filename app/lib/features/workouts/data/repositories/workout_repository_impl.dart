@@ -219,18 +219,24 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     Map<int, ExerciseSessionLog> sessionLogs,
   ) async {
     try {
-      final workoutsData = sessionLogs.values.map((log) {
-        return {
-          'exerciseId': log.exerciseId,
-          'notes': log.notes,
-          'sets': log.setLogs.values.map((s) => {
-            'reps': s.actualReps,
-            'weight': s.actualWeight,
-            'rpe': s.rpe,
-            'type': s.type.name,
-          }).toList(),
-        };
-      }).toList();
+      final workoutsData =
+          sessionLogs.values.map((log) {
+            return {
+              'exerciseId': log.exerciseId,
+              'notes': log.notes,
+              'sets':
+                  log.setLogs.values
+                      .map(
+                        (s) => {
+                          'reps': s.actualReps,
+                          'weight': s.actualWeight,
+                          'rpe': s.rpe,
+                          'type': s.type.name,
+                        },
+                      )
+                      .toList(),
+            };
+          }).toList();
 
       await _apiClient.post(
         'workouts-sessions',

@@ -32,12 +32,7 @@ class UserDto {
   }
 
   UserEntity toEntity() {
-    return UserEntity(
-      id: id,
-      email: email,
-      name: name,
-      photoUrl: photoUrl,
-    );
+    return UserEntity(id: id, email: email, name: name, photoUrl: photoUrl);
   }
 
   factory UserDto.fromEntity(UserEntity entity) {

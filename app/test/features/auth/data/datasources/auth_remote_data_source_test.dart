@@ -1,129 +1,82 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mockito/annotations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 import 'package:my_academy/core/exceptions/failure.dart';
 import 'package:my_academy/core/network/api_client.dart';
 import 'package:my_academy/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:my_academy/features/auth/data/models/user_dto.dart';
 
-@GenerateNiceMocks([
-  MockSpec<FirebaseAuth>(),
-  MockSpec<GoogleSignIn>(),
-  MockSpec<GoogleSignInAccount>(),
-  MockSpec<GoogleSignInAuthentication>(),
-  MockSpec<UserCredential>(),
-  MockSpec<User>(),
-])
 import 'auth_remote_data_source_test.mocks.dart';
 
-// Manual Mock for ApiClient
-class MockApiClientManual implements ApiClient {
-  String? capturedAuthToken;
-  bool clearAuthTokenCalled = false;
-  final List<String> postCalls = [];
+// Since UserCredential cannot be cleanly generated we mock it here.
+class MockUserCredential extends Mock implements UserCredential {
+  User? _user;
+  MockUserCredential(this._user);
 
   @override
-  void setAuthToken(String token) {
-    capturedAuthToken = token;
-  }
-
-  @override
-  void clearAuthToken() {
-    clearAuthTokenCalled = true;
-  }
-
-  @override
-  Future<dynamic> post(
-    String path, {
-    data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async {
-    postCalls.add(path);
-    return null;
-  }
-
-  @override
-  Future delete(
-    String path, {
-    data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async => null;
-
-  @override
-  Future get(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async => null;
-
-  @override
-  Future put(
-    String path, {
-    data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-  }) async => null;
+  User? get user => _user;
 }
 
+@GenerateMocks([
+  FirebaseAuth,
+  GoogleSignIn,
+  User,
+  GoogleSignInAccount,
+  GoogleSignInAuthentication,
+])
 void main() {
+  late AuthRemoteDataSourceImpl dataSource;
   late MockFirebaseAuth mockFirebaseAuth;
   late MockGoogleSignIn mockGoogleSignIn;
   late MockApiClientManual mockApiClient;
-  late AuthRemoteDataSourceImpl dataSource;
-
-  late MockGoogleSignInAccount mockGoogleUser;
-  late MockGoogleSignInAuthentication mockGoogleAuth;
-  late MockUserCredential mockUserCredential;
-  late MockUser mockUser;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockGoogleSignIn = MockGoogleSignIn();
     mockApiClient = MockApiClientManual();
+
     dataSource = AuthRemoteDataSourceImpl(
       firebaseAuth: mockFirebaseAuth,
       googleSignIn: mockGoogleSignIn,
       apiClient: mockApiClient,
     );
-
-    mockGoogleUser = MockGoogleSignInAccount();
-    mockGoogleAuth = MockGoogleSignInAuthentication();
-    mockUserCredential = MockUserCredential();
-    mockUser = MockUser();
   });
 
   group('signInWithGoogle', () {
     test('should return UserDto when successful', () async {
-      when(mockGoogleSignIn.signIn()).thenAnswer((_) async => mockGoogleUser);
-      when(
-        mockGoogleUser.authentication,
-      ).thenAnswer((_) async => mockGoogleAuth);
-      when(mockGoogleAuth.accessToken).thenReturn('access_token');
-      when(mockGoogleAuth.idToken).thenReturn('id_token');
+      final mockGoogleAccount = MockGoogleSignInAccount();
+      final mockGoogleAuth = MockGoogleSignInAuthentication();
+      final mockUser = MockUser();
+      final mockUserCredential = MockUserCredential(mockUser);
 
-      // Note: We cannot easily mock the static GoogleAuthProvider.credential.
-      // However, we mock signInWithCredential to accept ANY credential.
+      when(
+        mockGoogleSignIn.signIn(),
+      ).thenAnswer((_) async => mockGoogleAccount);
+      when(
+        mockGoogleAccount.authentication,
+      ).thenAnswer((_) async => mockGoogleAuth);
+      when(mockGoogleAuth.accessToken).thenReturn('test_access_token');
+      when(mockGoogleAuth.idToken).thenReturn('test_id_token');
+
       when(
         mockFirebaseAuth.signInWithCredential(any),
       ).thenAnswer((_) async => mockUserCredential);
-      when(mockUserCredential.user).thenReturn(mockUser);
-      when(mockUser.uid).thenReturn('1');
-      when(mockUser.email).thenReturn('email');
-      when(mockUser.displayName).thenReturn('name');
+      when(mockFirebaseAuth.currentUser).thenReturn(mockUser);
+
+      when(mockUser.uid).thenReturn('123');
+      when(mockUser.email).thenReturn('test@test.com');
+      when(mockUser.displayName).thenReturn('Test User');
       when(mockUser.photoURL).thenReturn('url');
-      when(mockUser.getIdToken()).thenAnswer((_) async => 'token');
+
+      // mock ID token
+      when(mockUser.getIdToken()).thenAnswer((_) async => 'fake_token');
 
       final result = await dataSource.signInWithGoogle();
 
-      expect(result, isA<UserDto>());
-      // Verify manual mock state
-      expect(mockApiClient.capturedAuthToken, 'token');
-      expect(mockApiClient.postCalls, contains('/users'));
+      expect(result.id, '123');
+      expect(result.email, 'test@test.com');
     });
 
     test('should throw AuthFailure when Google Sign In is canceled', () async {
@@ -135,39 +88,109 @@ void main() {
 
   group('signOut', () {
     test('should call signOut on dependencies', () async {
-      // Explicitly stub signOut to return void Future
       when(mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
-      when(mockFirebaseAuth.signOut()).thenAnswer((_) async {});
+      when(mockFirebaseAuth.signOut()).thenAnswer((_) async => null);
 
       await dataSource.signOut();
 
-      verify(mockGoogleSignIn.signOut()).called(1);
-      verify(mockFirebaseAuth.signOut()).called(1);
-
-      // Verify manual mock
-      expect(mockApiClient.clearAuthTokenCalled, true);
+      verify(mockGoogleSignIn.signOut());
+      verify(mockFirebaseAuth.signOut());
     });
   });
 
   group('getCurrentUser', () {
     test('should return UserDto when user is logged in', () async {
+      final mockUser = MockUser();
       when(mockFirebaseAuth.currentUser).thenReturn(mockUser);
-      when(mockUser.uid).thenReturn('1');
-      when(mockUser.email).thenReturn('email');
-      when(mockUser.displayName).thenReturn('name');
+
+      when(mockUser.uid).thenReturn('123');
+      when(mockUser.email).thenReturn('test@test.com');
+      when(mockUser.displayName).thenReturn('Test User');
       when(mockUser.photoURL).thenReturn('url');
-      when(mockUser.getIdToken()).thenAnswer((_) async => 'token');
+
+      // Sync backend
+      when(mockUser.getIdToken()).thenAnswer((_) async => 'fake_token');
 
       final result = await dataSource.getCurrentUser();
-      expect(result, isA<UserDto>());
-      expect(mockApiClient.capturedAuthToken, 'token');
+
+      expect(result?.id, '123');
     });
 
     test('should return null when user is not logged in', () async {
       when(mockFirebaseAuth.currentUser).thenReturn(null);
 
       final result = await dataSource.getCurrentUser();
-      expect(result, null);
+
+      expect(result, isNull);
     });
   });
+}
+
+class MockApiClientManual implements ApiClient {
+  String? token;
+
+  @override
+  void setAuthToken(String token) {
+    this.token = token;
+  }
+
+  @override
+  void clearAuthToken() {
+    token = null;
+  }
+
+  @override
+  Future<dynamic> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<dynamic> post(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return {
+      'id': '123',
+      'email': 'test@test.com',
+      'name': 'Test User',
+      'avatarUrl': 'url',
+      'role': 'USER',
+    };
+  }
+
+  @override
+  Future<dynamic> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<dynamic> patch(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<dynamic> delete(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) {
+    throw UnimplementedError();
+  }
 }

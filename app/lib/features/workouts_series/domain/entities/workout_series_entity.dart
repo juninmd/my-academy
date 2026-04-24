@@ -25,14 +25,14 @@ class WorkoutSeriesEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        workoutId,
-        repetitions,
-        weight,
-        rest,
-        rpe,
-        time,
-        distance,
-        speed,
-      ];
+    id,
+    workoutId,
+    repetitions,
+    weight,
+    rest,
+    rpe,
+    time,
+    distance,
+    speed,
+  ];
 }

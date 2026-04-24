@@ -25,12 +25,14 @@ describe('AppModule', () => {
 
     const consumer = {
       apply: jest.fn().mockReturnThis(),
+      exclude: jest.fn().mockReturnThis(),
       forRoutes: jest.fn().mockReturnThis(),
     };
 
     appModule.configure(consumer as unknown as MiddlewareConsumer);
 
     expect(consumer.apply).toHaveBeenCalledWith(PreauthMiddleware);
+    expect(consumer.exclude).toHaveBeenCalledWith({ path: 'health', method: RequestMethod.GET }, { path: 'api/health', method: RequestMethod.GET });
     expect(consumer.forRoutes).toHaveBeenCalledWith({
       path: '*',
       method: RequestMethod.ALL,
@@ -42,6 +44,7 @@ describe('AppModule', () => {
 
     const consumer = {
       apply: jest.fn().mockReturnThis(),
+      exclude: jest.fn().mockReturnThis(),
       forRoutes: jest.fn().mockReturnThis(),
     };
 

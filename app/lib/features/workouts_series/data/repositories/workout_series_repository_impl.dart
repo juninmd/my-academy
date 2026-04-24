@@ -30,7 +30,9 @@ class WorkoutSeriesRepositoryImpl implements WorkoutSeriesRepository {
   }
 
   @override
-  Future<Either<Failure, WorkoutSeriesEntity>> getWorkoutSeriesById(int id) async {
+  Future<Either<Failure, WorkoutSeriesEntity>> getWorkoutSeriesById(
+    int id,
+  ) async {
     try {
       final response = await _apiClient.get('workouts-series/$id');
       final data = response as Map<String, dynamic>;
@@ -46,7 +48,10 @@ class WorkoutSeriesRepositoryImpl implements WorkoutSeriesRepository {
   ) async {
     try {
       final dto = WorkoutSeriesDto.fromEntity(series);
-      final response = await _apiClient.post('workouts-series', data: dto.toJson());
+      final response = await _apiClient.post(
+        'workouts-series',
+        data: dto.toJson(),
+      );
       return Right(
         WorkoutSeriesDto.fromJson(response as Map<String, dynamic>).toEntity(),
       );
@@ -61,7 +66,10 @@ class WorkoutSeriesRepositoryImpl implements WorkoutSeriesRepository {
   ) async {
     try {
       final dto = WorkoutSeriesDto.fromEntity(series);
-      final response = await _apiClient.patch('workouts-series/${series.id}', data: dto.toJson());
+      final response = await _apiClient.patch(
+        'workouts-series/${series.id}',
+        data: dto.toJson(),
+      );
       return Right(
         WorkoutSeriesDto.fromJson(response as Map<String, dynamic>).toEntity(),
       );
