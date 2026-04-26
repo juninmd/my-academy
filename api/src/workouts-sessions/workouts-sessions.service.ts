@@ -47,7 +47,10 @@ export class WorkoutsSessionsService {
       },
     });
 
-    if (createworkoutsDto.Workouts && Array.isArray(createworkoutsDto.Workouts)) {
+    if (
+      createworkoutsDto.Workouts &&
+      Array.isArray(createworkoutsDto.Workouts)
+    ) {
       for (const workout of createworkoutsDto.Workouts) {
         if (!workout.exerciseId) continue;
 
@@ -58,12 +61,13 @@ export class WorkoutsSessionsService {
             date: createworkoutsDto.date,
             notes: workout.notes || '',
             sets: {
-              create: workout.sets?.map((set: any) => ({
-                reps: set.reps,
-                weight: set.weight,
-                rpe: set.rpe || null,
-                type: set.type || 'normal',
-              })) || [],
+              create:
+                workout.sets?.map((set: any) => ({
+                  reps: set.reps,
+                  weight: set.weight,
+                  rpe: set.rpe || null,
+                  type: set.type || 'normal',
+                })) || [],
             },
           },
         });

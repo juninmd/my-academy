@@ -12,7 +12,7 @@ import 'auth_remote_data_source_test.mocks.dart';
 
 // Since UserCredential cannot be cleanly generated we mock it here.
 class MockUserCredential extends Mock implements UserCredential {
-  User? _user;
+  final User? _user;
   MockUserCredential(this._user);
 
   @override
@@ -89,7 +89,7 @@ void main() {
   group('signOut', () {
     test('should call signOut on dependencies', () async {
       when(mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
-      when(mockFirebaseAuth.signOut()).thenAnswer((_) async => null);
+      when(mockFirebaseAuth.signOut()).thenAnswer((_) async {});
 
       await dataSource.signOut();
 

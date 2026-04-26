@@ -3,6 +3,7 @@ import { WorkoutsSessionsService } from './workouts-sessions.service';
 import { PrismaService } from '../prisma.service';
 import { TelegramService } from '../telegram/telegram.service';
 import { Logger } from '@nestjs/common';
+import { CreateWorkoutsSessionsDto } from './dto/create-workouts-sessions.dto';
 
 describe('WorkoutsSessionsService', () => {
   let service: WorkoutsSessionsService;
@@ -387,6 +388,99 @@ describe('WorkoutsSessionsService', () => {
     it('getEndDateOfWeek', () => {
       const date = service.getEndDateOfWeek(1);
       expect(date).toBeInstanceOf(Date);
+    });
+  });
+
+  describe('create with Workouts and sets', () => {
+    beforeEach(() => {
+      (prisma.exerciseLog as any) = {
+        create: jest.fn(),
+      };
+    });
+
+    it('should create session and exercise logs with sets', async () => {
+      const userId = 'user1';
+      const createDto: CreateWorkoutsSessionsDto = {
+        date: new Date(),
+        workoutGroupId: 1,
+        Workouts: [
+          {
+            exerciseId: 10,
+            notes: 'Test notes',
+            sets: [
+              { reps: 10, weight: 50, rpe: 8, type: 'normal' },
+              { reps: 8, weight: 60 },
+            ],
+          },
+          {
+            exerciseId: 0, // Should be skipped
+            sets: [],
+          },
+        ],
+      };
+
+      const user = { id: userId, telegramId: null } as any;
+      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
+      const session = { id: 100, date: createDto.date, workoutGroupId: 1 };
+      (prisma.workoutSessions.create as jest.Mock).mockResolvedValue(session);
+
+      await service.create(createDto, userId);
+
+      expect(prisma.workoutSessions.create).toHaveBeenCalledWith({
+        data: {
+          date: createDto.date,
+          workoutGroupId: createDto.workoutGroupId,
+        },
+      });
+
+      expect(prisma.exerciseLog.create).toHaveBeenCalledTimes(1);
+      expect(prisma.exerciseLog.create).toHaveBeenCalledWith({
+        data: {
+          userId: userId,
+          exerciseId: 10,
+          date: createDto.date,
+          notes: 'Test notes',
+          sets: {
+            create: [
+              { reps: 10, weight: 50, rpe: 8, type: 'normal' },
+              { reps: 8, weight: 60, rpe: null, type: 'normal' },
+            ],
+          },
+        },
+      });
+    });
+
+    it('should handle workouts without sets and notes', async () => {
+      const userId = 'user1';
+      const createDto: CreateWorkoutsSessionsDto = {
+        date: new Date(),
+        workoutGroupId: 1,
+        Workouts: [
+          {
+            exerciseId: 11,
+          },
+        ],
+      };
+
+      const user = { id: userId, telegramId: null } as any;
+      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
+      const session = { id: 100, date: createDto.date, workoutGroupId: 1 };
+      (prisma.workoutSessions.create as jest.Mock).mockResolvedValue(session);
+
+      await service.create(createDto, userId);
+
+      expect(prisma.exerciseLog.create).toHaveBeenCalledTimes(1);
+      expect(prisma.exerciseLog.create).toHaveBeenCalledWith({
+        data: {
+          userId: userId,
+          exerciseId: 11,
+          date: createDto.date,
+          notes: '',
+          sets: {
+            create: [],
+          },
+        },
+      });
     });
   });
 });

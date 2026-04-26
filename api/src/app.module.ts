@@ -36,7 +36,10 @@ export class AppModule {
     if (process.env.FIREBASE_ENABLED === 'true') {
       consumer
         .apply(PreauthMiddleware)
-        .exclude({ path: 'health', method: RequestMethod.GET }, { path: 'api/health', method: RequestMethod.GET })
+        .exclude(
+          { path: 'health', method: RequestMethod.GET },
+          { path: 'api/health', method: RequestMethod.GET },
+        )
         .forRoutes({
           path: '*',
           method: RequestMethod.ALL,

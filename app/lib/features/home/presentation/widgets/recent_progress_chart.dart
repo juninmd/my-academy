@@ -38,8 +38,9 @@ class RecentProgressChart extends ConsumerWidget {
         }
 
         final maxVolume = dailyVolumes.reduce((a, b) => a > b ? a : b);
-        if (maxVolume == 0)
+        if (maxVolume == 0) {
           return const SizedBox.shrink(); // No activity in last 7 days
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +198,7 @@ class RecentProgressChart extends ConsumerWidget {
         );
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

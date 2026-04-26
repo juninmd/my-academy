@@ -122,7 +122,7 @@ class ExerciseDetailsPage extends HookConsumerWidget {
                             ) {
                               chartMetric.value = newSelection.first;
                             },
-                            style: ButtonStyle(
+                            style: const ButtonStyle(
                               visualDensity: VisualDensity.compact,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),

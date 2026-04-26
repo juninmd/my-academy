@@ -90,7 +90,7 @@ class DashboardPage extends ConsumerWidget {
                         ],
                       ),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
               ),
               IconButton(
@@ -195,8 +195,9 @@ class DashboardPage extends ConsumerWidget {
                                     // Last Workout History
                                     logsAsync.when(
                                       data: (logs) {
-                                        if (logs.isEmpty)
+                                        if (logs.isEmpty) {
                                           return const SizedBox.shrink();
+                                        }
                                         final latestLog = logs.reduce(
                                           (a, b) =>
                                               a.date.isAfter(b.date) ? a : b,
@@ -294,10 +295,11 @@ class DashboardPage extends ConsumerWidget {
                                                     index,
                                                   ) {
                                                     if (index ==
-                                                        starters.length)
+                                                        starters.length) {
                                                       return _buildCreateNewCard(
                                                         context,
                                                       );
+                                                    }
                                                     return _buildPlanCard(
                                                       context,
                                                       starters[index],
@@ -323,10 +325,11 @@ class DashboardPage extends ConsumerWidget {
                                             scrollDirection: Axis.horizontal,
                                             itemCount: groups.length + 1,
                                             itemBuilder: (context, index) {
-                                              if (index == groups.length)
+                                              if (index == groups.length) {
                                                 return _buildCreateNewCard(
                                                   context,
                                                 );
+                                              }
                                               return _buildPlanCard(
                                                 context,
                                                 groups[index],
@@ -505,18 +508,18 @@ class DashboardPage extends ConsumerWidget {
                         color: Colors.white.withValues(alpha: 0.3),
                       ),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.local_fire_department,
                           color: Colors.orangeAccent,
                           size: 16,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4),
                         Text(
                           'TREINO DE HOJE',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 12,

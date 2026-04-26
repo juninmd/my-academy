@@ -390,7 +390,7 @@ class ExercisePlayerView extends HookConsumerWidget {
                     onPressed:
                         allSetsCompleted
                             ? () {
-                              final finishAction = () {
+                              void finishAction() {
                                 final historyLogs =
                                     historyLogsAsync.asData?.value ?? [];
                                 String? recordMessage;
@@ -430,7 +430,7 @@ class ExercisePlayerView extends HookConsumerWidget {
                                   notesController.text,
                                   recordMessage,
                                 );
-                              };
+                              }
 
                               if (isLast) {
                                 showDialog(

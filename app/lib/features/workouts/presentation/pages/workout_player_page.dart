@@ -6,9 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../domain/entities/exercise_log_entity.dart';
 import '../providers/workout_provider.dart';
-import '../../../auth/presentation/providers/auth_provider.dart';
 import '../widgets/rest_timer_widget.dart';
 import '../widgets/workout_timer.dart';
 import '../widgets/timer_notifier.dart';
