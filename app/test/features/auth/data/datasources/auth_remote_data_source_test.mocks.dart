@@ -59,29 +59,29 @@ class _FakePasswordValidationStatus_4 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeGoogleSignInAuthentication_5 extends _i1.SmartFake
+class _FakeUserMetadata_5 extends _i1.SmartFake implements _i3.UserMetadata {
+  _FakeUserMetadata_5(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeMultiFactor_6 extends _i1.SmartFake implements _i4.MultiFactor {
+  _FakeMultiFactor_6(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeIdTokenResult_7 extends _i1.SmartFake implements _i3.IdTokenResult {
+  _FakeIdTokenResult_7(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeUser_8 extends _i1.SmartFake implements _i4.User {
+  _FakeUser_8(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeGoogleSignInAuthentication_9 extends _i1.SmartFake
     implements _i5.GoogleSignInAuthentication {
-  _FakeGoogleSignInAuthentication_5(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeUserMetadata_6 extends _i1.SmartFake implements _i3.UserMetadata {
-  _FakeUserMetadata_6(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeMultiFactor_7 extends _i1.SmartFake implements _i4.MultiFactor {
-  _FakeMultiFactor_7(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeIdTokenResult_8 extends _i1.SmartFake implements _i3.IdTokenResult {
-  _FakeIdTokenResult_8(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeUser_9 extends _i1.SmartFake implements _i4.User {
-  _FakeUser_9(Object parent, Invocation parentInvocation)
+  _FakeGoogleSignInAuthentication_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -89,15 +89,15 @@ class _FakeUser_9 extends _i1.SmartFake implements _i4.User {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
+  MockFirebaseAuth() {
+    _i1.throwOnMissingStub(this);
+  }
+
   @override
   _i2.FirebaseApp get app =>
       (super.noSuchMethod(
             Invocation.getter(#app),
             returnValue: _FakeFirebaseApp_0(this, Invocation.getter(#app)),
-            returnValueForMissingStub: _FakeFirebaseApp_0(
-              this,
-              Invocation.getter(#app),
-            ),
           )
           as _i2.FirebaseApp);
 
@@ -124,7 +124,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.getter(#pluginConstants),
             returnValue: <dynamic, dynamic>{},
-            returnValueForMissingStub: <dynamic, dynamic>{},
           )
           as Map<dynamic, dynamic>);
 
@@ -159,12 +158,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#checkActionCode, [code]),
             returnValue: _i6.Future<_i3.ActionCodeInfo>.value(
-              _FakeActionCodeInfo_1(
-                this,
-                Invocation.method(#checkActionCode, [code]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i3.ActionCodeInfo>.value(
               _FakeActionCodeInfo_1(
                 this,
                 Invocation.method(#checkActionCode, [code]),
@@ -207,15 +200,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 }),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#createUserWithEmailAndPassword, [], {
-                  #email: email,
-                  #password: password,
-                }),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -229,12 +213,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 Invocation.method(#getRedirectResult, []),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#getRedirectResult, []),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -243,7 +221,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#isSignInWithEmailLink, [emailLink]),
             returnValue: false,
-            returnValueForMissingStub: false,
           )
           as bool);
 
@@ -252,7 +229,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#authStateChanges, []),
             returnValue: _i6.Stream<_i4.User?>.empty(),
-            returnValueForMissingStub: _i6.Stream<_i4.User?>.empty(),
           )
           as _i6.Stream<_i4.User?>);
 
@@ -261,7 +237,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#idTokenChanges, []),
             returnValue: _i6.Stream<_i4.User?>.empty(),
-            returnValueForMissingStub: _i6.Stream<_i4.User?>.empty(),
           )
           as _i6.Stream<_i4.User?>);
 
@@ -270,7 +245,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#userChanges, []),
             returnValue: _i6.Stream<_i4.User?>.empty(),
-            returnValueForMissingStub: _i6.Stream<_i4.User?>.empty(),
           )
           as _i6.Stream<_i4.User?>);
 
@@ -354,12 +328,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 Invocation.method(#signInAnonymously, []),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInAnonymously, []),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -375,12 +343,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 Invocation.method(#signInWithCredential, [credential]),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInWithCredential, [credential]),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -389,12 +351,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#signInWithCustomToken, [token]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInWithCustomToken, [token]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#signInWithCustomToken, [token]),
@@ -414,15 +370,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
               #password: password,
             }),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInWithEmailAndPassword, [], {
-                  #email: email,
-                  #password: password,
-                }),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#signInWithEmailAndPassword, [], {
@@ -453,15 +400,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 }),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInWithEmailLink, [], {
-                  #email: email,
-                  #emailLink: emailLink,
-                }),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -472,12 +410,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#signInWithProvider, [provider]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInWithProvider, [provider]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#signInWithProvider, [provider]),
@@ -502,15 +434,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 ]),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.ConfirmationResult>.value(
-              _FakeConfirmationResult_3(
-                this,
-                Invocation.method(#signInWithPhoneNumber, [
-                  phoneNumber,
-                  verifier,
-                ]),
-              ),
-            ),
           )
           as _i6.Future<_i4.ConfirmationResult>);
 
@@ -519,12 +442,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#signInWithPopup, [provider]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#signInWithPopup, [provider]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#signInWithPopup, [provider]),
@@ -547,12 +464,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
       (super.noSuchMethod(
             Invocation.method(#verifyPasswordResetCode, [code]),
             returnValue: _i6.Future<String>.value(
-              _i7.dummyValue<String>(
-                this,
-                Invocation.method(#verifyPasswordResetCode, [code]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<String>.value(
               _i7.dummyValue<String>(
                 this,
                 Invocation.method(#verifyPasswordResetCode, [code]),
@@ -636,13 +547,6 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
                 Invocation.method(#validatePassword, [auth, password]),
               ),
             ),
-            returnValueForMissingStub:
-                _i6.Future<_i3.PasswordValidationStatus>.value(
-                  _FakePasswordValidationStatus_4(
-                    this,
-                    Invocation.method(#validatePassword, [auth, password]),
-                  ),
-                ),
           )
           as _i6.Future<_i3.PasswordValidationStatus>);
 }
@@ -651,22 +555,21 @@ class MockFirebaseAuth extends _i1.Mock implements _i4.FirebaseAuth {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
+  MockGoogleSignIn() {
+    _i1.throwOnMissingStub(this);
+  }
+
   @override
   _i8.SignInOption get signInOption =>
       (super.noSuchMethod(
             Invocation.getter(#signInOption),
             returnValue: _i8.SignInOption.standard,
-            returnValueForMissingStub: _i8.SignInOption.standard,
           )
           as _i8.SignInOption);
 
   @override
   List<String> get scopes =>
-      (super.noSuchMethod(
-            Invocation.getter(#scopes),
-            returnValue: <String>[],
-            returnValueForMissingStub: <String>[],
-          )
+      (super.noSuchMethod(Invocation.getter(#scopes), returnValue: <String>[])
           as List<String>);
 
   @override
@@ -674,7 +577,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.getter(#forceCodeForRefreshToken),
             returnValue: false,
-            returnValueForMissingStub: false,
           )
           as bool);
 
@@ -683,8 +585,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.getter(#onCurrentUserChanged),
             returnValue: _i6.Stream<_i5.GoogleSignInAccount?>.empty(),
-            returnValueForMissingStub:
-                _i6.Stream<_i5.GoogleSignInAccount?>.empty(),
           )
           as _i6.Stream<_i5.GoogleSignInAccount?>);
 
@@ -699,8 +599,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
               #reAuthenticate: reAuthenticate,
             }),
             returnValue: _i6.Future<_i5.GoogleSignInAccount?>.value(),
-            returnValueForMissingStub:
-                _i6.Future<_i5.GoogleSignInAccount?>.value(),
           )
           as _i6.Future<_i5.GoogleSignInAccount?>);
 
@@ -709,7 +607,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.method(#isSignedIn, []),
             returnValue: _i6.Future<bool>.value(false),
-            returnValueForMissingStub: _i6.Future<bool>.value(false),
           )
           as _i6.Future<bool>);
 
@@ -718,8 +615,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.method(#signIn, []),
             returnValue: _i6.Future<_i5.GoogleSignInAccount?>.value(),
-            returnValueForMissingStub:
-                _i6.Future<_i5.GoogleSignInAccount?>.value(),
           )
           as _i6.Future<_i5.GoogleSignInAccount?>);
 
@@ -728,8 +623,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.method(#signOut, []),
             returnValue: _i6.Future<_i5.GoogleSignInAccount?>.value(),
-            returnValueForMissingStub:
-                _i6.Future<_i5.GoogleSignInAccount?>.value(),
           )
           as _i6.Future<_i5.GoogleSignInAccount?>);
 
@@ -738,8 +631,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.method(#disconnect, []),
             returnValue: _i6.Future<_i5.GoogleSignInAccount?>.value(),
-            returnValueForMissingStub:
-                _i6.Future<_i5.GoogleSignInAccount?>.value(),
           )
           as _i6.Future<_i5.GoogleSignInAccount?>);
 
@@ -748,7 +639,6 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
       (super.noSuchMethod(
             Invocation.method(#requestScopes, [scopes]),
             returnValue: _i6.Future<bool>.value(false),
-            returnValueForMissingStub: _i6.Future<bool>.value(false),
           )
           as _i6.Future<bool>);
 
@@ -764,129 +654,33 @@ class MockGoogleSignIn extends _i1.Mock implements _i5.GoogleSignIn {
               {#accessToken: accessToken},
             ),
             returnValue: _i6.Future<bool>.value(false),
-            returnValueForMissingStub: _i6.Future<bool>.value(false),
           )
           as _i6.Future<bool>);
 }
-
-/// A class which mocks [GoogleSignInAccount].
-///
-/// See the documentation for Mockito's code generation for more information.
-// ignore: must_be_immutable
-class MockGoogleSignInAccount extends _i1.Mock
-    implements _i5.GoogleSignInAccount {
-  @override
-  String get email =>
-      (super.noSuchMethod(
-            Invocation.getter(#email),
-            returnValue: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#email),
-            ),
-            returnValueForMissingStub: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#email),
-            ),
-          )
-          as String);
-
-  @override
-  String get id =>
-      (super.noSuchMethod(
-            Invocation.getter(#id),
-            returnValue: _i7.dummyValue<String>(this, Invocation.getter(#id)),
-            returnValueForMissingStub: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#id),
-            ),
-          )
-          as String);
-
-  @override
-  _i6.Future<_i5.GoogleSignInAuthentication> get authentication =>
-      (super.noSuchMethod(
-            Invocation.getter(#authentication),
-            returnValue: _i6.Future<_i5.GoogleSignInAuthentication>.value(
-              _FakeGoogleSignInAuthentication_5(
-                this,
-                Invocation.getter(#authentication),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i6.Future<_i5.GoogleSignInAuthentication>.value(
-                  _FakeGoogleSignInAuthentication_5(
-                    this,
-                    Invocation.getter(#authentication),
-                  ),
-                ),
-          )
-          as _i6.Future<_i5.GoogleSignInAuthentication>);
-
-  @override
-  _i6.Future<Map<String, String>> get authHeaders =>
-      (super.noSuchMethod(
-            Invocation.getter(#authHeaders),
-            returnValue: _i6.Future<Map<String, String>>.value(
-              <String, String>{},
-            ),
-            returnValueForMissingStub: _i6.Future<Map<String, String>>.value(
-              <String, String>{},
-            ),
-          )
-          as _i6.Future<Map<String, String>>);
-
-  @override
-  _i6.Future<void> clearAuthCache() =>
-      (super.noSuchMethod(
-            Invocation.method(#clearAuthCache, []),
-            returnValue: _i6.Future<void>.value(),
-            returnValueForMissingStub: _i6.Future<void>.value(),
-          )
-          as _i6.Future<void>);
-}
-
-/// A class which mocks [GoogleSignInAuthentication].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockGoogleSignInAuthentication extends _i1.Mock
-    implements _i5.GoogleSignInAuthentication {}
-
-/// A class which mocks [UserCredential].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockUserCredential extends _i1.Mock implements _i4.UserCredential {}
 
 /// A class which mocks [User].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockUser extends _i1.Mock implements _i4.User {
+  MockUser() {
+    _i1.throwOnMissingStub(this);
+  }
+
   @override
   bool get emailVerified =>
-      (super.noSuchMethod(
-            Invocation.getter(#emailVerified),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
+      (super.noSuchMethod(Invocation.getter(#emailVerified), returnValue: false)
           as bool);
 
   @override
   bool get isAnonymous =>
-      (super.noSuchMethod(
-            Invocation.getter(#isAnonymous),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
+      (super.noSuchMethod(Invocation.getter(#isAnonymous), returnValue: false)
           as bool);
 
   @override
   _i3.UserMetadata get metadata =>
       (super.noSuchMethod(
             Invocation.getter(#metadata),
-            returnValue: _FakeUserMetadata_6(
-              this,
-              Invocation.getter(#metadata),
-            ),
-            returnValueForMissingStub: _FakeUserMetadata_6(
+            returnValue: _FakeUserMetadata_5(
               this,
               Invocation.getter(#metadata),
             ),
@@ -898,7 +692,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.getter(#providerData),
             returnValue: <_i3.UserInfo>[],
-            returnValueForMissingStub: <_i3.UserInfo>[],
           )
           as List<_i3.UserInfo>);
 
@@ -907,10 +700,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.getter(#uid),
             returnValue: _i7.dummyValue<String>(this, Invocation.getter(#uid)),
-            returnValueForMissingStub: _i7.dummyValue<String>(
-              this,
-              Invocation.getter(#uid),
-            ),
           )
           as String);
 
@@ -918,11 +707,7 @@ class MockUser extends _i1.Mock implements _i4.User {
   _i4.MultiFactor get multiFactor =>
       (super.noSuchMethod(
             Invocation.getter(#multiFactor),
-            returnValue: _FakeMultiFactor_7(
-              this,
-              Invocation.getter(#multiFactor),
-            ),
-            returnValueForMissingStub: _FakeMultiFactor_7(
+            returnValue: _FakeMultiFactor_6(
               this,
               Invocation.getter(#multiFactor),
             ),
@@ -943,7 +728,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#getIdToken, [forceRefresh]),
             returnValue: _i6.Future<String?>.value(),
-            returnValueForMissingStub: _i6.Future<String?>.value(),
           )
           as _i6.Future<String?>);
 
@@ -954,13 +738,7 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#getIdTokenResult, [forceRefresh]),
             returnValue: _i6.Future<_i3.IdTokenResult>.value(
-              _FakeIdTokenResult_8(
-                this,
-                Invocation.method(#getIdTokenResult, [forceRefresh]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i3.IdTokenResult>.value(
-              _FakeIdTokenResult_8(
+              _FakeIdTokenResult_7(
                 this,
                 Invocation.method(#getIdTokenResult, [forceRefresh]),
               ),
@@ -980,12 +758,6 @@ class MockUser extends _i1.Mock implements _i4.User {
                 Invocation.method(#linkWithCredential, [credential]),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#linkWithCredential, [credential]),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -994,12 +766,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#linkWithProvider, [provider]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#linkWithProvider, [provider]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#linkWithProvider, [provider]),
@@ -1020,12 +786,6 @@ class MockUser extends _i1.Mock implements _i4.User {
                 Invocation.method(#reauthenticateWithProvider, [provider]),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#reauthenticateWithProvider, [provider]),
-              ),
-            ),
           )
           as _i6.Future<_i4.UserCredential>);
 
@@ -1036,12 +796,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#reauthenticateWithPopup, [provider]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#reauthenticateWithPopup, [provider]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#reauthenticateWithPopup, [provider]),
@@ -1064,12 +818,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#linkWithPopup, [provider]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#linkWithPopup, [provider]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#linkWithPopup, [provider]),
@@ -1103,15 +851,6 @@ class MockUser extends _i1.Mock implements _i4.User {
                 ]),
               ),
             ),
-            returnValueForMissingStub: _i6.Future<_i4.ConfirmationResult>.value(
-              _FakeConfirmationResult_3(
-                this,
-                Invocation.method(#linkWithPhoneNumber, [
-                  phoneNumber,
-                  verifier,
-                ]),
-              ),
-            ),
           )
           as _i6.Future<_i4.ConfirmationResult>);
 
@@ -1122,12 +861,6 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#reauthenticateWithCredential, [credential]),
             returnValue: _i6.Future<_i4.UserCredential>.value(
-              _FakeUserCredential_2(
-                this,
-                Invocation.method(#reauthenticateWithCredential, [credential]),
-              ),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.UserCredential>.value(
               _FakeUserCredential_2(
                 this,
                 Invocation.method(#reauthenticateWithCredential, [credential]),
@@ -1161,10 +894,7 @@ class MockUser extends _i1.Mock implements _i4.User {
       (super.noSuchMethod(
             Invocation.method(#unlink, [providerId]),
             returnValue: _i6.Future<_i4.User>.value(
-              _FakeUser_9(this, Invocation.method(#unlink, [providerId])),
-            ),
-            returnValueForMissingStub: _i6.Future<_i4.User>.value(
-              _FakeUser_9(this, Invocation.method(#unlink, [providerId])),
+              _FakeUser_8(this, Invocation.method(#unlink, [providerId])),
             ),
           )
           as _i6.Future<_i4.User>);
@@ -1233,4 +963,75 @@ class MockUser extends _i1.Mock implements _i4.User {
             returnValueForMissingStub: _i6.Future<void>.value(),
           )
           as _i6.Future<void>);
+}
+
+/// A class which mocks [GoogleSignInAccount].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGoogleSignInAccount extends _i1.Mock
+    implements _i5.GoogleSignInAccount {
+  MockGoogleSignInAccount() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String get email =>
+      (super.noSuchMethod(
+            Invocation.getter(#email),
+            returnValue: _i7.dummyValue<String>(
+              this,
+              Invocation.getter(#email),
+            ),
+          )
+          as String);
+
+  @override
+  String get id =>
+      (super.noSuchMethod(
+            Invocation.getter(#id),
+            returnValue: _i7.dummyValue<String>(this, Invocation.getter(#id)),
+          )
+          as String);
+
+  @override
+  _i6.Future<_i5.GoogleSignInAuthentication> get authentication =>
+      (super.noSuchMethod(
+            Invocation.getter(#authentication),
+            returnValue: _i6.Future<_i5.GoogleSignInAuthentication>.value(
+              _FakeGoogleSignInAuthentication_9(
+                this,
+                Invocation.getter(#authentication),
+              ),
+            ),
+          )
+          as _i6.Future<_i5.GoogleSignInAuthentication>);
+
+  @override
+  _i6.Future<Map<String, String>> get authHeaders =>
+      (super.noSuchMethod(
+            Invocation.getter(#authHeaders),
+            returnValue: _i6.Future<Map<String, String>>.value(
+              <String, String>{},
+            ),
+          )
+          as _i6.Future<Map<String, String>>);
+
+  @override
+  _i6.Future<void> clearAuthCache() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearAuthCache, []),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
+}
+
+/// A class which mocks [GoogleSignInAuthentication].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGoogleSignInAuthentication extends _i1.Mock
+    implements _i5.GoogleSignInAuthentication {
+  MockGoogleSignInAuthentication() {
+    _i1.throwOnMissingStub(this);
+  }
 }
