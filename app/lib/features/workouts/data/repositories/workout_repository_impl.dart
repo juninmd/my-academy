@@ -92,7 +92,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   ) async {
     try {
       final response = await _apiClient.get(
-        'exercise-logs?userId=$userId&exerciseId=$exerciseId&_sort=date&_order=desc',
+        'exercise-logs?userId=$userId&exerciseId=$exerciseId',
       );
       final List<dynamic> data = response;
       return Right(
@@ -130,7 +130,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   ) async {
     try {
       final response = await _apiClient.get(
-        'exercise-logs?userId=$userId&_sort=date&_order=desc',
+        'exercise-logs?userId=$userId',
         options: Options(responseType: ResponseType.plain),
       );
       final String jsonString = response as String;
