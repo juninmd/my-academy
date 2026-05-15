@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api_client.dart';
 
-const String _apiBaseUrlFromEnv = String.fromEnvironment('API_BASE_URL');
+const String _apiBaseUrlFromEnv = String.fromEnvironment('API_BASE_URL', defaultValue: 'http://localhost:9000/api/');
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
@@ -66,8 +66,9 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 });
 
 String _getBaseUrl() {
+  // If the env variable is set and not the default fallback
   final envUrl = _apiBaseUrlFromEnv.trim();
-  if (envUrl.isNotEmpty) {
+  if (envUrl.isNotEmpty && envUrl != 'http://localhost:9000/api/') {
     return envUrl;
   }
 
@@ -88,5 +89,5 @@ String _getBaseUrl() {
   }
 
   // Fallback
-  return 'http://localhost:9000/api/';
+  return _apiBaseUrlFromEnv;
 }

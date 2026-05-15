@@ -56,7 +56,10 @@ describe('PreauthMiddleware', () => {
 
   it('should use mock auth if enabled', async () => {
     (configs as any).authMoc.enabled = 'true';
-    const req = {} as Request;
+    (configs as any).authMoc.token = 'test-token';
+    const req = {
+      headers: { authorization: 'Bearer test-token' },
+    } as Request;
     const res = {} as Response;
     const next = jest.fn();
 
