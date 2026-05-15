@@ -29,9 +29,14 @@ async function bootstrap() {
       .split(',')
       .map((o) => o.trim())
       .filter(Boolean);
+
     app.enableCors({
       origin: allowedOrigins.length > 0 ? allowedOrigins : '*',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      preflightContinue: false,
+      optionsSuccessStatus: 204,
       credentials: allowedOrigins.length > 0 ? true : false,
+      allowedHeaders: 'Content-Type, Accept, Authorization',
     });
 
     // Configuração do Swagger
