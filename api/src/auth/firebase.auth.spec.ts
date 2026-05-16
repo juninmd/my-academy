@@ -122,4 +122,54 @@ describe('PreauthMiddleware', () => {
     );
     expect(next).not.toHaveBeenCalled();
   });
+
+  it('should skip auth for /health', async () => {
+    const req = { url: '/health' } as Request;
+    const res = {} as Response;
+    const next = jest.fn();
+
+    await middleware.use(req, res, next);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('should skip auth for /api/health', async () => {
+    const req = { url: '/api/health' } as Request;
+    const res = {} as Response;
+    const next = jest.fn();
+
+    await middleware.use(req, res, next);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('should not use mock auth if token does not match', async () => {
+    (configs as any).authMoc.enabled = 'true';
+    (configs as any).authMoc.token = 'test-token';
+    const req = {
+      headers: { authorization: 'Bearer wrong-token' },
+      url: '/test',
+    } as Request;
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+    const next = jest.fn();
+
+    await middleware.use(req, res, next);
+
+    expect(mockVerifyIdToken).toHaveBeenCalledWith('wrong-token');
+  });
+
+  it('should handle undefined headers safely', async () => {
+    (configs as any).authMoc.enabled = 'true';
+    const req = { url: '/test' } as Request;
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+    const next = jest.fn();
+
+    await middleware.use(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+  });
 });

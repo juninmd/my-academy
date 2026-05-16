@@ -13,6 +13,8 @@ import { PreauthMiddleware } from './auth/firebase.auth';
 import { HealthModule } from './health/health.module';
 import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { AssessmentsModule } from './assessments/assessments.module';
+import { GymsModule } from './gyms/gyms.module';
 
 @Module({
   imports: [
@@ -27,7 +29,10 @@ import { TelegramModule } from './telegram/telegram.module';
     HealthModule,
     TelegramModule,
     ExerciseLogsModule,
+    AssessmentsModule,
+    GymsModule,
   ],
+
   controllers: [AppController],
   providers: [AppService],
 })

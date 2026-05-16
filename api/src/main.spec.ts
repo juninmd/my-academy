@@ -112,4 +112,15 @@ describe('Main', () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(loggerInstance.error).toHaveBeenCalledTimes(2);
   });
+
+  it('should bootstrap successfully with CORS_ORIGINS', async () => {
+    process.env.CORS_ORIGINS = 'http://localhost:3000,http://localhost:4000';
+    jest.isolateModules(() => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      require('./main');
+    });
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(NestFactory.create).toHaveBeenCalled();
+    delete process.env.CORS_ORIGINS;
+  });
 });
