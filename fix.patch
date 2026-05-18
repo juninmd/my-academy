@@ -1,0 +1,62 @@
+--- app/test/features/workouts/presentation/pages/exercise_library_page_test.dart
++++ app/test/features/workouts/presentation/pages/exercise_library_page_test.dart
+@@ -6,6 +6,13 @@
+ import 'package:my_academy/features/workouts/presentation/providers/workout_create_provider.dart';
+ import 'package:my_academy/core/widgets/common_empty_state.dart';
++import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
++import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
++import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
+
++class FakeAuthNotifier extends AuthNotifier {
++  @override
++  Future<UserEntity?> build() async => const UserEntity(id: '1', email: 'test@test.com', name: 'Test User');
++}
++
+ void main() {
+   final exercises = [
+     const ExerciseEntity(
+@@ -23,6 +30,8 @@
+           exercisesProvider.overrideWith(
+             (ref) => Future.delayed(const Duration(seconds: 1), () => []),
+           ),
++          authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
++          allExerciseLogsProvider.overrideWith((ref) async => []),
+         ],
+         child: const MaterialApp(home: ExerciseLibraryPage()),
+       ),
+@@ -37,7 +46,11 @@
+     await tester.pumpWidget(
+       ProviderScope(
+-        overrides: [exercisesProvider.overrideWith((ref) async => exercises)],
++        overrides: [
++          exercisesProvider.overrideWith((ref) async => exercises),
++          authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
++          allExerciseLogsProvider.overrideWith((ref) async => []),
++        ],
+         child: const MaterialApp(home: ExerciseLibraryPage()),
+       ),
+     );
+@@ -51,7 +64,11 @@
+     await tester.pumpWidget(
+       ProviderScope(
+-        overrides: [exercisesProvider.overrideWith((ref) async => exercises)],
++        overrides: [
++          exercisesProvider.overrideWith((ref) async => exercises),
++          authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
++          allExerciseLogsProvider.overrideWith((ref) async => []),
++        ],
+         child: const MaterialApp(home: ExerciseLibraryPage()),
+       ),
+     );
+@@ -75,7 +92,11 @@
+     await tester.pumpWidget(
+       ProviderScope(
+-        overrides: [exercisesProvider.overrideWith((ref) async => exercises)],
++        overrides: [
++          exercisesProvider.overrideWith((ref) async => exercises),
++          authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
++          allExerciseLogsProvider.overrideWith((ref) async => []),
++        ],
+         child: const MaterialApp(home: ExerciseLibraryPage()),
+       ),
+     );
