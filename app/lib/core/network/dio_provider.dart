@@ -1,12 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'api_client.dart';
 
-const String _apiBaseUrlFromEnv = String.fromEnvironment('API_BASE_URL', defaultValue: 'http://localhost:9000/api/');
+const String _apiBaseUrlFromEnv = String.fromEnvironment(
+  'API_BASE_URL',
+  defaultValue: 'http://localhost:9000/api/',
+);
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
@@ -24,6 +28,11 @@ final dioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(
     InterceptorsWrapper(
       onRequest: (options, handler) async {
+        if (useMockAuth) {
+          options.headers['Authorization'] = 'Bearer $mockAuthToken';
+          return handler.next(options);
+        }
+
         try {
           final user = FirebaseAuth.instance.currentUser;
           if (user != null) {
