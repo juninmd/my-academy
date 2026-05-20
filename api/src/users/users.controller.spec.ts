@@ -44,7 +44,7 @@ describe('UsersController', () => {
   });
 
   it('findAll', async () => {
-    await controller.findAll();
+    await controller.findAll({});
     expect(service.findAll).toHaveBeenCalled();
   });
 

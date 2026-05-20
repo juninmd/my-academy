@@ -12,6 +12,7 @@ import {
 import { WorkoutsSessionsService } from './workouts-sessions.service';
 import { CreateWorkoutsSessionsDto } from './dto/create-workouts-sessions.dto';
 import { UpdateWorkoutsSessionsDto } from './dto/update-workouts-sessions.dto';
+import { FindWorkoutsSessionsDto } from './dto/find-workouts-sessions.dto';
 
 @Controller('workouts-sessions')
 export class WorkoutsSessionsController {
@@ -31,11 +32,14 @@ export class WorkoutsSessionsController {
   }
 
   @Get(':idUser')
-  findAll(@Param('idUser') idUser: string, @Query() query: any) {
+  findAll(
+    @Param('idUser') idUser: string,
+    @Query() query: FindWorkoutsSessionsDto,
+  ) {
     return this.workoutsSessionsService.findAll(
       idUser,
-      +query.year,
-      +query.month,
+      query.year ? +query.year : undefined,
+      query.month ? +query.month : undefined,
     );
   }
 

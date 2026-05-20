@@ -57,7 +57,7 @@ describe('ExerciseLogsController', () => {
       const result = [];
       (service.findAll as jest.Mock).mockResolvedValue(result);
 
-      expect(await controller.findAll('user1')).toBe(result);
+      expect(await controller.findAll({ userId: 'user1' })).toBe(result);
       expect(service.findAll).toHaveBeenCalledWith('user1', undefined);
     });
 
@@ -65,7 +65,9 @@ describe('ExerciseLogsController', () => {
       const result = [];
       (service.findAll as jest.Mock).mockResolvedValue(result);
 
-      expect(await controller.findAll('user1', '5')).toBe(result);
+      expect(
+        await controller.findAll({ userId: 'user1', exerciseId: '5' }),
+      ).toBe(result);
       expect(service.findAll).toHaveBeenCalledWith('user1', 5);
     });
   });

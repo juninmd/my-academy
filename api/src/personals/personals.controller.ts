@@ -11,6 +11,7 @@ import {
 import { PersonalsService } from './personals.service';
 import { CreatePersonalDto } from './dto/create-personal.dto';
 import { UpdatePersonalDto } from './dto/update-personal.dto';
+import { FindPersonalsDto } from './dto/find-personals.dto';
 
 @Controller('personals')
 export class PersonalsController {
@@ -22,8 +23,8 @@ export class PersonalsController {
   }
 
   @Get()
-  findAll(@Query('personalUserId') personalUserId?: string) {
-    return this.personalsService.findAll(personalUserId);
+  findAll(@Query() query: FindPersonalsDto) {
+    return this.personalsService.findAll(query.personalUserId);
   }
 
   @Get(':id/students')

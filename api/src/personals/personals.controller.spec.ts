@@ -44,7 +44,7 @@ describe('PersonalsController', () => {
   });
 
   it('findAll', async () => {
-    await controller.findAll('p1');
+    await controller.findAll({ personalUserId: 'p1' });
     expect(service.findAll).toHaveBeenCalledWith('p1');
   });
 

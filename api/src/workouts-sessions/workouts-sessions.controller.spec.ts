@@ -48,7 +48,7 @@ describe('WorkoutsSessionsController', () => {
   });
 
   it('findAll', async () => {
-    await controller.findAll('u1', { year: '2023', month: '1' });
+    await controller.findAll('u1', { year: '2023', month: '1' } as any);
     expect(service.findAll).toHaveBeenCalledWith('u1', 2023, 1);
   });
 
