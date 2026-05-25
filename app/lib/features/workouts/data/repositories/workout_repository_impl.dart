@@ -92,7 +92,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   ) async {
     try {
       final response = await _apiClient.get(
-        'exercise-logs?userId=$userId&exerciseId=$exerciseId',
+        'exercise-logs',
+        queryParameters: {'userId': userId, 'exerciseId': exerciseId},
       );
       final List<dynamic> data = response;
       return Right(
@@ -130,7 +131,8 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
   ) async {
     try {
       final response = await _apiClient.get(
-        'exercise-logs?userId=$userId',
+        'exercise-logs',
+        queryParameters: {'userId': userId},
         options: Options(responseType: ResponseType.plain),
       );
       final String jsonString = response as String;
