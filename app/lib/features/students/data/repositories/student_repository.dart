@@ -82,7 +82,10 @@ class StudentRepositoryImpl implements StudentRepository {
     String email,
   ) async {
     try {
-      final response = await _apiClient.get('users?email=$email');
+      final response = await _apiClient.get(
+        'users',
+        queryParameters: {'email': email},
+      );
       final List<dynamic> data = response;
       if (data.isNotEmpty) {
         final json = data.first;
@@ -97,7 +100,10 @@ class StudentRepositoryImpl implements StudentRepository {
   @override
   Future<bool> isPersonal(String userId) async {
     try {
-      final response = await _apiClient.get('personals?personalUserId=$userId');
+      final response = await _apiClient.get(
+        'personals',
+        queryParameters: {'personalUserId': userId},
+      );
       return response is List && response.isNotEmpty;
     } catch (_) {
       return false;

@@ -71,7 +71,7 @@ void main() {
       ];
 
       when(
-        mockApiClient.get('users?email=new@test.com'),
+        mockApiClient.get('users', queryParameters: {'email': 'new@test.com'}),
       ).thenAnswer((_) async => mockStudentSearchResponse);
 
       when(
@@ -91,7 +91,7 @@ void main() {
         {'id': '123', 'name': 'New', 'email': 'new@test.com', 'photoUrl': null},
       ];
       when(
-        mockApiClient.get('users?email=new@test.com'),
+        mockApiClient.get('users', queryParameters: {'email': 'new@test.com'}),
       ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.checkStudentExists('new@test.com');
@@ -102,7 +102,7 @@ void main() {
     test('should return null when not found', () async {
       final mockResponse = [];
       when(
-        mockApiClient.get('users?email=new@test.com'),
+        mockApiClient.get('users', queryParameters: {'email': 'new@test.com'}),
       ).thenAnswer((_) async => mockResponse);
 
       final result = await repository.checkStudentExists('new@test.com');
@@ -114,7 +114,7 @@ void main() {
   group('isPersonal', () {
     test('should return true when successful', () async {
       when(
-        mockApiClient.get('personals?personalUserId=123'),
+        mockApiClient.get('personals', queryParameters: {'personalUserId': '123'}),
       ).thenAnswer((_) async => [{}]);
       final result = await repository.isPersonal('123');
       expect(result, true);
@@ -122,7 +122,7 @@ void main() {
 
     test('should return false when error', () async {
       when(
-        mockApiClient.get('personals?personalUserId=123'),
+        mockApiClient.get('personals', queryParameters: {'personalUserId': '123'}),
       ).thenThrow(Exception());
       final result = await repository.isPersonal('123');
       expect(result, false);

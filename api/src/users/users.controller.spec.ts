@@ -44,8 +44,8 @@ describe('UsersController', () => {
   });
 
   it('findAll', async () => {
-    await controller.findAll();
-    expect(service.findAll).toHaveBeenCalled();
+    await controller.findAll({});
+    expect(service.findAll).toHaveBeenCalledWith(undefined);
   });
 
   it('findOne', async () => {

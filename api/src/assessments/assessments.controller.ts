@@ -11,6 +11,7 @@ import {
 import { AssessmentsService } from './assessments.service';
 import { CreateAssessmentDto } from './dto/create-assessment.dto';
 import { UpdateAssessmentDto } from './dto/update-assessment.dto';
+import { FindAssessmentsDto } from './dto/find-assessments.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiTags('assessments')
@@ -25,8 +26,8 @@ export class AssessmentsController {
   }
 
   @Get()
-  findAll(@Query('studentId') studentId?: string) {
-    return this.assessmentsService.findAll(studentId);
+  findAll(@Query() query: FindAssessmentsDto) {
+    return this.assessmentsService.findAll(query.studentId);
   }
 
   @Get(':id')

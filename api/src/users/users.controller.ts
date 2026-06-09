@@ -11,6 +11,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FindUsersDto } from './dto/find-users.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 
@@ -38,8 +39,8 @@ export class UsersController {
     description: 'Return all users.',
     type: [User],
   })
-  findAll(@Query('email') email?: string): Promise<User[]> {
-    return this.usersService.findAll(email);
+  findAll(@Query() query: FindUsersDto): Promise<User[]> {
+    return this.usersService.findAll(query.email);
   }
 
   @Get(':id')
