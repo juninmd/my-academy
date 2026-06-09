@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateExerciseLogDto } from './dto/create-exercise-log.dto';
 import { ExerciseLogsService } from './exercise-logs.service';
-import { FindExerciseLogsQueryDto } from './dto/find-exercise-logs-query.dto';
+import { FindExerciseLogsDto } from './dto/find-exercise-logs.dto';
 
 @ApiTags('Exercise Logs')
 @Controller('exercise-logs')
@@ -15,8 +15,7 @@ export class ExerciseLogsController {
   }
 
   @Get()
-  findAll(@Query() query: FindExerciseLogsQueryDto) {
-    // Handle json-server style or generic params
+  findAll(@Query() query: FindExerciseLogsDto) {
     return this.exerciseLogsService.findAll(
       query.userId,
       query.exerciseId ? +query.exerciseId : undefined,
