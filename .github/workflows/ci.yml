@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+        cache-dependency-path: 'api/pnpm-lock.yaml'
+
+    - name: Install dependencies
+      run: cd api && pnpm install
+
+    - name: Lint
+      run: cd api && pnpm run lint
+
+    - name: Build
+      run: cd api && pnpm run build
+
+    - name: Test
+      run: cd api && pnpm run test:cov

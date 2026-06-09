@@ -94,9 +94,7 @@ void main() {
           'sets': [],
         },
       ];
-      when(
-        mockApiClient.get(any, queryParameters: anyNamed('queryParameters')),
-      ).thenAnswer((_) async => mockData);
+      when(mockApiClient.get(any)).thenAnswer((_) async => mockData);
 
       final result = await repository.getExerciseLogs('u1', 10);
       expect(result.isRight(), true);
