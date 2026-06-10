@@ -1,5 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsNumberString,
+} from 'class-validator';
 
 export class FindExerciseLogsDto {
   @ApiProperty()
@@ -7,8 +12,8 @@ export class FindExerciseLogsDto {
   @IsNotEmpty()
   userId: string;
 
-  @ApiProperty({ required: false })
+  @ApiPropertyOptional()
   @IsOptional()
-  @IsString()
+  @IsNumberString()
   exerciseId?: string;
 }

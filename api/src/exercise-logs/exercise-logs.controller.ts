@@ -16,7 +16,6 @@ export class ExerciseLogsController {
 
   @Get()
   findAll(@Query() query: FindExerciseLogsDto) {
-    // Handle json-server style or generic params
     return this.exerciseLogsService.findAll(
       query.userId,
       query.exerciseId ? +query.exerciseId : undefined,
