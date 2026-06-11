@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateExerciseLogDto } from './dto/create-exercise-log.dto';
-import { ExerciseLogsService } from './exercise-logs.service';
 import { FindExerciseLogsDto } from './dto/find-exercise-logs.dto';
+import { ExerciseLogsService } from './exercise-logs.service';
 
 @ApiTags('Exercise Logs')
 @Controller('exercise-logs')
