@@ -18,9 +18,11 @@ class PersonalRepositoryImpl implements PersonalRepository {
     String? personalUserId,
   }) async {
     try {
-      final query =
-          personalUserId != null ? '?personalUserId=$personalUserId' : '';
-      final response = await _apiClient.get('personals$query');
+      final response = await _apiClient.get(
+        'personals',
+        queryParameters:
+            personalUserId != null ? {'personalUserId': personalUserId} : null,
+      );
       final List<dynamic> data = response;
       return Right(
         data

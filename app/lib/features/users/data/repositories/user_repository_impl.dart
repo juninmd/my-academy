@@ -16,8 +16,10 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Failure, List<UserEntity>>> getUsers({String? email}) async {
     try {
-      final query = email != null ? '?email=$email' : '';
-      final response = await _apiClient.get('users$query');
+      final response = await _apiClient.get(
+        'users',
+        queryParameters: email != null ? {'email': email} : null,
+      );
       final List<dynamic> data = response;
       return Right(
         data
