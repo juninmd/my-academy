@@ -27,7 +27,8 @@ class CalendarRepositoryImpl implements CalendarRepository {
   ) async {
     try {
       final response = await _apiClient.get(
-        'workouts-sessions/$userId?month=$month&year=$year',
+        'workouts-sessions/$userId',
+        queryParameters: {'month': month.toString(), 'year': year.toString()},
       );
       final List<dynamic> data = response;
       return Right(
