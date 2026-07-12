@@ -38,7 +38,10 @@ void main() {
       ];
 
       when(
-        mockApiClient.get('workouts-groups/user/user1'),
+        mockApiClient.get(
+          'workouts-groups/user/user1',
+          queryParameters: anyNamed('queryParameters'),
+        ),
       ).thenAnswer((_) async => mockData);
 
       final result = await repository.getWorkoutGroups('user1');
@@ -52,7 +55,9 @@ void main() {
     });
 
     test('should return failure when exception', () async {
-      when(mockApiClient.get(any)).thenThrow(Exception('Error'));
+      when(
+        mockApiClient.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenThrow(Exception('Error'));
 
       final result = await repository.getWorkoutGroups('user_doesnt_exist');
 
@@ -71,7 +76,12 @@ void main() {
         },
       ];
 
-      when(mockApiClient.get('exercises')).thenAnswer((_) async => mockData);
+      when(
+        mockApiClient.get(
+          'exercises',
+          queryParameters: anyNamed('queryParameters'),
+        ),
+      ).thenAnswer((_) async => mockData);
 
       final result = await repository.getExercises();
 
