@@ -28,7 +28,9 @@ void main() {
         },
       ];
 
-      when(mockApiClient.get(any)).thenAnswer((_) async => mockData);
+      when(
+        mockApiClient.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenAnswer((_) async => mockData);
 
       final result = await repository.getSessions('u1', 1, 2023);
 
@@ -40,7 +42,9 @@ void main() {
     });
 
     test('should return failure when exception', () async {
-      when(mockApiClient.get(any)).thenThrow(Exception('error'));
+      when(
+        mockApiClient.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenThrow(Exception('error'));
 
       final result = await repository.getSessions('u1', 1, 2023);
 
