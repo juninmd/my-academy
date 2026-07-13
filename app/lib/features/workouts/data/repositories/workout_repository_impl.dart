@@ -93,7 +93,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
     try {
       final response = await _apiClient.get(
         'exercise-logs',
-        queryParameters: {'userId': userId, 'exerciseId': exerciseId},
+        queryParameters: {'userId': userId, 'exerciseId': exerciseId.toString()},
       );
       final List<dynamic> data = response;
       return Right(
