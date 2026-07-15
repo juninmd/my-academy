@@ -33,6 +33,7 @@ void main() {
       ProviderScope(
         overrides: [
           allExerciseLogsProvider.overrideWith((ref) async => logs),
+          exerciseLogsProvider.overrideWith((ref, arg) async => logs),
           exercisesProvider.overrideWith((ref) async => exercises),
         ],
         child: const MaterialApp(
