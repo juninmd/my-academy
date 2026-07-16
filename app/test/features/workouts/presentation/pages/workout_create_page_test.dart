@@ -5,6 +5,14 @@ import 'package:my_academy/features/workouts/domain/entities/exercise_entity.dar
 import 'package:my_academy/features/workouts/domain/entities/workout_group_entity.dart';
 import 'package:my_academy/features/workouts/presentation/pages/workout_create_page.dart';
 import 'package:my_academy/features/workouts/presentation/providers/workout_create_provider.dart';
+import 'package:my_academy/features/workouts/presentation/providers/workout_provider.dart';
+import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
+import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
+
+class FakeAuthNotifier extends AuthNotifier {
+  @override
+  Future<UserEntity?> build() async => const UserEntity(id: '1', email: 'test@test.com', name: 'Test User');
+}
 
 class FakeWorkoutCreateNotifier extends WorkoutCreateNotifier {
   @override
@@ -34,6 +42,8 @@ void main() {
           workoutCreateNotifierProvider.overrideWith(
             FakeWorkoutCreateNotifier.new,
           ),
+          authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
+          allExerciseLogsProvider.overrideWith((ref) async => []),
         ],
         child: const MaterialApp(home: WorkoutCreatePage()),
       ),
