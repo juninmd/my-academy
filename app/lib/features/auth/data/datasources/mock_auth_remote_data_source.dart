@@ -12,7 +12,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final ApiClient _apiClient;
 
   static const _mockUserId = 'db6i035Vjtb77a7cBDnXQVPd3oL2';
-  static const _mockToken = 'mock-token-for-testing';
+  static const _mockToken = 'mock-token';
 
   @override
   Future<UserDto> signInWithGoogle() async {

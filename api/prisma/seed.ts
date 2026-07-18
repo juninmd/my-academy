@@ -12,8 +12,10 @@ const prisma = new PrismaClient({ adapter })
 
 async function main() {
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Crucifixo Reto" },
+    update: {},
+    create: {
       name: "Crucifixo Reto",
       image: "assets/images/crucifixo_reto.gif",
       tips:
@@ -22,8 +24,10 @@ async function main() {
     },
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Supino com halteres" },
+    update: {},
+    create: {
       name: "Supino com halteres",
       image: "assets/images/supino_halteres.gif",
       tips:
@@ -33,8 +37,10 @@ async function main() {
     },
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Supino inclinado com barra" },
+    update: {},
+    create: {
       name: "Supino inclinado com barra",
       image: "assets/images/supino_inclinado_barra.gif",
       tips:
@@ -44,8 +50,10 @@ async function main() {
     },
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Crucifixo Inclinado Com Halteres" },
+    update: {},
+    create: {
       name: "Crucifixo Inclinado Com Halteres",
       image: "assets/images/crucifixo_inclinado_halteres.gif",
       tips:
@@ -55,8 +63,10 @@ async function main() {
     },
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Tríceps Testa Barra W" },
+    update: {},
+    create: {
       name: "Tríceps Testa Barra W",
       image: "assets/images/tricepes_testa_barra_w.gif",
       tips: "Mantenha o cotovelo próximo à cabeça, Não deixe o pulso dobrar",
@@ -65,8 +75,10 @@ async function main() {
   });
 
   // Ombro
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Desenvolvimento com halteres" },
+    update: {},
+    create: {
       tips: "Mantenha a coluna ereta, Estenda totalmente os braços",
       mistakes:
         "Fazer o movimento com impulso,Não realizar a amplitude completa",
@@ -75,8 +87,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Elevação Frontal" },
+    update: {},
+    create: {
       tips: "Mantenha os cotovelos elevados, Não deixe o peso balançar",
       mistakes: "Usar peso excessivo, Mover o corpo para ajudar o movimento",
       name: "Elevação Frontal",
@@ -84,16 +98,20 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Remada Alta" },
+    update: {},
+    create: {
       tips: "Mantenha os ombros para baixo e para trás durante o movimento.",
       mistakes: "Não puxe com as costas.",
       name: "Remada Alta",
       image: "assets/images/remada_alta.gif",
     }
   });
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Elevação lateral" },
+    update: {},
+    create: {
       tips: "Use um peso leve para iniciar o movimento.",
       mistakes: "Não jogue os halteres para cima.",
       name: "Elevação lateral",
@@ -101,8 +119,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Rosca de bíceps com barra W" },
+    update: {},
+    create: {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não arqueie as costas.",
       name: "Rosca de bíceps com barra W",
@@ -110,8 +130,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Rosca Concentrada" },
+    update: {},
+    create: {
       tips: "Mantenha o cotovelo fixo no apoio.",
       mistakes: "Não mova o cotovelo durante o movimento.",
       name: "Rosca Concentrada",
@@ -119,8 +141,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Rosca de martelo alternada" },
+    update: {},
+    create: {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não balance o corpo para ajudar no movimento.",
       name: "Rosca de martelo alternada",
@@ -128,8 +152,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Tríceps Barra (polia alta)" },
+    update: {},
+    create: {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não arqueie as costas.",
       name: "Tríceps Barra (polia alta)",
@@ -137,8 +163,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Tríceps Corda" },
+    update: {},
+    create: {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não use um peso excessivo.",
       name: "Tríceps Corda",
@@ -146,8 +174,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Tríceps Francês Halteres" },
+    update: {},
+    create: {
       tips: "Use um peso leve para iniciar o movimento.",
       mistakes: "Não desça o halter além da cabeça.",
       name: "Tríceps Francês Halteres",
@@ -156,8 +186,10 @@ async function main() {
   });
 
   // Pernas
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Cadeira Extensora" },
+    update: {},
+    create: {
       tips: "Mantenha as costas apoiadas no banco durante o movimento.",
       mistakes: "Não levante os quadris do banco.",
       name: "Cadeira Extensora",
@@ -165,8 +197,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Leg Pres" },
+    update: {},
+    create: {
       tips:
         "Mantenha os joelhos alinhados com os dedos dos pés durante o movimento.",
       mistakes: "Não trave os joelhos no final do movimento.",
@@ -175,8 +209,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Adutor de Coxas" },
+    update: {},
+    create: {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não use um peso excessivo.",
       name: "Adutor de Coxas",
@@ -184,8 +220,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Hack" },
+    update: {},
+    create: {
       tips: "Mantenha as costas retas durante o movimento.",
       mistakes: "Não mova os joelhos para os lados.",
       name: "Hack",
@@ -193,8 +231,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Mesa Flexora" },
+    update: {},
+    create: {
       tips: "Mantenha as costas apoiadas no banco durante o movimento.",
       mistakes: "Não use um peso excessivo.",
       name: "Mesa Flexora",
@@ -202,8 +242,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Cadeira Flexora" },
+    update: {},
+    create: {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Cadeira Flexora",
@@ -211,8 +253,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Flexora em pé unilateral (Vertical)" },
+    update: {},
+    create: {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Flexora em pé unilateral (Vertical)",
@@ -220,8 +264,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Elevação Frontal com Kettlebel" },
+    update: {},
+    create: {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Elevação Frontal com Kettlebel",
@@ -229,8 +275,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Abdução de Quadril Máquina" },
+    update: {},
+    create: {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Abdução de Quadril Máquina",
@@ -238,8 +286,10 @@ async function main() {
     }
   });
 
-  await prisma.exercises.create({
-    data: {
+  await prisma.exercises.upsert({
+    where: { name: "Elevação de Quadril com Step" },
+    update: {},
+    create: {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Elevação de Quadril com Step",
@@ -247,8 +297,10 @@ async function main() {
     }
   });
 
-  await prisma.users.create({
-    data: {
+  await prisma.users.upsert({
+    where: { email: 'jr_acn@hotmail.com' },
+    update: {},
+    create: {
       id: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
       email: 'jr_acn@hotmail.com',
       name: 'Antonio',
@@ -256,32 +308,40 @@ async function main() {
     }
   });
 
-  await prisma.workoutsGroups.create({
-    data: {
+  await prisma.workoutsGroups.upsert({
+    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Peitos' } },
+    update: {},
+    create: {
       image: 'assets/images/supino_halteres.gif',
       name: 'Peitos',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }
   });
 
-  await prisma.workoutsGroups.create({
-    data: {
+  await prisma.workoutsGroups.upsert({
+    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Pernas' } },
+    update: {},
+    create: {
       image: 'assets/images/supino_halteres.gif',
       name: 'Pernas',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }
   });
 
-  await prisma.workoutsGroups.create({
-    data: {
+  await prisma.workoutsGroups.upsert({
+    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Ombros' } },
+    update: {},
+    create: {
       image: 'assets/images/supino_halteres.gif',
       name: 'Ombros',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }
   });
 
-  await prisma.workoutsGroups.create({
-    data: {
+  await prisma.workoutsGroups.upsert({
+    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Costas' } },
+    update: {},
+    create: {
       image: 'assets/images/supino_halteres.gif',
       name: 'Costas',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
