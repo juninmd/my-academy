@@ -21,5 +21,6 @@ export class CreateWorkoutsSessionsDto {
   readonly date: Date;
 
   @IsArray()
-  readonly Workouts: any[];
+  @IsOptional()
+  readonly Workouts?: any[];
 }

@@ -81,7 +81,7 @@ describe('Homologation (e2e)', () => {
 
   describe('1. Users & Auth', () => {
     it('should create a new student', () => {
-      const dto = {
+      const dto = { Workouts: [],
         id: 'user-1',
         name: 'Student One',
         email: 'student@test.com',
@@ -117,7 +117,7 @@ describe('Homologation (e2e)', () => {
 
   describe('3. Workouts', () => {
     it('should create a workout group', () => {
-      const dto = {
+      const dto = { Workouts: [],
         name: 'Treino A',
         image: 'image.jpg',
         userId: 'user-1',
@@ -143,7 +143,7 @@ describe('Homologation (e2e)', () => {
 
   describe('4. Sessions', () => {
     it('should register a workout session', () => {
-      const dto = {
+      const dto = { Workouts: [],
         workoutGroupId: 10,
         date: new Date().toISOString(),
       };
@@ -166,7 +166,7 @@ describe('Homologation (e2e)', () => {
 
   describe('5. Personal Trainer', () => {
     it('should link student to personal', () => {
-      const dto = {
+      const dto = { Workouts: [],
         studentUserId: 'user-1',
         personalUserId: 'personal-1',
       };
