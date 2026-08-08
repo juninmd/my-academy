@@ -248,7 +248,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
         data: {
           'workoutGroupId': workoutGroupId,
           'date': date.toIso8601String(),
-          'Workouts': workoutsData,
+          'workouts': workoutsData,
         },
       );
       return const Right(unit);

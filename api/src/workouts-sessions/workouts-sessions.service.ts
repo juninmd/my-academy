@@ -48,10 +48,10 @@ export class WorkoutsSessionsService {
     });
 
     if (
-      createworkoutsDto.Workouts &&
-      Array.isArray(createworkoutsDto.Workouts)
+      createworkoutsDto.workouts &&
+      Array.isArray(createworkoutsDto.workouts)
     ) {
-      for (const workout of createworkoutsDto.Workouts) {
+      for (const workout of createworkoutsDto.workouts) {
         if (!workout.exerciseId) continue;
 
         await this.prismaService.exerciseLog.create({

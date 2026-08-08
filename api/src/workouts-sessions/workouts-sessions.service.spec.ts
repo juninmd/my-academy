@@ -403,7 +403,7 @@ describe('WorkoutsSessionsService', () => {
       const createDto: CreateWorkoutsSessionsDto = {
         date: new Date(),
         workoutGroupId: 1,
-        Workouts: [
+        workouts: [
           {
             exerciseId: 10,
             notes: 'Test notes',
@@ -455,7 +455,7 @@ describe('WorkoutsSessionsService', () => {
       const createDto: CreateWorkoutsSessionsDto = {
         date: new Date(),
         workoutGroupId: 1,
-        Workouts: [
+        workouts: [
           {
             exerciseId: 11,
           },
