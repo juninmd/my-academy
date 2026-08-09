@@ -1,9 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional, IsNumber, IsDate, IsArray } from 'class-validator';
+import {
+  IsOptional,
+  IsNumber,
+  IsDate,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
+import { WorkoutSessionItemDto } from './workout-session-item.dto';
 
 export class CreateWorkoutsSessionsDto {
-  @ApiProperty({})
+  @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   readonly id?: number;
@@ -20,7 +27,10 @@ export class CreateWorkoutsSessionsDto {
   @Type(() => Date)
   readonly date: Date;
 
+  @ApiPropertyOptional({ type: [WorkoutSessionItemDto] })
   @IsArray()
   @IsOptional()
-  readonly workouts?: any[];
+  @ValidateNested({ each: true })
+  @Type(() => WorkoutSessionItemDto)
+  readonly workouts?: WorkoutSessionItemDto[];
 }
