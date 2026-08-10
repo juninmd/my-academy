@@ -76,14 +76,19 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
   _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>> signUpWithEmail(
     String? email,
     String? password,
+    String? role,
   ) =>
       (super.noSuchMethod(
-            Invocation.method(#signUpWithEmail, [email, password]),
+            Invocation.method(#signUpWithEmail, [email, password, role]),
             returnValue:
                 _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
                   _FakeEither_0<_i5.Failure, _i6.UserEntity>(
                     this,
-                    Invocation.method(#signUpWithEmail, [email, password]),
+                    Invocation.method(#signUpWithEmail, [
+                      email,
+                      password,
+                      role,
+                    ]),
                   ),
                 ),
           )

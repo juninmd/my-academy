@@ -39,9 +39,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserEntity>> signUpWithEmail(
     String email,
     String password,
+    String? role,
   ) async {
     try {
-      final user = await _remoteDataSource.signUpWithEmail(email, password);
+      final user = await _remoteDataSource.signUpWithEmail(email, password, role);
       return Right(user);
     } on Failure catch (e) {
       return Left(e);

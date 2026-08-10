@@ -21,7 +21,7 @@ export class UsersService {
       throw new ConflictException('User already exists');
     }
 
-    const { id, name, email, photoUrl, telegramId } = createUsersDto;
+    const { id, name, email, photoUrl, telegramId, role } = createUsersDto;
 
     return this.prismaService.users.create({
       data: {
@@ -30,6 +30,7 @@ export class UsersService {
         email,
         photoUrl,
         telegramId,
+        ...(role && { role }),
       },
     });
   }

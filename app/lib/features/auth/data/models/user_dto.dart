@@ -27,8 +27,8 @@ class UserDto extends UserEntity {
   Map<String, dynamic> toJson() => {
     'id': id,
     'email': email,
-    'name': name,
-    'photoUrl': photoUrl,
-    'role': role,
+    if (name != null) 'name': name,
+    if (photoUrl != null) 'photoUrl': photoUrl,
+    if (role != null) 'role': role,
   };
 }
