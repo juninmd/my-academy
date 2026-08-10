@@ -5,7 +5,9 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsEnum,
 } from 'class-validator';
+import { Role } from '@prisma/client';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -52,4 +54,14 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   telegramId?: string;
+
+  @ApiProperty({
+    required: false,
+    enum: Role,
+    example: 'STUDENT',
+    description: 'User role',
+  })
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
 }

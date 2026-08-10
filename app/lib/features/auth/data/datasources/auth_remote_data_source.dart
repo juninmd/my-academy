@@ -9,7 +9,7 @@ import '../models/user_dto.dart';
 abstract class AuthRemoteDataSource {
   Future<UserDto> signInWithGoogle();
   Future<UserDto> signInWithEmail(String email, String password);
-  Future<UserDto> signUpWithEmail(String email, String password);
+  Future<UserDto> signUpWithEmail(String email, String password, String? role);
   Future<void> signOut();
   Future<UserDto?> getCurrentUser();
   Future<String> getAuthToken();
@@ -127,7 +127,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserDto> signUpWithEmail(String email, String password) async {
+  Future<UserDto> signUpWithEmail(String email, String password, String? role) async {
     try {
       final UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -149,6 +149,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         email: user.email!,
         name: user.displayName ?? 'Sem nome',
         photoUrl: user.photoURL,
+        role: role,
       );
 
       try {
