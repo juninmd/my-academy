@@ -11,7 +11,8 @@ import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 
 class FakeAuthNotifier extends AuthNotifier {
   @override
-  Future<UserEntity?> build() async => const UserEntity(id: '1', email: 'test@test.com', name: 'Test User');
+  Future<UserEntity?> build() async =>
+      const UserEntity(id: '1', email: 'test@test.com', name: 'Test User');
 }
 
 class FakeWorkoutCreateNotifier extends WorkoutCreateNotifier {
