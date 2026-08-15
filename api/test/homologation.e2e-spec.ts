@@ -11,7 +11,7 @@ describe('Homologation (e2e)', () => {
   const mockPrisma = {
     users: {
       findUnique: jest.fn(),
-      findUniqueOrThrow: jest.fn(),
+      findFirstOrThrow: jest.fn(),
       create: jest.fn(),
       findMany: jest.fn(),
       update: jest.fn(),
@@ -26,7 +26,7 @@ describe('Homologation (e2e)', () => {
       create: jest.fn(),
       findMany: jest.fn(),
       findUnique: jest.fn(),
-      findUniqueOrThrow: jest.fn(),
+      findFirstOrThrow: jest.fn(),
     },
     workoutsSessions: {
       create: jest.fn(),
@@ -147,11 +147,11 @@ describe('Homologation (e2e)', () => {
         workoutGroupId: 10,
         date: new Date().toISOString(),
       };
-      mockPrisma.users.findUniqueOrThrow.mockResolvedValue({
+      mockPrisma.users.findFirstOrThrow.mockResolvedValue({
         id: 'user-1',
         telegramId: '123',
       });
-      mockPrisma.workoutsGroups.findUniqueOrThrow.mockResolvedValue({
+      mockPrisma.workoutsGroups.findFirstOrThrow.mockResolvedValue({
         id: 10,
         name: 'Treino A',
       });

@@ -15,7 +15,7 @@ export class WorkoutsSessionsService {
   ) {}
 
   async create(createworkoutsDto: CreateWorkoutsSessionsDto, userId: string) {
-    const user = await this.prismaService.users.findUniqueOrThrow({
+    const user = await this.prismaService.users.findFirstOrThrow({
       where: { id: userId },
     });
     if (user.telegramId) {
@@ -26,7 +26,7 @@ export class WorkoutsSessionsService {
         .toString()
         .padStart(2, '0')}/${date.getUTCFullYear()}`;
       const workoutGroup =
-        await this.prismaService.workoutsGroups.findUniqueOrThrow({
+        await this.prismaService.workoutsGroups.findFirstOrThrow({
           where: { id: createworkoutsDto.workoutGroupId },
         });
       const message = `${dateText} - ${workoutGroup.name}`;

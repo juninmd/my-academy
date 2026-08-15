@@ -18,10 +18,10 @@ describe('WorkoutsSessionsService', () => {
           provide: PrismaService,
           useValue: {
             users: {
-              findUniqueOrThrow: jest.fn(),
+              findFirstOrThrow: jest.fn(),
             },
             workoutsGroups: {
-              findUniqueOrThrow: jest.fn(),
+              findFirstOrThrow: jest.fn(),
               findMany: jest.fn(),
             },
             workoutSessions: {
@@ -69,8 +69,8 @@ describe('WorkoutsSessionsService', () => {
       const group = { id: 1, name: 'Legs' };
       const session = { id: 1, ...createDto };
 
-      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
-      (prisma.workoutsGroups.findUniqueOrThrow as jest.Mock).mockResolvedValue(
+      (prisma.users.findFirstOrThrow as jest.Mock).mockResolvedValue(user);
+      (prisma.workoutsGroups.findFirstOrThrow as jest.Mock).mockResolvedValue(
         group,
       );
       (telegramService.postChannelMessage as jest.Mock).mockResolvedValue(
@@ -88,7 +88,7 @@ describe('WorkoutsSessionsService', () => {
       const user = { id: userId, telegramId: null };
       const session = { id: 1, ...createDto };
 
-      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
+      (prisma.users.findFirstOrThrow as jest.Mock).mockResolvedValue(user);
       (prisma.workoutSessions.create as jest.Mock).mockResolvedValue(session);
 
       await service.create(createDto as any, userId);
@@ -101,8 +101,8 @@ describe('WorkoutsSessionsService', () => {
       const group = { id: 1, name: 'Legs' };
       const session = { id: 1, ...createDto };
 
-      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
-      (prisma.workoutsGroups.findUniqueOrThrow as jest.Mock).mockResolvedValue(
+      (prisma.users.findFirstOrThrow as jest.Mock).mockResolvedValue(user);
+      (prisma.workoutsGroups.findFirstOrThrow as jest.Mock).mockResolvedValue(
         group,
       );
       (telegramService.postChannelMessage as jest.Mock).mockRejectedValue(
@@ -420,7 +420,7 @@ describe('WorkoutsSessionsService', () => {
       };
 
       const user = { id: userId, telegramId: null } as any;
-      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
+      (prisma.users.findFirstOrThrow as jest.Mock).mockResolvedValue(user);
       const session = { id: 100, date: createDto.date, workoutGroupId: 1 };
       (prisma.workoutSessions.create as jest.Mock).mockResolvedValue(session);
 
@@ -463,7 +463,7 @@ describe('WorkoutsSessionsService', () => {
       };
 
       const user = { id: userId, telegramId: null } as any;
-      (prisma.users.findUniqueOrThrow as jest.Mock).mockResolvedValue(user);
+      (prisma.users.findFirstOrThrow as jest.Mock).mockResolvedValue(user);
       const session = { id: 100, date: createDto.date, workoutGroupId: 1 };
       (prisma.workoutSessions.create as jest.Mock).mockResolvedValue(session);
 
