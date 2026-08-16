@@ -23,15 +23,23 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     _apiClient.setAuthToken(_mockToken);
 
-    logger.i(
-      '[MockAuthRemoteDataSource] Mock user signed in: mock@example.com',
-    );
-    return const UserDto(
+    final userDto = const UserDto(
       id: _mockUserId,
       email: 'mock@example.com',
       name: 'Mock User',
       photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
     );
+
+    try {
+      await _apiClient.post('/users', data: userDto.toJson());
+    } catch (e) {
+      logger.w('Failed to sync mock user with backend: $e');
+    }
+
+    logger.i(
+      '[MockAuthRemoteDataSource] Mock user signed in: mock@example.com',
+    );
+    return userDto;
   }
 
   @override
@@ -43,12 +51,16 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     _apiClient.setAuthToken(_mockToken);
 
-    return UserDto(
+    final userDto = UserDto(
       id: _mockUserId,
       email: email,
       name: 'Mock User',
       photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
     );
+
+    // No post to /users in real implementation either for signInWithEmail
+
+    return userDto;
   }
 
   @override
@@ -60,12 +72,21 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     _apiClient.setAuthToken(_mockToken);
 
-    return UserDto(
+    final userDto = UserDto(
       id: _mockUserId,
       email: email,
       name: 'Mock User',
       photoUrl: 'https://i.pravatar.cc/150?u=$_mockUserId',
+      role: role,
     );
+
+    try {
+      await _apiClient.post('/users', data: userDto.toJson());
+    } catch (e) {
+      logger.w('Failed to sync mock user with backend: $e');
+    }
+
+    return userDto;
   }
 
   @override
