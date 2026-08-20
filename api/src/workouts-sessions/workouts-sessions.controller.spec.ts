@@ -47,6 +47,21 @@ describe('WorkoutsSessionsController', () => {
     expect(service.create).toHaveBeenCalledWith(dto, 'u1');
   });
 
+  it('create with fallback ids', async () => {
+    const dto = { workoutsGroupId: 1, duration: 60 };
+    const req1 = { user: { user_id: 'u2' } };
+    await controller.create(dto as any, req1);
+    expect(service.create).toHaveBeenCalledWith(dto, 'u2');
+
+    const req2 = { user: { id: 'u3' } };
+    await controller.create(dto as any, req2);
+    expect(service.create).toHaveBeenCalledWith(dto, 'u3');
+
+    const req3 = { user: [{ id: 'u4' }] };
+    await controller.create(dto as any, req3);
+    expect(service.create).toHaveBeenCalledWith(dto, 'u4');
+  });
+
   it('findAll', async () => {
     await controller.findAll('u1', { year: '2023', month: '1' });
     expect(service.findAll).toHaveBeenCalledWith('u1', 2023, 1);

@@ -42,7 +42,11 @@ class AuthRepositoryImpl implements AuthRepository {
     String? role,
   ) async {
     try {
-      final user = await _remoteDataSource.signUpWithEmail(email, password, role);
+      final user = await _remoteDataSource.signUpWithEmail(
+        email,
+        password,
+        role,
+      );
       return Right(user);
     } on Failure catch (e) {
       return Left(e);
