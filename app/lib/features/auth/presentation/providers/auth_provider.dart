@@ -66,7 +66,11 @@ class AuthNotifier extends _$AuthNotifier {
     );
   }
 
-  Future<void> signUpWithEmail(String email, String password, {String? role}) async {
+  Future<void> signUpWithEmail(
+    String email,
+    String password, {
+    String? role,
+  }) async {
     state = const AsyncValue.loading();
     final repository = ref.read(authRepositoryProvider);
     final result = await repository.signUpWithEmail(email, password, role);

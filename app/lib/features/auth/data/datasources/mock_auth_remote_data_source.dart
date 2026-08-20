@@ -64,7 +64,11 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserDto> signUpWithEmail(String email, String password, String? role) async {
+  Future<UserDto> signUpWithEmail(
+    String email,
+    String password,
+    String? role,
+  ) async {
     logger.i(
       '[MockAuthRemoteDataSource] signUpWithEmail() called - using MOCK auth',
     );

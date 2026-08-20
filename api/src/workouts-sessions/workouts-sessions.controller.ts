@@ -25,9 +25,13 @@ export class WorkoutsSessionsController {
     @Body() createWorkoutsSessionsDto: CreateWorkoutsSessionsDto,
     @Req() req,
   ) {
+    let userId = req.user?.uid || req.user?.user_id || req.user?.id;
+    if (!userId && Array.isArray(req.user) && req.user.length > 0) {
+      userId = req.user[0].id;
+    }
     return this.workoutsSessionsService.create(
       createWorkoutsSessionsDto,
-      req.user.uid,
+      userId,
     );
   }
 
