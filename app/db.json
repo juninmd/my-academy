@@ -4,7 +4,7 @@
             "id": 1,
             "name": "Peito e Tríceps",
             "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
-            "image": "assets/images/supino_inclinado_barra.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/supino-inclinado-barra.webp",
             "workouts": [
                 {
                     "id": 101,
@@ -14,7 +14,7 @@
                     "exercise": {
                         "id": 1,
                         "name": "Supino Reto",
-                        "image": "assets/images/supino_halteres.gif",
+                        "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/supino-halteres.webp",
                         "description": "Peito",
                         "tips": "Mantenha os cotovelos a 45 graus",
                         "mistakes": "Arquear muito as costas"
@@ -28,7 +28,7 @@
                     "exercise": {
                         "id": 4,
                         "name": "Tríceps Corda",
-                        "image": "assets/images/tricepes_corda.gif",
+                        "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/triceps-corda.webp",
                         "description": "Tríceps",
                         "tips": "Estique todo o braço",
                         "mistakes": "Mexer o cotovelo"
@@ -40,14 +40,14 @@
             "id": 2,
             "name": "Costas e Bíceps",
             "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
-            "image": "assets/images/remada_alta.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/remada-alta.webp",
             "workouts": []
         },
         {
             "id": 3,
             "name": "Pernas",
             "userId": "db6i035Vjtb77a7cBDnXQVPd3oL2",
-            "image": "assets/images/leg_press.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/leg-press.webp",
             "workouts": []
         }
     ],
@@ -55,7 +55,7 @@
         {
             "id": 1,
             "name": "Supino Reto",
-            "image": "assets/images/supino_halteres.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/supino-halteres.webp",
             "description": "Peito",
             "tips": "Mantenha os cotovelos a 45 graus",
             "mistakes": "Arquear muito as costas"
@@ -63,7 +63,7 @@
         {
             "id": 2,
             "name": "Agachamento",
-            "image": "assets/images/hack_machine.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/hack.webp",
             "description": "Pernas",
             "tips": "Joelho não passa da ponta do pé",
             "mistakes": "Curvar as costas"
@@ -71,7 +71,7 @@
         {
             "id": 3,
             "name": "Puxada Alta",
-            "image": "assets/images/remada_alta.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/remada-alta.webp",
             "description": "Costas",
             "tips": "Tronco levemente inclinado",
             "mistakes": "Balançar o corpo"
@@ -79,7 +79,7 @@
         {
             "id": 4,
             "name": "Tríceps Corda",
-            "image": "assets/images/tricepes_corda.gif",
+            "image": "https://br-se1.magaluobjects.com/fast-dl-cs/my-academy/exercises/v1/triceps-corda.webp",
             "description": "Tríceps",
             "tips": "Estique todo o braço",
             "mistakes": "Mexer o cotovelo"
