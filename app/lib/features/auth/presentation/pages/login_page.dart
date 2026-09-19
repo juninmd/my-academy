@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
+import '../widgets/login_background.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -45,26 +45,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // 1. Dynamic Background
-          const _BackgroundCarousel(),
-
-          // 2. Gradient Overlay
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withValues(alpha: 0.3),
-                    Colors.black.withValues(alpha: 0.6),
-                    Colors.black.withValues(alpha: 0.9),
-                  ],
-                  stops: const [0.0, 0.5, 1.0],
-                ),
-              ),
-            ),
-          ),
+          const LoginBackground(),
 
           // 3. Content
           SafeArea(
@@ -269,30 +250,4 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
-}
-
-class _BackgroundCarousel extends StatelessWidget {
-  const _BackgroundCarousel();
-
-  static const List<String> _images = [
-    'assets/images/ia/a.jpg',
-    'assets/images/ia/b.jpg',
-    'assets/images/ia/c.jpg',
-    'assets/images/bg1.jpg',
-  ];
-
-  @override
-  Widget build(BuildContext context) => Positioned.fill(
-    child: Swiper(
-      itemBuilder:
-          (context, index) => Image.asset(_images[index], fit: BoxFit.cover),
-      itemCount: _images.length,
-      autoplay: true,
-      autoplayDelay: 6000,
-      duration: 1500,
-      curve: Curves.easeInOut,
-      pagination: null,
-      control: null,
-    ),
-  );
 }

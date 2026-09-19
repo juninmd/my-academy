@@ -29,8 +29,10 @@ void main() {
       ),
     );
 
-    // Use pump with duration instead of pumpAndSettle because Swiper has infinite animation
     await tester.pump(const Duration(seconds: 1));
+
+    // The background is a neutral gradient: no photos of people.
+    expect(find.byType(Image), findsNothing);
 
     // Verify Title
     expect(find.text('MY ACADEMY'), findsOneWidget);
