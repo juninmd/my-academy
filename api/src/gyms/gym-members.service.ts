@@ -16,9 +16,18 @@ import {
 
 const memberSelect = { id: true, name: true, email: true, photoUrl: true };
 
+/** Calendar months, clamped to the target month's last day (Jan 31 + 1 = Feb 28). */
 export const addMonths = (date: Date, months: number): Date => {
   const result = new Date(date);
+  const day = result.getDate();
+  result.setDate(1);
   result.setMonth(result.getMonth() + months);
+  const lastDay = new Date(
+    result.getFullYear(),
+    result.getMonth() + 1,
+    0,
+  ).getDate();
+  result.setDate(Math.min(day, lastDay));
   return result;
 };
 

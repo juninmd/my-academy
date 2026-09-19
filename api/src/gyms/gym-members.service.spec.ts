@@ -67,7 +67,7 @@ describe('GymMembersService', () => {
         userId: 'u',
         planId: 2,
         startDate: now,
-        endDate: addMonths(now, 3),
+        endDate: new Date(2026, 3, 30),
         payments: { create: { userId: 'u', amount: 119.9 } },
       });
     });
@@ -75,6 +75,12 @@ describe('GymMembersService', () => {
 
   it('adds calendar months', () => {
     expect(addMonths(new Date(2026, 0, 15), 3)).toEqual(new Date(2026, 3, 15));
+  });
+
+  it('clamps month-end starts instead of overflowing into the next month', () => {
+    expect(addMonths(new Date(2026, 0, 31), 1)).toEqual(new Date(2026, 1, 28));
+    expect(addMonths(new Date(2028, 0, 31), 1)).toEqual(new Date(2028, 1, 29));
+    expect(addMonths(new Date(2026, 11, 31), 2)).toEqual(new Date(2027, 1, 28));
   });
 
   it('lists members and payments scoped to the gym with pagination', async () => {
