@@ -9,7 +9,7 @@ class WorkoutSeriesDialog extends HookWidget {
     super.key,
   });
   final String exerciseName;
-  final Function(int reps, int weight, int rest) onSave;
+  final Function(int reps, double weight, int rest) onSave;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class WorkoutSeriesDialog extends HookWidget {
           ),
           TextField(
             controller: weightController,
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(labelText: 'Carga (kg)'),
           ),
           TextField(
@@ -47,7 +47,9 @@ class WorkoutSeriesDialog extends HookWidget {
         ElevatedButton(
           onPressed: () {
             final reps = int.tryParse(repsController.text) ?? 0;
-            final weight = int.tryParse(weightController.text) ?? 0;
+            final weight =
+                double.tryParse(weightController.text.replaceAll(',', '.')) ??
+                0;
             final rest = int.tryParse(restController.text) ?? 0;
             onSave(reps, weight, rest);
             Navigator.pop(context);
@@ -63,7 +65,7 @@ class WorkoutSeriesDialog extends HookWidget {
     super.debugFillProperties(properties);
     properties.add(StringProperty('exerciseName', exerciseName));
     properties.add(
-      ObjectFlagProperty<Function(int reps, int weight, int rest)>.has(
+      ObjectFlagProperty<Function(int reps, double weight, int rest)>.has(
         'onSave',
         onSave,
       ),

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/exceptions/failure.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/repositories/student_repository.dart';
 import '../../domain/entities/student_entity.dart';
 import 'student_details_page.dart';
+import '../../../../core/widgets/user_avatar.dart';
 
 class StudentsPage extends ConsumerWidget {
   const StudentsPage({super.key});
@@ -84,7 +86,7 @@ class StudentsPage extends ConsumerWidget {
                 children: [
                   Icon(Icons.error_outline, size: 48, color: colorScheme.error),
                   const SizedBox(height: 16),
-                  Text('Erro: $e'),
+                  Text(e is Failure ? e.message : 'Erro: $e'),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => ref.invalidate(studentsProvider(user.id)),
@@ -127,27 +129,7 @@ class _StudentListTile extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: Hero(
           tag: 'student-${student.id}',
-          child: CircleAvatar(
-            radius: 28,
-            backgroundColor: colorScheme.primaryContainer,
-            backgroundImage:
-                student.photoUrl != null
-                    ? NetworkImage(student.photoUrl!)
-                    : null,
-            child:
-                student.photoUrl == null
-                    ? Text(
-                      student.name.isNotEmpty
-                          ? student.name[0].toUpperCase()
-                          : '?',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onPrimaryContainer,
-                      ),
-                    )
-                    : null,
-          ),
+          child: UserAvatar(name: student.name, photoUrl: student.photoUrl),
         ),
         title: Text(
           student.name,

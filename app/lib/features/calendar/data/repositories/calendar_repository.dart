@@ -40,6 +40,7 @@ class CalendarRepositoryImpl implements CalendarRepository {
                 date: DateTime.parse(json['date']),
                 checked: json['checked'] ?? false,
                 userId: json['userId'] ?? userId,
+                createdAt: DateTime.tryParse(json['createdAt'] ?? ''),
               ),
             )
             .toList(),

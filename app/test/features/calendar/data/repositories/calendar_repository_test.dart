@@ -38,7 +38,29 @@ void main() {
       result.fold((l) => fail('should be right: $l'), (r) {
         expect(r.length, 1);
         expect(r[0].id, 1);
+        expect(r[0].createdAt, isNull);
       });
+    });
+
+    test('keeps the logging time, since date only carries the day', () async {
+      when(
+        mockApiClient.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenAnswer(
+        (_) async => [
+          {
+            'id': 2,
+            'workoutGroupId': 1,
+            'date': '2023-01-01T00:00:00.000Z',
+            'createdAt': '2023-01-01T22:03:50.000Z',
+          },
+        ],
+      );
+
+      final result = await repository.getSessions('u1', 1, 2023);
+
+      final session = result.getOrElse(() => []).single;
+      expect(session.createdAt, DateTime.utc(2023, 1, 1, 22, 3, 50));
+      expect(session.userId, 'u1');
     });
 
     test('should return failure when exception', () async {

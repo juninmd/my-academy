@@ -63,7 +63,7 @@ final class UsersProvider
     with $FutureModifier<List<UserEntity>>, $FutureProvider<List<UserEntity>> {
   UsersProvider._({
     required UsersFamily super.from,
-    required String? super.argument,
+    required String super.argument,
   }) : super(
          retry: null,
          name: r'usersProvider',
@@ -90,7 +90,7 @@ final class UsersProvider
 
   @override
   FutureOr<List<UserEntity>> create(Ref ref) {
-    final argument = this.argument as String?;
+    final argument = this.argument as String;
     return users(ref, email: argument);
   }
 
@@ -105,10 +105,10 @@ final class UsersProvider
   }
 }
 
-String _$usersHash() => r'5adcda6d7e76238044c6e695bfce5de6bbb658b9';
+String _$usersHash() => r'990df60807821a16659b3b4f25667302ecdd7148';
 
 final class UsersFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<UserEntity>>, String?> {
+    with $FunctionalFamilyOverride<FutureOr<List<UserEntity>>, String> {
   UsersFamily._()
     : super(
         retry: null,
@@ -118,7 +118,7 @@ final class UsersFamily extends $Family
         isAutoDispose: true,
       );
 
-  UsersProvider call({String? email}) =>
+  UsersProvider call({required String email}) =>
       UsersProvider._(argument: email, from: this);
 
   @override

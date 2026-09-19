@@ -5,6 +5,7 @@ import '../../../../core/network/dio_provider.dart';
 import '../../../../utils/constants.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
 import '../../data/datasources/mock_auth_remote_data_source.dart';
+import '../../data/datasources/user_profile_sync.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -32,8 +33,14 @@ AuthRemoteDataSource authRemoteDataSource(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-AuthRepository authRepository(Ref ref) =>
-    AuthRepositoryImpl(ref.watch(authRemoteDataSourceProvider));
+UserProfileSync userProfileSync(Ref ref) =>
+    UserProfileSync(ref.watch(apiClientProvider));
+
+@Riverpod(keepAlive: true)
+AuthRepository authRepository(Ref ref) => AuthRepositoryImpl(
+  ref.watch(authRemoteDataSourceProvider),
+  ref.watch(userProfileSyncProvider),
+);
 
 @Riverpod(keepAlive: true)
 class AuthNotifier extends _$AuthNotifier {
@@ -86,6 +93,15 @@ class AuthNotifier extends _$AuthNotifier {
     final repository = ref.read(authRepositoryProvider);
     await repository.signOut();
     state = const AsyncValue.data(null);
+  }
+
+  Future<void> updateRole(String role) async {
+    final user = state.value;
+    if (user == null) return;
+    final updated = await ref
+        .read(userProfileSyncProvider)
+        .updateRole(user.id, role);
+    state = AsyncValue.data(updated);
   }
 
   Future<void> updateName(String name) async {

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class OneRepMaxDisplay extends StatelessWidget {
   const OneRepMaxDisplay({required this.weight, required this.reps, super.key});
 
-  final int weight;
+  final double weight;
   final int reps;
 
   int get _estimated1RM {
     if (reps == 0 || weight == 0) return 0;
-    if (reps == 1) return weight;
+    if (reps == 1) return weight.round();
     // Epley formula
     return (weight * (1 + reps / 30)).round();
   }

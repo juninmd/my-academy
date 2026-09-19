@@ -262,7 +262,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       'exerciseId': workout.exerciseId,
       if (workout.methodId != null) 'methodId': workout.methodId,
       if (workout.description != null) 'description': workout.description,
-      'workoutSeries': workout.series.map((s) => s.toJson()).toList(),
+      'workoutSeries': workout.series.map((s) => s.toNestedJson()).toList(),
     };
   }
 
@@ -272,7 +272,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       'exerciseId': workout.exerciseId,
       if (workout.methodId != null) 'methodId': workout.methodId,
       if (workout.description != null) 'description': workout.description,
-      'workoutSeries': workout.series.map((s) => s.toJson()).toList(),
+      'workoutSeries': workout.series.map((s) => s.toNestedJson()).toList(),
     };
   }
 }

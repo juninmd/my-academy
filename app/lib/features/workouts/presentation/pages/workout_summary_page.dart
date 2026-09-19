@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../calendar/data/repositories/calendar_repository.dart';
+import '../../../home/presentation/providers/home_provider.dart';
 import '../../domain/entities/session_log_entity.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/confetti_overlay.dart';
@@ -23,7 +25,7 @@ class WorkoutSummaryPage extends HookConsumerWidget {
   final Map<int, ExerciseSessionLog> sessionLogs;
   final List<String> newRecords;
 
-  String _getWeightEquivalence(int weightKg) {
+  String _getWeightEquivalence(double weightKg) {
     if (weightKg < 100) return 'um Lobo Grande 🐺';
     if (weightKg < 500) return 'um Urso Pardo 🐻';
     if (weightKg < 1000) return 'um Piano de Cauda 🎹';
@@ -37,7 +39,7 @@ class WorkoutSummaryPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final intensity = useState(3.0);
     int totalSets = 0;
-    int totalWeight = 0;
+    double totalWeight = 0;
 
     for (final log in sessionLogs.values) {
       for (final set in log.setLogs.values) {
@@ -154,7 +156,10 @@ class WorkoutSummaryPage extends HookConsumerWidget {
                             await Share.share(text);
                           },
                           icon: const Icon(Icons.share),
-                          label: const Text('Compartilhar'),
+                          label: const FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text('Compartilhar'),
+                          ),
                         ),
                       ),
                     ),
@@ -188,9 +193,14 @@ class WorkoutSummaryPage extends HookConsumerWidget {
                                   }
                                 },
                                 (_) {
-                                  if (context.mounted) {
-                                    context.go('/home');
-                                  }
+                                  if (!context.mounted) return;
+                                  // Dashboard, calendar and history read these.
+                                  ref
+                                    ..invalidate(workoutSummaryProvider)
+                                    ..invalidate(workoutSessionsProvider)
+                                    ..invalidate(allExerciseLogsProvider)
+                                    ..invalidate(exerciseLogsProvider);
+                                  context.go('/home');
                                 },
                               );
                             } catch (e) {

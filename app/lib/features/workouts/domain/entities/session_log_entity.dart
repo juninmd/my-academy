@@ -11,7 +11,7 @@ class SetLogState {
   });
 
   int actualReps;
-  int actualWeight;
+  double actualWeight;
   int? rpe;
   bool isCompleted;
   SetType type;

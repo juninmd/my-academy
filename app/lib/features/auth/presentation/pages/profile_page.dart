@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
+import '../../../../core/widgets/user_avatar.dart';
+import '../../../gym/presentation/widgets/memberships_card.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -67,16 +69,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: CircleAvatar(
+                  child: UserAvatar(
+                    name: user.name ?? user.email,
+                    photoUrl: user.photoUrl,
                     radius: 50,
-                    backgroundImage:
-                        user.photoUrl != null
-                            ? NetworkImage(user.photoUrl!)
-                            : null,
-                    child:
-                        user.photoUrl == null
-                            ? const Icon(Icons.person, size: 50)
-                            : null,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -98,6 +94,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ),
                     const SizedBox(width: 8),
                     IconButton(
+                      tooltip: _isEditing ? 'Salvar nome' : 'Editar nome',
                       icon: Icon(_isEditing ? Icons.check : Icons.edit),
                       onPressed: () async {
                         if (_isEditing) {
@@ -126,6 +123,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
                 const SizedBox(height: 8),
                 Text(user.email, style: const TextStyle(fontSize: 16)),
+                const MembershipsCard(),
               ],
             ),
           );

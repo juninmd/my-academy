@@ -4,7 +4,8 @@ import 'package:my_academy/features/workouts/presentation/widgets/workout_series
 
 void main() {
   testWidgets('WorkoutSeriesDialog collects data', (tester) async {
-    int? r, w, t;
+    int? r, t;
+    double? w;
     await tester.pumpWidget(
       MaterialApp(
         home: WorkoutSeriesDialog(
@@ -21,7 +22,10 @@ void main() {
     expect(find.text('Configurar Squat'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextField, 'Repetições'), '10');
-    await tester.enterText(find.widgetWithText(TextField, 'Carga (kg)'), '100');
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Carga (kg)'),
+      '22,5',
+    );
     await tester.enterText(
       find.widgetWithText(TextField, 'Descanso (s)'),
       '90',
@@ -31,7 +35,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(r, 10);
-    expect(w, 100);
+    expect(w, 22.5);
     expect(t, 90);
   });
 }

@@ -11,7 +11,7 @@ class SetLogEntity extends Equatable {
   });
 
   final int reps;
-  final int weight;
+  final double weight;
   final int? rpe;
   final SetType type;
 
@@ -30,7 +30,7 @@ class SetLogEntity extends Equatable {
   factory SetLogEntity.fromJson(Map<String, dynamic> json) {
     return SetLogEntity(
       reps: json['reps'] as int,
-      weight: json['weight'] as int,
+      weight: (json['weight'] as num).toDouble(),
       rpe: json['rpe'] as int?,
       type:
           json['type'] != null

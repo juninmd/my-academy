@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
+import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
 import 'package:my_academy/features/home/presentation/pages/home_shell_page.dart';
 
 @GenerateNiceMocks([MockSpec<StatefulNavigationShell>()])
@@ -13,40 +16,72 @@ class _DummyState extends State<StatefulWidget> {
   Widget build(BuildContext context) => const SizedBox.shrink();
 }
 
+class _FakeAuthNotifier extends AuthNotifier {
+  _FakeAuthNotifier(this.role);
+  final String role;
+
+  @override
+  Future<UserEntity?> build() async =>
+      UserEntity(id: 'u1', email: 'u1@myacademy.dev', role: role);
+}
+
 void main() {
-  late MockStatefulNavigationShell mockShell;
+  late MockStatefulNavigationShell shell;
 
   setUp(() {
-    mockShell = MockStatefulNavigationShell();
+    shell = MockStatefulNavigationShell();
+    when(shell.currentIndex).thenReturn(0);
+    when(shell.createElement()).thenAnswer((_) => StatefulElement(shell));
+    when(shell.createState()).thenAnswer((_) => _DummyState());
   });
 
-  testWidgets('HomeShellPage displays navigation bar', (tester) async {
-    when(mockShell.currentIndex).thenReturn(0);
-
-    // MockStatefulNavigationShell causes a NoSuchMethodError when pumped directly
-    // because its framework lifecycle methods are mocked (and null by default).
-    // Instead of using the mock shell, we will use a test widget that uses
-    // a real widget to represent the shell. But to test what we want, we only
-    // care about the bottom navigation bar working.
-
-    // Instead of using mockShell in HomeShellPage directly for pump,
-    // let's test a slightly refactored scenario, or just test the
-    // navigation behavior directly.
-    when(mockShell.key).thenReturn(null);
-    when(
-      mockShell.createElement(),
-    ).thenAnswer((_) => StatefulElement(mockShell));
-    when(mockShell.createState()).thenAnswer((_) => _DummyState());
-
+  Future<void> pumpShell(WidgetTester tester, String role, Size size) async {
+    tester.view.physicalSize = size;
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(
-      MaterialApp(home: HomeShellPage(navigationShell: mockShell)),
+      ProviderScope(
+        overrides: [
+          authNotifierProvider.overrideWith(() => _FakeAuthNotifier(role)),
+        ],
+        child: MaterialApp(home: HomeShellPage(navigationShell: shell)),
+      ),
     );
+    await tester.pump();
+  }
 
-    expect(find.text('Dashboard'), findsOneWidget);
-    expect(find.text('Treinos'), findsOneWidget);
+  testWidgets('student on a phone gets a bottom bar with training tabs', (
+    tester,
+  ) async {
+    await pumpShell(tester, 'STUDENT', const Size(400, 800));
+
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(NavigationRail), findsNothing);
     expect(find.text('Progresso'), findsOneWidget);
+    expect(find.text('Academia'), findsNothing);
 
     await tester.tap(find.text('Treinos'));
-    verify(mockShell.goBranch(1, initialLocation: false));
+    verify(shell.goBranch(1, initialLocation: false));
+  });
+
+  testWidgets('gym owner on desktop gets an extended rail led by the gym', (
+    tester,
+  ) async {
+    await pumpShell(tester, 'ADMIN', const Size(1300, 900));
+
+    final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+    expect(rail.extended, isTrue);
+    expect(find.byType(NavigationBar), findsNothing);
+    expect(find.text('Academia'), findsOneWidget);
+    expect(find.text('Progresso'), findsNothing);
+  });
+
+  testWidgets('personal trainer sees the students tab', (tester) async {
+    await pumpShell(tester, 'PERSONAL', const Size(900, 800));
+
+    final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+    expect(rail.extended, isFalse);
+    await tester.tap(find.text('Alunos'));
+    verify(shell.goBranch(5, initialLocation: false));
   });
 }

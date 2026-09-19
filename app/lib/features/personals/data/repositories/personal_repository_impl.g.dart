@@ -72,7 +72,7 @@ final class PersonalsProvider
         $FutureProvider<List<PersonalEntity>> {
   PersonalsProvider._({
     required PersonalsFamily super.from,
-    required String? super.argument,
+    required String super.argument,
   }) : super(
          retry: null,
          name: r'personalsProvider',
@@ -99,7 +99,7 @@ final class PersonalsProvider
 
   @override
   FutureOr<List<PersonalEntity>> create(Ref ref) {
-    final argument = this.argument as String?;
+    final argument = this.argument as String;
     return personals(ref, personalUserId: argument);
   }
 
@@ -114,10 +114,10 @@ final class PersonalsProvider
   }
 }
 
-String _$personalsHash() => r'1eb490fe6a4eda4769a06e3fafd773df8984efb1';
+String _$personalsHash() => r'41b98da819328a584c061e3cc1e78a5c80b5cb15';
 
 final class PersonalsFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<PersonalEntity>>, String?> {
+    with $FunctionalFamilyOverride<FutureOr<List<PersonalEntity>>, String> {
   PersonalsFamily._()
     : super(
         retry: null,
@@ -127,7 +127,7 @@ final class PersonalsFamily extends $Family
         isAutoDispose: true,
       );
 
-  PersonalsProvider call({String? personalUserId}) =>
+  PersonalsProvider call({required String personalUserId}) =>
       PersonalsProvider._(argument: personalUserId, from: this);
 
   @override

@@ -63,13 +63,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         id: user.uid,
         email: user.email!,
         name: user.displayName ?? 'Sem nome',
-        photoUrl:
-            user.photoURL ??
-            'https://w7.pngwing.com/pngs/620/837/png-transparent-bodybuilding-drawing-bodybuilding-physical-fitness-logo-monochrome-thumbnail.png',
+        photoUrl: user.photoURL,
       );
 
       try {
-        await _apiClient.post('/users', data: userDto.toJson());
+        await _apiClient.post('users', data: userDto.toJson());
       } catch (e) {
         // Ignore if user already exists (400 or 409 depending on backend validation)
         // If it's a server failure, we might want to log it but proceed if Auth is successful.
@@ -157,7 +155,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
       try {
-        await _apiClient.post('/users', data: userDto.toJson());
+        await _apiClient.post('users', data: userDto.toJson());
       } catch (e) {
         if (e is ServerFailure) {
           // ignore

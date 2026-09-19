@@ -3,7 +3,7 @@ import '../../../../core/exceptions/failure.dart';
 import '../entities/user_entity.dart';
 
 abstract class UserRepository {
-  Future<Either<Failure, List<UserEntity>>> getUsers({String? email});
+  Future<Either<Failure, List<UserEntity>>> getUsers({required String email});
   Future<Either<Failure, UserEntity>> getUser(String id);
   Future<Either<Failure, UserEntity>> createUser(UserEntity user);
   Future<Either<Failure, UserEntity>> updateUser(UserEntity user);

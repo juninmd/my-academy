@@ -4,7 +4,7 @@ import '../entities/personal_entity.dart';
 
 abstract class PersonalRepository {
   Future<Either<Failure, List<PersonalEntity>>> getPersonals({
-    String? personalUserId,
+    required String personalUserId,
   });
   Future<Either<Failure, PersonalEntity>> createPersonal(
     PersonalEntity personal,

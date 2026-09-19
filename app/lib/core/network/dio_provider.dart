@@ -6,11 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'api_client.dart';
+import 'mock_session.dart';
 
-const String _apiBaseUrlFromEnv = String.fromEnvironment(
-  'API_BASE_URL',
-  defaultValue: 'http://localhost:9000/api/',
-);
+const String _apiBaseUrlFromEnv = String.fromEnvironment('API_BASE_URL');
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
@@ -29,7 +27,7 @@ final dioProvider = Provider<Dio>((ref) {
     InterceptorsWrapper(
       onRequest: (options, handler) async {
         if (useMockAuth) {
-          options.headers['Authorization'] = 'Bearer $mockAuthToken';
+          options.headers['Authorization'] = 'Bearer ${MockSession.token}';
           return handler.next(options);
         }
 
@@ -75,14 +73,13 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 });
 
 String _getBaseUrl() {
-  // If the env variable is set and not the default fallback
   final envUrl = _apiBaseUrlFromEnv.trim();
-  if (envUrl.isNotEmpty && envUrl != 'http://localhost:9000/api/') {
+  if (envUrl.isNotEmpty) {
     return envUrl;
   }
 
   if (kReleaseMode) {
-    return 'https://my-academy-api.onrender.com';
+    return 'https://my-academy-api.onrender.com/api/';
   }
 
   if (kIsWeb) return 'http://localhost:9000/api/';

@@ -28,6 +28,7 @@ class RpeSelectorSheet extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
+                tooltip: 'Fechar',
                 icon: const Icon(Icons.close),
               ),
             ],

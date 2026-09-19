@@ -191,6 +191,7 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                       context.pop();
                     }
                   },
+                  tooltip: 'Sair do treino',
                   icon: const Icon(Icons.close),
                 ),
               ],

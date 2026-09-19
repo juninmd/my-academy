@@ -98,6 +98,10 @@ class CalendarPage extends HookConsumerWidget {
                             focusedDay.value = focused;
                           },
                           eventLoader: getEventsForDay,
+                          headerStyle: const HeaderStyle(
+                            formatButtonVisible: false,
+                            titleCentered: true,
+                          ),
                           calendarStyle: CalendarStyle(
                             markerDecoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.primary,
@@ -125,7 +129,9 @@ class CalendarPage extends HookConsumerWidget {
                                   Icon(
                                     Icons.insights,
                                     color:
-                                        Theme.of(context).colorScheme.primary,
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimaryContainer,
                                   ),
                                   const SizedBox(width: 16),
                                   Column(
@@ -134,16 +140,24 @@ class CalendarPage extends HookConsumerWidget {
                                     children: [
                                       Text(
                                         '${eventsForSelectedDay.length} sessões • $distinctExercises exercícios',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimaryContainer,
                                         ),
                                       ),
                                       Text(
                                         'Volume do dia: ${(dailyVolume / 1000).toStringAsFixed(1)} ton',
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodySmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall?.copyWith(
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimaryContainer,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -207,15 +221,16 @@ class CalendarPage extends HookConsumerWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Realizado às ${timeFormat.format(e.date)}',
-                                          style: TextStyle(
-                                            color:
-                                                Theme.of(
-                                                  context,
-                                                ).colorScheme.primary,
+                                        if (e.createdAt != null)
+                                          Text(
+                                            'Realizado às ${timeFormat.format(e.createdAt!.toLocal())}',
+                                            style: TextStyle(
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
+                                            ),
                                           ),
-                                        ),
                                         if (exercisesList.isNotEmpty)
                                           Padding(
                                             padding: const EdgeInsets.only(

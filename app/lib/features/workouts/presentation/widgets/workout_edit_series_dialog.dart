@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../domain/entities/workout_entity.dart';
 import '../../domain/entities/workout_series_entity.dart';
+import 'number_input_control.dart';
 
 class WorkoutEditSeriesDialog extends HookWidget {
   const WorkoutEditSeriesDialog({
@@ -139,7 +140,7 @@ class _SeriesEditorRow extends HookWidget {
       text: series.repetitions.toString(),
     );
     final weightController = useTextEditingController(
-      text: series.weight.toString(),
+      text: NumberInputControl.format(series.weight),
     );
     final restController = useTextEditingController(
       text: series.rest.toString(),
@@ -193,7 +194,8 @@ class _SeriesEditorRow extends HookWidget {
               label: 'Carga',
               suffix: 'kg',
               onChanged: (val) {
-                final weight = int.tryParse(val) ?? series.weight;
+                final weight =
+                    double.tryParse(val.replaceAll(',', '.')) ?? series.weight;
                 onUpdate(series.copyWith(weight: weight));
               },
             ),
@@ -211,6 +213,7 @@ class _SeriesEditorRow extends HookWidget {
             ),
           ),
           IconButton(
+            tooltip: 'Remover série',
             icon: const Icon(Icons.close, size: 18),
             color: Colors.redAccent,
             visualDensity: VisualDensity.compact,
@@ -245,7 +248,7 @@ class _CompactInput extends StatelessWidget {
           height: 36,
           child: TextField(
             controller: controller,
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: const TextStyle(fontSize: 14),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(

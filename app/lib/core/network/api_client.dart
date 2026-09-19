@@ -158,7 +158,7 @@ class ApiClient {
 
     if (e.response != null) {
       final statusCode = e.response?.statusCode;
-      final message = e.response?.data['message'] ?? 'Unknown server error';
+      final message = serverMessage(e.response?.data);
 
       if (statusCode == 401) {
         return AuthFailure(message);
@@ -168,4 +168,12 @@ class ApiClient {
 
     return ServerFailure(e.message ?? 'Unknown error');
   }
+}
+
+/// Nest returns `message` as a string or, for validation errors, a list.
+String serverMessage(Object? data) {
+  final message = data is Map ? data['message'] : null;
+  if (message is List) return message.join('\n');
+  if (message is String && message.isNotEmpty) return message;
+  return 'Unknown server error';
 }

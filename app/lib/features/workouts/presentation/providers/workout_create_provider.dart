@@ -22,7 +22,7 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
     state = state.copyWith(name: name);
   }
 
-  void addWorkout(ExerciseEntity exercise, int reps, int weight, int rest) {
+  void addWorkout(ExerciseEntity exercise, int reps, double weight, int rest) {
     final newSeries = WorkoutSeriesEntity(
       repetitions: reps,
       weight: weight,
@@ -72,9 +72,6 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
   }
 
   void reorderWorkouts(int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final newWorkouts = [...state.workouts];
     final item = newWorkouts.removeAt(oldIndex);
     newWorkouts.insert(newIndex, item);
@@ -85,12 +82,12 @@ class WorkoutCreateNotifier extends _$WorkoutCreateNotifier {
     final repository = ref.read(workoutRepositoryProvider);
     final groupToSave = state.copyWith(userId: userId);
 
-    if (state.id != null) {
-      await repository.updateWorkoutGroup(groupToSave);
-    } else {
-      await repository.createWorkoutGroup(groupToSave);
-    }
+    final result =
+        state.id != null
+            ? await repository.updateWorkoutGroup(groupToSave)
+            : await repository.createWorkoutGroup(groupToSave);
     ref.invalidate(workoutGroupsProvider(userId));
+    result.fold((failure) => throw failure, (_) {});
   }
 }
 

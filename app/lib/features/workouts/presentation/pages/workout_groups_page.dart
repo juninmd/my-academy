@@ -27,6 +27,7 @@ class WorkoutGroupsPage extends ConsumerWidget {
         centerTitle: false,
         actions: [
           IconButton(
+            tooltip: 'Criar treino',
             icon: const Icon(Icons.add),
             onPressed: () {
               context.go('/workouts/create');

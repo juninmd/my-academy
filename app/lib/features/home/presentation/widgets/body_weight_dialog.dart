@@ -21,11 +21,9 @@ class BodyWeightDialog extends HookConsumerWidget {
           const SizedBox(height: 24),
           NumberInputControl(
             label: 'Peso (kg)',
-            value: currentWeight.value.round(),
-            step: 1,
-            onChanged: (val) {
-              currentWeight.value = val.toDouble();
-            },
+            value: currentWeight.value,
+            step: 0.5,
+            onChanged: (val) => currentWeight.value = val,
           ),
         ],
       ),
