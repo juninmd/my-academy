@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
-import { CreateWorkoutsGroupDto } from './create-workouts-group.dto';
-import { CreateWorkoutNestedDto } from '../../workouts/dto/create-workout-nested.dto';
-import { CreateWorkoutSeriesNestedDto } from '../../workouts-series/dto/create-workout-series-nested.dto';
+import { CreateWorkoutsGroupDto } from './create-workouts-group.dto.js';
+import { CreateWorkoutNestedDto } from '../../workouts/dto/create-workout-nested.dto.js';
+import { CreateWorkoutSeriesNestedDto } from '../../workouts-series/dto/create-workout-series-nested.dto.js';
 
 describe('CreateWorkoutsGroupDto', () => {
   it('should transform nested workouts and series correctly', () => {

@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WorkoutsSeriesService } from './workouts-series.service';
-import { PrismaService } from '../prisma.service';
+import { WorkoutsSeriesService } from './workouts-series.service.js';
+import { PrismaService } from '../prisma.service.js';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { CreateWorkoutsSeriesDto } from './dto/create-workouts-series.dto';
-import { UpdateWorkoutsSeriesDto } from './dto/update-workouts-series.dto';
-import { WorkoutSeries } from './entities/workout-series.entity';
+import { CreateWorkoutsSeriesDto } from './dto/create-workouts-series.dto.js';
+import { UpdateWorkoutsSeriesDto } from './dto/update-workouts-series.dto.js';
+import { WorkoutSeries } from './entities/workout-series.entity.js';
 
 describe('WorkoutsSeriesService', () => {
   let service: WorkoutsSeriesService;
@@ -24,11 +24,14 @@ describe('WorkoutsSeriesService', () => {
 
   const prismaMock = {
     workoutSeries: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      findMany: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    workouts: {
+      findUnique: vi.fn(),
     },
   };
 
@@ -47,7 +50,7 @@ describe('WorkoutsSeriesService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -94,13 +97,39 @@ describe('WorkoutsSeriesService', () => {
   });
 
   describe('findAll', () => {
-    it('should return all series', async () => {
+    it('should return series filtered by workoutId', async () => {
       prismaMock.workoutSeries.findMany.mockResolvedValue([mockSeries]);
 
-      const result = await service.findAll();
+      const result = await service.findAll(1);
 
-      expect(prismaMock.workoutSeries.findMany).toHaveBeenCalled();
+      expect(prismaMock.workoutSeries.findMany).toHaveBeenCalledWith({
+        where: { workoutId: 1 },
+      });
       expect(result).toEqual([mockSeries]);
+    });
+  });
+
+  describe('resolveGroupId', () => {
+    it('should return the owning group id', async () => {
+      prismaMock.workouts.findUnique.mockResolvedValue({
+        workoutsGroupsId: 7,
+      });
+
+      const result = await service.resolveGroupId(1);
+
+      expect(prismaMock.workouts.findUnique).toHaveBeenCalledWith({
+        where: { id: 1 },
+        select: { workoutsGroupsId: true },
+      });
+      expect(result).toBe(7);
+    });
+
+    it('should throw NotFoundException if the workout does not exist', async () => {
+      prismaMock.workouts.findUnique.mockResolvedValue(null);
+
+      await expect(service.resolveGroupId(999)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 

@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MethodsService } from './methods.service';
-import { MethodsController } from './methods.controller';
-import { PrismaService } from '../prisma.service';
-import { CacheModule } from '@nestjs/cache-manager';
+import { MethodsService } from './methods.service.js';
+import { MethodsController } from './methods.controller.js';
 
 @Module({
-  imports: [CacheModule.register()],
   controllers: [MethodsController],
-  providers: [MethodsService, PrismaService],
+  providers: [MethodsService],
 })
 export class MethodsModule {}

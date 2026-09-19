@@ -8,12 +8,18 @@ part of 'onboarding_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Onboarding completion is tracked per user so switching accounts on the
+/// same device does not skip (or repeat) another user's setup.
 
 @ProviderFor(OnboardingNotifier)
 final onboardingProvider = OnboardingNotifierProvider._();
 
+/// Onboarding completion is tracked per user so switching accounts on the
+/// same device does not skip (or repeat) another user's setup.
 final class OnboardingNotifierProvider
     extends $AsyncNotifierProvider<OnboardingNotifier, bool> {
+  /// Onboarding completion is tracked per user so switching accounts on the
+  /// same device does not skip (or repeat) another user's setup.
   OnboardingNotifierProvider._()
     : super(
         from: null,
@@ -34,7 +40,10 @@ final class OnboardingNotifierProvider
 }
 
 String _$onboardingNotifierHash() =>
-    r'ecf8aa6a280b9880736e17477a0b49a3c0f7399c';
+    r'd434fc8e2679b99950c4ceab6a86a1cd33ecd777';
+
+/// Onboarding completion is tracked per user so switching accounts on the
+/// same device does not skip (or repeat) another user's setup.
 
 abstract class _$OnboardingNotifier extends $AsyncNotifier<bool> {
   FutureOr<bool> build();

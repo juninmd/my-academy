@@ -7,6 +7,7 @@ class WorkoutSessionEntity extends Equatable {
     required this.checked,
     required this.userId,
     this.id,
+    this.createdAt,
   });
   final int? id;
   final int workoutGroupId;
@@ -14,6 +15,16 @@ class WorkoutSessionEntity extends Equatable {
   final bool checked;
   final String userId;
 
+  /// When the session was logged; `date` only carries the day.
+  final DateTime? createdAt;
+
   @override
-  List<Object?> get props => [id, workoutGroupId, date, checked, userId];
+  List<Object?> get props => [
+    id,
+    workoutGroupId,
+    date,
+    checked,
+    userId,
+    createdAt,
+  ];
 }

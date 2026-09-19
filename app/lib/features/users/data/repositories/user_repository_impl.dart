@@ -14,11 +14,13 @@ class UserRepositoryImpl implements UserRepository {
   final ApiClient _apiClient;
 
   @override
-  Future<Either<Failure, List<UserEntity>>> getUsers({String? email}) async {
+  Future<Either<Failure, List<UserEntity>>> getUsers({
+    required String email,
+  }) async {
     try {
       final response = await _apiClient.get(
         'users',
-        queryParameters: email != null ? {'email': email} : null,
+        queryParameters: {'email': email},
       );
       final List<dynamic> data = response;
       return Right(
@@ -89,7 +91,7 @@ UserRepository userRepository(Ref ref) {
 }
 
 @riverpod
-Future<List<UserEntity>> users(Ref ref, {String? email}) async {
+Future<List<UserEntity>> users(Ref ref, {required String email}) async {
   final repository = ref.watch(userRepositoryProvider);
   final result = await repository.getUsers(email: email);
   return result.fold((failure) => [], (list) => list);

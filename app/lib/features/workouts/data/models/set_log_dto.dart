@@ -9,14 +9,14 @@ class SetLogDto {
   });
 
   final int reps;
-  final int weight;
+  final double weight;
   final int? rpe;
   final SetType type;
 
   factory SetLogDto.fromJson(Map<String, dynamic> json) {
     return SetLogDto(
       reps: json['reps'] as int,
-      weight: json['weight'] as int,
+      weight: (json['weight'] as num).toDouble(),
       rpe: json['rpe'] as int?,
       type:
           json['type'] != null

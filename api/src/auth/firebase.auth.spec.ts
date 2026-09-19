@@ -1,18 +1,17 @@
-import { PreauthMiddleware } from './firebase.auth';
-import * as firebase from 'firebase-admin';
-import configs from '../configs';
+import type { Mock, MockInstance } from 'vitest';
+import { PreauthMiddleware } from './firebase.auth.js';
+import { initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import configs from '../configs/index.js';
 import { Request, Response } from 'express';
 
-jest.mock('firebase-admin', () => {
-  return {
-    initializeApp: jest.fn(),
-    credential: {
-      cert: jest.fn(),
-    },
-  };
-});
+vi.mock('firebase-admin/app', () => ({
+  initializeApp: vi.fn(() => ({})),
+  cert: vi.fn(),
+}));
+vi.mock('firebase-admin/auth', () => ({ getAuth: vi.fn() }));
 
-jest.mock('../configs', () => ({
+vi.mock('../configs/index.js', () => ({
   default: {
     serviceAccount: {},
     authMoc: {
@@ -20,24 +19,17 @@ jest.mock('../configs', () => ({
       json: '{"uid": "mocked"}',
     },
   },
-  __esModule: true,
 }));
 
 describe('PreauthMiddleware', () => {
   let middleware: PreauthMiddleware;
-  let mockVerifyIdToken: jest.Mock;
-  let mockConsoleError: jest.SpyInstance;
+  let mockVerifyIdToken: Mock;
+  let mockConsoleError: MockInstance;
 
   beforeEach(() => {
-    mockConsoleError = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    mockVerifyIdToken = jest.fn();
-    (firebase.initializeApp as jest.Mock).mockReturnValue({
-      auth: () => ({
-        verifyIdToken: mockVerifyIdToken,
-      }),
-    });
+    mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    mockVerifyIdToken = vi.fn();
+    (getAuth as Mock).mockReturnValue({ verifyIdToken: mockVerifyIdToken });
 
     // Reset configs
     (configs as any).authMoc.enabled = 'false';
@@ -47,11 +39,16 @@ describe('PreauthMiddleware', () => {
 
   afterEach(() => {
     mockConsoleError.mockRestore();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(middleware).toBeDefined();
+  it('does not initialize Firebase until a real token must be verified', async () => {
+    expect(initializeApp).not.toHaveBeenCalled();
+    mockVerifyIdToken.mockResolvedValue({ uid: 'u' });
+    const req = { headers: { authorization: 'Bearer a' } } as Request;
+    await middleware.use(req, {} as Response, vi.fn());
+    await middleware.use(req, {} as Response, vi.fn());
+    expect(initializeApp).toHaveBeenCalledTimes(1);
   });
 
   it('should use mock auth if enabled', async () => {
@@ -61,7 +58,7 @@ describe('PreauthMiddleware', () => {
       headers: { authorization: 'Bearer test-token' },
     } as Request;
     const res = {} as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     await middleware.use(req, res, next);
 
@@ -72,10 +69,10 @@ describe('PreauthMiddleware', () => {
   it('should return 403 if no token provided', async () => {
     const req = { headers: {}, url: '/test' } as Request;
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
     } as unknown as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     await middleware.use(req, res, next);
 
@@ -89,7 +86,7 @@ describe('PreauthMiddleware', () => {
   it('should verify token successfully', async () => {
     const req = { headers: { authorization: 'Bearer valid' } } as Request;
     const res = {} as Response;
-    const next = jest.fn();
+    const next = vi.fn();
     const decoded = { uid: 'user1' };
 
     mockVerifyIdToken.mockResolvedValue(decoded);
@@ -107,10 +104,10 @@ describe('PreauthMiddleware', () => {
       url: '/test',
     } as Request;
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
     } as unknown as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     mockVerifyIdToken.mockRejectedValue(new Error('Invalid token'));
 
@@ -126,7 +123,7 @@ describe('PreauthMiddleware', () => {
   it('should skip auth for /health', async () => {
     const req = { url: '/health' } as Request;
     const res = {} as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     await middleware.use(req, res, next);
     expect(next).toHaveBeenCalled();
@@ -135,7 +132,7 @@ describe('PreauthMiddleware', () => {
   it('should skip auth for /api/health', async () => {
     const req = { url: '/api/health' } as Request;
     const res = {} as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     await middleware.use(req, res, next);
     expect(next).toHaveBeenCalled();
@@ -149,10 +146,10 @@ describe('PreauthMiddleware', () => {
       url: '/test',
     } as Request;
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
     } as unknown as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     await middleware.use(req, res, next);
 
@@ -163,10 +160,10 @@ describe('PreauthMiddleware', () => {
     (configs as any).authMoc.enabled = 'true';
     const req = { url: '/test' } as Request;
     const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      status: vi.fn().mockReturnThis(),
+      json: vi.fn(),
     } as unknown as Response;
-    const next = jest.fn();
+    const next = vi.fn();
 
     await middleware.use(req, res, next);
 

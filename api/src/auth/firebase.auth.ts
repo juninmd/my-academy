@@ -1,18 +1,19 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import * as firebase from 'firebase-admin';
-import configs from '../configs';
+import { App, cert, initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import configs from '../configs/index.js';
+import { resolveMockUser } from './mock-auth.js';
 
 const firebase_params = configs.serviceAccount;
 
 @Injectable()
 export class PreauthMiddleware implements NestMiddleware {
-  private defaultApp: any;
+  private defaultApp?: App;
 
-  constructor() {
-    this.defaultApp = firebase.initializeApp({
-      credential: firebase.credential.cert(firebase_params),
-    });
+  private get firebaseAuth() {
+    this.defaultApp ??= initializeApp({ credential: cert(firebase_params) });
+    return getAuth(this.defaultApp);
   }
 
   async use(req: Request, res: Response, next: (error?: any) => void) {
@@ -21,13 +22,13 @@ export class PreauthMiddleware implements NestMiddleware {
     }
 
     if (configs.authMoc.enabled === 'true') {
-      const token = req.headers?.authorization;
-      if (token === `Bearer ${configs.authMoc.token}`) {
-        const decodedToken = JSON.parse(configs.authMoc.json);
-        req['user'] =
-          Array.isArray(decodedToken) && decodedToken.length > 0
-            ? decodedToken[0]
-            : decodedToken;
+      const mockUser = resolveMockUser(
+        req.headers?.authorization,
+        configs.authMoc.token,
+        configs.authMoc.json,
+      );
+      if (mockUser) {
+        req['user'] = mockUser;
         return next();
       }
     }
@@ -42,9 +43,9 @@ export class PreauthMiddleware implements NestMiddleware {
       });
     }
     try {
-      const decodedToken = await this.defaultApp
-        .auth()
-        .verifyIdToken(token.replace('Bearer ', ''));
+      const decodedToken = await this.firebaseAuth.verifyIdToken(
+        token.replace('Bearer ', ''),
+      );
 
       req['user'] = decodedToken;
       next();

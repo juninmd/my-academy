@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ExercisesService } from './exercises.service';
-import { ExercisesController } from './exercises.controller';
-import { PrismaService } from '../prisma.service';
-import { CacheModule } from '@nestjs/cache-manager';
+import { ExercisesService } from './exercises.service.js';
+import { ExercisesController } from './exercises.controller.js';
 
 @Module({
-  imports: [CacheModule.register()],
   controllers: [ExercisesController],
-  providers: [ExercisesService, PrismaService],
+  providers: [ExercisesService],
 })
 export class ExercisesModule {}

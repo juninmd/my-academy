@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateWorkoutsGroupDto } from './dto/create-workouts-group.dto';
-import { UpdateWorkoutsGroupDto } from './dto/update-workouts-group.dto';
-import { PrismaService } from '../prisma.service';
-import { WorkoutsGroup } from './entities/workouts-group.entity';
-import { CreateWorkoutNestedDto } from '../workouts/dto/create-workout-nested.dto';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { CreateWorkoutsGroupDto } from './dto/create-workouts-group.dto.js';
+import { UpdateWorkoutsGroupDto } from './dto/update-workouts-group.dto.js';
+import { PrismaService } from '../prisma.service.js';
+import { WorkoutsGroup } from './entities/workouts-group.entity.js';
+import { CreateWorkoutNestedDto } from '../workouts/dto/create-workout-nested.dto.js';
 
 @Injectable()
 export class WorkoutsGroupsService {
@@ -11,24 +17,28 @@ export class WorkoutsGroupsService {
 
   async create(data: CreateWorkoutsGroupDto): Promise<WorkoutsGroup> {
     const { name, image, userId, workouts } = data;
-    return this.prismaService.workoutsGroups.create({
-      data: {
-        name,
-        image,
-        userId,
-        workouts: {
-          create: this.mapWorkoutsCreate(workouts),
-        },
-      },
-      include: {
-        workouts: {
-          include: {
-            workoutSeries: true,
-            exercise: true,
+    try {
+      return await this.prismaService.workoutsGroups.create({
+        data: {
+          name,
+          image,
+          userId,
+          workouts: {
+            create: this.mapWorkoutsCreate(workouts),
           },
         },
-      },
-    });
+        include: {
+          workouts: {
+            include: {
+              workoutSeries: true,
+              exercise: true,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw this.mapUniqueConstraintError(error);
+    }
   }
 
   async findAll(userId: string): Promise<WorkoutsGroup[]> {
@@ -72,36 +82,46 @@ export class WorkoutsGroupsService {
     id: number,
     data: UpdateWorkoutsGroupDto,
   ): Promise<WorkoutsGroup> {
-    await this.findOne(id);
+    const existing = await this.findOne(id);
 
     const { name, image, userId, workouts } = data;
 
-    return this.prismaService.$transaction(async (tx) => {
-      // Delete existing workouts
-      await tx.workouts.deleteMany({
-        where: { workoutsGroupsId: id },
-      });
+    if (userId !== undefined && userId !== existing.userId) {
+      throw new BadRequestException(
+        'Não é possível mover o treino para outro usuário',
+      );
+    }
 
-      return tx.workoutsGroups.update({
-        where: { id },
-        data: {
-          name,
-          image,
-          userId,
-          workouts: {
-            create: this.mapWorkoutsCreate(workouts),
-          },
-        },
-        include: {
-          workouts: {
-            include: {
-              workoutSeries: true,
-              exercise: true,
+    try {
+      return await this.prismaService.$transaction(async (tx) => {
+        // Delete existing workouts
+        await tx.workouts.deleteMany({
+          where: { workoutsGroupsId: id },
+        });
+
+        return tx.workoutsGroups.update({
+          where: { id },
+          data: {
+            name,
+            image,
+            userId,
+            workouts: {
+              create: this.mapWorkoutsCreate(workouts),
             },
           },
-        },
+          include: {
+            workouts: {
+              include: {
+                workoutSeries: true,
+                exercise: true,
+              },
+            },
+          },
+        });
       });
-    });
+    } catch (error) {
+      throw this.mapUniqueConstraintError(error);
+    }
   }
 
   async remove(id: number): Promise<WorkoutsGroup> {
@@ -130,4 +150,32 @@ export class WorkoutsGroupsService {
       },
     }));
   }
+
+  private mapUniqueConstraintError(error: unknown): unknown {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      if (uniqueConstraintOf(error).includes('exerciseId')) {
+        return new ConflictException('Exercício duplicado no treino');
+      }
+      return new ConflictException('Já existe um treino com esse nome');
+    }
+    return error;
+  }
+}
+
+/** Driver adapters report the violated index instead of `meta.target`. */
+export function uniqueConstraintOf(
+  error: Prisma.PrismaClientKnownRequestError,
+): string {
+  const meta = error.meta as
+    | {
+        target?: string | string[];
+        driverAdapterError?: { cause?: { constraint?: { index?: string } } };
+      }
+    | undefined;
+  const target =
+    meta?.target ?? meta?.driverAdapterError?.cause?.constraint?.index;
+  return Array.isArray(target) ? target.join(',') : (target ?? '');
 }

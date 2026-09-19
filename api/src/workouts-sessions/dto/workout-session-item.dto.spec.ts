@@ -1,6 +1,6 @@
 import { validate } from 'class-validator';
-import { WorkoutSessionItemDto } from './workout-session-item.dto';
-import { WorkoutSessionSetItemDto } from './workout-session-set-item.dto';
+import { WorkoutSessionItemDto } from './workout-session-item.dto.js';
+import { WorkoutSessionSetItemDto } from './workout-session-set-item.dto.js';
 
 describe('WorkoutSessionItemDto', () => {
   it('should validate with valid properties', async () => {

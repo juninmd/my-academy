@@ -7,39 +7,45 @@ import {
   Param,
   Delete,
   Query,
-  Req,
+  ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
-import { WorkoutsSessionsService } from './workouts-sessions.service';
-import { CreateWorkoutsSessionsDto } from './dto/create-workouts-sessions.dto';
-import { UpdateWorkoutsSessionsDto } from './dto/update-workouts-sessions.dto';
-import { FindWorkoutsSessionsDto } from './dto/find-workouts-sessions.dto';
+import { WorkoutsSessionsService } from './workouts-sessions.service.js';
+import { CreateWorkoutsSessionsDto } from './dto/create-workouts-sessions.dto.js';
+import { UpdateWorkoutsSessionsDto } from './dto/update-workouts-sessions.dto.js';
+import { FindWorkoutsSessionsDto } from './dto/find-workouts-sessions.dto.js';
+import { AccessService } from '../access/access.service.js';
+import { CurrentUserId } from '../access/current-user.decorator.js';
 
 @Controller('workouts-sessions')
 export class WorkoutsSessionsController {
   constructor(
     private readonly workoutsSessionsService: WorkoutsSessionsService,
+    private readonly accessService: AccessService,
   ) {}
 
   @Post()
-  create(
+  async create(
     @Body() createWorkoutsSessionsDto: CreateWorkoutsSessionsDto,
-    @Req() req,
+    @CurrentUserId() actor: string | undefined,
   ) {
-    let userId = req.user?.uid || req.user?.user_id || req.user?.id;
-    if (!userId && Array.isArray(req.user) && req.user.length > 0) {
-      userId = req.user[0].id;
-    }
+    await this.accessService.assertCanAccessGroup(
+      actor,
+      createWorkoutsSessionsDto.workoutGroupId,
+    );
     return this.workoutsSessionsService.create(
       createWorkoutsSessionsDto,
-      userId,
+      actor,
     );
   }
 
   @Get(':idUser')
-  findAll(
+  async findAll(
     @Param('idUser') idUser: string,
     @Query() query: FindWorkoutsSessionsDto,
+    @CurrentUserId() actor: string | undefined,
   ) {
+    await this.accessService.assertCanActFor(actor, idUser);
     return this.workoutsSessionsService.findAll(
       idUser,
       +query.year,
@@ -48,25 +54,50 @@ export class WorkoutsSessionsController {
   }
 
   @Get(':idUser/summary')
-  findSummary(@Param('idUser') idUser: string) {
+  async findSummary(
+    @Param('idUser') idUser: string,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    await this.accessService.assertCanActFor(actor, idUser);
     return this.workoutsSessionsService.findSummary(idUser);
   }
 
   @Get('single/:id')
-  findOne(@Param('id') id: string) {
-    return this.workoutsSessionsService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    const groupId = await this.resolveGroupId(id);
+    await this.accessService.assertCanAccessGroup(actor, groupId);
+    return this.workoutsSessionsService.findOne(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateWorkoutsSessionsDto: UpdateWorkoutsSessionsDto,
+    @CurrentUserId() actor: string | undefined,
   ) {
-    return this.workoutsSessionsService.update(+id, updateWorkoutsSessionsDto);
+    const groupId = await this.resolveGroupId(id);
+    await this.accessService.assertCanAccessGroup(actor, groupId);
+    return this.workoutsSessionsService.update(id, updateWorkoutsSessionsDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.workoutsSessionsService.remove(+id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    const groupId = await this.resolveGroupId(id);
+    await this.accessService.assertCanAccessGroup(actor, groupId);
+    return this.workoutsSessionsService.remove(id);
+  }
+
+  private async resolveGroupId(id: number): Promise<number> {
+    const session = await this.workoutsSessionsService.findOne(id);
+    if (!session) {
+      throw new NotFoundException(`WorkoutSession #${id} not found`);
+    }
+    return session.workoutGroupId;
   }
 }

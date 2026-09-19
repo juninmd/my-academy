@@ -37,4 +37,31 @@ void main() {
     );
     expect(find.text('11'), findsOneWidget);
   });
+
+  testWidgets('weight control accepts fractional plate loads', (tester) async {
+    double value = 20;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: NumberInputControl(
+            value: value,
+            step: 2.5,
+            onChanged: (v) => value = v,
+            label: 'Carga',
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('20'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.add));
+    expect(value, 22.5);
+
+    await tester.enterText(find.byType(TextField), '17,25');
+    expect(value, 17.25);
+
+    // Typing past the limit must not bypass the +/- bounds.
+    await tester.enterText(find.byType(TextField), '5000');
+    expect(value, 17.25);
+  });
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../../../core/widgets/user_avatar.dart';
 import '../../domain/entities/student_entity.dart';
 
 class StudentDetailsPage extends HookConsumerWidget {
@@ -53,25 +54,10 @@ class StudentDetailsPage extends HookConsumerWidget {
                   Center(
                     child: Hero(
                       tag: 'student-${student.id}',
-                      child: CircleAvatar(
+                      child: UserAvatar(
+                        name: student.name,
+                        photoUrl: student.photoUrl,
                         radius: 60,
-                        backgroundColor: colorScheme.surface,
-                        backgroundImage:
-                            student.photoUrl != null
-                                ? NetworkImage(student.photoUrl!)
-                                : null,
-                        child:
-                            student.photoUrl == null
-                                ? Text(
-                                  student.name.isNotEmpty
-                                      ? student.name[0].toUpperCase()
-                                      : '?',
-                                  style: textTheme.displayMedium?.copyWith(
-                                    color: colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                                : null,
                       ),
                     ),
                   ),

@@ -44,7 +44,6 @@ class WorkoutSeriesDto {
       'repetitions': repetitions,
       'weight': weight,
       'rest': rest,
-      if (rpe != null) 'rpe': rpe,
       if (time != null) 'time': time,
       if (distance != null) 'distance': distance,
       if (speed != null) 'speed': speed,

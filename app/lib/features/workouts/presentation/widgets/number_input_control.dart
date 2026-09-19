@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class NumberInputControl extends HookWidget {
+import 'step_button.dart';
+
+class NumberInputControl<T extends num> extends HookWidget {
   const NumberInputControl({
     required this.value,
     required this.onChanged,
@@ -15,31 +17,44 @@ class NumberInputControl extends HookWidget {
     super.key,
   });
 
-  final int value;
-  final ValueChanged<int> onChanged;
+  final T value;
+  final ValueChanged<T> onChanged;
   final String label;
   final Widget? labelSuffix;
   final bool enabled;
-  final int min;
-  final int max;
-  final int step;
+  final num min;
+  final num max;
+  final num step;
+
+  bool get _decimal => value is double;
+
+  T _coerce(num n) => (_decimal ? n.toDouble() : n.round()) as T;
+
+  static String format(num v) =>
+      v == v.roundToDouble() ? v.toInt().toString() : v.toString();
+
+  T? _parse(String v) {
+    final n = num.tryParse(v.replaceAll(',', '.'));
+    return n == null ? null : _coerce(n);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final controller = useTextEditingController(text: value.toString());
+    final controller = useTextEditingController(text: format(value));
     final focusNode = useFocusNode();
 
     useEffect(() {
-      if (int.tryParse(controller.text) != value) {
-        controller.text = value.toString();
+      if (_parse(controller.text) != value) {
+        controller.text = format(value);
       }
       return null;
     }, [value]);
 
-    void updateValue(int newValue) {
+    void updateValue(num raw) {
+      final newValue = _coerce(raw);
       if (newValue >= min && newValue <= max) {
         onChanged(newValue);
-        controller.text = newValue.toString();
+        controller.text = format(newValue);
       }
     }
 
@@ -67,70 +82,64 @@ class NumberInputControl extends HookWidget {
           ),
           child: Row(
             children: [
-              _ControlButton(
+              StepButton(
                 icon: Icons.remove,
+                tooltip: 'Diminuir ',
                 onPressed: enabled ? () => updateValue(value - step) : null,
               ),
               const VerticalDivider(width: 1),
               Expanded(
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                child: Semantics(
+                  label: label,
+                  child: TextField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: _decimal,
+                    ),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    enabled: enabled,
+                    inputFormatters: [
+                      _decimal
+                          ? FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*[.,]?\d{0,2}'),
+                          )
+                          : FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    onChanged: (v) {
+                      final val = _parse(v);
+                      if (val != null && val >= min && val <= max) {
+                        onChanged(val);
+                      }
+                    },
+                    onTap: () {
+                      controller.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: controller.text.length,
+                      );
+                    },
                   ),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                  enabled: enabled,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onChanged: (v) {
-                    final val = int.tryParse(v);
-                    if (val != null) {
-                      onChanged(val);
-                    }
-                  },
-                  onTap: () {
-                    controller.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: controller.text.length,
-                    );
-                  },
                 ),
               ),
               const VerticalDivider(width: 1),
-              _ControlButton(
+              StepButton(
                 icon: Icons.add,
+                tooltip: 'Aumentar ',
                 onPressed: enabled ? () => updateValue(value + step) : null,
               ),
             ],
           ),
         ),
       ],
-    );
-  }
-}
-
-class _ControlButton extends StatelessWidget {
-  const _ControlButton({required this.icon, this.onPressed});
-
-  final IconData icon;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(4),
-        child: Center(child: Icon(icon, size: 20)),
-      ),
     );
   }
 }

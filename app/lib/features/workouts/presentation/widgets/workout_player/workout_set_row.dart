@@ -6,6 +6,7 @@ import '../../../domain/entities/session_log_entity.dart';
 import '../number_input_control.dart';
 import '../plate_calculator_dialog.dart';
 import '../rpe_selector_sheet.dart';
+import 'set_inputs_layout.dart';
 
 class WorkoutSetRow extends HookWidget {
   const WorkoutSetRow({
@@ -280,6 +281,7 @@ class WorkoutSetRow extends HookWidget {
                         padding: const EdgeInsets.all(4.0),
                         child: Icon(
                           Icons.delete_outline,
+                          semanticLabel: 'Excluir série',
                           size: 18,
                           color: Theme.of(context).colorScheme.error,
                         ),
@@ -316,8 +318,7 @@ class WorkoutSetRow extends HookWidget {
           const SizedBox(height: 4),
 
           // Main Input Row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          SetInputsLayout(
             children: [
               // Reps Input
               Expanded(
@@ -347,7 +348,7 @@ class WorkoutSetRow extends HookWidget {
                   label: weightLabel,
                   value: log.actualWeight,
                   enabled: !log.isCompleted,
-                  step: 1,
+                  step: 2.5,
                   onChanged: (val) {
                     onChanged(
                       SetLogState(
@@ -487,23 +488,26 @@ class WorkoutSetRow extends HookWidget {
               const SizedBox(width: 12),
 
               // Completion Button
-              InkWell(
-                onTap: onCompleted,
-                borderRadius: BorderRadius.circular(8),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color:
-                        log.isCompleted
-                            ? Colors.green
-                            : Colors.grey.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.check,
-                    color: log.isCompleted ? Colors.white : Colors.grey,
+              Tooltip(
+                message: log.isCompleted ? 'Série concluída' : 'Concluir série',
+                child: InkWell(
+                  onTap: onCompleted,
+                  borderRadius: BorderRadius.circular(8),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color:
+                          log.isCompleted
+                              ? Colors.green
+                              : Colors.grey.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.check,
+                      color: log.isCompleted ? Colors.white : Colors.grey,
+                    ),
                   ),
                 ),
               ),

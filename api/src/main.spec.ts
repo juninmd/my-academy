@@ -1,126 +1,99 @@
+import type { Mock, MockInstance } from 'vitest';
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
 
-jest.mock('@nestjs/core', () => {
-  const original = jest.requireActual('@nestjs/core');
-  return {
-    ...original,
-    NestFactory: {
-      create: jest.fn().mockResolvedValue({
-        useGlobalPipes: jest.fn(),
-        enableCors: jest.fn(),
-        use: jest.fn(),
-        setGlobalPrefix: jest.fn(),
-        listen: jest.fn(),
-      }),
-    },
-  };
-});
+const app = {
+  useGlobalPipes: vi.fn(),
+  enableCors: vi.fn(),
+  use: vi.fn(),
+  setGlobalPrefix: vi.fn(),
+  listen: vi.fn(),
+};
+const logger = vi.hoisted(() => ({ log: vi.fn(), error: vi.fn() }));
 
-jest.mock('@nestjs/common', () => {
-  const original = jest.requireActual('@nestjs/common');
-  return {
-    ...original,
-    Logger: jest.fn().mockReturnValue({
-      log: jest.fn(),
-      error: jest.fn(),
-    }),
-  };
-});
-
-jest.mock('@nestjs/swagger', () => {
-  const original = jest.requireActual('@nestjs/swagger');
-  return {
-    ...original,
-    SwaggerModule: {
-      createDocument: jest.fn(),
-      setup: jest.fn(),
-    },
-    DocumentBuilder: jest.fn().mockReturnValue({
-      setTitle: jest.fn().mockReturnThis(),
-      setDescription: jest.fn().mockReturnThis(),
-      setVersion: jest.fn().mockReturnThis(),
-      addBearerAuth: jest.fn().mockReturnThis(),
-      build: jest.fn(),
-    }),
-  };
-});
-
-jest.mock('@scalar/nestjs-api-reference', () => ({
-  apiReference: jest.fn(),
+vi.mock('@nestjs/core', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  NestFactory: { create: vi.fn() },
 }));
 
-jest.mock('../package.json', () => ({
-  version: '1.0.0',
-  name: 'test',
-  description: 'test',
+vi.mock('@nestjs/common', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  Logger: vi.fn(function () {
+    return logger;
+  }),
 }));
+
+vi.mock('@nestjs/swagger', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  SwaggerModule: { createDocument: vi.fn(), setup: vi.fn() },
+  DocumentBuilder: vi.fn(function () {
+    const builder = {
+      setTitle: () => builder,
+      setDescription: () => builder,
+      setVersion: () => builder,
+      addBearerAuth: () => builder,
+      build: vi.fn(),
+    };
+    return builder;
+  }),
+}));
+
+vi.mock('@scalar/nestjs-api-reference', () => ({ apiReference: vi.fn() }));
+
+const runMain = async () => {
+  vi.resetModules();
+  await import('./main.js');
+};
 
 describe('Main', () => {
-  let mockExit: jest.SpyInstance;
+  let exit: MockInstance;
 
   beforeEach(() => {
-    mockExit = jest
-      .spyOn(process, 'exit')
-      .mockImplementation((() => {}) as any);
+    (NestFactory.create as Mock).mockResolvedValue(app);
+    exit = vi.spyOn(process, 'exit').mockImplementation((() => {}) as any);
   });
 
   afterEach(() => {
-    mockExit.mockRestore();
-    jest.clearAllMocks();
-  });
-
-  it('should bootstrap successfully', async () => {
-    jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('./main');
-    });
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(NestFactory.create).toHaveBeenCalled();
-  }, 10000);
-
-  it('should handle error during bootstrap', async () => {
-    (NestFactory.create as jest.Mock).mockRejectedValueOnce(
-      new Error('Bootstrap failed'),
-    );
-
-    jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('./main');
-    });
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(mockExit).toHaveBeenCalledWith(1);
-  });
-
-  it('should handle error in global catch block', async () => {
-    (NestFactory.create as jest.Mock).mockRejectedValueOnce(
-      new Error('Bootstrap failed'),
-    );
-
-    // Make logger.error throw to trigger outer catch
-    const loggerInstance = new Logger();
-    (loggerInstance.error as jest.Mock).mockImplementationOnce(() => {
-      throw new Error('Logger error');
-    });
-
-    jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('./main');
-    });
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(loggerInstance.error).toHaveBeenCalledTimes(2);
-  });
-
-  it('should bootstrap successfully with CORS_ORIGINS', async () => {
-    process.env.CORS_ORIGINS = 'http://localhost:3000,http://localhost:4000';
-    jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require('./main');
-    });
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(NestFactory.create).toHaveBeenCalled();
+    exit.mockRestore();
+    vi.clearAllMocks();
     delete process.env.CORS_ORIGINS;
+  });
+
+  it('boots with validation, /api prefix and open CORS by default', async () => {
+    await runMain();
+    await vi.waitFor(() => expect(app.listen).toHaveBeenCalledWith(9000));
+    expect(app.setGlobalPrefix).toHaveBeenCalledWith('api', {
+      exclude: ['docs', 'health'],
+    });
+    expect(app.enableCors).toHaveBeenCalledWith(
+      expect.objectContaining({ origin: '*', credentials: false }),
+    );
+  });
+
+  it('restricts CORS to configured origins', async () => {
+    process.env.CORS_ORIGINS = 'http://a.io, http://b.io';
+    await runMain();
+    await vi.waitFor(() =>
+      expect(app.enableCors).toHaveBeenCalledWith(
+        expect.objectContaining({
+          origin: ['http://a.io', 'http://b.io'],
+          credentials: true,
+        }),
+      ),
+    );
+  });
+
+  it('exits with code 1 when bootstrap fails', async () => {
+    (NestFactory.create as Mock).mockRejectedValueOnce(new Error('boom'));
+    await runMain();
+    await vi.waitFor(() => expect(exit).toHaveBeenCalledWith(1));
+  });
+
+  it('logs unexpected errors raised while handling a failed bootstrap', async () => {
+    (NestFactory.create as Mock).mockRejectedValueOnce(new Error('boom'));
+    logger.error.mockImplementationOnce(() => {
+      throw new Error('logger down');
+    });
+    await runMain();
+    await vi.waitFor(() => expect(logger.error).toHaveBeenCalledTimes(2));
   });
 });

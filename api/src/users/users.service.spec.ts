@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
-import { PrismaService } from '../prisma.service';
+import { UsersService } from './users.service.js';
+import { PrismaService } from '../prisma.service.js';
 import { NotFoundException, ConflictException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { User } from './entities/user.entity.js';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -22,11 +22,11 @@ describe('UsersService', () => {
 
   const prismaMock = {
     users: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      findMany: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
   };
 
@@ -45,7 +45,7 @@ describe('UsersService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -82,6 +82,14 @@ describe('UsersService', () => {
       expect(result).toEqual(mockUser);
     });
 
+    it('persists the role chosen at sign-up (e.g. a personal trainer)', async () => {
+      prismaMock.users.findUnique.mockResolvedValue(null);
+      await service.create({ ...createUserDto, role: 'PERSONAL' } as any);
+      expect(prismaMock.users.create.mock.calls[0][0].data.role).toBe(
+        'PERSONAL',
+      );
+    });
+
     it('should throw ConflictException if user already exists', async () => {
       prismaMock.users.findUnique.mockResolvedValue(mockUser);
 
@@ -96,15 +104,6 @@ describe('UsersService', () => {
   });
 
   describe('findAll', () => {
-    it('should return an array of users', async () => {
-      prismaMock.users.findMany.mockResolvedValue([mockUser]);
-
-      const result = await service.findAll();
-
-      expect(prismaMock.users.findMany).toHaveBeenCalled();
-      expect(result).toEqual([mockUser]);
-    });
-
     it('should return an array of users by email', async () => {
       prismaMock.users.findMany.mockResolvedValue([mockUser]);
 
@@ -157,6 +156,36 @@ describe('UsersService', () => {
         data: expect.objectContaining(updateUserDto),
       });
       expect(result.name).toEqual(updateUserDto.name);
+    });
+
+    it('should persist role when provided', async () => {
+      const dtoWithRole: UpdateUserDto = { role: 'ADMIN' } as UpdateUserDto;
+      prismaMock.users.update.mockResolvedValue({
+        ...mockUser,
+        role: 'ADMIN',
+      });
+
+      await service.update('123', dtoWithRole);
+
+      expect(prismaMock.users.update).toHaveBeenCalledWith({
+        where: { id: '123' },
+        data: expect.objectContaining({ role: 'ADMIN' }),
+      });
+    });
+
+    it('records when onboarding is finished so other devices skip it', async () => {
+      await service.update('123', { onboarded: true });
+
+      const data = prismaMock.users.update.mock.calls[0][0].data;
+      expect(data.onboardedAt).toBeInstanceOf(Date);
+    });
+
+    it('does not touch onboarding when the flag is absent', async () => {
+      await service.update('123', { name: 'x' });
+
+      expect(prismaMock.users.update.mock.calls[0][0].data).not.toHaveProperty(
+        'onboardedAt',
+      );
     });
 
     it('should throw NotFoundException if user to update not found', async () => {

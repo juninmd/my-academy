@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/workout_entity.dart';
 import '../providers/workout_provider.dart';
+import '../../../../core/widgets/app_image.dart';
 
 class WorkoutDetailsPage extends ConsumerWidget {
   const WorkoutDetailsPage({required this.groupId, super.key});
@@ -46,22 +46,26 @@ class WorkoutDetailsPage extends ConsumerWidget {
                   SliverAppBar(
                     expandedHeight: 200,
                     pinned: true,
+                    // White on primary/darkened photo keeps WCAG contrast.
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     flexibleSpace: FlexibleSpaceBar(
-                      title: Text(group.name),
+                      title: Text(
+                        group.name,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
                       background:
                           group.image != null
-                              ? CachedNetworkImage(
-                                imageUrl: group.image!,
+                              ? AppImage(
+                                source: group.image!,
                                 fit: BoxFit.cover,
                                 color: Colors.black45,
                                 colorBlendMode: BlendMode.darken,
-                                errorWidget:
-                                    (c, e, s) => Container(
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.primaryContainer,
-                                    ),
+                                fallback: Container(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                               )
                               : Container(
                                 color: Theme.of(context).colorScheme.primary,
@@ -272,11 +276,10 @@ class _WorkoutListItem extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 child:
                     workout.exercise?.image != null
-                        ? CachedNetworkImage(
-                          imageUrl: workout.exercise!.image!,
+                        ? AppImage(
+                          source: workout.exercise!.image!,
                           fit: BoxFit.cover,
-                          errorWidget:
-                              (c, e, s) => const Icon(Icons.fitness_center),
+                          fallback: const Icon(Icons.fitness_center),
                         )
                         : const Icon(Icons.fitness_center),
               ),

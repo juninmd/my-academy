@@ -1,43 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { version, name, description } from '../package.json';
+import { AppModule } from './app.module.js';
+import { Logger } from '@nestjs/common';
+import { configureApp } from './app.setup.js';
+import { assertSafeAuthConfig } from './configs/auth-safety.js';
+import { readFileSync } from 'node:fs';
 import { apiReference } from '@scalar/nestjs-api-reference';
+
+const { version, name, description } = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+);
 
 const logger = new Logger('Bootstrap');
 async function bootstrap() {
   try {
+    assertSafeAuthConfig();
     const app = await NestFactory.create(AppModule, {
       logger: ['error', 'warn', 'log'],
     });
 
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-        forbidNonWhitelisted: true,
-      }),
-    );
-
-    app.setGlobalPrefix('api', {
-      exclude: ['docs', 'health'],
-    });
-
-    // Habilita CORS
-    const allowedOrigins = (process.env.CORS_ORIGINS || '')
-      .split(',')
-      .map((o) => o.trim())
-      .filter(Boolean);
-
-    app.enableCors({
-      origin: allowedOrigins.length > 0 ? allowedOrigins : '*',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
-      credentials: allowedOrigins.length > 0 ? true : false,
-      allowedHeaders: 'Content-Type, Accept, Authorization',
-    });
+    configureApp(app);
 
     // Configuração do Swagger
     const config = new DocumentBuilder()

@@ -16,7 +16,7 @@ class WorkoutSeriesEntity extends Equatable {
   final int? id;
   final int? workoutId;
   final int repetitions;
-  final int weight; // in kg or unit
+  final double weight; // in kg or unit
   final int rest;
   final int? time;
   final double? distance;
@@ -38,7 +38,7 @@ class WorkoutSeriesEntity extends Equatable {
     int? id,
     int? workoutId,
     int? repetitions,
-    int? weight,
+    double? weight,
     int? rest,
     int? time,
     double? distance,

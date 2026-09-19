@@ -1,4 +1,4 @@
-import { Workout } from '../../workouts/entities/workout.entity';
+import { Workout } from '../../workouts/entities/workout.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
 import { ExerciseType } from '@prisma/client';
 

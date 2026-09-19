@@ -1,6 +1,6 @@
 import { Personals } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { WorkoutsGroup } from '../../workouts-groups/entities/workouts-group.entity';
+import { WorkoutsGroup } from '../../workouts-groups/entities/workouts-group.entity.js';
 
 export class User {
   @ApiProperty({
@@ -23,6 +23,13 @@ export class User {
     description: 'Photo URL',
   })
   photoUrl: string;
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+    description: 'When the user finished the in-app onboarding',
+  })
+  onboardedAt?: Date | null;
 
   @ApiProperty({
     example: '123456789',

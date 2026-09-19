@@ -15,13 +15,12 @@ class PersonalRepositoryImpl implements PersonalRepository {
 
   @override
   Future<Either<Failure, List<PersonalEntity>>> getPersonals({
-    String? personalUserId,
+    required String personalUserId,
   }) async {
     try {
       final response = await _apiClient.get(
         'personals',
-        queryParameters:
-            personalUserId != null ? {'personalUserId': personalUserId} : null,
+        queryParameters: {'personalUserId': personalUserId},
       );
       final List<dynamic> data = response;
       return Right(
@@ -87,7 +86,7 @@ PersonalRepository personalRepository(Ref ref) {
 @riverpod
 Future<List<PersonalEntity>> personals(
   Ref ref, {
-  String? personalUserId,
+  required String personalUserId,
 }) async {
   final repository = ref.watch(personalRepositoryProvider);
   final result = await repository.getPersonals(personalUserId: personalUserId);

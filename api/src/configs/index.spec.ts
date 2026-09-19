@@ -2,7 +2,7 @@ describe('Config', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     process.env = { ...originalEnv };
   });
 
@@ -10,7 +10,7 @@ describe('Config', () => {
     process.env = originalEnv;
   });
 
-  it('should load config with all env vars and replace newlines in private key', () => {
+  it('should load config with all env vars and replace newlines in private key', async () => {
     process.env.SA_TYPE = 'service_account';
     process.env.SA_PROJECT_ID = 'project-id';
     process.env.SA_PRIVATE_KEY_ID = 'key-id';
@@ -26,8 +26,7 @@ describe('Config', () => {
     process.env.AUTH_MOC_JSON = '{}';
     process.env.TELEGRAM_TOKEN = 'telegram-token';
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const config = require('./index').default;
+    const { default: config } = await import('./index.js');
 
     expect(config.serviceAccount).toEqual({
       type: 'service_account',
@@ -49,11 +48,10 @@ describe('Config', () => {
     expect(config.telegramToken).toBe('telegram-token');
   });
 
-  it('should handle undefined private key', () => {
+  it('should handle undefined private key', async () => {
     delete process.env.SA_PRIVATE_KEY;
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const config = require('./index').default;
+    const { default: config } = await import('./index.js');
     expect(config.serviceAccount.privateKey).toBe('');
   });
 });

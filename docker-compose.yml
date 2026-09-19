@@ -1,0 +1,61 @@
+# Local homologation stack: Postgres + Redis + API (mock auth, never for production).
+# Usage: docker compose up -d --build  →  API at http://localhost:9000/api
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: academy
+      POSTGRES_PASSWORD: academy
+      POSTGRES_DB: myacademy
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U academy -d myacademy"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  cache:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./api
+    # Local homologation only: mock identities, no real secrets.
+    environment:
+      # Mock auth is refused when NODE_ENV=production (the image default).
+      NODE_ENV: development
+      PORT: '9000'
+      FIREBASE_ENABLED: 'true'
+      AUTH_MOC_ENABLED: 'true'
+      AUTH_MOC_TOKEN: 'mock-token'
+      AUTH_MOC_JSON: '[{"uid":"hml-student","email":"aluno@myacademy.dev","name":"Ana Aluna"},{"uid":"hml-personal","email":"personal@myacademy.dev","name":"Paulo Personal"},{"uid":"hml-owner","email":"dono@myacademy.dev","name":"Otávio Dono"},{"uid":"hml-newbie","email":"novo@myacademy.dev","name":"Nina Nova"}]'
+      CORS_ORIGINS: ''
+      TELEGRAM_TOKEN: ''
+      DATABASE_URL: postgresql://academy:academy@db:5432/myacademy?schema=public
+      REDIS_URL: redis://cache:6379
+    command: ["sh", "-c", "bunx prisma db push && bun prisma/seed.ts && bun prisma/seed-homologation.ts && bun dist/main.js"]
+    ports:
+      - "9000:9000"
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  db-data:

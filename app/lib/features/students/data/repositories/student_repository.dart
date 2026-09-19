@@ -141,7 +141,7 @@ StudentRepository studentRepository(Ref ref) =>
 Future<List<StudentEntity>> students(Ref ref, String userId) async {
   final repo = ref.watch(studentRepositoryProvider);
   final result = await repo.getStudents(userId);
-  return result.fold((l) => [], (r) => r);
+  return result.fold((failure) => throw failure, (r) => r);
 }
 
 @riverpod

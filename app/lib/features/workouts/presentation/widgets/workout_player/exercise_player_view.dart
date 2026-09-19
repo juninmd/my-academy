@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,6 +10,7 @@ import '../../../domain/entities/exercise_log_entity.dart';
 import '../../../domain/entities/session_log_entity.dart';
 import '../../providers/workout_provider.dart';
 import '../../../../../utils/one_rep_max_calculator.dart';
+import '../../../../../core/widgets/app_image.dart';
 import 'workout_set_row.dart';
 import 'workout_warmup_list.dart';
 import 'workout_history_view.dart';
@@ -131,12 +131,12 @@ class ExercisePlayerView extends HookConsumerWidget {
 
       warmupSets.value = [
         {
-          'weight': (workingWeight * 0.5).round(),
+          'weight': (workingWeight * 0.5).roundToDouble(),
           'reps': 12,
           'completed': false,
         },
         {
-          'weight': (workingWeight * 0.75).round(),
+          'weight': (workingWeight * 0.75).roundToDouble(),
           'reps': 8,
           'completed': false,
         },
@@ -157,11 +157,9 @@ class ExercisePlayerView extends HookConsumerWidget {
                   fit: StackFit.expand,
                   children: [
                     if (workout.exercise?.image != null)
-                      CachedNetworkImage(
-                        imageUrl: workout.exercise!.image!,
-                        fit: BoxFit.cover,
-                        errorWidget:
-                            (c, e, s) => Container(color: Colors.grey[800]),
+                      AppImage(
+                        source: workout.exercise!.image!,
+                        fallback: Container(color: Colors.grey[800]),
                       )
                     else
                       Container(

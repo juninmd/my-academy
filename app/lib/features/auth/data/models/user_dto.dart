@@ -7,6 +7,7 @@ class UserDto extends UserEntity {
     super.name,
     super.photoUrl,
     super.role,
+    super.onboarded,
   });
   factory UserDto.fromEntity(UserEntity entity) => UserDto(
     id: entity.id,
@@ -14,6 +15,7 @@ class UserDto extends UserEntity {
     name: entity.name,
     photoUrl: entity.photoUrl,
     role: entity.role,
+    onboarded: entity.onboarded,
   );
 
   factory UserDto.fromJson(Map<String, dynamic> json) => UserDto(
@@ -22,6 +24,7 @@ class UserDto extends UserEntity {
     name: json['name'] as String?,
     photoUrl: json['photoUrl'] as String?,
     role: json['role'] as String?,
+    onboarded: json['onboardedAt'] != null,
   );
 
   Map<String, dynamic> toJson() => {

@@ -92,6 +92,7 @@ class StudentAddPage extends HookConsumerWidget {
             );
           },
           (success) {
+            ref.invalidate(studentsProvider(user.id));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Aluno ${success.name} adicionado!'),
@@ -136,11 +137,11 @@ class StudentAddPage extends HookConsumerWidget {
                       radius: 50,
                       backgroundColor: colorScheme.primaryContainer,
                       backgroundImage:
-                          photoUrl.value != null
+                          (photoUrl.value ?? '').isNotEmpty
                               ? NetworkImage(photoUrl.value!)
                               : null,
                       child:
-                          photoUrl.value == null
+                          (photoUrl.value ?? '').isEmpty
                               ? Icon(
                                 Icons.person,
                                 size: 50,

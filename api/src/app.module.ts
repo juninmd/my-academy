@@ -1,23 +1,29 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ExercisesModule } from './exercises/exercises.module';
-import { WorkoutsSeriesModule } from './workouts-series/workouts-series.module';
-import { MethodsModule } from './methods/methods.module';
-import { PersonalsModule } from './personals/personals.module';
-import { UsersModule } from './users/users.module';
-import { WorkoutsModule } from './workouts/workouts.module';
-import { WorkoutsGroupsModule } from './workouts-groups/workouts-groups.module';
-import { WorkoutsSessionsModule } from './workouts-sessions/workouts-sessions.module';
-import { PreauthMiddleware } from './auth/firebase.auth';
-import { HealthModule } from './health/health.module';
-import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module';
-import { TelegramModule } from './telegram/telegram.module';
-import { AssessmentsModule } from './assessments/assessments.module';
-import { GymsModule } from './gyms/gyms.module';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { ExercisesModule } from './exercises/exercises.module.js';
+import { WorkoutsSeriesModule } from './workouts-series/workouts-series.module.js';
+import { MethodsModule } from './methods/methods.module.js';
+import { PersonalsModule } from './personals/personals.module.js';
+import { UsersModule } from './users/users.module.js';
+import { WorkoutsModule } from './workouts/workouts.module.js';
+import { WorkoutsGroupsModule } from './workouts-groups/workouts-groups.module.js';
+import { WorkoutsSessionsModule } from './workouts-sessions/workouts-sessions.module.js';
+import { PreauthMiddleware } from './auth/firebase.auth.js';
+import { HealthModule } from './health/health.module.js';
+import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module.js';
+import { TelegramModule } from './telegram/telegram.module.js';
+import { AssessmentsModule } from './assessments/assessments.module.js';
+import { GymsModule } from './gyms/gyms.module.js';
+import { PrismaModule } from './prisma.module.js';
+import { AppCacheModule } from './cache/app-cache.module.js';
+import { AccessModule } from './access/access.module.js';
 
 @Module({
   imports: [
+    PrismaModule,
+    AppCacheModule,
+    AccessModule,
     ExercisesModule,
     WorkoutsSeriesModule,
     MethodsModule,
@@ -46,7 +52,7 @@ export class AppModule {
           { path: 'api/health', method: RequestMethod.GET },
         )
         .forRoutes({
-          path: '*',
+          path: '{*splat}',
           method: RequestMethod.ALL,
         });
     }

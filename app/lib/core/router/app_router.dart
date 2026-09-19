@@ -20,6 +20,12 @@ import '../../features/workouts/presentation/pages/workout_details_page.dart';
 import '../../features/workouts/presentation/pages/workout_groups_page.dart';
 import '../../features/workouts/presentation/pages/workout_player_page.dart';
 import '../../features/workouts/presentation/pages/workout_history_page.dart';
+import '../../features/auth/domain/entities/user_role.dart';
+import '../../features/gym/presentation/pages/gym_page.dart';
+import '../../features/profile/presentation/pages/edit_profile_page.dart';
+import '../../features/students/presentation/pages/student_add_page.dart';
+import '../../features/students/presentation/pages/students_page.dart';
+import 'app_destinations.dart';
 
 part 'app_router.g.dart';
 
@@ -33,10 +39,6 @@ GoRouter router(Ref ref) {
   return GoRouter(
     navigatorKey: _key,
     initialLocation: '/login',
-    // We don't strictly need refreshListenable if the provider rebuilds the router,
-    // but preserving it for authState logic if needed.
-    // However, rebuilding the router on every state change can be jarring.
-    // A better approach usually involves a Listenable that combines states, but adhering to current pattern:
     refreshListenable: ValueNotifier(authState),
     redirect: (context, state) {
       final isLoggedIn = authState.value != null;
@@ -55,9 +57,8 @@ GoRouter router(Ref ref) {
           return null;
         }
 
-        if (isOnboardingPage) return '/home';
-
-        if (isLoggingIn) return '/home';
+        final home = homePathFor(UserRole.fromApi(authState.value?.role));
+        if (isOnboardingPage || isLoggingIn) return home;
       }
 
       return null;
@@ -167,6 +168,36 @@ GoRouter router(Ref ref) {
               GoRoute(
                 path: '/profile',
                 builder: (context, state) => const ProfilePage(),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (context, state) => const EditProfilePage(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // Branch 5: Students (personal trainers)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/students',
+                builder: (context, state) => const StudentsPage(),
+                routes: [
+                  GoRoute(
+                    path: 'add',
+                    builder: (context, state) => const StudentAddPage(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // Branch 6: Gym management (owners)
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/gym',
+                builder: (context, state) => const GymPage(),
               ),
             ],
           ),

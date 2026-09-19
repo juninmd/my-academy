@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 My Academy is a fitness/gym management platform with two sub-projects:
-- **`api/`** — NestJS backend (TypeScript, Node ≥22, pnpm)
+- **`api/`** — NestJS 12 backend (TypeScript 6, ESM, Bun runtime + package manager)
 - **`app/`** — Flutter frontend (Dart, targets Web/Android/iOS)
 
 The API uses PostgreSQL via Prisma and Firebase for authentication. The Flutter app is deployed to Netlify.
@@ -18,43 +18,53 @@ The API uses PostgreSQL via Prisma and Firebase for authentication. The Flutter 
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Development (watch mode)
-pnpm run start:dev
+bun run start:dev
 
-# Build
-pnpm run build
+# Build / typecheck / lint (auto-fix)
+bun run build
+bun run typecheck
+bun run lint
 
-# Lint (auto-fix)
-pnpm run lint
+# Unit tests (Vitest, max 2 workers) — single file, coverage
+bun run test
+bun run test -- src/users/users.service.spec.ts
+bun run test:cov
 
-# Run all unit tests
-pnpm test
-
-# Run a single test file
-pnpm test -- src/users/users.service.spec.ts
-
-# Run with coverage
-pnpm run test:cov
-
-# Run E2E tests
-pnpm run test:e2e
+# E2E: mocked suites, then personas against real Postgres + Redis (needs docker compose up)
+bun run test:e2e
+bun run test:e2e:db
 
 # Prisma
-pnpm run prisma:generate   # regenerate client after schema changes
-pnpm run prisma:push       # push schema to DB
-pnpm run prisma:pull       # pull schema from DB
-pnpm run prisma:seed       # seed initial data
+bun run prisma:generate   # regenerate client after schema changes
+bun run prisma:push       # push schema to DB
+bun run prisma:pull       # pull schema from DB
+bun run prisma:seed       # seed initial data + homologation personas
 ```
+
+### Local stack (Docker)
+
+```bash
+# From the repo root: Postgres :5433, Redis :6380, API :9000 (seeded, mock auth)
+docker compose up -d --build
+curl -fsS http://localhost:9000/health
+```
+
+Homologation personas (mock auth, `Authorization: Bearer mock-token:<uid>`):
+`hml-student` (aluno@myacademy.dev), `hml-personal` (personal@myacademy.dev),
+`hml-owner` (dono@myacademy.dev, OWNER, owns "Academia Homologação"), `hml-newbie` (novo@myacademy.dev).
 
 ### Architecture
 
 - **NestJS modules** — each domain (exercises, workouts, users, personals, etc.) is a self-contained module under `src/<domain>/`.
-- **Auth** — Firebase ID token verification via `PreauthMiddleware` (`src/auth/firebase.auth.ts`). Applied globally when `FIREBASE_ENABLED=true`. For local dev, mock auth via `AUTH_MOC_ENABLED=true` + `AUTH_MOC_JSON=<decoded token JSON>`.
+- **Auth** — Firebase ID token verification via `PreauthMiddleware` (`src/auth/firebase.auth.ts`). Applied globally when `FIREBASE_ENABLED=true`. For local dev, mock auth via `AUTH_MOC_ENABLED=true` + `AUTH_MOC_JSON=<decoded token JSON or array of them>`; `Bearer <AUTH_MOC_TOKEN>:<uid>` picks a user from the array.
+- **Authorization** — `AccessService` (`src/access/`) + `@CurrentUserId()`: users act on their own data, personals on their contracted students, gym owners on their gyms; catalog writes (exercises, methods) are ADMIN-only. Self-service roles are STUDENT/PERSONAL/OWNER; ADMIN is granted only in the DB. `NODE_ENV=production` refuses to boot without `FIREBASE_ENABLED=true` or with `AUTH_MOC_ENABLED=true`.
+- **Cache** — global `CacheModule` backed by Redis when `REDIS_URL` is set (TTL in ms); services evict list keys on writes.
 - **Prisma** — single `PrismaService` (`src/prisma.service.ts`) injected into repositories. Schema is at `prisma/schema.prisma`.
 - **Swagger/Scalar** — API docs auto-generated via `@nestjs/swagger`; served by `@scalar/nestjs-api-reference`.
-- **Coverage threshold** — Jest is configured to require **100% coverage** (branches, functions, lines, statements). All new code must have tests.
+- **Coverage threshold** — Vitest is configured to require **100% coverage** (branches, functions, lines, statements). All new code must have tests.
 
 ### Key env vars
 
@@ -78,6 +88,9 @@ flutter pub get
 
 # Run on Chrome (web)
 flutter run -d chrome
+
+# Local homologation against the Docker API with persona login (any password)
+flutter run -d chrome --dart-define=USE_MOCK_AUTH=true --dart-define=API_BASE_URL=http://localhost:9000/api/
 
 # Build for web (production)
 flutter build web

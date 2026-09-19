@@ -29,7 +29,7 @@ class FakeWorkoutCreateNotifier extends WorkoutCreateNotifier {
   Future<void> saveGroup(String userId) async {}
 
   @override
-  void addWorkout(ExerciseEntity exercise, int reps, int weight, int rest) {}
+  void addWorkout(ExerciseEntity exercise, int reps, double weight, int rest) {}
 }
 
 void main() {

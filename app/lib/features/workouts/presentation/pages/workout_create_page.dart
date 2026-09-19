@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +11,8 @@ import '../providers/workout_provider.dart';
 import '../providers/workout_create_provider.dart';
 import '../widgets/workout_series_dialog.dart';
 import '../widgets/workout_edit_series_dialog.dart';
+import '../../../../core/widgets/app_image.dart';
+import '../../../../core/exceptions/failure.dart';
 
 class WorkoutCreatePage extends HookConsumerWidget {
   const WorkoutCreatePage({super.key, this.initialGroup});
@@ -91,7 +92,7 @@ class WorkoutCreatePage extends HookConsumerWidget {
                     : ReorderableListView.builder(
                       padding: const EdgeInsets.only(bottom: 80),
                       itemCount: draftGroup.workouts.length,
-                      onReorder: (oldIndex, newIndex) {
+                      onReorderItem: (oldIndex, newIndex) {
                         notifier.reorderWorkouts(oldIndex, newIndex);
                       },
                       itemBuilder: (context, index) {
@@ -142,13 +143,12 @@ class WorkoutCreatePage extends HookConsumerWidget {
                               clipBehavior: Clip.antiAlias,
                               child:
                                   workout.exercise?.image != null
-                                      ? CachedNetworkImage(
-                                        imageUrl: workout.exercise!.image!,
+                                      ? AppImage(
+                                        source: workout.exercise!.image!,
                                         fit: BoxFit.cover,
-                                        errorWidget:
-                                            (context, url, error) => const Icon(
-                                              Icons.fitness_center,
-                                            ),
+                                        fallback: const Icon(
+                                          Icons.fitness_center,
+                                        ),
                                       )
                                       : const Icon(Icons.fitness_center),
                             ),
@@ -186,43 +186,61 @@ class WorkoutCreatePage extends HookConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () async {
-                  final user = ref.read(authNotifierProvider).value;
-                  if (user != null) {
-                    if (draftGroup.name.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Digite um nome para o treino'),
-                        ),
-                      );
-                      return;
-                    }
-                    if (draftGroup.workouts.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Adicione pelo menos um exercício'),
-                        ),
-                      );
-                      return;
-                    }
-                    await notifier.saveGroup(user.id);
-                    if (context.mounted) context.pop();
-                  }
-                },
-                child: const Text('Salvar Treino'),
-              ),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 50,
+                  child: OutlinedButton.icon(
+                    onPressed: showExercisePicker,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Adicionar'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final user = ref.read(authNotifierProvider).value;
+                        if (user != null) {
+                          if (draftGroup.name.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Digite um nome para o treino'),
+                              ),
+                            );
+                            return;
+                          }
+                          if (draftGroup.workouts.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Adicione pelo menos um exercício',
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+                          try {
+                            await notifier.saveGroup(user.id);
+                            if (context.mounted) context.pop();
+                          } on Failure catch (failure) {
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(failure.message)),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text('Salvar Treino'),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: showExercisePicker,
-        label: const Text('Adicionar'),
-        icon: const Icon(Icons.add),
       ),
     );
   }
@@ -471,17 +489,15 @@ class _ExercisePickerSheet extends HookConsumerWidget {
                                 flex: 3,
                                 child:
                                     exercise.image != null
-                                        ? CachedNetworkImage(
-                                          imageUrl: exercise.image!,
+                                        ? AppImage(
+                                          source: exercise.image!,
                                           fit: BoxFit.cover,
-                                          errorWidget:
-                                              (context, url, error) =>
-                                                  Container(
-                                                    color: Colors.grey[200],
-                                                    child: const Icon(
-                                                      Icons.fitness_center,
-                                                    ),
-                                                  ),
+                                          fallback: Container(
+                                            color: Colors.grey[200],
+                                            child: const Icon(
+                                              Icons.fitness_center,
+                                            ),
+                                          ),
                                         )
                                         : Container(
                                           color: Colors.grey[200],

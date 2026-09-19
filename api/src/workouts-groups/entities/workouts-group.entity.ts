@@ -1,6 +1,6 @@
-import { Users } from '@prisma/client';
+import type { Users } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { Workout } from '../../workouts/entities/workout.entity';
+import { Workout } from '../../workouts/entities/workout.entity.js';
 
 export class WorkoutsGroup {
   @ApiProperty({

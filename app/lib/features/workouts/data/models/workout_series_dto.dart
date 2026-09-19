@@ -15,7 +15,7 @@ class WorkoutSeriesDto {
   final int? id;
   final int? workoutId;
   final int repetitions;
-  final int weight;
+  final double weight;
   final int rest;
   final int? time;
   final double? distance;
@@ -26,7 +26,7 @@ class WorkoutSeriesDto {
       id: json['id'] as int?,
       workoutId: json['workoutId'] as int?,
       repetitions: json['repetitions'] as int? ?? 0,
-      weight: json['weight'] as int? ?? 0,
+      weight: (json['weight'] as num?)?.toDouble() ?? 0,
       rest: json['rest'] as int? ?? 0,
       time: json['time'] as int?,
       distance: (json['distance'] as num?)?.toDouble(),
@@ -46,6 +46,12 @@ class WorkoutSeriesDto {
       if (speed != null) 'speed': speed,
     };
   }
+
+  /// Payload for series nested in a workout group; the API owns ids there.
+  Map<String, dynamic> toNestedJson() =>
+      toJson()
+        ..remove('id')
+        ..remove('workoutId');
 
   WorkoutSeriesEntity toEntity() {
     return WorkoutSeriesEntity(

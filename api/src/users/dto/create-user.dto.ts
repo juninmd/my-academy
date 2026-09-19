@@ -5,9 +5,16 @@ import {
   IsOptional,
   IsString,
   IsUrl,
-  IsEnum,
+  IsIn,
 } from 'class-validator';
 import { Role } from '@prisma/client';
+
+/** Roles a user may pick for themselves (onboarding). */
+export const SELF_ASSIGNABLE_ROLES: Role[] = [
+  Role.STUDENT,
+  Role.PERSONAL,
+  Role.OWNER,
+];
 
 export class CreateUserDto {
   @ApiProperty({
@@ -38,13 +45,13 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
-    required: true,
+    required: false,
     example: 'https://example.com/photo.jpg',
     description: 'User profile photo URL',
   })
+  @IsOptional()
   @IsUrl()
-  @IsNotEmpty()
-  photoUrl: string;
+  photoUrl?: string;
 
   @ApiProperty({
     required: false,
@@ -57,11 +64,11 @@ export class CreateUserDto {
 
   @ApiProperty({
     required: false,
-    enum: Role,
+    enum: SELF_ASSIGNABLE_ROLES,
     example: 'STUDENT',
-    description: 'User role',
+    description: 'User role; ADMIN is only granted directly in the database',
   })
   @IsOptional()
-  @IsEnum(Role)
+  @IsIn(SELF_ASSIGNABLE_ROLES)
   role?: Role;
 }

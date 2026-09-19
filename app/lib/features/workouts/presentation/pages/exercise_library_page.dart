@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +9,7 @@ import '../providers/favorites_provider.dart';
 import '../providers/workout_create_provider.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/add_custom_exercise_dialog.dart';
+import '../../../../core/widgets/app_image.dart';
 
 enum FilterType { all, recent }
 
@@ -244,14 +244,12 @@ class ExerciseLibraryPage extends HookConsumerWidget {
                                 clipBehavior: Clip.antiAlias,
                                 child:
                                     exercise.image != null
-                                        ? CachedNetworkImage(
-                                          imageUrl: exercise.image!,
+                                        ? AppImage(
+                                          source: exercise.image!,
                                           fit: BoxFit.cover,
-                                          errorWidget:
-                                              (context, url, error) =>
-                                                  const Icon(
-                                                    Icons.fitness_center,
-                                                  ),
+                                          fallback: const Icon(
+                                            Icons.fitness_center,
+                                          ),
                                         )
                                         : const Icon(Icons.fitness_center),
                               ),

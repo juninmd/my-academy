@@ -1,24 +1,23 @@
-FROM node:22-alpine AS builder
+FROM oven/bun:1.4.2-alpine AS builder
 WORKDIR /usr/src/app
 
-# Instala dependências primeiro (layer cacheável)
-# --ignore-scripts evita que o postinstall rode `pnpm run build`
-# antes de copiar o código-fonte
-COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile --ignore-scripts
+# Dependencies first (cacheable layer); scripts are skipped until sources exist.
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile --ignore-scripts
 
-# Copia código e gera o Prisma client + compila TypeScript
 COPY . .
-# DATABASE_URL exigido pelo prisma.config.ts durante o `prisma generate`
-# (não conecta ao banco — apenas satisfaz a validação do Prisma 6)
+# prisma.config.ts requires DATABASE_URL at generate time; no connection is made.
 ENV DATABASE_URL="postgresql://build:build@localhost:5432/build"
-RUN pnpm run build
+RUN bun run build
 
-FROM node:22-alpine
+FROM oven/bun:1.4.2-alpine
 WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/dist ./dist
+ENV NODE_ENV=production
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package.json ./
+COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
+COPY --from=builder /usr/src/app/package.json /usr/src/app/prisma.config.ts ./
+USER bun
 EXPOSE 9000
-CMD ["node", "dist/src/main.js"]
+HEALTHCHECK --interval=15s --timeout=5s --retries=5 CMD wget -qO- http://localhost:9000/health || exit 1
+CMD ["bun", "dist/main.js"]

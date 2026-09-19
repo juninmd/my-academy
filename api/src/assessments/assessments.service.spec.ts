@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AssessmentsService } from './assessments.service';
-import { PrismaService } from '../prisma.service';
+import { AssessmentsService } from './assessments.service.js';
+import { PrismaService } from '../prisma.service.js';
 import { NotFoundException } from '@nestjs/common';
 
 describe('AssessmentsService', () => {
@@ -8,11 +8,11 @@ describe('AssessmentsService', () => {
 
   const mockPrisma = {
     assessment: {
-      create: jest.fn(),
-      findMany: jest.fn(),
-      findUnique: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
   };
 
@@ -27,7 +27,7 @@ describe('AssessmentsService', () => {
     service = module.get<AssessmentsService>(AssessmentsService);
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   it('should calculate IMC automatically', async () => {
     const dto = { studentId: 's1', personalId: 'p1', weight: 80, height: 2 };
@@ -39,11 +39,20 @@ describe('AssessmentsService', () => {
     });
   });
 
-  it('should find all assessments', async () => {
+  it('should find all assessments by studentId', async () => {
     mockPrisma.assessment.findMany.mockResolvedValue([]);
     await service.findAll('s1');
     expect(mockPrisma.assessment.findMany).toHaveBeenCalledWith({
       where: { studentId: 's1' },
+      orderBy: { date: 'desc' },
+    });
+  });
+
+  it('should find all assessments by personalId', async () => {
+    mockPrisma.assessment.findMany.mockResolvedValue([]);
+    await service.findAll(undefined, 'p1');
+    expect(mockPrisma.assessment.findMany).toHaveBeenCalledWith({
+      where: { personalId: 'p1' },
       orderBy: { date: 'desc' },
     });
   });

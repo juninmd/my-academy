@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
+import 'package:my_academy/features/gym/domain/entities/gym_entities.dart';
+import 'package:my_academy/features/gym/presentation/providers/gym_providers.dart';
 import 'package:my_academy/features/home/domain/entities/workout_summary_entity.dart';
 import 'package:my_academy/features/home/presentation/providers/home_provider.dart';
 import 'package:my_academy/features/auth/presentation/pages/profile_page.dart';
@@ -40,6 +42,16 @@ void main() {
             ),
           ),
           settingsProvider.overrideWith(FakeSettingsNotifier.new),
+          myMembershipsProvider.overrideWith(
+            (ref) async => const [
+              MembershipEntity(
+                gymName: 'Academia Centro',
+                status: 'ACTIVE',
+                planName: 'Mensal',
+                pendingPayments: 1,
+              ),
+            ],
+          ),
           // This is likely not used anymore in ProfilePage but keeping it
           workoutSummaryProvider.overrideWith(
             (ref) async =>
@@ -72,5 +84,9 @@ void main() {
     final textField = find.byType(TextField);
     expect(textField, findsOneWidget);
     expect(tester.widget<TextField>(textField).controller?.text, 'User Name');
+
+    // The student sees the enrollment the gym owner registered.
+    expect(find.text('Academia Centro'), findsOneWidget);
+    expect(find.text('Mensal · 1 pagamento(s) em aberto'), findsOneWidget);
   });
 }

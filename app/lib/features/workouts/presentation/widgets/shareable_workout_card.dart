@@ -11,11 +11,11 @@ class ShareableWorkoutCard extends StatelessWidget {
   });
 
   final Duration duration;
-  final int totalWeight;
+  final double totalWeight;
   final int totalSets;
   final List<String> newRecords;
 
-  String _getWeightEquivalence(int weightKg) {
+  String _getWeightEquivalence(double weightKg) {
     if (weightKg < 100) return 'um Lobo Grande 🐺';
     if (weightKg < 500) return 'um Urso Pardo 🐻';
     if (weightKg < 1000) return 'um Piano de Cauda 🎹';
@@ -39,7 +39,9 @@ class ShareableWorkoutCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Theme.of(context).colorScheme.primaryContainer,
+              Theme.of(
+                context,
+              ).colorScheme.primaryContainer.withValues(alpha: 0.35),
               Theme.of(context).cardTheme.color ??
                   Theme.of(context).colorScheme.surface,
             ],
@@ -73,9 +75,9 @@ class ShareableWorkoutCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Ótimo trabalho hoje.',
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ).animate().fadeIn(delay: 400.ms),
             const SizedBox(height: 24),

@@ -113,7 +113,7 @@ final class StudentsProvider
   }
 }
 
-String _$studentsHash() => r'32d198abcb71220c89013e8b491cd08b5fcfe767';
+String _$studentsHash() => r'27205af2e7035f0b457c251f40cfdb55be0ecc65';
 
 final class StudentsFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<StudentEntity>>, String> {

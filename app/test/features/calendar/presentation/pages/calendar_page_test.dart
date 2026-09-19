@@ -41,6 +41,7 @@ void main() {
                 date: now,
                 checked: true,
                 userId: 'user1',
+                createdAt: DateTime(now.year, now.month, now.day, 7, 30),
               ),
             ];
           }),
@@ -71,6 +72,11 @@ void main() {
 
     // Wait for async
     await tester.pumpAndSettle();
+
+    // Shows when it was logged, not the day-only midnight of date.
+    expect(find.text('Realizado às 07:30'), findsOneWidget);
+    // The format toggle had no handler; it must not be offered.
+    expect(find.text('2 weeks'), findsNothing);
   });
 }
 

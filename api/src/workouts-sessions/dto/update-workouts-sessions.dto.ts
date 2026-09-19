@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateWorkoutsSessionsDto } from './create-workouts-sessions.dto';
+import { CreateWorkoutsSessionsDto } from './create-workouts-sessions.dto.js';
 
 export class UpdateWorkoutsSessionsDto extends PartialType(
   CreateWorkoutsSessionsDto,

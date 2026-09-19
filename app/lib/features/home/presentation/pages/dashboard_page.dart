@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +20,7 @@ import '../../../workouts/presentation/providers/workout_create_provider.dart';
 import '../../../workouts/presentation/widgets/workout_history_card.dart';
 import '../../../workouts/domain/utils/muscle_group_mapper.dart';
 import '../../domain/starter_plans.dart';
+import '../../../../core/widgets/user_avatar.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -46,324 +46,341 @@ class DashboardPage extends ConsumerWidget {
         icon: const Icon(Icons.fitness_center),
         label: const Text('Treino Rápido'),
       ),
-      body: CustomScrollView(
-        slivers: [
-          // Collapsible Header
-          SliverAppBar(
-            expandedHeight: 140,
-            floating: false,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
-              title: Text(
-                'Treino do dia',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.bold,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: CustomScrollView(
+            slivers: [
+              // Collapsible Header
+              SliverAppBar(
+                expandedHeight: 140,
+                floating: false,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
+                  title: Text(
+                    'Treino do dia',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  background: Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                  ),
                 ),
-              ),
-              background: Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
-            ),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: dashboardStatsAsync.when(
-                  data:
-                      (stats) => Row(
-                        children: [
-                          const Icon(
-                            Icons.local_fire_department,
-                            color: Colors.deepOrange,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${stats.streak}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: dashboardStatsAsync.when(
+                      data:
+                          (stats) => Semantics(
+                            label: 'Sequência de ${stats.streak} dias',
+                            excludeSemantics: true,
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.local_fire_department,
+                                  color: Colors.deepOrange,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${stats.streak}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 12),
-                        ],
-                      ),
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, _) => const SizedBox.shrink(),
-                ),
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
+                    ),
+                  ),
+                ],
               ),
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                onPressed: () {},
-              ),
-            ],
-          ),
 
-          // Content
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                // Custom Greeting Header
-                _DashboardHeader(user: user, settings: settings),
-                const SizedBox(height: 24),
+              // Content
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    // Custom Greeting Header
+                    _DashboardHeader(user: user, settings: settings),
+                    const SizedBox(height: 24),
 
-                // Stats Section
-                ref
-                    .watch(workoutSummaryProvider)
-                    .when(
-                      data:
-                          (summary) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              dashboardStatsAsync.when(
-                                data: (stats) => _SummaryCards(stats: stats),
-                                loading:
-                                    () => const SizedBox(
-                                      height: 100,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ),
-                                error:
-                                    (error, stack) => const SizedBox.shrink(),
-                              ),
-                              const SizedBox(height: 24),
-
-                              const RecentProgressChart(),
-                              const SizedBox(height: 24),
-
-                              const WeeklyProgressCard(),
-                              const SizedBox(height: 16),
-                              const BodyWeightTile(),
-                              const SizedBox(height: 16),
-
-                              // Daily Insight
-                              const DailyInsightCard(),
-                              const SizedBox(height: 16),
-
-                              // Daily Note Card
-                              const DailyNoteCard(),
-                              const SizedBox(height: 24),
-
-                              // Quick Actions Grid
-                              const QuickActionsGrid(),
-                              const SizedBox(height: 32),
-
-                              // Empty State "Quick Start"
-                              if (!summary.hasWorkoutToday) ...[
-                                _buildQuickStartCard(context),
-                                const SizedBox(height: 24),
-                              ],
-
-                              // Active Workout Card
-                              if (summary.hasWorkoutToday)
-                                _buildActiveWorkoutCard(context, summary)
-                              else
-                                Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    // Suggest Next Workout
-                                    nextWorkoutAsync.when(
-                                      data: (nextGroup) {
-                                        if (nextGroup != null) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                              bottom: 24,
-                                            ),
-                                            child: NextWorkoutCard(
-                                              workoutGroup: nextGroup,
-                                            ),
-                                          );
-                                        }
-                                        return const SizedBox.shrink();
-                                      },
-                                      loading:
-                                          () => const Center(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(16.0),
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
+                    // Stats Section
+                    ref
+                        .watch(workoutSummaryProvider)
+                        .when(
+                          data:
+                              (summary) => Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  dashboardStatsAsync.when(
+                                    data:
+                                        (stats) => _SummaryCards(stats: stats),
+                                    loading:
+                                        () => const SizedBox(
+                                          height: 100,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
                                           ),
-                                      error:
-                                          (_, stack) => const SizedBox.shrink(),
-                                    ),
+                                        ),
+                                    error:
+                                        (error, stack) =>
+                                            const SizedBox.shrink(),
+                                  ),
+                                  const SizedBox(height: 24),
 
-                                    // Last Workout History
-                                    logsAsync.when(
-                                      data: (logs) {
-                                        if (logs.isEmpty) {
-                                          return const SizedBox.shrink();
-                                        }
-                                        final latestLog = logs.reduce(
-                                          (a, b) =>
-                                              a.date.isAfter(b.date) ? a : b,
-                                        );
-                                        final latestDate = latestLog.date;
-                                        final sessionLogs =
-                                            logs
-                                                .where(
-                                                  (e) =>
-                                                      e.date.year ==
-                                                          latestDate.year &&
-                                                      e.date.month ==
-                                                          latestDate.month &&
-                                                      e.date.day ==
-                                                          latestDate.day,
-                                                )
-                                                .toList();
+                                  const RecentProgressChart(),
+                                  const SizedBox(height: 24),
 
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Último Treino',
-                                              style:
-                                                  Theme.of(
-                                                    context,
-                                                  ).textTheme.titleLarge,
-                                            ),
-                                            const SizedBox(height: 12),
-                                            exercisesAsync.when(
-                                              data: (exercises) {
-                                                final map = {
-                                                  for (var e in exercises)
-                                                    e.id: e.name,
-                                                };
-                                                return WorkoutHistoryCard(
-                                                  date: latestDate,
-                                                  logs: sessionLogs,
-                                                  exerciseNameMap: map,
-                                                );
-                                              },
-                                              loading:
-                                                  () => const SizedBox(
-                                                    height: 100,
-                                                    child: Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
-                                                    ),
-                                                  ),
-                                              error:
-                                                  (e, s) =>
-                                                      const SizedBox.shrink(),
-                                            ),
-                                            const SizedBox(height: 24),
-                                          ],
-                                        );
-                                      },
-                                      loading: () => const SizedBox.shrink(),
-                                      error: (e, s) => const SizedBox.shrink(),
-                                    ),
+                                  const WeeklyProgressCard(),
+                                  const SizedBox(height: 16),
+                                  const BodyWeightTile(),
+                                  const SizedBox(height: 16),
 
-                                    // Plans Section
-                                    Text(
-                                      'Seus Planos',
-                                      style:
-                                          Theme.of(
-                                            context,
-                                          ).textTheme.titleLarge,
-                                    ),
-                                    const SizedBox(height: 12),
-                                    SizedBox(
-                                      height: 140,
-                                      child: groupsAsync.when(
-                                        data: (groups) {
-                                          if (groups.isEmpty) {
-                                            return exercisesAsync.when(
-                                              data: (exercises) {
-                                                final starters =
-                                                    StarterPlans.getPlans(
-                                                      exercises,
+                                  // Daily Insight
+                                  const DailyInsightCard(),
+                                  const SizedBox(height: 16),
+
+                                  // Daily Note Card
+                                  const DailyNoteCard(),
+                                  const SizedBox(height: 24),
+
+                                  // Quick Actions Grid
+                                  const QuickActionsGrid(),
+                                  const SizedBox(height: 32),
+
+                                  // Empty State "Quick Start"
+                                  if (!summary.hasWorkoutToday) ...[
+                                    _buildQuickStartCard(context),
+                                    const SizedBox(height: 24),
+                                  ],
+
+                                  // Active Workout Card
+                                  if (summary.hasWorkoutToday)
+                                    _buildActiveWorkoutCard(context, summary)
+                                  else
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        // Suggest Next Workout
+                                        nextWorkoutAsync.when(
+                                          data: (nextGroup) {
+                                            if (nextGroup != null) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                  bottom: 24,
+                                                ),
+                                                child: NextWorkoutCard(
+                                                  workoutGroup: nextGroup,
+                                                ),
+                                              );
+                                            }
+                                            return const SizedBox.shrink();
+                                          },
+                                          loading:
+                                              () => const Center(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(16.0),
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              ),
+                                          error:
+                                              (_, stack) =>
+                                                  const SizedBox.shrink(),
+                                        ),
+
+                                        // Last Workout History
+                                        logsAsync.when(
+                                          data: (logs) {
+                                            if (logs.isEmpty) {
+                                              return const SizedBox.shrink();
+                                            }
+                                            final latestLog = logs.reduce(
+                                              (a, b) =>
+                                                  a.date.isAfter(b.date)
+                                                      ? a
+                                                      : b,
+                                            );
+                                            final latestDate = latestLog.date;
+                                            final sessionLogs =
+                                                logs
+                                                    .where(
+                                                      (e) =>
+                                                          e.date.year ==
+                                                              latestDate.year &&
+                                                          e.date.month ==
+                                                              latestDate
+                                                                  .month &&
+                                                          e.date.day ==
+                                                              latestDate.day,
+                                                    )
+                                                    .toList();
+
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Último Treino',
+                                                  style:
+                                                      Theme.of(
+                                                        context,
+                                                      ).textTheme.titleLarge,
+                                                ),
+                                                const SizedBox(height: 12),
+                                                exercisesAsync.when(
+                                                  data: (exercises) {
+                                                    final map = {
+                                                      for (var e in exercises)
+                                                        e.id: e.name,
+                                                    };
+                                                    return WorkoutHistoryCard(
+                                                      date: latestDate,
+                                                      logs: sessionLogs,
+                                                      exerciseNameMap: map,
                                                     );
-                                                if (starters.isEmpty) {
-                                                  return _buildCreateNewButton(
-                                                    context,
-                                                  );
-                                                }
-                                                return ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.horizontal,
-                                                  itemCount:
-                                                      starters.length + 1,
-                                                  itemBuilder: (
-                                                    context,
-                                                    index,
-                                                  ) {
-                                                    if (index ==
-                                                        starters.length) {
-                                                      return _buildCreateNewCard(
+                                                  },
+                                                  loading:
+                                                      () => const SizedBox(
+                                                        height: 100,
+                                                        child: Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        ),
+                                                      ),
+                                                  error:
+                                                      (e, s) =>
+                                                          const SizedBox.shrink(),
+                                                ),
+                                                const SizedBox(height: 24),
+                                              ],
+                                            );
+                                          },
+                                          loading:
+                                              () => const SizedBox.shrink(),
+                                          error:
+                                              (e, s) => const SizedBox.shrink(),
+                                        ),
+
+                                        // Plans Section
+                                        Text(
+                                          'Seus Planos',
+                                          style:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.titleLarge,
+                                        ),
+                                        const SizedBox(height: 12),
+                                        SizedBox(
+                                          height: 140,
+                                          child: groupsAsync.when(
+                                            data: (groups) {
+                                              if (groups.isEmpty) {
+                                                return exercisesAsync.when(
+                                                  data: (exercises) {
+                                                    final starters =
+                                                        StarterPlans.getPlans(
+                                                          exercises,
+                                                        );
+                                                    if (starters.isEmpty) {
+                                                      return _buildCreateNewButton(
                                                         context,
                                                       );
                                                     }
-                                                    return _buildPlanCard(
-                                                      context,
-                                                      starters[index],
-                                                      isTemplate: true,
-                                                      ref: ref,
+                                                    return ListView.builder(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemCount:
+                                                          starters.length + 1,
+                                                      itemBuilder: (
+                                                        context,
+                                                        index,
+                                                      ) {
+                                                        if (index ==
+                                                            starters.length) {
+                                                          return _buildCreateNewCard(
+                                                            context,
+                                                          );
+                                                        }
+                                                        return _buildPlanCard(
+                                                          context,
+                                                          starters[index],
+                                                          isTemplate: true,
+                                                          ref: ref,
+                                                        );
+                                                      },
                                                     );
                                                   },
-                                                );
-                                              },
-                                              loading:
-                                                  () => const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                              error:
-                                                  (e, s) =>
-                                                      _buildCreateNewButton(
-                                                        context,
+                                                  loading:
+                                                      () => const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
                                                       ),
-                                            );
-                                          }
-                                          return ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: groups.length + 1,
-                                            itemBuilder: (context, index) {
-                                              if (index == groups.length) {
-                                                return _buildCreateNewCard(
-                                                  context,
+                                                  error:
+                                                      (e, s) =>
+                                                          _buildCreateNewButton(
+                                                            context,
+                                                          ),
                                                 );
                                               }
-                                              return _buildPlanCard(
-                                                context,
-                                                groups[index],
-                                                isTemplate: false,
+                                              return ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: groups.length + 1,
+                                                itemBuilder: (context, index) {
+                                                  if (index == groups.length) {
+                                                    return _buildCreateNewCard(
+                                                      context,
+                                                    );
+                                                  }
+                                                  return _buildPlanCard(
+                                                    context,
+                                                    groups[index],
+                                                    isTemplate: false,
+                                                  );
+                                                },
                                               );
                                             },
-                                          );
-                                        },
-                                        loading:
-                                            () => const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                        error:
-                                            (e, s) =>
-                                                Center(child: Text('Erro: $e')),
-                                      ),
+                                            loading:
+                                                () => const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                            error:
+                                                (e, s) => Center(
+                                                  child: Text('Erro: $e'),
+                                                ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
 
-                              const SizedBox(height: 80),
-                            ],
-                          ),
-                      loading:
-                          () =>
-                              const Center(child: CircularProgressIndicator()),
-                      error:
-                          (error, stack) => Center(child: Text('Erro: $error')),
-                    ),
-              ]),
-            ),
+                                  const SizedBox(height: 80),
+                                ],
+                              ),
+                          loading:
+                              () => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          error:
+                              (error, stack) =>
+                                  Center(child: Text('Erro: $error')),
+                        ),
+                  ]),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -798,25 +815,7 @@ class _DashboardHeader extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => context.push('/profile'),
-          child: CircleAvatar(
-            radius: 28,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            backgroundImage:
-                user?.photoUrl != null
-                    ? CachedNetworkImageProvider(user!.photoUrl!)
-                    : null,
-            child:
-                user?.photoUrl == null
-                    ? Text(
-                      user?.name?.substring(0, 1).toUpperCase() ?? 'U',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    )
-                    : null,
-          ),
+          child: UserAvatar(name: user?.name, photoUrl: user?.photoUrl),
         ),
         const SizedBox(width: 16),
         Column(

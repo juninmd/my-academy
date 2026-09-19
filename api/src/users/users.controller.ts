@@ -8,17 +8,22 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { FindUserDto } from './dto/find-user.dto';
+import { UsersService } from './users.service.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { FindUserDto } from './dto/find-user.dto.js';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { User } from './entities/user.entity';
+import { User } from './entities/user.entity.js';
+import { AccessService } from '../access/access.service.js';
+import { CurrentUserId } from '../access/current-user.decorator.js';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly accessService: AccessService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
@@ -28,7 +33,11 @@ export class UsersController {
     type: User,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  create(
+    @Body() createUserDto: CreateUserDto,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<User> {
+    this.accessService.assertSelf(actor, createUserDto.id);
     return this.usersService.create(createUserDto);
   }
 
@@ -66,7 +75,9 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
+    @CurrentUserId() actor: string | undefined,
   ): Promise<User> {
+    this.accessService.assertSelf(actor, id);
     return this.usersService.update(id, updateUserDto);
   }
 
@@ -78,7 +89,11 @@ export class UsersController {
     type: User,
   })
   @ApiResponse({ status: 404, description: 'User not found.' })
-  remove(@Param('id') id: string): Promise<User> {
+  remove(
+    @Param('id') id: string,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<User> {
+    this.accessService.assertSelf(actor, id);
     return this.usersService.remove(id);
   }
 }

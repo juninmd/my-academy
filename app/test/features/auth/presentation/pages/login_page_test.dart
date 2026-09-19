@@ -40,4 +40,26 @@ void main() {
     expect(find.text('Entrar com Google'), findsOneWidget);
     expect(find.byIcon(Icons.login), findsOneWidget);
   });
+
+  testWidgets('login form stays narrow on desktop', (tester) async {
+    tester.view.physicalSize = const Size(1366, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authNotifierProvider.overrideWith(() => FakeAuthNotifier()),
+        ],
+        child: const MaterialApp(home: LoginPage()),
+      ),
+    );
+    await tester.pump(const Duration(seconds: 1));
+
+    final button = tester.getSize(
+      find.widgetWithText(OutlinedButton, 'Criar Conta'),
+    );
+    expect(button.width, lessThanOrEqualTo(488));
+  });
 }

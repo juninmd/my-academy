@@ -23,6 +23,7 @@ void main() {
         'Test User',
         'http://example.com/photo.jpg',
         'student',
+        false,
       ]);
     });
   });

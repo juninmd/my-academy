@@ -18,7 +18,7 @@ void main() {
       expect(session.date, date);
       expect(session.checked, true);
       expect(session.userId, 'user1');
-      expect(session.props, [1, 10, date, true, 'user1']);
+      expect(session.props, [1, 10, date, true, 'user1', null]);
     });
   });
 }

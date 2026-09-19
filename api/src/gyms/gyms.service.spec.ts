@@ -1,110 +1,99 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { GymsService } from './gyms.service';
-import { PrismaService } from '../prisma.service';
+import { NotFoundException } from '@nestjs/common';
+import { GymsService } from './gyms.service.js';
 
 describe('GymsService', () => {
-  let service: GymsService;
-  let prisma: PrismaService;
+  const prisma = {
+    gym: { create: vi.fn(), findMany: vi.fn(), update: vi.fn() },
+    plan: {
+      create: vi.fn(),
+      findMany: vi.fn(),
+      findFirst: vi.fn(),
+      update: vi.fn(),
+    },
+    subscription: { count: vi.fn() },
+    payment: { count: vi.fn(), aggregate: vi.fn() },
+    $transaction: vi.fn((ops: Promise<unknown>[]) => Promise.all(ops)),
+  };
+  const service = new GymsService(prisma as any);
 
-  beforeEach(async () => {
-    process.env.DATABASE_URL = 'postgresql://dummy:dummy@localhost:5432/dummy';
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        GymsService,
-        {
-          provide: PrismaService,
-          useValue: {
-            gym: {
-              create: jest.fn(),
-              findMany: jest.fn(),
-            },
-            plan: {
-              create: jest.fn(),
-              findMany: jest.fn(),
-            },
-          },
-        },
-      ],
-    }).compile();
+  afterEach(() => vi.clearAllMocks());
 
-    service = module.get<GymsService>(GymsService);
-    prisma = module.get<PrismaService>(PrismaService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  describe('createGym', () => {
-    it('should call prisma.gym.create', async () => {
-      const dto = { name: 'Iron Gym' };
-      const expectedResult = {
-        id: 1,
-        ...dto,
-        address: null,
-        ownerId: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      (prisma.gym.create as jest.Mock).mockResolvedValue(expectedResult);
-      expect(await service.createGym(dto)).toEqual(expectedResult);
-      expect(prisma.gym.create).toHaveBeenCalledWith({ data: dto });
+  it('assigns the gym to the authenticated owner', async () => {
+    await service.createGym('owner', { name: 'Iron' });
+    expect(prisma.gym.create).toHaveBeenCalledWith({
+      data: { name: 'Iron', ownerId: 'owner' },
     });
   });
 
-  describe('findAllGyms', () => {
-    it('should call prisma.gym.findMany', async () => {
-      const expectedResult = [
-        {
-          id: 1,
-          name: 'Iron Gym',
-          address: null,
-          ownerId: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ];
-      (prisma.gym.findMany as jest.Mock).mockResolvedValue(expectedResult);
-      expect(await service.findAllGyms()).toEqual(expectedResult);
-      expect(prisma.gym.findMany).toHaveBeenCalledWith({
-        include: { plans: true },
-      });
+  it('lists gyms paginated and owned gyms scoped by owner', async () => {
+    await service.findAllGyms({ skip: 20, take: 10 });
+    expect(prisma.gym.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({ skip: 20, take: 10 }),
+    );
+    await service.findOwnedGyms('owner');
+    expect(prisma.gym.findMany).toHaveBeenLastCalledWith(
+      expect.objectContaining({ where: { ownerId: 'owner' } }),
+    );
+  });
+
+  it('updates a gym', async () => {
+    await service.updateGym(1, { name: 'New' });
+    expect(prisma.gym.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { name: 'New' },
     });
   });
 
-  describe('createPlan', () => {
-    it('should call prisma.plan.create', async () => {
-      const dto = { name: 'Monthly', price: 99.9, durationMonths: 1, gymId: 1 };
-      const expectedResult = {
-        id: 1,
-        ...dto,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      (prisma.plan.create as jest.Mock).mockResolvedValue(expectedResult);
-      expect(await service.createPlan(dto)).toEqual(expectedResult);
-      expect(prisma.plan.create).toHaveBeenCalledWith({ data: dto });
+  it('creates and lists plans of a gym', async () => {
+    const dto = { name: 'M', price: 10, durationMonths: 1 };
+    await service.createPlan(3, dto);
+    expect(prisma.plan.create).toHaveBeenCalledWith({
+      data: { ...dto, gymId: 3 },
+    });
+    await service.findGymPlans(3);
+    expect(prisma.plan.findMany).toHaveBeenCalledWith({
+      where: { gymId: 3 },
+      orderBy: { price: 'asc' },
     });
   });
 
-  describe('findGymPlans', () => {
-    it('should call prisma.plan.findMany', async () => {
-      const expectedResult = [
-        {
-          id: 1,
-          name: 'Monthly',
-          price: 99.9,
-          durationMonths: 1,
-          gymId: 1,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ];
-      (prisma.plan.findMany as jest.Mock).mockResolvedValue(expectedResult);
-      expect(await service.findGymPlans(1)).toEqual(expectedResult);
-      expect(prisma.plan.findMany).toHaveBeenCalledWith({
-        where: { gymId: 1 },
-      });
+  it('refuses to update a plan from another gym', async () => {
+    prisma.plan.findFirst.mockResolvedValue(null);
+    await expect(service.updatePlan(1, 99, { price: 1 })).rejects.toThrow(
+      NotFoundException,
+    );
+    expect(prisma.plan.update).not.toHaveBeenCalled();
+  });
+
+  it('updates a plan of the gym', async () => {
+    prisma.plan.findFirst.mockResolvedValue({ id: 5 });
+    await service.updatePlan(1, 5, { price: 1 });
+    expect(prisma.plan.update).toHaveBeenCalledWith({
+      where: { id: 5 },
+      data: { price: 1 },
     });
+  });
+
+  it('computes KPIs counting only paid revenue from the current month', async () => {
+    prisma.subscription.count.mockResolvedValue(4);
+    prisma.payment.count.mockResolvedValueOnce(2).mockResolvedValueOnce(1);
+    prisma.payment.aggregate.mockResolvedValue({ _sum: { amount: 239.8 } });
+
+    const kpis = await service.getDashboard(1, new Date(2026, 8, 18));
+
+    expect(kpis).toEqual({
+      activeMembers: 4,
+      pendingPayments: 2,
+      overduePayments: 1,
+      revenueThisMonth: 239.8,
+    });
+    expect(prisma.payment.aggregate.mock.calls[0][0].where.date).toEqual({
+      gte: new Date(2026, 8, 1),
+    });
+  });
+
+  it('reports zero revenue when nothing was paid', async () => {
+    prisma.payment.aggregate.mockResolvedValue({ _sum: { amount: null } });
+    expect((await service.getDashboard(1)).revenueThisMonth).toBe(0);
   });
 });

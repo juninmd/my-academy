@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +11,7 @@ import '../../../../utils/one_rep_max_calculator.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/progress_chart.dart';
 import '../widgets/exercise_personal_records_widget.dart';
+import '../../../../core/widgets/app_image.dart';
 
 class ExerciseDetailsPage extends HookConsumerWidget {
   const ExerciseDetailsPage({required this.exercise, super.key});
@@ -42,10 +42,7 @@ class ExerciseDetailsPage extends HookConsumerWidget {
                 fit: StackFit.expand,
                 children: [
                   if (exercise.image != null)
-                    CachedNetworkImage(
-                      imageUrl: exercise.image!,
-                      fit: BoxFit.cover,
-                    )
+                    AppImage(source: exercise.image!, fit: BoxFit.cover)
                   else
                     Container(color: Theme.of(context).primaryColor),
                   const DecoratedBox(

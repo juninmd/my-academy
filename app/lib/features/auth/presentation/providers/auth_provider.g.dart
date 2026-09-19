@@ -139,6 +139,48 @@ final class AuthRemoteDataSourceProvider
 String _$authRemoteDataSourceHash() =>
     r'537a6bf28fa6ab34d51413905e551a10253cd8b9';
 
+@ProviderFor(userProfileSync)
+final userProfileSyncProvider = UserProfileSyncProvider._();
+
+final class UserProfileSyncProvider
+    extends
+        $FunctionalProvider<UserProfileSync, UserProfileSync, UserProfileSync>
+    with $Provider<UserProfileSync> {
+  UserProfileSyncProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userProfileSyncProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$userProfileSyncHash();
+
+  @$internal
+  @override
+  $ProviderElement<UserProfileSync> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  UserProfileSync create(Ref ref) {
+    return userProfileSync(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UserProfileSync value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<UserProfileSync>(value),
+    );
+  }
+}
+
+String _$userProfileSyncHash() => r'04e80fbc0de4429312d2457e119678de0635f899';
+
 @ProviderFor(authRepository)
 final authRepositoryProvider = AuthRepositoryProvider._();
 
@@ -178,7 +220,7 @@ final class AuthRepositoryProvider
   }
 }
 
-String _$authRepositoryHash() => r'360ac8b7d19c65768e5bb5d875d7db55d010c8e5';
+String _$authRepositoryHash() => r'76f5bef12a8b23263b7c0b4ca128d0f7d243ea63';
 
 @ProviderFor(AuthNotifier)
 final authProvider = AuthNotifierProvider._();
@@ -204,7 +246,7 @@ final class AuthNotifierProvider
   AuthNotifier create() => AuthNotifier();
 }
 
-String _$authNotifierHash() => r'16748b1a5eb9814ff24f2651e831d3e86a5faa6d';
+String _$authNotifierHash() => r'da7d06eb4844bc9d988dc5a4efcaed519895ef10';
 
 abstract class _$AuthNotifier extends $AsyncNotifier<UserEntity?> {
   FutureOr<UserEntity?> build();

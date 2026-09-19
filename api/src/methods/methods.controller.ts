@@ -9,17 +9,22 @@ import {
   UseInterceptors,
   ParseIntPipe,
 } from '@nestjs/common';
-import { MethodsService } from './methods.service';
-import { CreateMethodDto } from './dto/create-method.dto';
-import { UpdateMethodDto } from './dto/update-method.dto';
-import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
+import { MethodsService } from './methods.service.js';
+import { CreateMethodDto } from './dto/create-method.dto.js';
+import { UpdateMethodDto } from './dto/update-method.dto.js';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Methods } from '@prisma/client';
+import { Methods, Role } from '@prisma/client';
+import { AccessService } from '../access/access.service.js';
+import { CurrentUserId } from '../access/current-user.decorator.js';
 
 @ApiTags('Methods')
 @Controller('methods')
 export class MethodsController {
-  constructor(private readonly methodsService: MethodsService) {}
+  constructor(
+    private readonly methodsService: MethodsService,
+    private readonly accessService: AccessService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new method' })
@@ -28,13 +33,16 @@ export class MethodsController {
     description: 'The method has been successfully created.',
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(@Body() createMethodDto: CreateMethodDto): Promise<Methods> {
+  async create(
+    @Body() createMethodDto: CreateMethodDto,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Methods> {
+    await this.accessService.assertRole(actor, Role.ADMIN);
     return this.methodsService.create(createMethodDto);
   }
 
   @Get()
   @UseInterceptors(CacheInterceptor)
-  @CacheTTL(60)
   @ApiOperation({ summary: 'List all methods' })
   @ApiResponse({ status: 200, description: 'Return all methods.' })
   findAll(): Promise<Methods[]> {
@@ -56,10 +64,12 @@ export class MethodsController {
     description: 'The method has been successfully updated.',
   })
   @ApiResponse({ status: 404, description: 'Method not found.' })
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMethodDto: UpdateMethodDto,
+    @CurrentUserId() actor: string | undefined,
   ): Promise<Methods> {
+    await this.accessService.assertRole(actor, Role.ADMIN);
     return this.methodsService.update(id, updateMethodDto);
   }
 
@@ -70,7 +80,11 @@ export class MethodsController {
     description: 'The method has been successfully deleted.',
   })
   @ApiResponse({ status: 404, description: 'Method not found.' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<Methods> {
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Methods> {
+    await this.accessService.assertRole(actor, Role.ADMIN);
     return this.methodsService.remove(id);
   }
 }
