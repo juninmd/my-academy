@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
+import { EXERCISE_MEDIA, exerciseImage } from './exercise-media.js'
 
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) {
@@ -17,7 +18,7 @@ async function main() {
     update: {},
     create: {
       name: "Crucifixo Reto",
-      image: "assets/images/crucifixo_reto.gif",
+      image: exerciseImage("Crucifixo Reto"),
       tips:
         "Mantenha os braços estendidos durante todo o movimento, Mantenha os cotovelos levemente flexionados para evitar estresse nas articulações,Mantenha os ombros relaxados e evite arquear as costas.",
       mistakes: "Realizar o movimento com os braços flexionados.,Realizar o movimento com uma carga muito pesada, comprometendo a técnica e colocando em risco a integridade dos ombros."
@@ -29,7 +30,7 @@ async function main() {
     update: {},
     create: {
       name: "Supino com halteres",
-      image: "assets/images/supino_halteres.gif",
+      image: exerciseImage("Supino com halteres"),
       tips:
         "Mantenha os cotovelos em um ângulo de 90 graus.,Inspire durante a descida dos halteres e expire ao empurrá-los para cima.,Evite mover a cabeça ou o pescoço durante o exercício.",
       mistakes:
@@ -42,7 +43,7 @@ async function main() {
     update: {},
     create: {
       name: "Supino inclinado com barra",
-      image: "assets/images/supino_inclinado_barra.gif",
+      image: exerciseImage("Supino inclinado com barra"),
       tips:
         "Mantenha a barra alinhada com a linha média do peito.,Mantenha os cotovelos em um ângulo de 45 graus em relação ao tronco.,Mantenha os pés firmemente plantados no chão para manter a estabilidade.",
       mistakes:
@@ -55,7 +56,7 @@ async function main() {
     update: {},
     create: {
       name: "Crucifixo Inclinado Com Halteres",
-      image: "assets/images/crucifixo_inclinado_halteres.gif",
+      image: exerciseImage("Crucifixo Inclinado Com Halteres"),
       tips:
         "Mantenha os braços estendidos durante todo o movimento.,Mantenha os cotovelos levemente flexionados para evitar estresse nas articulações.,Mantenha os ombros relaxados e evite arquear as costas.",
       mistakes:
@@ -68,7 +69,7 @@ async function main() {
     update: {},
     create: {
       name: "Tríceps Testa Barra W",
-      image: "assets/images/tricepes_testa_barra_w.gif",
+      image: exerciseImage("Tríceps Testa Barra W"),
       tips: "Mantenha o cotovelo próximo à cabeça, Não deixe o pulso dobrar",
       mistakes: "Arquear as costas, Usar peso excessivo",
     }
@@ -83,7 +84,7 @@ async function main() {
       mistakes:
         "Fazer o movimento com impulso,Não realizar a amplitude completa",
       name: "Desenvolvimento com halteres",
-      image: "assets/images/desenvolvimento_halteres.gif",
+      image: exerciseImage("Desenvolvimento com halteres"),
     }
   });
 
@@ -94,7 +95,7 @@ async function main() {
       tips: "Mantenha os cotovelos elevados, Não deixe o peso balançar",
       mistakes: "Usar peso excessivo, Mover o corpo para ajudar o movimento",
       name: "Elevação Frontal",
-      image: "assets/images/elevacao_frontal.gif",
+      image: exerciseImage("Elevação Frontal"),
     }
   });
 
@@ -105,7 +106,7 @@ async function main() {
       tips: "Mantenha os ombros para baixo e para trás durante o movimento.",
       mistakes: "Não puxe com as costas.",
       name: "Remada Alta",
-      image: "assets/images/remada_alta.gif",
+      image: exerciseImage("Remada Alta"),
     }
   });
   await prisma.exercises.upsert({
@@ -115,7 +116,7 @@ async function main() {
       tips: "Use um peso leve para iniciar o movimento.",
       mistakes: "Não jogue os halteres para cima.",
       name: "Elevação lateral",
-      image: "assets/images/elevacao_lateral.gif",
+      image: exerciseImage("Elevação lateral"),
     }
   });
 
@@ -126,7 +127,7 @@ async function main() {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não arqueie as costas.",
       name: "Rosca de bíceps com barra W",
-      image: "assets/images/rosca_biceps_barra_w.gif",
+      image: exerciseImage("Rosca de bíceps com barra W"),
     }
   });
 
@@ -137,7 +138,7 @@ async function main() {
       tips: "Mantenha o cotovelo fixo no apoio.",
       mistakes: "Não mova o cotovelo durante o movimento.",
       name: "Rosca Concentrada",
-      image: "assets/images/rosca_concentrada.gif",
+      image: exerciseImage("Rosca Concentrada"),
     }
   });
 
@@ -148,7 +149,7 @@ async function main() {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não balance o corpo para ajudar no movimento.",
       name: "Rosca de martelo alternada",
-      image: "assets/images/rosca_martelo_alternada.gif",
+      image: exerciseImage("Rosca de martelo alternada"),
     }
   });
 
@@ -159,7 +160,7 @@ async function main() {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não arqueie as costas.",
       name: "Tríceps Barra (polia alta)",
-      image: "assets/images/tricepes_barra_polia_alta.gif",
+      image: exerciseImage("Tríceps Barra (polia alta)"),
     }
   });
 
@@ -170,7 +171,7 @@ async function main() {
       tips: "Mantenha os cotovelos próximos ao corpo durante o movimento.",
       mistakes: "Não use um peso excessivo.",
       name: "Tríceps Corda",
-      image: "assets/images/tricepes_corda.gif",
+      image: exerciseImage("Tríceps Corda"),
     }
   });
 
@@ -181,7 +182,7 @@ async function main() {
       tips: "Use um peso leve para iniciar o movimento.",
       mistakes: "Não desça o halter além da cabeça.",
       name: "Tríceps Francês Halteres",
-      image: "assets/images/tricepes_frances_halter.gif",
+      image: exerciseImage("Tríceps Francês Halteres"),
     }
   });
 
@@ -193,7 +194,7 @@ async function main() {
       tips: "Mantenha as costas apoiadas no banco durante o movimento.",
       mistakes: "Não levante os quadris do banco.",
       name: "Cadeira Extensora",
-      image: "assets/images/cadeira_extensora.gif",
+      image: exerciseImage("Cadeira Extensora"),
     }
   });
 
@@ -205,7 +206,7 @@ async function main() {
         "Mantenha os joelhos alinhados com os dedos dos pés durante o movimento.",
       mistakes: "Não trave os joelhos no final do movimento.",
       name: "Leg Pres",
-      image: "assets/images/leg_press.gif",
+      image: exerciseImage("Leg Pres"),
     }
   });
 
@@ -216,7 +217,7 @@ async function main() {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não use um peso excessivo.",
       name: "Adutor de Coxas",
-      image: "assets/images/adutor_coxas.gif",
+      image: exerciseImage("Adutor de Coxas"),
     }
   });
 
@@ -227,7 +228,7 @@ async function main() {
       tips: "Mantenha as costas retas durante o movimento.",
       mistakes: "Não mova os joelhos para os lados.",
       name: "Hack",
-      image: "assets/images/hack_machine.gif",
+      image: exerciseImage("Hack"),
     }
   });
 
@@ -238,7 +239,7 @@ async function main() {
       tips: "Mantenha as costas apoiadas no banco durante o movimento.",
       mistakes: "Não use um peso excessivo.",
       name: "Mesa Flexora",
-      image: "assets/images/mesa_flexora.gif",
+      image: exerciseImage("Mesa Flexora"),
     }
   });
 
@@ -249,7 +250,7 @@ async function main() {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Cadeira Flexora",
-      image: "assets/images/cadeira_flexora.gif",
+      image: exerciseImage("Cadeira Flexora"),
     }
   });
 
@@ -260,7 +261,7 @@ async function main() {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Flexora em pé unilateral (Vertical)",
-      image: "assets/images/cadeira_flexora.gif",
+      image: exerciseImage("Flexora em pé unilateral (Vertical)"),
     }
   });
 
@@ -271,7 +272,7 @@ async function main() {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Elevação Frontal com Kettlebel",
-      image: "assets/images/cadeira_flexora.gif",
+      image: exerciseImage("Elevação Frontal com Kettlebel"),
     }
   });
 
@@ -282,7 +283,7 @@ async function main() {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Abdução de Quadril Máquina",
-      image: "assets/images/cadeira_flexora.gif",
+      image: exerciseImage("Abdução de Quadril Máquina"),
     }
   });
 
@@ -293,8 +294,21 @@ async function main() {
       tips: "Mantenha o tronco ereto durante o movimento.",
       mistakes: "Não mova o tronco para ajudar no movimento.",
       name: "Elevação de Quadril com Step",
-      image: "assets/images/cadeira_flexora.gif",
+      image: exerciseImage("Elevação de Quadril com Step"),
     }
+  });
+
+  // Rows seeded before the bucket move still point at bundled GIFs.
+  for (const name of Object.keys(EXERCISE_MEDIA)) {
+    await prisma.exercises.updateMany({
+      where: { name, image: { startsWith: 'assets/' } },
+      data: { image: exerciseImage(name) },
+    });
+  }
+  // Seeded workout groups used this GIF as their cover.
+  await prisma.workoutsGroups.updateMany({
+    where: { image: 'assets/images/supino_halteres.gif' },
+    data: { image: exerciseImage('Supino com halteres') },
   });
 
   await prisma.users.upsert({
@@ -312,7 +326,7 @@ async function main() {
     where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Peitos' } },
     update: {},
     create: {
-      image: 'assets/images/supino_halteres.gif',
+      image: exerciseImage('Supino com halteres'),
       name: 'Peitos',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }
@@ -322,7 +336,7 @@ async function main() {
     where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Pernas' } },
     update: {},
     create: {
-      image: 'assets/images/supino_halteres.gif',
+      image: exerciseImage('Supino com halteres'),
       name: 'Pernas',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }
@@ -332,7 +346,7 @@ async function main() {
     where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Ombros' } },
     update: {},
     create: {
-      image: 'assets/images/supino_halteres.gif',
+      image: exerciseImage('Supino com halteres'),
       name: 'Ombros',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }
@@ -342,7 +356,7 @@ async function main() {
     where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Costas' } },
     update: {},
     create: {
-      image: 'assets/images/supino_halteres.gif',
+      image: exerciseImage('Supino com halteres'),
       name: 'Costas',
       userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
     }

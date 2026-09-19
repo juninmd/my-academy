@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-/// Renders an image that may be a bundled asset (seeded exercises use
-/// `assets/images/...`) or a remote URL, with one fallback for both.
+/// Renders a remote URL (seeded exercises live in object storage) or a
+/// bundled asset, with one fallback for both.
 class AppImage extends StatelessWidget {
   const AppImage({
     required this.source,

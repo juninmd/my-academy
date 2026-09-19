@@ -23,7 +23,7 @@ Students log their training, personal trainers follow their students, and gym ow
 
 | 🧑‍🎓 Student | 🧑‍🏫 Personal trainer | 🏢 Gym owner |
 |---|---|---|
-| Build workout plans from an exercise catalog with GIFs | Contract students and see them in one list | Create a gym and its membership plans |
+| Build workout plans from an exercise catalog with [public-domain images](docs/exercise-media.md) | Contract students and see them in one list | Create a gym and its membership plans |
 | Guided workout player: sets, fractional loads (22.5 kg), RPE, rest timer | Prescribe workouts and record physical assessments | Enroll students and track their memberships |
 | Dashboard with weekly goal, volume, streak and charts | Uses every student feature for their own training | Record payments: pending → paid → overdue |
 | Calendar, progress analytics and personal records | | Dashboard: active members, monthly revenue, overdue payments |
