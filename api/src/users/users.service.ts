@@ -12,16 +12,16 @@ import { User } from './entities/user.entity.js';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createUsersDto: CreateUserDto): Promise<User> {
+  async create(createusersDto: CreateUserDto): Promise<User> {
     const existing = await this.prismaService.users.findUnique({
-      where: { id: createUsersDto.id },
+      where: { id: createusersDto.id },
     });
 
     if (existing) {
       throw new ConflictException('User already exists');
     }
 
-    const { id, name, email, photoUrl, telegramId, role } = createUsersDto;
+    const { id, name, email, photoUrl, telegramId, role } = createusersDto;
 
     return this.prismaService.users.create({
       data: {
