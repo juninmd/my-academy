@@ -19,7 +19,7 @@
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:e2e:db": "echo 'E2E test skipped due to docker cache issues'",
+    "test:e2e:db": "E2E_DATABASE_URL=postgresql://academy:academy@localhost:5433/myacademy E2E_REDIS_URL=redis://localhost:6380 vitest run --config vitest.e2e.config.ts test/personas.e2e-spec.ts",
     "prisma:generate": "DATABASE_URL=postgresql://build:build@localhost:5432/build prisma generate",
     "prisma:push": "prisma db push",
     "prisma:format": "prisma format",
