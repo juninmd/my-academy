@@ -50,12 +50,14 @@ export class AccessService {
     }
   }
 
-  async assertRole(actor: Actor, role: Role): Promise<void> {
+  async assertRole(actor: Actor, ...roles: Role[]): Promise<void> {
     if (actor === undefined) return;
     const user = await this.prisma.users.findUnique({
       where: { id: actor },
       select: { role: true },
     });
-    if (user?.role !== role) throw new ForbiddenException('Access denied');
+    if (!user || !roles.includes(user.role)) {
+      throw new ForbiddenException('Access denied');
+    }
   }
 }

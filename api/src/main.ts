@@ -3,6 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
 import { Logger } from '@nestjs/common';
 import { configureApp } from './app.setup.js';
+import { assertSafeAuthConfig } from './configs/auth-safety.js';
 import { readFileSync } from 'node:fs';
 import { apiReference } from '@scalar/nestjs-api-reference';
 
@@ -13,6 +14,7 @@ const { version, name, description } = JSON.parse(
 const logger = new Logger('Bootstrap');
 async function bootstrap() {
   try {
+    assertSafeAuthConfig();
     const app = await NestFactory.create(AppModule, {
       logger: ['error', 'warn', 'log'],
     });

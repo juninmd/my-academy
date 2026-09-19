@@ -16,7 +16,9 @@ const persona = (key: string, role: string) => ({
 export const personas = {
   student: persona('student', 'STUDENT'),
   personal: persona('personal', 'PERSONAL'),
-  owner: persona('owner', 'ADMIN'),
+  owner: persona('owner', 'OWNER'),
+  // Registered as a student; promoted in the DB (ADMIN is never self-assigned).
+  admin: persona('admin', 'STUDENT'),
   stranger: persona('stranger', 'STUDENT'),
 };
 export type Persona = (typeof personas)[keyof typeof personas];

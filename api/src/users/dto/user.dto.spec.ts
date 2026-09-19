@@ -20,6 +20,16 @@ describe('user DTOs', () => {
     expect(errors(CreateUserDto, body)).not.toHaveLength(0);
   });
 
+  it('never lets a user grant themselves ADMIN (catalog writes)', () => {
+    const base = { id: 'u1', name: 'Ana', email: 'ana@myacademy.dev' };
+    expect(errors(CreateUserDto, { ...base, role: 'ADMIN' })).not.toHaveLength(
+      0,
+    );
+    expect(errors(UpdateUserDto, { role: 'ADMIN' })).not.toHaveLength(0);
+    expect(errors(UpdateUserDto, { role: 'OWNER' })).toHaveLength(0);
+    expect(errors(UpdateUserDto, { role: 'PERSONAL' })).toHaveLength(0);
+  });
+
   it('accepts the onboarding flag only as a boolean', () => {
     expect(errors(UpdateUserDto, { onboarded: true })).toHaveLength(0);
     expect(errors(UpdateUserDto, { onboarded: 'yes' })).not.toHaveLength(0);

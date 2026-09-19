@@ -9,7 +9,7 @@ import {
   realDbUrl,
 } from './support/persona-app.js';
 
-const { student, personal, owner, stranger } = personas;
+const { student, personal, owner, admin, stranger } = personas;
 
 describe.skipIf(!realDbUrl)(
   'Personas homologation (real Postgres + Redis)',
@@ -34,6 +34,10 @@ describe.skipIf(!realDbUrl)(
           })
           .expect(201);
       }
+      await prisma.users.update({
+        where: { id: admin.uid },
+        data: { role: 'ADMIN' },
+      });
     });
 
     afterAll(async () => {
@@ -56,7 +60,13 @@ describe.skipIf(!realDbUrl)(
         .expect(403);
     });
 
-    it('owner manages the catalog and the cache is invalidated', async () => {
+    it('nobody can grant themselves ADMIN', async () => {
+      await as(app, stranger)
+        .patch(`/api/users/${stranger.uid}`, { role: 'ADMIN' })
+        .expect(400);
+    });
+
+    it('admin manages the catalog and the cache is invalidated', async () => {
       await as(app, student).get('/api/exercises').expect(200);
       const name = `E2E Supino ${Date.now()}`;
       const body = {
@@ -66,7 +76,8 @@ describe.skipIf(!realDbUrl)(
         mistakes: 'm',
       };
       await as(app, student).post('/api/exercises', body).expect(403);
-      const created = await as(app, owner)
+      await as(app, owner).post('/api/exercises', body).expect(403);
+      const created = await as(app, admin)
         .post('/api/exercises', body)
         .expect(201);
       exerciseId = created.body.id;
@@ -75,17 +86,17 @@ describe.skipIf(!realDbUrl)(
       expect(list.body.map((e: { name: string }) => e.name)).toContain(name);
     });
 
-    it('owner curates training methods', async () => {
+    it('admin curates training methods', async () => {
       const method = { name: `E2E Drop-set ${Date.now()}`, description: 'x' };
       await as(app, personal).post('/api/methods', method).expect(403);
-      const created = await as(app, owner)
+      const created = await as(app, admin)
         .post('/api/methods', method)
         .expect(201);
       const url = `/api/methods/${created.body.id}`;
-      await as(app, owner)
+      await as(app, admin)
         .patch(url, { description: 'Reduce load' })
         .expect(200);
-      await as(app, owner).delete(url).expect(200);
+      await as(app, admin).delete(url).expect(200);
     });
 
     it('student builds a workout with fractional loads and logs a session', async () => {

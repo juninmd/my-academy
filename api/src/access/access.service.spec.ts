@@ -107,5 +107,16 @@ describe('AccessService', () => {
         access.assertRole(undefined, Role.ADMIN),
       ).resolves.toBeUndefined();
     });
+
+    it('accepts any of the allowed roles and rejects the others', async () => {
+      prisma.users.findUnique.mockResolvedValueOnce({ role: Role.OWNER });
+      await expect(
+        access.assertRole('o', Role.OWNER, Role.ADMIN),
+      ).resolves.toBeUndefined();
+      prisma.users.findUnique.mockResolvedValueOnce({ role: Role.OWNER });
+      await expect(access.assertRole('o', Role.ADMIN)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
   });
 });

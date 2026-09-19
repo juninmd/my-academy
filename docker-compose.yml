@@ -32,6 +32,8 @@ services:
     build: ./api
     # Local homologation only: mock identities, no real secrets.
     environment:
+      # Mock auth is refused when NODE_ENV=production (the image default).
+      NODE_ENV: development
       PORT: '9000'
       FIREBASE_ENABLED: 'true'
       AUTH_MOC_ENABLED: 'true'

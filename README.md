@@ -85,7 +85,7 @@ flowchart LR
 | [`app/`](app/) | Flutter with Clean Architecture per feature (`data` / `domain` / `presentation`) and Riverpod |
 | [`docker-compose.yml`](docker-compose.yml) | Local stack: Postgres, Redis and the seeded API |
 
-**Authorization:** users act on their own data, personal trainers on their contracted students, gym owners on their gyms. Catalog writes (exercises, methods) are ADMIN-only.
+**Authorization:** users act on their own data, personal trainers on their contracted students, gym owners on their gyms. Catalog writes (exercises, methods) are ADMIN-only; users pick STUDENT, PERSONAL or OWNER during onboarding, and ADMIN is only granted in the database. In production the API refuses to boot without Firebase auth or with mock auth enabled.
 
 ## 🚀 Quick start
 
@@ -114,7 +114,7 @@ With mock auth, sign in with any password:
 |---|---|---|
 | `aluno@myacademy.dev` | Student | Create a workout, run the player, check the dashboard and calendar |
 | `personal@myacademy.dev` | Personal trainer | Students tab, prescriptions, assessments |
-| `dono@myacademy.dev` | Gym owner (ADMIN) | Owns "Academia Homologação": plans, enrollments, payments |
+| `dono@myacademy.dev` | Gym owner (OWNER) | Owns "Academia Homologação": plans, enrollments, payments |
 | `novo@myacademy.dev` | New user | Full onboarding flow |
 
 Direct API calls use `Authorization: Bearer mock-token:<uid>`, where the uid is one of `hml-student`, `hml-personal`, `hml-owner` or `hml-newbie`.

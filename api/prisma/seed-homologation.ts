@@ -23,7 +23,7 @@ const users = [
     id: 'hml-owner',
     email: 'dono@myacademy.dev',
     name: 'Otávio Dono',
-    role: Role.ADMIN,
+    role: Role.OWNER,
   },
 ];
 

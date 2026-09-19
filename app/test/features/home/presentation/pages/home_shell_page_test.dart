@@ -67,7 +67,7 @@ void main() {
   testWidgets('gym owner on desktop gets an extended rail led by the gym', (
     tester,
   ) async {
-    await pumpShell(tester, 'ADMIN', const Size(1300, 900));
+    await pumpShell(tester, 'OWNER', const Size(1300, 900));
 
     final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
     expect(rail.extended, isTrue);

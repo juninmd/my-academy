@@ -39,9 +39,9 @@ export class GymsController {
   ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a gym owned by the current user (ADMIN)' })
+  @ApiOperation({ summary: 'Create a gym owned by the current user (OWNER)' })
   async create(@CurrentUserId() actor: Actor, @Body() dto: CreateGymDto) {
-    await this.access.assertRole(actor, Role.ADMIN);
+    await this.access.assertRole(actor, Role.OWNER, Role.ADMIN);
     return this.gyms.createGym(actor, dto);
   }
 

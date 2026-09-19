@@ -54,13 +54,13 @@ curl -fsS http://localhost:9000/health
 
 Homologation personas (mock auth, `Authorization: Bearer mock-token:<uid>`):
 `hml-student` (aluno@myacademy.dev), `hml-personal` (personal@myacademy.dev),
-`hml-owner` (dono@myacademy.dev, ADMIN, owns "Academia Homologação"), `hml-newbie` (novo@myacademy.dev).
+`hml-owner` (dono@myacademy.dev, OWNER, owns "Academia Homologação"), `hml-newbie` (novo@myacademy.dev).
 
 ### Architecture
 
 - **NestJS modules** — each domain (exercises, workouts, users, personals, etc.) is a self-contained module under `src/<domain>/`.
 - **Auth** — Firebase ID token verification via `PreauthMiddleware` (`src/auth/firebase.auth.ts`). Applied globally when `FIREBASE_ENABLED=true`. For local dev, mock auth via `AUTH_MOC_ENABLED=true` + `AUTH_MOC_JSON=<decoded token JSON or array of them>`; `Bearer <AUTH_MOC_TOKEN>:<uid>` picks a user from the array.
-- **Authorization** — `AccessService` (`src/access/`) + `@CurrentUserId()`: users act on their own data, personals on their contracted students, gym owners on their gyms; catalog writes (exercises, methods) are ADMIN-only.
+- **Authorization** — `AccessService` (`src/access/`) + `@CurrentUserId()`: users act on their own data, personals on their contracted students, gym owners on their gyms; catalog writes (exercises, methods) are ADMIN-only. Self-service roles are STUDENT/PERSONAL/OWNER; ADMIN is granted only in the DB. `NODE_ENV=production` refuses to boot without `FIREBASE_ENABLED=true` or with `AUTH_MOC_ENABLED=true`.
 - **Cache** — global `CacheModule` backed by Redis when `REDIS_URL` is set (TTL in ms); services evict list keys on writes.
 - **Prisma** — single `PrismaService` (`src/prisma.service.ts`) injected into repositories. Schema is at `prisma/schema.prisma`.
 - **Swagger/Scalar** — API docs auto-generated via `@nestjs/swagger`; served by `@scalar/nestjs-api-reference`.

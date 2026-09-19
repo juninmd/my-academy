@@ -34,7 +34,7 @@ describe('GymsController', () => {
 
   it('only gym owners (ADMIN) can create gyms', async () => {
     await controller.create('o', { name: 'G' });
-    expect(access.assertRole).toHaveBeenCalledWith('o', Role.ADMIN);
+    expect(access.assertRole).toHaveBeenCalledWith('o', Role.OWNER, Role.ADMIN);
     expect(gyms.createGym).toHaveBeenCalledWith('o', { name: 'G' });
 
     access.assertRole.mockRejectedValueOnce(new ForbiddenException());
