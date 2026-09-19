@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { CreateExerciseLogDto } from './dto/create-exercise-log.dto';
+import { PrismaService } from '../prisma.service.js';
+import { CreateExerciseLogDto } from './dto/create-exercise-log.dto.js';
 
 @Injectable()
 export class ExerciseLogsService {
@@ -33,6 +33,7 @@ export class ExerciseLogsService {
       orderBy: {
         date: 'desc',
       },
+      take: 200,
     });
   }
 }

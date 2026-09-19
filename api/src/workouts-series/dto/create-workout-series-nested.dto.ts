@@ -1,5 +1,5 @@
 import { OmitType } from '@nestjs/swagger';
-import { CreateWorkoutsSeriesDto } from './create-workouts-series.dto';
+import { CreateWorkoutsSeriesDto } from './create-workouts-series.dto.js';
 
 export class CreateWorkoutSeriesNestedDto extends OmitType(
   CreateWorkoutsSeriesDto,

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateWorkoutSeriesNestedDto } from '../../workouts-series/dto/create-workout-series-nested.dto';
+import { CreateWorkoutSeriesNestedDto } from '../../workouts-series/dto/create-workout-series-nested.dto.js';
 import {
   IsOptional,
   IsString,

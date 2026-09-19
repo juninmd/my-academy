@@ -6,18 +6,25 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
-import { WorkoutsService } from './workouts.service';
-import { CreateWorkoutDto } from './dto/create-workout.dto';
-import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { WorkoutsService } from './workouts.service.js';
+import { CreateWorkoutDto } from './dto/create-workout.dto.js';
+import { UpdateWorkoutDto } from './dto/update-workout.dto.js';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Workout } from './entities/workout.entity';
+import { Workout } from './entities/workout.entity.js';
+import { AccessService } from '../access/access.service.js';
+import { CurrentUserId } from '../access/current-user.decorator.js';
 
 @ApiTags('Workouts')
 @Controller('workouts')
 export class WorkoutsController {
-  constructor(private readonly workoutsService: WorkoutsService) {}
+  constructor(
+    private readonly workoutsService: WorkoutsService,
+    private readonly accessService: AccessService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new workout' })
@@ -27,19 +34,30 @@ export class WorkoutsController {
     type: Workout,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(@Body() createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
+  async create(
+    @Body() createWorkoutDto: CreateWorkoutDto,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Workout> {
+    await this.accessService.assertCanAccessGroup(
+      actor,
+      createWorkoutDto.workoutsGroupsId,
+    );
     return this.workoutsService.create(createWorkoutDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all workouts' })
+  @ApiOperation({ summary: 'List all workouts of a workout group' })
   @ApiResponse({
     status: 200,
-    description: 'Return all workouts.',
+    description: 'Return the workouts of the given group.',
     type: [Workout],
   })
-  findAll(): Promise<Workout[]> {
-    return this.workoutsService.findAll();
+  async findAll(
+    @Query('workoutsGroupsId', ParseIntPipe) workoutsGroupsId: number,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Workout[]> {
+    await this.accessService.assertCanAccessGroup(actor, workoutsGroupsId);
+    return this.workoutsService.findAll(workoutsGroupsId);
   }
 
   @Get(':id')
@@ -50,8 +68,16 @@ export class WorkoutsController {
     type: Workout,
   })
   @ApiResponse({ status: 404, description: 'Workout not found.' })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Workout> {
-    return this.workoutsService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Workout> {
+    const workout = await this.workoutsService.findOne(id);
+    await this.accessService.assertCanAccessGroup(
+      actor,
+      workout.workoutsGroupsId,
+    );
+    return workout;
   }
 
   @Patch(':id')
@@ -62,10 +88,24 @@ export class WorkoutsController {
     type: Workout,
   })
   @ApiResponse({ status: 404, description: 'Workout not found.' })
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateWorkoutDto: UpdateWorkoutDto,
+    @CurrentUserId() actor: string | undefined,
   ): Promise<Workout> {
+    const workout = await this.workoutsService.findOne(id);
+    await this.accessService.assertCanAccessGroup(
+      actor,
+      workout.workoutsGroupsId,
+    );
+    if (
+      updateWorkoutDto.workoutsGroupsId !== undefined &&
+      updateWorkoutDto.workoutsGroupsId !== workout.workoutsGroupsId
+    ) {
+      throw new BadRequestException(
+        'Não é possível mover o exercício para outro treino',
+      );
+    }
     return this.workoutsService.update(id, updateWorkoutDto);
   }
 
@@ -77,7 +117,15 @@ export class WorkoutsController {
     type: Workout,
   })
   @ApiResponse({ status: 404, description: 'Workout not found.' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<Workout> {
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Workout> {
+    const workout = await this.workoutsService.findOne(id);
+    await this.accessService.assertCanAccessGroup(
+      actor,
+      workout.workoutsGroupsId,
+    );
     return this.workoutsService.remove(id);
   }
 }

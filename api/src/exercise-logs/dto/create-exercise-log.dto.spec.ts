@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer';
 import {
   CreateExerciseLogDto,
   CreateSetLogDto,
-} from './create-exercise-log.dto';
+} from './create-exercise-log.dto.js';
 
 describe('CreateExerciseLogDto', () => {
   it('should transform nested sets correctly', () => {

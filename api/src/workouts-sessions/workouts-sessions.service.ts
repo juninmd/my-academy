@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateWorkoutsSessionsDto } from './dto/create-workouts-sessions.dto';
-import { UpdateWorkoutsSessionsDto } from './dto/update-workouts-sessions.dto';
-import { PrismaService } from '../prisma.service';
+import { CreateWorkoutsSessionsDto } from './dto/create-workouts-sessions.dto.js';
+import { UpdateWorkoutsSessionsDto } from './dto/update-workouts-sessions.dto.js';
+import { PrismaService } from '../prisma.service.js';
 import { WorkoutSessions } from '@prisma/client';
-import { TelegramService } from '../telegram/telegram.service';
+import { TelegramService } from '../telegram/telegram.service.js';
 
 @Injectable()
 export class WorkoutsSessionsService {

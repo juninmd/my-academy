@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class FindPersonalsDto {
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
+  @IsNotEmpty()
   @IsString()
-  personalUserId?: string;
+  personalUserId: string;
 }

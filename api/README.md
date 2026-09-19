@@ -18,37 +18,38 @@ High-performance NestJS backend for the My Academy ecosystem, built with a focus
 
 ## 🚀 Tech Stack
 
-- **Framework:** NestJS (v11)
+- **Framework:** NestJS 12 (ESM) on Bun
 - **ORM:** Prisma (PostgreSQL)
 - **Auth:** Firebase Admin SDK
 - **Docs:** Swagger + Scalar API Reference
 - **Caching:** Cache Manager + Redis support
-- **Testing:** Vitest / Jest (Target: 100% Coverage)
+- **Testing:** Vitest (100% coverage gate) + real-DB persona e2e
 
 ## 🛠️ Setup & Installation
 
-Ensure you have `pnpm` installed.
+Ensure you have `bun` (>= 1.4) installed. For a full local stack run `docker compose up -d --build` from the repo root.
 
 ```bash
 # Install dependencies
-pnpm install
+bun install
 
 # Database Setup
-pnpm run prisma:generate
-pnpm run prisma:push
+bun run prisma:generate
+bun run prisma:push
 
 # Development
-pnpm run start:dev
+bun run start:dev
 
 # Production Build
-pnpm run build
+bun run build
 ```
 
 ## 📜 Key Scripts
 
-- `pnpm run lint`: Enforce coding standards (ESLint + Prettier).
-- `pnpm run test`: Execute the test suite with coverage reporting.
-- `pnpm run prisma:seed`: Populate the database with initial data.
+- `bun run lint`: Enforce coding standards (ESLint + Prettier).
+- `bun run test` / `bun run test:cov`: Unit tests (Vitest), coverage gate at 100%.
+- `bun run test:e2e:db`: Persona flows (student, personal, gym owner) against Docker Postgres + Redis.
+- `bun run prisma:seed`: Populate the database with initial data and homologation personas.
 
 ## 🛡️ Architecture
 

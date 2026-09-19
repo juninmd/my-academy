@@ -38,13 +38,13 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
-    required: true,
+    required: false,
     example: 'https://example.com/photo.jpg',
     description: 'User profile photo URL',
   })
+  @IsOptional()
   @IsUrl()
-  @IsNotEmpty()
-  photoUrl: string;
+  photoUrl?: string;
 
   @ApiProperty({
     required: false,

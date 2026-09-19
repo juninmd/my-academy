@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { PersonalsService } from './personals.service';
-import { PersonalsController } from './personals.controller';
-import { PrismaService } from '../prisma.service';
+import { PersonalsService } from './personals.service.js';
+import { PersonalsController } from './personals.controller.js';
 
 @Module({
   controllers: [PersonalsController],
-  providers: [PersonalsService, PrismaService],
+  providers: [PersonalsService],
 })
 export class PersonalsModule {}

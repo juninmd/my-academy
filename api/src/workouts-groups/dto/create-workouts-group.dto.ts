@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateWorkoutNestedDto } from '../../workouts/dto/create-workout-nested.dto';
+import { CreateWorkoutNestedDto } from '../../workouts/dto/create-workout-nested.dto.js';
 import {
   IsNotEmpty,
   IsString,
@@ -15,10 +15,10 @@ export class CreateWorkoutsGroupDto {
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  image: string;
+  image?: string;
 
   @ApiProperty({ required: true })
   @IsString()

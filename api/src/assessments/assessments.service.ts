@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { CreateAssessmentDto } from './dto/create-assessment.dto';
-import { UpdateAssessmentDto } from './dto/update-assessment.dto';
+import { PrismaService } from '../prisma.service.js';
+import { CreateAssessmentDto } from './dto/create-assessment.dto.js';
+import { UpdateAssessmentDto } from './dto/update-assessment.dto.js';
 
 @Injectable()
 export class AssessmentsService {
@@ -21,9 +21,12 @@ export class AssessmentsService {
     });
   }
 
-  async findAll(studentId?: string) {
+  async findAll(studentId?: string, personalId?: string) {
     return this.prismaService.assessment.findMany({
-      where: studentId ? { studentId } : {},
+      where: {
+        ...(studentId && { studentId }),
+        ...(personalId && { personalId }),
+      },
       orderBy: { date: 'desc' },
     });
   }

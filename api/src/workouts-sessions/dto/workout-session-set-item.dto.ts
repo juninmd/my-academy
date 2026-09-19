@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class WorkoutSessionSetItemDto {
   @ApiProperty()
@@ -7,7 +7,8 @@ export class WorkoutSessionSetItemDto {
   reps: number;
 
   @ApiProperty()
-  @IsInt()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
   weight: number;
 
   @ApiPropertyOptional()

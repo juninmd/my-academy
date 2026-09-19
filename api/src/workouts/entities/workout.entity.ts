@@ -1,4 +1,4 @@
-import { WorkoutSeries } from '../../workouts-series/entities/workout-series.entity';
+import { WorkoutSeries } from '../../workouts-series/entities/workout-series.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Workout {

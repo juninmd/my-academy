@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WorkoutsService } from './workouts.service';
-import { PrismaService } from '../prisma.service';
+import { WorkoutsService } from './workouts.service.js';
+import { PrismaService } from '../prisma.service.js';
 import { NotFoundException } from '@nestjs/common';
-import { CreateWorkoutDto } from './dto/create-workout.dto';
-import { UpdateWorkoutDto } from './dto/update-workout.dto';
-import { Workout } from './entities/workout.entity';
+import { CreateWorkoutDto } from './dto/create-workout.dto.js';
+import { UpdateWorkoutDto } from './dto/update-workout.dto.js';
+import { Workout } from './entities/workout.entity.js';
 
 describe('WorkoutsService', () => {
   let service: WorkoutsService;
@@ -22,15 +22,15 @@ describe('WorkoutsService', () => {
 
   const prismaMock = {
     workouts: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      findMany: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
-    $transaction: jest.fn(),
+    $transaction: vi.fn(),
     workoutSeries: {
-      deleteMany: jest.fn(),
+      deleteMany: vi.fn(),
     },
   };
 
@@ -49,7 +49,7 @@ describe('WorkoutsService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -115,9 +115,10 @@ describe('WorkoutsService', () => {
     it('should return an array of workouts', async () => {
       prismaMock.workouts.findMany.mockResolvedValue([mockWorkout]);
 
-      const result = await service.findAll();
+      const result = await service.findAll(1);
 
       expect(prismaMock.workouts.findMany).toHaveBeenCalledWith({
+        where: { workoutsGroupsId: 1 },
         include: { workoutSeries: true },
       });
       expect(result).toEqual([mockWorkout]);

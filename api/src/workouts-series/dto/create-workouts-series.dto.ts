@@ -34,7 +34,7 @@ export class CreateWorkoutsSeriesDto {
     required: false,
   })
   @IsOptional()
-  @IsInt()
+  @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   weight?: number;
 

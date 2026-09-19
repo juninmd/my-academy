@@ -4,8 +4,10 @@ import {
   IsDateString,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
+  Min,
   ValidateNested,
 } from 'class-validator';
 
@@ -15,7 +17,8 @@ export class CreateSetLogDto {
   reps: number;
 
   @ApiProperty()
-  @IsInt()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
   weight: number;
 
   @ApiProperty({ required: false })

@@ -3,10 +3,10 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from '../prisma.service';
-import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { PrismaService } from '../prisma.service.js';
+import { User } from './entities/user.entity.js';
 
 @Injectable()
 export class UsersService {
@@ -35,11 +35,8 @@ export class UsersService {
     });
   }
 
-  async findAll(email?: string): Promise<User[]> {
-    if (email) {
-      return this.prismaService.users.findMany({ where: { email } });
-    }
-    return this.prismaService.users.findMany();
+  async findAll(email: string): Promise<User[]> {
+    return this.prismaService.users.findMany({ where: { email } });
   }
 
   async findOne(id: string): Promise<User> {
@@ -51,7 +48,7 @@ export class UsersService {
   }
 
   async update(id: string, updateDto: UpdateUserDto): Promise<User> {
-    const { name, email, photoUrl, telegramId } = updateDto;
+    const { name, email, photoUrl, telegramId, role, onboarded } = updateDto;
 
     try {
       return await this.prismaService.users.update({
@@ -61,6 +58,8 @@ export class UsersService {
           email,
           photoUrl,
           telegramId,
+          ...(role && { role }),
+          ...(onboarded && { onboardedAt: new Date() }),
         },
       });
     } catch (error: any) {

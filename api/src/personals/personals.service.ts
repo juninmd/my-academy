@@ -1,19 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { CreatePersonalDto } from './dto/create-personal.dto';
-import { UpdatePersonalDto } from './dto/update-personal.dto';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma.service.js';
+import { CreatePersonalDto } from './dto/create-personal.dto.js';
+import { UpdatePersonalDto } from './dto/update-personal.dto.js';
 
 @Injectable()
 export class PersonalsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(createpersonalsDto: CreatePersonalDto) {
-    return this.prismaService.personals.create({
-      data: {
-        studentUserId: createpersonalsDto.studentUserId,
-        personalUserId: createpersonalsDto.personalUserId,
-      },
+  async create(createpersonalsDto: CreatePersonalDto) {
+    try {
+      return await this.prismaService.personals.create({
+        data: {
+          studentUserId: createpersonalsDto.studentUserId,
+          personalUserId: createpersonalsDto.personalUserId,
+        },
+      });
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Student already linked');
+      }
+      throw error;
+    }
+  }
+
+  async findOne(id: number) {
+    const personal = await this.prismaService.personals.findUnique({
+      where: { id },
     });
+    if (!personal) {
+      throw new NotFoundException(`Personal #${id} not found`);
+    }
+    return personal;
   }
 
   findAll(personalUserId?: string) {

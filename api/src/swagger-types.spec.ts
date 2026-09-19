@@ -1,15 +1,15 @@
 import { Test } from '@nestjs/testing';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Controller, Get, Body, Module } from '@nestjs/common';
-import { User } from './users/entities/user.entity';
-import { CreateUserDto } from './users/dto/create-user.dto';
-import { CreateWorkoutsGroupDto } from './workouts-groups/dto/create-workouts-group.dto';
-import { WorkoutsGroup } from './workouts-groups/entities/workouts-group.entity';
-import { CreateWorkoutDto } from './workouts/dto/create-workout.dto';
-import { Workout } from './workouts/entities/workout.entity';
-import { CreateExerciseLogDto } from './exercise-logs/dto/create-exercise-log.dto';
-import { Exercise } from './exercises/entities/exercise.entity';
-import { Method } from './methods/entities/method.entity';
+import { User } from './users/entities/user.entity.js';
+import { CreateUserDto } from './users/dto/create-user.dto.js';
+import { CreateWorkoutsGroupDto } from './workouts-groups/dto/create-workouts-group.dto.js';
+import { WorkoutsGroup } from './workouts-groups/entities/workouts-group.entity.js';
+import { CreateWorkoutDto } from './workouts/dto/create-workout.dto.js';
+import { Workout } from './workouts/entities/workout.entity.js';
+import { CreateExerciseLogDto } from './exercise-logs/dto/create-exercise-log.dto.js';
+import { Exercise } from './exercises/entities/exercise.entity.js';
+import { Method } from './methods/entities/method.entity.js';
 
 @Controller('dummy')
 class DummyController {

@@ -1,10 +1,11 @@
+import type { Mocked } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TelegramService } from './telegram.service';
+import { TelegramService } from './telegram.service.js';
 import axios from 'axios';
-import configs from '../configs';
+import configs from '../configs/index.js';
 
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+vi.mock('axios');
+const mockedAxios = axios as Mocked<typeof axios>;
 
 describe('TelegramService', () => {
   let service: TelegramService;
@@ -18,7 +19,7 @@ describe('TelegramService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be defined', () => {

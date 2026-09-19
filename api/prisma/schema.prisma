@@ -70,7 +70,7 @@ model ExerciseLogSet {
   id            Int         @id @default(autoincrement())
   exerciseLogId Int
   reps          Int
-  weight        Int
+  weight        Float
   rpe           Int?
   type          String      @default("normal")
   createdAt     DateTime    @default(now())
@@ -116,7 +116,7 @@ model Workouts {
 model WorkoutsGroups {
   id              Int               @id @default(autoincrement())
   name            String
-  image           String
+  image           String            @default("")
   userId          String
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -133,9 +133,11 @@ model Users {
   id         String @id
   name       String
   email      String @unique
-  photoUrl   String @default("https://w7.pngwing.com/pngs/620/837/png-transparent-bodybuilding-drawing-bodybuilding-physical-fitness-logo-monochrome-thumbnail.png")
+  photoUrl   String    @default("")
   telegramId String?
-  role       Role   @default(STUDENT)
+  role       Role      @default(STUDENT)
+  // Set once the user finishes the in-app onboarding (any device).
+  onboardedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -175,7 +177,7 @@ model WorkoutSeries {
   id          Int      @id @default(autoincrement())
   workoutId   Int
   repetitions Int      @default(15)
-  weight      Int?     @default(10)
+  weight      Float?   @default(10)
   rest        Int?     @default(60)
 
   // Cardio fields

@@ -9,17 +9,23 @@ import {
   UseInterceptors,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ExercisesService } from './exercises.service';
-import { CreateExerciseDto } from './dto/create-exercise.dto';
-import { UpdateExerciseDto } from './dto/update-exercise.dto';
-import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
+import { ExercisesService } from './exercises.service.js';
+import { CreateExerciseDto } from './dto/create-exercise.dto.js';
+import { UpdateExerciseDto } from './dto/update-exercise.dto.js';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Exercise } from './entities/exercise.entity';
+import { Exercise } from './entities/exercise.entity.js';
+import { AccessService } from '../access/access.service.js';
+import { CurrentUserId } from '../access/current-user.decorator.js';
+import { Role } from '@prisma/client';
 
 @ApiTags('Exercises')
 @Controller('exercises')
 export class ExercisesController {
-  constructor(private readonly exercisesService: ExercisesService) {}
+  constructor(
+    private readonly exercisesService: ExercisesService,
+    private readonly accessService: AccessService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new exercise' })
@@ -29,13 +35,16 @@ export class ExercisesController {
     type: Exercise,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(@Body() createExerciseDto: CreateExerciseDto): Promise<Exercise> {
+  async create(
+    @Body() createExerciseDto: CreateExerciseDto,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Exercise> {
+    await this.accessService.assertRole(actor, Role.ADMIN);
     return this.exercisesService.create(createExerciseDto);
   }
 
   @Get()
   @UseInterceptors(CacheInterceptor)
-  @CacheTTL(60)
   @ApiOperation({ summary: 'List all exercises' })
   @ApiResponse({
     status: 200,
@@ -66,10 +75,12 @@ export class ExercisesController {
     type: Exercise,
   })
   @ApiResponse({ status: 404, description: 'Exercise not found.' })
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDto: UpdateExerciseDto,
+    @CurrentUserId() actor: string | undefined,
   ): Promise<Exercise> {
+    await this.accessService.assertRole(actor, Role.ADMIN);
     return this.exercisesService.update(id, updateDto);
   }
 
@@ -81,7 +92,11 @@ export class ExercisesController {
     type: Exercise,
   })
   @ApiResponse({ status: 404, description: 'Exercise not found.' })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<Exercise> {
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUserId() actor: string | undefined,
+  ): Promise<Exercise> {
+    await this.accessService.assertRole(actor, Role.ADMIN);
     return this.exercisesService.remove(id);
   }
 }

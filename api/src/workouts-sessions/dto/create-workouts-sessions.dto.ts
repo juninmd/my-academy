@@ -7,7 +7,7 @@ import {
   IsArray,
   ValidateNested,
 } from 'class-validator';
-import { WorkoutSessionItemDto } from './workout-session-item.dto';
+import { WorkoutSessionItemDto } from './workout-session-item.dto.js';
 
 export class CreateWorkoutsSessionsDto {
   @ApiPropertyOptional()

@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from './prisma.service.js';
 
-jest.mock('@prisma/client', () => {
+vi.mock('@prisma/client', () => {
   return {
     PrismaClient: class {
-      $connect = jest.fn();
+      $connect = vi.fn();
     },
   };
 });
@@ -40,7 +40,7 @@ describe('PrismaService', () => {
 
   it('should enable shutdown hooks', async () => {
     const app = {
-      close: jest.fn(),
+      close: vi.fn(),
     };
     await service.enableShutdownHooks(app as any);
     expect(app.close).toHaveBeenCalled();
@@ -56,8 +56,8 @@ describe('PrismaService', () => {
   });
 
   it('should call destroy method', async () => {
-    service.$disconnect = jest.fn();
-    (service as any).pool = { end: jest.fn() };
+    service.$disconnect = vi.fn();
+    (service as any).pool = { end: vi.fn() };
     await service.onModuleDestroy();
     expect(service.$disconnect).toHaveBeenCalled();
     expect((service as any).pool.end).toHaveBeenCalled();

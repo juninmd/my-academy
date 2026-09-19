@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateWorkoutDto } from './dto/create-workout.dto';
-import { UpdateWorkoutDto } from './dto/update-workout.dto';
-import { PrismaService } from '../prisma.service';
-import { Workout } from './entities/workout.entity';
-import { CreateWorkoutSeriesNestedDto } from '../workouts-series/dto/create-workout-series-nested.dto';
+import { CreateWorkoutDto } from './dto/create-workout.dto.js';
+import { UpdateWorkoutDto } from './dto/update-workout.dto.js';
+import { PrismaService } from '../prisma.service.js';
+import { Workout } from './entities/workout.entity.js';
+import { CreateWorkoutSeriesNestedDto } from '../workouts-series/dto/create-workout-series-nested.dto.js';
 
 @Injectable()
 export class WorkoutsService {
@@ -26,8 +26,9 @@ export class WorkoutsService {
     });
   }
 
-  async findAll(): Promise<Workout[]> {
+  async findAll(workoutsGroupsId: number): Promise<Workout[]> {
     return this.prismaService.workouts.findMany({
+      where: { workoutsGroupsId },
       include: { workoutSeries: true },
     });
   }

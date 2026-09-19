@@ -1,54 +1,54 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
-import { PrismaService } from '../src/prisma.service';
-import { TelegramService } from '../src/telegram/telegram.service';
+import request from 'supertest';
+import { AppModule } from './../src/app.module.js';
+import { PrismaService } from '../src/prisma.service.js';
+import { TelegramService } from '../src/telegram/telegram.service.js';
 
 describe('Homologation (e2e)', () => {
   let app: INestApplication;
 
   const mockPrisma = {
     users: {
-      findUnique: jest.fn(),
-      findFirstOrThrow: jest.fn(),
-      create: jest.fn(),
-      findMany: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      findUnique: vi.fn(),
+      findFirstOrThrow: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
     exercises: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      findMany: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
     },
     workoutsGroups: {
-      create: jest.fn(),
-      findMany: jest.fn(),
-      findUnique: jest.fn(),
-      findFirstOrThrow: jest.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      findFirstOrThrow: vi.fn(),
     },
     workoutsSessions: {
-      create: jest.fn(),
+      create: vi.fn(),
     },
     workoutSessions: {
-      create: jest.fn(),
-      findFirst: jest.fn(),
-      findMany: jest.fn(),
+      create: vi.fn(),
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
     },
     exerciseLog: {
-      create: jest.fn(),
+      create: vi.fn(),
     },
     personals: {
-      create: jest.fn(),
-      findMany: jest.fn(),
-      findFirst: jest.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      findFirst: vi.fn(),
     },
-    $transaction: jest.fn().mockImplementation((cb) => cb(mockPrisma)),
+    $transaction: vi.fn().mockImplementation((cb) => cb(mockPrisma)),
   };
 
   const mockTelegram = {
-    postChannelMessage: jest.fn().mockResolvedValue({}),
+    postChannelMessage: vi.fn().mockResolvedValue({}),
   };
 
   beforeAll(async () => {
@@ -155,6 +155,9 @@ describe('Homologation (e2e)', () => {
         id: 10,
         name: 'Treino A',
       });
+      mockPrisma.workoutsGroups.findUnique.mockResolvedValue({
+        userId: 'user-1',
+      });
       mockPrisma.workoutSessions.create.mockResolvedValue({ id: 100, ...dto });
 
       return request(app.getHttpServer())
@@ -165,11 +168,12 @@ describe('Homologation (e2e)', () => {
   });
 
   describe('5. Personal Trainer', () => {
-    it('should link student to personal', () => {
+    it('should let a personal trainer link a student', () => {
       const dto = {
-        studentUserId: 'user-1',
-        personalUserId: 'personal-1',
+        studentUserId: 'student-1',
+        personalUserId: 'user-1',
       };
+      mockPrisma.users.findUnique.mockResolvedValue({ role: 'PERSONAL' });
       mockPrisma.personals.create.mockResolvedValue({ id: 50, ...dto });
 
       return request(app.getHttpServer())

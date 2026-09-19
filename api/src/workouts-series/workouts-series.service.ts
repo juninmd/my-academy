@@ -3,10 +3,10 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { CreateWorkoutsSeriesDto } from './dto/create-workouts-series.dto';
-import { UpdateWorkoutsSeriesDto } from './dto/update-workouts-series.dto';
-import { WorkoutSeries } from './entities/workout-series.entity';
+import { PrismaService } from '../prisma.service.js';
+import { CreateWorkoutsSeriesDto } from './dto/create-workouts-series.dto.js';
+import { UpdateWorkoutsSeriesDto } from './dto/update-workouts-series.dto.js';
+import { WorkoutSeries } from './entities/workout-series.entity.js';
 
 @Injectable()
 export class WorkoutsSeriesService {
@@ -29,8 +29,21 @@ export class WorkoutsSeriesService {
     });
   }
 
-  findAll(): Promise<WorkoutSeries[]> {
-    return this.prismaService.workoutSeries.findMany();
+  findAll(workoutId: number): Promise<WorkoutSeries[]> {
+    return this.prismaService.workoutSeries.findMany({
+      where: { workoutId },
+    });
+  }
+
+  async resolveGroupId(workoutId: number): Promise<number> {
+    const workout = await this.prismaService.workouts.findUnique({
+      where: { id: workoutId },
+      select: { workoutsGroupsId: true },
+    });
+    if (!workout) {
+      throw new NotFoundException(`Workout #${workoutId} not found`);
+    }
+    return workout.workoutsGroupsId;
   }
 
   async findOne(id: number): Promise<WorkoutSeries> {

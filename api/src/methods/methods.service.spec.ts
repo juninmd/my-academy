@@ -1,19 +1,23 @@
+import type { Mock } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MethodsService } from './methods.service';
-import { PrismaService } from '../prisma.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { MethodsService, METHODS_CACHE_KEY } from './methods.service.js';
+import { PrismaService } from '../prisma.service.js';
 import { NotFoundException } from '@nestjs/common';
 
 describe('MethodsService', () => {
   let service: MethodsService;
   let prisma: PrismaService;
 
+  const mockCache = { del: vi.fn() };
+
   const mockPrisma = {
     methods: {
-      findUnique: jest.fn(),
-      create: jest.fn(),
-      findMany: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+      findUnique: vi.fn(),
+      create: vi.fn(),
+      findMany: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
   };
 
@@ -25,6 +29,7 @@ describe('MethodsService', () => {
           provide: PrismaService,
           useValue: mockPrisma,
         },
+        { provide: CACHE_MANAGER, useValue: mockCache },
       ],
     }).compile();
 
@@ -33,7 +38,7 @@ describe('MethodsService', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -44,7 +49,7 @@ describe('MethodsService', () => {
     it('should create a method', async () => {
       const dto = { name: 'Method 1', description: 'Desc' };
       const result = { id: 1, ...dto };
-      (prisma.methods.create as jest.Mock).mockResolvedValue(result);
+      (prisma.methods.create as Mock).mockResolvedValue(result);
 
       expect(await service.create(dto)).toBe(result);
       expect(prisma.methods.create).toHaveBeenCalledWith({ data: dto });
@@ -54,7 +59,7 @@ describe('MethodsService', () => {
   describe('findAll', () => {
     it('should return array of methods', async () => {
       const result = [{ id: 1 }];
-      (prisma.methods.findMany as jest.Mock).mockResolvedValue(result);
+      (prisma.methods.findMany as Mock).mockResolvedValue(result);
 
       expect(await service.findAll()).toBe(result);
     });
@@ -63,7 +68,7 @@ describe('MethodsService', () => {
   describe('findOne', () => {
     it('should return a method', async () => {
       const result = { id: 1 };
-      (prisma.methods.findUnique as jest.Mock).mockResolvedValue(result);
+      (prisma.methods.findUnique as Mock).mockResolvedValue(result);
 
       expect(await service.findOne(1)).toBe(result);
       expect(prisma.methods.findUnique).toHaveBeenCalledWith({
@@ -72,7 +77,7 @@ describe('MethodsService', () => {
     });
 
     it('should throw NotFoundException', async () => {
-      (prisma.methods.findUnique as jest.Mock).mockResolvedValue(null);
+      (prisma.methods.findUnique as Mock).mockResolvedValue(null);
       await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
     });
   });
@@ -82,8 +87,8 @@ describe('MethodsService', () => {
       const dto = { name: 'Updated' };
       const result = { id: 1, ...dto };
 
-      (prisma.methods.findUnique as jest.Mock).mockResolvedValue(result);
-      (prisma.methods.update as jest.Mock).mockResolvedValue(result);
+      (prisma.methods.findUnique as Mock).mockResolvedValue(result);
+      (prisma.methods.update as Mock).mockResolvedValue(result);
 
       expect(await service.update(1, dto as any)).toBe(result);
       expect(prisma.methods.update).toHaveBeenCalledWith({
@@ -96,11 +101,34 @@ describe('MethodsService', () => {
   describe('remove', () => {
     it('should remove a method', async () => {
       const result = { id: 1 };
-      (prisma.methods.findUnique as jest.Mock).mockResolvedValue(result);
-      (prisma.methods.delete as jest.Mock).mockResolvedValue(result);
+      (prisma.methods.findUnique as Mock).mockResolvedValue(result);
+      (prisma.methods.delete as Mock).mockResolvedValue(result);
 
       expect(await service.remove(1)).toBe(result);
       expect(prisma.methods.delete).toHaveBeenCalledWith({ where: { id: 1 } });
+    });
+  });
+
+  describe('cache invalidation', () => {
+    it('evicts the cached list after every write so clients never read stale catalog data', async () => {
+      const entity = { id: 1 };
+      (prisma.methods.create as Mock).mockResolvedValue(entity);
+      (prisma.methods.findUnique as Mock).mockResolvedValue(entity);
+      (prisma.methods.update as Mock).mockResolvedValue(entity);
+      (prisma.methods.delete as Mock).mockResolvedValue(entity);
+
+      await service.create({} as any);
+      await service.update(1, {} as any);
+      await service.remove(1);
+
+      expect(mockCache.del).toHaveBeenCalledTimes(3);
+      expect(mockCache.del).toHaveBeenCalledWith(METHODS_CACHE_KEY);
+    });
+
+    it('does not evict the cache when the write fails', async () => {
+      (prisma.methods.create as Mock).mockRejectedValue(new Error('db down'));
+      await expect(service.create({} as any)).rejects.toThrow('db down');
+      expect(mockCache.del).not.toHaveBeenCalled();
     });
   });
 });

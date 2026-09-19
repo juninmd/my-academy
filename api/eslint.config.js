@@ -1,26 +1,26 @@
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const prettierPlugin = require('eslint-plugin-prettier');
-const prettierConfig = require('eslint-config-prettier');
-const globals = require('globals');
+import eslint from '@eslint/js';
+import prettierConfig from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
-module.exports = tseslint.config(
+export default tseslint.config(
   {
-    ignores: ['dist/**', 'node_modules/**', 'eslint.config.js'],
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'eslint.config.js'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['**/*.ts', '**/*.js'],
+    files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        project: 'tsconfig.json',
-        tsconfigRootDir: __dirname,
+        project: 'tsconfig.check.json',
+        tsconfigRootDir: import.meta.dirname,
         sourceType: 'module',
       },
       globals: {
         ...globals.node,
-        ...globals.jest,
+        ...globals.vitest,
       },
     },
     plugins: {

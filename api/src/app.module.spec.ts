@@ -1,13 +1,13 @@
-import { AppModule } from './app.module';
+import { AppModule } from './app.module.js';
 import { MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { PreauthMiddleware } from './auth/firebase.auth';
+import { PreauthMiddleware } from './auth/firebase.auth.js';
 
 describe('AppModule', () => {
   let appModule: AppModule;
   const originalEnv = process.env;
 
   beforeEach(() => {
-    jest.resetModules();
+    vi.resetModules();
     process.env = { ...originalEnv };
     appModule = new AppModule();
   });
@@ -24,9 +24,9 @@ describe('AppModule', () => {
     process.env.FIREBASE_ENABLED = 'true';
 
     const consumer = {
-      apply: jest.fn().mockReturnThis(),
-      exclude: jest.fn().mockReturnThis(),
-      forRoutes: jest.fn().mockReturnThis(),
+      apply: vi.fn().mockReturnThis(),
+      exclude: vi.fn().mockReturnThis(),
+      forRoutes: vi.fn().mockReturnThis(),
     };
 
     appModule.configure(consumer as unknown as MiddlewareConsumer);
@@ -37,7 +37,7 @@ describe('AppModule', () => {
       { path: 'api/health', method: RequestMethod.GET },
     );
     expect(consumer.forRoutes).toHaveBeenCalledWith({
-      path: '*',
+      path: '{*splat}',
       method: RequestMethod.ALL,
     });
   });
@@ -46,9 +46,9 @@ describe('AppModule', () => {
     process.env.FIREBASE_ENABLED = 'false';
 
     const consumer = {
-      apply: jest.fn().mockReturnThis(),
-      exclude: jest.fn().mockReturnThis(),
-      forRoutes: jest.fn().mockReturnThis(),
+      apply: vi.fn().mockReturnThis(),
+      exclude: vi.fn().mockReturnThis(),
+      forRoutes: vi.fn().mockReturnThis(),
     };
 
     appModule.configure(consumer as unknown as MiddlewareConsumer);

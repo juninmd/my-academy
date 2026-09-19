@@ -1,7 +1,8 @@
+import type { Mock } from 'vitest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExerciseLogsService } from './exercise-logs.service';
-import { PrismaService } from '../prisma.service';
-import { CreateExerciseLogDto } from './dto/create-exercise-log.dto';
+import { ExerciseLogsService } from './exercise-logs.service.js';
+import { PrismaService } from '../prisma.service.js';
+import { CreateExerciseLogDto } from './dto/create-exercise-log.dto.js';
 
 describe('ExerciseLogsService', () => {
   let service: ExerciseLogsService;
@@ -15,8 +16,8 @@ describe('ExerciseLogsService', () => {
           provide: PrismaService,
           useValue: {
             exerciseLog: {
-              create: jest.fn(),
-              findMany: jest.fn(),
+              create: vi.fn(),
+              findMany: vi.fn(),
             },
           },
         },
@@ -49,7 +50,7 @@ describe('ExerciseLogsService', () => {
         updatedAt: new Date(),
       };
 
-      (prisma.exerciseLog.create as jest.Mock).mockResolvedValue(result);
+      (prisma.exerciseLog.create as Mock).mockResolvedValue(result);
 
       expect(await service.create(dto)).toBe(result);
       expect(prisma.exerciseLog.create).toHaveBeenCalledWith({
@@ -71,25 +72,27 @@ describe('ExerciseLogsService', () => {
   describe('findAll', () => {
     it('should return an array of exercise logs', async () => {
       const result = [{ id: 1, userId: 'user1', exerciseId: 1 }];
-      (prisma.exerciseLog.findMany as jest.Mock).mockResolvedValue(result);
+      (prisma.exerciseLog.findMany as Mock).mockResolvedValue(result);
 
       expect(await service.findAll('user1')).toBe(result);
       expect(prisma.exerciseLog.findMany).toHaveBeenCalledWith({
         where: { userId: 'user1' },
         include: { sets: true },
         orderBy: { date: 'desc' },
+        take: 200,
       });
     });
 
     it('should filter by exerciseId', async () => {
       const result = [];
-      (prisma.exerciseLog.findMany as jest.Mock).mockResolvedValue(result);
+      (prisma.exerciseLog.findMany as Mock).mockResolvedValue(result);
 
       expect(await service.findAll('user1', 2)).toBe(result);
       expect(prisma.exerciseLog.findMany).toHaveBeenCalledWith({
         where: { userId: 'user1', exerciseId: 2 },
         include: { sets: true },
         orderBy: { date: 'desc' },
+        take: 200,
       });
     });
   });

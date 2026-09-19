@@ -1,20 +1,27 @@
+import { ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { UsersController } from './users.controller.js';
+import { UsersService } from './users.service.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { UpdateUserDto } from './dto/update-user.dto.js';
+import { User } from './entities/user.entity.js';
+import { AccessService } from '../access/access.service.js';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
+  let accessService: AccessService;
 
   const mockUsersService = {
-    create: jest.fn(),
-    findAll: jest.fn(),
-    findOne: jest.fn(),
-    update: jest.fn(),
-    remove: jest.fn(),
+    create: vi.fn(),
+    findAll: vi.fn(),
+    findOne: vi.fn(),
+    update: vi.fn(),
+    remove: vi.fn(),
+  };
+
+  const mockAccessService = {
+    assertSelf: vi.fn(),
   };
 
   beforeEach(async () => {
@@ -25,15 +32,20 @@ describe('UsersController', () => {
           provide: UsersService,
           useValue: mockUsersService,
         },
+        {
+          provide: AccessService,
+          useValue: mockAccessService,
+        },
       ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
     service = module.get<UsersService>(UsersService);
+    accessService = module.get<AccessService>(AccessService);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('should be defined', () => {
@@ -41,7 +53,7 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    it('should create a user', async () => {
+    it('should create a user when acting as itself', async () => {
       const createDto: CreateUserDto = {
         id: '1',
         name: 'Test User',
@@ -50,34 +62,36 @@ describe('UsersController', () => {
       };
       const result: User = {
         ...createDto,
+        photoUrl: createDto.photoUrl!,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
       mockUsersService.create.mockResolvedValue(result);
 
-      expect(await controller.create(createDto)).toBe(result);
+      expect(await controller.create(createDto, '1')).toBe(result);
+      expect(accessService.assertSelf).toHaveBeenCalledWith('1', '1');
       expect(service.create).toHaveBeenCalledWith(createDto);
+    });
+
+    it('should not allow a user to register another user', async () => {
+      const createDto: CreateUserDto = {
+        id: '1',
+        name: 'Test User',
+        email: 'test@example.com',
+        photoUrl: 'https://example.com/photo.jpg',
+      };
+      mockAccessService.assertSelf.mockImplementation(() => {
+        throw new ForbiddenException('Access denied');
+      });
+
+      expect(() => controller.create(createDto, '2')).toThrow(
+        ForbiddenException,
+      );
+      expect(service.create).not.toHaveBeenCalled();
     });
   });
 
   describe('findAll', () => {
-    it('should find all users', async () => {
-      const result: User[] = [
-        {
-          id: '1',
-          name: 'User 1',
-          email: 'user1@example.com',
-          photoUrl: '',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ];
-      mockUsersService.findAll.mockResolvedValue(result);
-
-      expect(await controller.findAll({})).toBe(result);
-      expect(service.findAll).toHaveBeenCalledWith(undefined);
-    });
-
     it('should find users by email', async () => {
       const result: User[] = [
         {
@@ -116,7 +130,7 @@ describe('UsersController', () => {
   });
 
   describe('update', () => {
-    it('should update a user', async () => {
+    it('a user can update itself', async () => {
       const updateDto: UpdateUserDto = { name: 'Updated Name' };
       const result: User = {
         id: '1',
@@ -128,13 +142,26 @@ describe('UsersController', () => {
       };
       mockUsersService.update.mockResolvedValue(result);
 
-      expect(await controller.update('1', updateDto)).toBe(result);
+      expect(await controller.update('1', updateDto, '1')).toBe(result);
+      expect(accessService.assertSelf).toHaveBeenCalledWith('1', '1');
       expect(service.update).toHaveBeenCalledWith('1', updateDto);
+    });
+
+    it('a student cannot update another user', async () => {
+      const updateDto: UpdateUserDto = { name: 'Updated Name' };
+      mockAccessService.assertSelf.mockImplementation(() => {
+        throw new ForbiddenException('Access denied');
+      });
+
+      expect(() => controller.update('1', updateDto, '2')).toThrow(
+        ForbiddenException,
+      );
+      expect(service.update).not.toHaveBeenCalled();
     });
   });
 
   describe('remove', () => {
-    it('should remove a user', async () => {
+    it('a user can remove itself', async () => {
       const result: User = {
         id: '1',
         name: 'User 1',
@@ -145,8 +172,18 @@ describe('UsersController', () => {
       };
       mockUsersService.remove.mockResolvedValue(result);
 
-      expect(await controller.remove('1')).toBe(result);
+      expect(await controller.remove('1', '1')).toBe(result);
+      expect(accessService.assertSelf).toHaveBeenCalledWith('1', '1');
       expect(service.remove).toHaveBeenCalledWith('1');
+    });
+
+    it('a student cannot remove another user', async () => {
+      mockAccessService.assertSelf.mockImplementation(() => {
+        throw new ForbiddenException('Access denied');
+      });
+
+      expect(() => controller.remove('1', '2')).toThrow(ForbiddenException);
+      expect(service.remove).not.toHaveBeenCalled();
     });
   });
 });

@@ -6,4 +6,9 @@ export class FindAssessmentDto {
   @IsOptional()
   @IsString()
   studentId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  personalId?: string;
 }

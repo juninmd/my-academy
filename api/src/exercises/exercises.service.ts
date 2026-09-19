@@ -1,17 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateExerciseDto } from './dto/create-exercise.dto';
-import { UpdateExerciseDto } from './dto/update-exercise.dto';
-import { PrismaService } from '../prisma.service';
-import { Exercise } from './entities/exercise.entity';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { CreateExerciseDto } from './dto/create-exercise.dto.js';
+import { UpdateExerciseDto } from './dto/update-exercise.dto.js';
+import { PrismaService } from '../prisma.service.js';
+import { Exercise } from './entities/exercise.entity.js';
+
+export const EXERCISES_CACHE_KEY = '/api/exercises';
 
 @Injectable()
 export class ExercisesService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    @Inject(CACHE_MANAGER) private readonly cache: Cache,
+  ) {}
 
   async create(createExerciseDto: CreateExerciseDto): Promise<Exercise> {
     const { name, image, tips, mistakes, type } = createExerciseDto;
 
-    return this.prismaService.exercises.create({
+    const result = await this.prismaService.exercises.create({
       data: {
         name,
         image,
@@ -20,6 +26,8 @@ export class ExercisesService {
         type,
       },
     });
+    await this.cache.del(EXERCISES_CACHE_KEY);
+    return result;
   }
 
   async findAll(): Promise<Exercise[]> {
@@ -43,7 +51,7 @@ export class ExercisesService {
 
     const { name, image, tips, mistakes, type } = updateDto;
 
-    return this.prismaService.exercises.update({
+    const result = await this.prismaService.exercises.update({
       where: { id },
       data: {
         name,
@@ -53,11 +61,15 @@ export class ExercisesService {
         type,
       },
     });
+    await this.cache.del(EXERCISES_CACHE_KEY);
+    return result;
   }
 
   async remove(id: number): Promise<Exercise> {
     await this.findOne(id);
 
-    return this.prismaService.exercises.delete({ where: { id } });
+    const result = await this.prismaService.exercises.delete({ where: { id } });
+    await this.cache.del(EXERCISES_CACHE_KEY);
+    return result;
   }
 }
