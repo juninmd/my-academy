@@ -92,7 +92,7 @@ class WorkoutCreatePage extends HookConsumerWidget {
                     : ReorderableListView.builder(
                       padding: const EdgeInsets.only(bottom: 80),
                       itemCount: draftGroup.workouts.length,
-                      onReorder: (oldIndex, newIndex) {
+                      onReorderItem: (oldIndex, newIndex) {
                         notifier.reorderWorkouts(oldIndex, newIndex);
                       },
                       itemBuilder: (context, index) {
