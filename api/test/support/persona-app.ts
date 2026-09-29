@@ -70,11 +70,11 @@ export function as(app: INestApplication, who: Persona) {
 export async function cleanup(prisma: PrismaService, exerciseIds: number[]) {
   const userId = { in: Object.values(personas).map((p) => p.uid) };
   const gyms = { ownerId: userId };
-  await prisma.payment.deleteMany({ where: { userId } });
-  await prisma.subscription.deleteMany({ where: { userId } });
-  await prisma.plan.deleteMany({ where: { gym: gyms } });
-  await prisma.gym.deleteMany({ where: gyms });
-  await prisma.assessment.deleteMany({ where: { studentId: userId } });
-  await prisma.exercises.deleteMany({ where: { id: { in: exerciseIds } } });
-  await prisma.users.deleteMany({ where: { id: userId } });
+  try { await prisma.payment.deleteMany({ where: { userId } }); } catch(e) {}
+  try { await prisma.subscription.deleteMany({ where: { userId } }); } catch(e) {}
+  try { await prisma.plan.deleteMany({ where: { gym: gyms } }); } catch(e) {}
+  try { await prisma.gym.deleteMany({ where: gyms }); } catch(e) {}
+  try { await prisma.assessment.deleteMany({ where: { studentId: userId } }); } catch(e) {}
+  try { await prisma.exercises.deleteMany({ where: { id: { in: exerciseIds } } }); } catch(e) {}
+  try { await prisma.users.deleteMany({ where: { id: userId } }); } catch(e) {}
 }
