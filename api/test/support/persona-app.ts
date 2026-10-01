@@ -70,11 +70,39 @@ export function as(app: INestApplication, who: Persona) {
 export async function cleanup(prisma: PrismaService, exerciseIds: number[]) {
   const userId = { in: Object.values(personas).map((p) => p.uid) };
   const gyms = { ownerId: userId };
-  try { await prisma.payment.deleteMany({ where: { userId } }); } catch(e) {}
-  try { await prisma.subscription.deleteMany({ where: { userId } }); } catch(e) {}
-  try { await prisma.plan.deleteMany({ where: { gym: gyms } }); } catch(e) {}
-  try { await prisma.gym.deleteMany({ where: gyms }); } catch(e) {}
-  try { await prisma.assessment.deleteMany({ where: { studentId: userId } }); } catch(e) {}
-  try { await prisma.exercises.deleteMany({ where: { id: { in: exerciseIds } } }); } catch(e) {}
-  try { await prisma.users.deleteMany({ where: { id: userId } }); } catch(e) {}
+  try {
+    await prisma.payment.deleteMany({ where: { userId } });
+  } catch (_e) {
+    /* ignore */
+  }
+  try {
+    await prisma.subscription.deleteMany({ where: { userId } });
+  } catch (_e) {
+    /* ignore */
+  }
+  try {
+    await prisma.plan.deleteMany({ where: { gym: gyms } });
+  } catch (_e) {
+    /* ignore */
+  }
+  try {
+    await prisma.gym.deleteMany({ where: gyms });
+  } catch (_e) {
+    /* ignore */
+  }
+  try {
+    await prisma.assessment.deleteMany({ where: { studentId: userId } });
+  } catch (_e) {
+    /* ignore */
+  }
+  try {
+    await prisma.exercises.deleteMany({ where: { id: { in: exerciseIds } } });
+  } catch (_e) {
+    /* ignore */
+  }
+  try {
+    await prisma.users.deleteMany({ where: { id: userId } });
+  } catch (_e) {
+    /* ignore */
+  }
 }

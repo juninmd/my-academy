@@ -24,15 +24,17 @@ describe.skipIf(!realDbUrl)(
       ({ app, prisma } = await bootPersonaApp());
       await cleanup(prisma, []);
       for (const p of Object.values(personas)) {
-        await as(app, p)
+        const res = await as(app, p)
           .post('/api/users', {
             id: p.uid,
             name: p.name,
             email: p.email,
             photoUrl: 'https://myacademy.dev/avatar.png',
             role: p.role,
-          })
-          .expect(201);
+          });
+        if (res.status !== 201 && res.status !== 409) {
+          throw new Error(`Failed to seed user ${p.email}: ${res.status}`);
+        }
       }
       await prisma.users.update({
         where: { id: admin.uid },

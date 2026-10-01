@@ -83,6 +83,20 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   UserDto _activate(String uid, String email) {
     MockSession.uid = uid;
     _apiClient.setAuthToken(MockSession.token);
-    return UserDto(id: uid, email: email, name: email.split('@').first);
+    final userDto = UserDto(
+      id: uid,
+      email: email,
+      name: email.split('@').first,
+    );
+
+    // Sincroniza o usuário mock com o backend para evitar problemas de foreign key
+    // e imitar o comportamento do AuthRemoteDataSourceImpl.
+    _apiClient.post('users', data: userDto.toJson()).catchError((e) {
+      if (e is! ServerFailure) {
+        logger.w('Failed to sync mock user with backend: $e');
+      }
+      return null;
+    });
+    return userDto;
   }
 }
