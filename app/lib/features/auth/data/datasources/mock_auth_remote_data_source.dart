@@ -41,7 +41,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_uidKey, uid);
     await prefs.setString(_emailKey, normalized);
-    return _activate(uid, normalized);
+    return await _activate(uid, normalized);
   }
 
   @override
@@ -69,7 +69,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final uid = prefs.getString(_uidKey);
     final email = prefs.getString(_emailKey);
     if (uid == null || email == null) return null;
-    return _activate(uid, email);
+    return await _activate(uid, email);
   }
 
   @override
@@ -80,7 +80,7 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     logger.i('[MockAuth] updateDisplayName($name) is a no-op');
   }
 
-  UserDto _activate(String uid, String email) {
+  Future<UserDto> _activate(String uid, String email) async {
     MockSession.uid = uid;
     _apiClient.setAuthToken(MockSession.token);
     final userDto = UserDto(
