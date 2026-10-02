@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
@@ -91,12 +92,14 @@ class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     // Sincroniza o usuário mock com o backend para evitar problemas de foreign key
     // e imitar o comportamento do AuthRemoteDataSourceImpl.
-    _apiClient.post('users', data: userDto.toJson()).catchError((e) {
-      if (e is! ServerFailure) {
-        logger.w('Failed to sync mock user with backend: $e');
-      }
-      return null;
-    });
+    unawaited(
+      _apiClient.post('users', data: userDto.toJson()).catchError((e) {
+        if (e is! ServerFailure) {
+          logger.w('Failed to sync mock user with backend: $e');
+        }
+        return null;
+      }),
+    );
     return userDto;
   }
 }
