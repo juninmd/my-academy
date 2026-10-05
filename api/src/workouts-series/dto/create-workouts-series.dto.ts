@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNumber,
-  IsOptional,
-  IsNotEmpty,
-  IsInt,
-  IsPositive,
-  Min,
-} from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsInt, Min } from 'class-validator';
 
 export class CreateWorkoutsSeriesDto {
   @ApiProperty({
@@ -56,7 +49,7 @@ export class CreateWorkoutsSeriesDto {
     required: true,
   })
   @IsInt()
-  @IsPositive()
+  @Min(0)
   @IsNotEmpty()
   repetitions: number;
 
