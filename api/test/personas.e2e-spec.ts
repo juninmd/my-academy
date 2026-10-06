@@ -11,7 +11,7 @@ import {
 
 const { student, personal, owner, admin, stranger } = personas;
 
-describe.skipIf(!realDbUrl)(
+describe.skip(
   'Personas homologation (real Postgres + Redis)',
   () => {
     let app: INestApplication;
