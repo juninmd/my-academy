@@ -8,4 +8,5 @@ permissions:
 
 jobs:
   gitleaks:
+    runs-on: ubuntu-24.04
     uses: juninmd/base-actions/.github/workflows/reusable-security-scan.yml@main
