@@ -128,7 +128,7 @@ export class WorkoutsGroupsService {
     await this.findOne(id);
     return this.prismaService.workoutsGroups.delete({
       where: { id },
-      include: { WorkoutSessions: true },
+      include: { workoutSessions: true },
     });
   }
 
