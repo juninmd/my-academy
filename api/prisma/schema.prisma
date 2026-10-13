@@ -121,7 +121,7 @@ model WorkoutsGroups {
   userId          String
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-  WorkoutSessions WorkoutSessions[]
+  workoutSessions WorkoutSessions[]
   workouts        Workouts[]
   user            Users             @relation(fields: [userId], references: [id], onDelete: Cascade)
 

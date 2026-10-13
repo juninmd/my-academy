@@ -407,7 +407,7 @@ describe('WorkoutsGroupsService', () => {
       await service.remove(1);
       expect(prisma.workoutsGroups.delete).toHaveBeenCalledWith({
         where: { id: 1 },
-        include: { WorkoutSessions: true },
+        include: { workoutSessions: true },
       });
     });
   });
