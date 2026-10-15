@@ -48,12 +48,12 @@ export class PersonalsService {
   async findStudents(personalUserId: string) {
     const personal = await this.prismaService.personals.findMany({
       where: { personalUserId },
-      include: { StudentUser: true, PersonalClassSchedule: true },
+      include: { StudentUser: true, personalClassSchedule: true },
     });
     return personal
       .map((q) => ({
         student: q.StudentUser,
-        schedule: q.PersonalClassSchedule,
+        schedule: q.personalClassSchedule,
       }))
       .flat(1);
   }
