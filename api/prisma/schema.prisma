@@ -218,7 +218,7 @@ model Personals {
   personalUserId        String
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
-  PersonalClassSchedule PersonalClassSchedule[]
+  personalClassSchedule PersonalClassSchedule[]
   payments              Payment[]
 
   @@unique([studentUserId, personalUserId])

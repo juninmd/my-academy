@@ -116,7 +116,7 @@ describe('PersonalsService', () => {
       const dbResult = [
         {
           StudentUser: { id: 's1' },
-          PersonalClassSchedule: { id: 'sch1' },
+          personalClassSchedule: { id: 'sch1' },
         },
       ];
       const expected = [{ student: { id: 's1' }, schedule: { id: 'sch1' } }];
@@ -126,7 +126,7 @@ describe('PersonalsService', () => {
       expect(await service.findStudents('p1')).toEqual(expected);
       expect(prisma.personals.findMany).toHaveBeenCalledWith({
         where: { personalUserId: 'p1' },
-        include: { StudentUser: true, PersonalClassSchedule: true },
+        include: { StudentUser: true, personalClassSchedule: true },
       });
     });
   });
