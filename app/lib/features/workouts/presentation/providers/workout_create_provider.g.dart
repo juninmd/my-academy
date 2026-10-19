@@ -42,13 +42,13 @@ final class WorkoutCreateNotifierProvider
 }
 
 String _$workoutCreateNotifierHash() =>
-    r'fb8d92cfbf546118d154831835a98edbe7542855';
+    r'7cc2c6236c14695e5e6f3e4572af526395518332';
 
 abstract class _$WorkoutCreateNotifier extends $Notifier<WorkoutGroupEntity> {
   WorkoutGroupEntity build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<WorkoutGroupEntity, WorkoutGroupEntity>;
     final element =
         ref.element
@@ -58,7 +58,7 @@ abstract class _$WorkoutCreateNotifier extends $Notifier<WorkoutGroupEntity> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
 

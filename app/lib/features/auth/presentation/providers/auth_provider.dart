@@ -16,7 +16,7 @@ part 'auth_provider.g.dart';
 FirebaseAuth firebaseAuth(Ref ref) => FirebaseAuth.instance;
 
 @Riverpod(keepAlive: true)
-GoogleSignIn googleSignIn(Ref ref) => GoogleSignIn();
+GoogleSignIn googleSignIn(Ref ref) => GoogleSignIn.instance;
 
 @Riverpod(keepAlive: true)
 AuthRemoteDataSource authRemoteDataSource(Ref ref) {

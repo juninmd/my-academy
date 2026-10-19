@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'component_themes.dart';
+
 class AppTheme {
   // Premium Color Palette (Shared)
   static const Color primaryColor = Color(0xFF6200EA); // Deep Purple A700
   static const Color primaryVariant = Color(0xFF3700B3);
   static const Color secondaryColor = Color(0xFF00E5FF); // Cyan A400
   static const Color errorColor = Color(0xFFCF6679);
+  static const Color errorColorLight = Color(0xFFB3261E);
+  // Roxo mais claro no escuro: contraste adequado sobre fundos escuros.
+  static const Color primaryOnDark = Color(0xFF7C4DFF);
 
   // Dark Palette
   static const Color backgroundDark = Color(0xFF121212);
@@ -36,7 +41,7 @@ class AppTheme {
       brightness: Brightness.dark,
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,
-        primary: primaryColor,
+        primary: primaryOnDark,
         onPrimary: onPrimaryDark,
         primaryContainer: primaryVariant,
         onPrimaryContainer: onPrimaryDark,
@@ -58,7 +63,10 @@ class AppTheme {
         surfaceDark,
         Colors.white.withValues(alpha: 0.08),
       ),
-      elevatedButtonTheme: _buildElevatedButtonTheme(onPrimaryDark),
+      elevatedButtonTheme: _buildElevatedButtonTheme(
+        primaryOnDark,
+        onPrimaryDark,
+      ),
       outlinedButtonTheme: _buildOutlinedButtonTheme(secondaryColor),
       textButtonTheme: _buildTextButtonTheme(secondaryColor),
       inputDecorationTheme: _buildInputDecorationTheme(
@@ -70,7 +78,7 @@ class AppTheme {
         surfaceDark,
         onBackgroundDark,
       ),
-    );
+    ).withAppComponents();
   }
 
   static ThemeData get lightPremiumTheme {
@@ -91,7 +99,7 @@ class AppTheme {
         onSecondary: onSecondaryLight,
         secondaryContainer: secondaryColor,
         onSecondaryContainer: onSecondaryLight,
-        error: errorColor,
+        error: errorColorLight,
         onError: Colors.white,
         surface: surfaceLight,
         onSurface: onSurfaceLight,
@@ -105,7 +113,10 @@ class AppTheme {
         surfaceLight,
         Colors.black.withValues(alpha: 0.05),
       ),
-      elevatedButtonTheme: _buildElevatedButtonTheme(onPrimaryLight),
+      elevatedButtonTheme: _buildElevatedButtonTheme(
+        primaryColor,
+        onPrimaryLight,
+      ),
       outlinedButtonTheme: _buildOutlinedButtonTheme(
         primaryColor,
       ), // Use Primary for outlined in light mode for better contrast? Or keep secondary
@@ -119,7 +130,7 @@ class AppTheme {
         surfaceLight,
         onBackgroundLight,
       ),
-    );
+    ).withAppComponents();
   }
 
   // Helper methods to reduce duplication
@@ -185,13 +196,15 @@ class AppTheme {
     );
   }
 
-  static ElevatedButtonThemeData _buildElevatedButtonTheme(Color fgColor) {
+  static ElevatedButtonThemeData _buildElevatedButtonTheme(
+    Color bgColor,
+    Color fgColor,
+  ) {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: primaryColor,
+        backgroundColor: bgColor,
         foregroundColor: fgColor,
-        elevation: 4,
-        shadowColor: primaryColor.withValues(alpha: 0.3),
+        elevation: 2,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: GoogleFonts.outfit(

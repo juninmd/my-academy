@@ -17,6 +17,8 @@ import '../widgets/one_rep_max_calculator_dialog.dart';
 import '../../../home/presentation/widgets/quick_timer_dialog.dart';
 import '../widgets/workout_player/exercise_player_view.dart';
 import '../hooks/use_rest_timer.dart';
+import '../../../../core/notifications/notification_service.dart';
+import '../../../profile/presentation/providers/settings_provider.dart';
 import '../widgets/workout_player/exit_confirmation_dialog.dart';
 
 class WorkoutPlayerPage extends HookConsumerWidget {
@@ -45,7 +47,13 @@ class WorkoutPlayerPage extends HookConsumerWidget {
           return timerNotifier.dispose;
         }, []);
 
-        final restTimer = useRestTimer();
+        final restAlert = ref.watch(
+          settingsProvider.select((s) => s.restAlertEnabled),
+        );
+        final restTimer = useRestTimer(
+          notifications:
+              restAlert ? ref.read(notificationServiceProvider) : null,
+        );
 
         final activeWorkouts = useMemoized(
           () => workouts.where((w) => w.exercise != null).toList(),
@@ -226,14 +234,8 @@ class WorkoutPlayerPage extends HookConsumerWidget {
                     child: RestTimerWidget(
                       remainingSeconds: restTimer.remaining.value,
                       totalSeconds: restTimer.duration.value,
-                      onAdd10Seconds: () {
-                        restTimer.remaining.value += 10;
-                        restTimer.duration.value += 10;
-                      },
-                      onAdd30Seconds: () {
-                        restTimer.remaining.value += 30;
-                        restTimer.duration.value += 30;
-                      },
+                      onAdd10Seconds: () => restTimer.extend(10),
+                      onAdd30Seconds: () => restTimer.extend(30),
                       onSkip: restTimer.stop,
                     ),
                   ),

@@ -78,6 +78,7 @@ void main() {
       ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
+        retry: (_, _) => null,
         overrides: [
           authProvider.overrideWith(() => MockAuthNotifier(user)),
           workoutRepositoryProvider.overrideWithValue(mockRepository),
@@ -96,7 +97,7 @@ void main() {
       }, fireImmediately: true);
 
       // Wait a tiny bit for the microtask to complete and the provider to resolve
-      await Future.delayed(Duration.zero);
+      await Future.delayed(const Duration(milliseconds: 50));
 
       expect(capturedError, isNotNull);
       expect(capturedError, isA<Exception>());
@@ -111,6 +112,7 @@ void main() {
   group('allExerciseLogsProvider', () {
     test('returns empty list when user is not logged in', () async {
       final container = ProviderContainer(
+        retry: (_, _) => null,
         overrides: [
           authProvider.overrideWith(() => MockAuthNotifier(null)),
           workoutRepositoryProvider.overrideWithValue(mockRepository),
@@ -130,6 +132,7 @@ void main() {
       ).thenAnswer((_) async => Right(logs));
 
       final container = ProviderContainer(
+        retry: (_, _) => null,
         overrides: [
           authProvider.overrideWith(() => MockAuthNotifier(user)),
           workoutRepositoryProvider.overrideWithValue(mockRepository),
@@ -149,6 +152,7 @@ void main() {
       ).thenAnswer((_) async => const Left(ServerFailure('Error')));
 
       final container = ProviderContainer(
+        retry: (_, _) => null,
         overrides: [
           authProvider.overrideWith(() => MockAuthNotifier(user)),
           workoutRepositoryProvider.overrideWithValue(mockRepository),
@@ -164,7 +168,7 @@ void main() {
       }, fireImmediately: true);
 
       // Wait a tiny bit for the microtask to complete and the provider to resolve
-      await Future.delayed(Duration.zero);
+      await Future.delayed(const Duration(milliseconds: 50));
 
       expect(capturedError, isNotNull);
       expect(capturedError, isA<Exception>());

@@ -8,18 +8,18 @@ part of 'onboarding_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Onboarding completion is tracked per user so switching accounts on the
-/// same device does not skip (or repeat) another user's setup.
+/// Onboarding completion is stored on the backend (so a new device skips it)
+/// and cached per user locally (so it also works offline).
 
 @ProviderFor(OnboardingNotifier)
 final onboardingProvider = OnboardingNotifierProvider._();
 
-/// Onboarding completion is tracked per user so switching accounts on the
-/// same device does not skip (or repeat) another user's setup.
+/// Onboarding completion is stored on the backend (so a new device skips it)
+/// and cached per user locally (so it also works offline).
 final class OnboardingNotifierProvider
     extends $AsyncNotifierProvider<OnboardingNotifier, bool> {
-  /// Onboarding completion is tracked per user so switching accounts on the
-  /// same device does not skip (or repeat) another user's setup.
+  /// Onboarding completion is stored on the backend (so a new device skips it)
+  /// and cached per user locally (so it also works offline).
   OnboardingNotifierProvider._()
     : super(
         from: null,
@@ -40,16 +40,16 @@ final class OnboardingNotifierProvider
 }
 
 String _$onboardingNotifierHash() =>
-    r'd434fc8e2679b99950c4ceab6a86a1cd33ecd777';
+    r'27055fda501694cef2ceb2a3b319b202ced54e45';
 
-/// Onboarding completion is tracked per user so switching accounts on the
-/// same device does not skip (or repeat) another user's setup.
+/// Onboarding completion is stored on the backend (so a new device skips it)
+/// and cached per user locally (so it also works offline).
 
 abstract class _$OnboardingNotifier extends $AsyncNotifier<bool> {
   FutureOr<bool> build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<bool>, bool>;
     final element =
         ref.element
@@ -59,6 +59,6 @@ abstract class _$OnboardingNotifier extends $AsyncNotifier<bool> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }
