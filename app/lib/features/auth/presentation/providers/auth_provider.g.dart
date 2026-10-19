@@ -89,7 +89,7 @@ final class GoogleSignInProvider
   }
 }
 
-String _$googleSignInHash() => r'4df13ef226b172967e2ad6fef31c4648f6d52fd9';
+String _$googleSignInHash() => r'be6e657edfb1790d127cff1d3820a50c34e65011';
 
 @ProviderFor(authRemoteDataSource)
 final authRemoteDataSourceProvider = AuthRemoteDataSourceProvider._();
@@ -252,7 +252,7 @@ abstract class _$AuthNotifier extends $AsyncNotifier<UserEntity?> {
   FutureOr<UserEntity?> build();
   @$mustCallSuper
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<UserEntity?>, UserEntity?>;
     final element =
         ref.element
@@ -262,6 +262,6 @@ abstract class _$AuthNotifier extends $AsyncNotifier<UserEntity?> {
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    return element.handleCreate(ref, build);
   }
 }

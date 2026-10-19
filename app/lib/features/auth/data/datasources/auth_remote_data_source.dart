@@ -27,20 +27,28 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final ApiClient _apiClient;
+  bool _googleInitialized = false;
 
   @override
   Future<UserDto> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        throw const AuthFailure('Google Sign-In canceled');
+      if (!_googleInitialized) {
+        await _googleSignIn.initialize();
+        _googleInitialized = true;
       }
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAccount googleUser;
+      try {
+        googleUser = await _googleSignIn.authenticate();
+      } on GoogleSignInException catch (e) {
+        if (e.code == GoogleSignInExceptionCode.canceled) {
+          throw const AuthFailure('Google Sign-In canceled');
+        }
+        rethrow;
+      }
+
       final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+        idToken: googleUser.authentication.idToken,
       );
 
       final UserCredential userCredential = await _firebaseAuth

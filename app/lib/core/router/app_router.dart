@@ -23,6 +23,7 @@ import '../../features/workouts/presentation/pages/workout_history_page.dart';
 import '../../features/auth/domain/entities/user_role.dart';
 import '../../features/gym/presentation/pages/gym_page.dart';
 import '../../features/profile/presentation/pages/edit_profile_page.dart';
+import '../../features/profile/presentation/pages/settings_page.dart';
 import '../../features/students/presentation/pages/student_add_page.dart';
 import '../../features/students/presentation/pages/students_page.dart';
 import 'app_destinations.dart';
@@ -172,6 +173,10 @@ GoRouter router(Ref ref) {
                   GoRoute(
                     path: 'edit',
                     builder: (context, state) => const EditProfilePage(),
+                  ),
+                  GoRoute(
+                    path: 'settings',
+                    builder: (context, state) => const SettingsPage(),
                   ),
                 ],
               ),

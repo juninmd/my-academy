@@ -88,11 +88,12 @@ class RecentProgressChart extends ConsumerWidget {
                           barTouchData: BarTouchData(
                             enabled: true,
                             touchTooltipData: BarTouchTooltipData(
-                              tooltipBgColor:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.primaryContainer,
-                              tooltipRoundedRadius: 8,
+                              getTooltipColor:
+                                  (_) =>
+                                      Theme.of(
+                                        context,
+                                      ).colorScheme.primaryContainer,
+                              tooltipBorderRadius: BorderRadius.circular(8),
                               getTooltipItem: (
                                 group,
                                 groupIndex,

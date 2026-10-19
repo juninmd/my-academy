@@ -51,13 +51,11 @@ void main() {
       final mockUser = MockUser();
       final mockUserCredential = MockUserCredential(mockUser);
 
+      when(mockGoogleSignIn.initialize()).thenAnswer((_) async {});
       when(
-        mockGoogleSignIn.signIn(),
+        mockGoogleSignIn.authenticate(),
       ).thenAnswer((_) async => mockGoogleAccount);
-      when(
-        mockGoogleAccount.authentication,
-      ).thenAnswer((_) async => mockGoogleAuth);
-      when(mockGoogleAuth.accessToken).thenReturn('test_access_token');
+      when(mockGoogleAccount.authentication).thenReturn(mockGoogleAuth);
       when(mockGoogleAuth.idToken).thenReturn('test_id_token');
 
       when(
@@ -80,7 +78,10 @@ void main() {
     });
 
     test('should throw AuthFailure when Google Sign In is canceled', () async {
-      when(mockGoogleSignIn.signIn()).thenAnswer((_) async => null);
+      when(mockGoogleSignIn.initialize()).thenAnswer((_) async {});
+      when(mockGoogleSignIn.authenticate()).thenThrow(
+        const GoogleSignInException(code: GoogleSignInExceptionCode.canceled),
+      );
 
       expect(() => dataSource.signInWithGoogle(), throwsA(isA<AuthFailure>()));
     });
@@ -88,7 +89,7 @@ void main() {
 
   group('signOut', () {
     test('should call signOut on dependencies', () async {
-      when(mockGoogleSignIn.signOut()).thenAnswer((_) async => null);
+      when(mockGoogleSignIn.signOut()).thenAnswer((_) async {});
       when(mockFirebaseAuth.signOut()).thenAnswer((_) async {});
 
       await dataSource.signOut();

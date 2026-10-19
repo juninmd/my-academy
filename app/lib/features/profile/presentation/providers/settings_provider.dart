@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/notifications/notification_service.dart';
+
 enum UnitSystem { metric, imperial }
 
 class SettingsState {
@@ -13,6 +15,10 @@ class SettingsState {
   final String goal;
   final String experienceLevel;
   final UnitSystem unitSystem;
+  final bool reminderEnabled;
+  final int reminderHour;
+  final int reminderMinute;
+  final bool restAlertEnabled;
 
   SettingsState({
     this.barWeight = 20.0,
@@ -23,6 +29,10 @@ class SettingsState {
     this.goal = 'Hipertrofia',
     this.experienceLevel = 'Iniciante',
     this.unitSystem = UnitSystem.metric,
+    this.reminderEnabled = false,
+    this.reminderHour = 18,
+    this.reminderMinute = 0,
+    this.restAlertEnabled = true,
   });
 
   SettingsState copyWith({
@@ -34,6 +44,10 @@ class SettingsState {
     String? goal,
     String? experienceLevel,
     UnitSystem? unitSystem,
+    bool? reminderEnabled,
+    int? reminderHour,
+    int? reminderMinute,
+    bool? restAlertEnabled,
   }) {
     return SettingsState(
       barWeight: barWeight ?? this.barWeight,
@@ -44,6 +58,10 @@ class SettingsState {
       goal: goal ?? this.goal,
       experienceLevel: experienceLevel ?? this.experienceLevel,
       unitSystem: unitSystem ?? this.unitSystem,
+      reminderEnabled: reminderEnabled ?? this.reminderEnabled,
+      reminderHour: reminderHour ?? this.reminderHour,
+      reminderMinute: reminderMinute ?? this.reminderMinute,
+      restAlertEnabled: restAlertEnabled ?? this.restAlertEnabled,
     );
   }
 }
@@ -96,6 +114,10 @@ class SettingsNotifier extends Notifier<SettingsState> {
       goal: goal,
       experienceLevel: experienceLevel,
       unitSystem: unitSystem,
+      reminderEnabled: prefs.getBool('reminder_enabled') ?? false,
+      reminderHour: prefs.getInt('reminder_hour') ?? 18,
+      reminderMinute: prefs.getInt('reminder_minute') ?? 0,
+      restAlertEnabled: prefs.getBool('rest_alert_enabled') ?? true,
     );
   }
 
@@ -139,6 +161,48 @@ class SettingsNotifier extends Notifier<SettingsState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('theme_mode', mode.index);
     state = state.copyWith(themeMode: mode);
+  }
+
+  /// Liga/desliga o lembrete diário. Retorna `false` se a permissão for negada.
+  Future<bool> setReminderEnabled(bool enabled) async {
+    final service = ref.read(notificationServiceProvider);
+    if (enabled) {
+      if (!await service.requestPermission()) return false;
+      await service.scheduleWorkoutReminder(
+        hour: state.reminderHour,
+        minute: state.reminderMinute,
+      );
+    } else {
+      await service.cancelWorkoutReminder();
+    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('reminder_enabled', enabled);
+    state = state.copyWith(reminderEnabled: enabled);
+    return true;
+  }
+
+  Future<void> setReminderTime(int hour, int minute) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('reminder_hour', hour);
+    await prefs.setInt('reminder_minute', minute);
+    state = state.copyWith(reminderHour: hour, reminderMinute: minute);
+    if (state.reminderEnabled) {
+      await ref
+          .read(notificationServiceProvider)
+          .scheduleWorkoutReminder(hour: hour, minute: minute);
+    }
+  }
+
+  /// Liga/desliga o aviso de fim de descanso. Retorna `false` se negada.
+  Future<bool> setRestAlertEnabled(bool enabled) async {
+    if (enabled &&
+        !await ref.read(notificationServiceProvider).requestPermission()) {
+      return false;
+    }
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('rest_alert_enabled', enabled);
+    state = state.copyWith(restAlertEnabled: enabled);
+    return true;
   }
 
   Future<void> togglePlateAvailability(double plate) async {
