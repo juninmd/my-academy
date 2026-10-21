@@ -18,8 +18,7 @@ const mockPersonas = <String, String>{
 
 /// Auth without Firebase for local homologation (USE_MOCK_AUTH builds only).
 class MockAuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  MockAuthRemoteDataSourceImpl({required ApiClient apiClient})
-    : _apiClient = apiClient;
+  MockAuthRemoteDataSourceImpl({required this._apiClient});
   final ApiClient _apiClient;
 
   static const _uidKey = 'mock_auth_uid';

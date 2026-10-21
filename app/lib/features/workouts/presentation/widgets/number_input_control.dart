@@ -66,6 +66,7 @@ class NumberInputControl<T extends num> extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label, style: Theme.of(context).textTheme.labelSmall),
+            // ignore: use_null_aware_elements
             if (labelSuffix != null) labelSuffix!,
           ],
         ),
