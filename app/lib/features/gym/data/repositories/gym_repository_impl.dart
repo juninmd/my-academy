@@ -31,6 +31,7 @@ class GymRepositoryImpl implements GymRepository {
   @override
   Future<Either<Failure, GymEntity>> createGym(String name, String? address) =>
       _guard(() async {
+        // ignore: use_null_aware_elements
         final body = {'name': name, if (address != null) 'address': address};
         return gymFromJson(await _api.post('gyms', data: body) as Json);
       });
@@ -48,6 +49,7 @@ class GymRepositoryImpl implements GymRepository {
     double price,
     int durationMonths,
   ) => _guard(() async {
+        // ignore: use_null_aware_elements
     final body = {
       'name': name,
       'price': price,

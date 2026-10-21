@@ -18,12 +18,10 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({
-    required FirebaseAuth firebaseAuth,
-    required GoogleSignIn googleSignIn,
-    required ApiClient apiClient,
-  }) : _firebaseAuth = firebaseAuth,
-       _googleSignIn = googleSignIn,
-       _apiClient = apiClient;
+    required this._firebaseAuth,
+    required this._googleSignIn,
+    required this._apiClient,
+  });
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final ApiClient _apiClient;

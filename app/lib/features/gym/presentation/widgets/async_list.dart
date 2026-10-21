@@ -50,6 +50,7 @@ class AsyncList<T> extends StatelessWidget {
                 if (i > 0) return itemBuilder(context, items[i - 1]);
                 return Column(
                   children: [
+                    // ignore: use_null_aware_elements
                     if (header != null) header!,
                     if (items.isEmpty)
                       CommonEmptyState(
