@@ -4,6 +4,7 @@ import { IsInt, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 export class WorkoutSessionSetItemDto {
   @ApiProperty()
   @IsInt()
+  @Min(0)
   reps: number;
 
   @ApiProperty()
@@ -14,6 +15,7 @@ export class WorkoutSessionSetItemDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
+  @Min(0)
   rpe?: number;
 
   @ApiPropertyOptional()
