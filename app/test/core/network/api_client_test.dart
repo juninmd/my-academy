@@ -57,6 +57,48 @@ void main() {
       expect(() => apiClient.get('test'), throwsA(isA<ServerFailure>()));
     });
 
+    test('get call should parse list of error messages', () async {
+      when(
+        mockDio.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: 'test'),
+          response: Response(
+            requestOptions: RequestOptions(path: 'test'),
+            statusCode: 400,
+            data: {'message': ['Bad request 1', 'Bad request 2']},
+          ),
+          type: DioExceptionType.badResponse,
+        ),
+      );
+
+      expect(
+        () => apiClient.get('test'),
+        throwsA(isA<ServerFailure>().having((e) => e.message, 'message', 'Bad request 1\nBad request 2')),
+      );
+    });
+
+    test('get call should parse error property if message is null', () async {
+      when(
+        mockDio.get(any, queryParameters: anyNamed('queryParameters')),
+      ).thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: 'test'),
+          response: Response(
+            requestOptions: RequestOptions(path: 'test'),
+            statusCode: 500,
+            data: {'error': 'Internal Server Error'},
+          ),
+          type: DioExceptionType.badResponse,
+        ),
+      );
+
+      expect(
+        () => apiClient.get('test'),
+        throwsA(isA<ServerFailure>().having((e) => e.message, 'message', 'Internal Server Error')),
+      );
+    });
+
     test('post call should return data when successful', () async {
       when(
         mockDio.post(

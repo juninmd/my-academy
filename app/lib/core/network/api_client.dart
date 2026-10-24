@@ -172,8 +172,14 @@ class ApiClient {
 
 /// Nest returns `message` as a string or, for validation errors, a list.
 String serverMessage(Object? data) {
-  final message = data is Map ? data['message'] : null;
-  if (message is List) return message.join('\n');
-  if (message is String && message.isNotEmpty) return message;
+  if (data is Map) {
+    final message = data['message'];
+    if (message is List) return message.map((e) => e.toString()).join('\n');
+    if (message is String && message.isNotEmpty) return message;
+
+    final error = data['error'];
+    if (error is String && error.isNotEmpty) return error;
+  }
+  if (data is String && data.isNotEmpty) return data;
   return 'Unknown server error';
 }
