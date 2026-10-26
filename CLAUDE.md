@@ -40,7 +40,6 @@ bun run test:e2e:db
 # Prisma
 bun run prisma:generate   # regenerate client after schema changes
 bun run prisma:push       # push schema to DB
-bun run prisma:pull       # pull schema from DB
 bun run prisma:seed       # seed initial data + homologation personas
 ```
 
