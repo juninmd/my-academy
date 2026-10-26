@@ -167,4 +167,47 @@ void main() {
       expect(mockDio.options.headers.containsKey('Authorization'), false);
     });
   });
+
+  group('serverMessage', () {
+    test('returns Unknown server error for null data', () {
+      expect(serverMessage(null), 'Unknown server error');
+    });
+
+    test('returns message when it is a non-empty string', () {
+      expect(serverMessage({'message': 'Error msg'}), 'Error msg');
+    });
+
+    test('returns joined message when it is a non-empty list', () {
+      expect(
+        serverMessage({'message': ['Error 1', 'Error 2']}),
+        'Error 1\nError 2',
+      );
+    });
+
+    test('falls back to error when message is an empty list', () {
+      expect(
+        serverMessage({'message': [], 'error': 'Fallback error'}),
+        'Fallback error',
+      );
+    });
+
+    test('falls back to error when message is a whitespace string', () {
+      expect(
+        serverMessage({'message': '   ', 'error': 'Fallback error'}),
+        'Fallback error',
+      );
+    });
+
+    test('returns Unknown server error when map is empty', () {
+      expect(serverMessage({}), 'Unknown server error');
+    });
+
+    test('returns the string itself if data is a non-empty string', () {
+      expect(serverMessage('Direct string error'), 'Direct string error');
+    });
+
+    test('returns Unknown server error if data is a whitespace string', () {
+      expect(serverMessage('   '), 'Unknown server error');
+    });
+  });
 }
