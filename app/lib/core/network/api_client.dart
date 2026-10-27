@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+
 import '../utils/logger.dart';
 import '../exceptions/failure.dart';
 
@@ -71,7 +72,7 @@ class ApiClient {
 
   Future<dynamic> post(
     String path, {
-    data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
@@ -90,7 +91,7 @@ class ApiClient {
 
   Future<dynamic> put(
     String path, {
-    data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
@@ -109,7 +110,7 @@ class ApiClient {
 
   Future<dynamic> patch(
     String path, {
-    data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
@@ -128,7 +129,7 @@ class ApiClient {
 
   Future<dynamic> delete(
     String path, {
-    data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
