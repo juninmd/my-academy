@@ -1,4 +1,4 @@
-import { Personals } from '@prisma/client';
+import type { Personals } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 import { WorkoutsGroup } from '../../workouts-groups/entities/workouts-group.entity.js';
 
