@@ -23,6 +23,11 @@ data files are not copied either.
 | Restore a JSON backup | `imports/json.ts` | `POST /imports/json` |
 | Hevy Pro account import (key used once, not stored) | `imports/hevy.ts` | `POST /imports/hevy` |
 | Next routine in A, B, C rotation | `rotation/` | `GET /rotation/next` |
+| Supersets (label on routine exercises) | `workouts` | `supersetGroup` on workouts |
+| Rest-pause sets | `exercise-logs` | set type `restpause` |
+| Body-weight log, one reading per day | `body-weight/` | `GET/POST/DELETE /body-weight` |
+| Body weight from Apple Health export.xml, or CSV / Strong measurements | `imports/body-weight.ts` | `POST /imports/body-weight` |
+| Invite-only sign-up with admin-issued codes | `invites/` | `POST/GET /invites`, `REGISTRATION_INVITE_ONLY=true` |
 | AI coach advice, read-only, off without a key | `coach/` | `POST /coach/advice` |
 
 Import rules, as in openGym: days that already hold the exercise are skipped (re-importing is safe),
@@ -65,11 +70,9 @@ applying it, `prisma migrate diff` reports no difference.
 
 | openGym feature | Reason |
 |---|---|
-| Supersets | Needs a schema change and a rework of the workout player. Not started. |
-| Pyramid sets, rest-pause, card/list view | Workout UI. The set `type` field could carry them; not built. |
-| Health Connect, Apple Health (both directions), Apple Watch, widgets, Live Activity, gym reminder | Native plugins and devices. Cannot be built or tested in this environment. |
-| Apple Health weight import | Assessments need a personal and a height in this schema. Needs a design decision first. |
+| Pyramid sets | Already covered by per-series reps and rest in the routine plan; no separate type. |
+| Health Connect, Apple Health (both directions, on-device), Apple Watch, widgets, Live Activity, gym reminder | Native plugins and devices. No Android SDK and no Xcode here, so they cannot be built or tested. The body-weight import above works on the server. |
 | Passkeys, pairing by QR, offline sync with field-level merge | Auth and sync architecture change. This app uses Firebase auth and a server-first model. |
 | 5,600-exercise catalogue, 20 languages | Content. The catalogue belongs to that AGPL project and is not copied; the app is in Portuguese only. |
-| Admin dashboard with invite-only signup | Overlaps existing roles and admin tooling. |
+| Admin dashboard | Admin actions are API endpoints for now; no admin screen in the app yet. |
 | openGym's own mobile-only features (sharing a plan as a file or PDF) | Not planned for this app yet. |
