@@ -29,6 +29,7 @@ import { Workout } from './workouts/entities/workout.entity.js';
 // Modules
 import { AppModule } from './app.module.js';
 import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module.js';
+import { ProgressModule } from './progress/progress.module.js';
 import { ExercisesModule } from './exercises/exercises.module.js';
 import { HealthModule } from './health/health.module.js';
 import { MethodsModule } from './methods/methods.module.js';
@@ -81,6 +82,7 @@ describe('Structure Coverage', () => {
     // Modules
     expect(new AppModule()).toBeDefined();
     expect(new ExerciseLogsModule()).toBeDefined();
+    expect(new ProgressModule()).toBeDefined();
     expect(new ExercisesModule()).toBeDefined();
     expect(new HealthModule()).toBeDefined();
     expect(new MethodsModule()).toBeDefined();
