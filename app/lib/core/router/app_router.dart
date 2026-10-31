@@ -20,6 +20,7 @@ import '../../features/workouts/presentation/pages/workout_details_page.dart';
 import '../../features/workouts/presentation/pages/workout_groups_page.dart';
 import '../../features/workouts/presentation/pages/workout_player_page.dart';
 import '../../features/workouts/presentation/pages/workout_history_page.dart';
+import '../../features/progress/presentation/pages/muscle_overview_page.dart';
 import '../../features/auth/domain/entities/user_role.dart';
 import '../../features/gym/presentation/pages/gym_page.dart';
 import '../../features/profile/presentation/pages/edit_profile_page.dart';
@@ -73,6 +74,10 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/history',
         builder: (context, state) => const WorkoutHistoryPage(),
+      ),
+      GoRoute(
+        path: '/progress/muscles',
+        builder: (context, state) => const MuscleOverviewPage(),
       ),
       GoRoute(
         path: '/exercise-details',

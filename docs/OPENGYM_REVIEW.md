@@ -27,6 +27,12 @@ exercises are matched by name against the catalogue, and unmatched names are ret
 `unmatchedExercises` instead of being created. Pounds are converted when the header says `lb`
 or `unit: "lb"` is sent. Dates without a timezone are read as UTC.
 
+## Imported (Flutter)
+
+- `app/lib/features/progress/`: muscle recovery and left/right balance page (`/progress/muscles`),
+  reached from the icon in the progress analysis page. Same layering as the other features; the
+  provider is written by hand, so build_runner is not needed.
+
 ## Schema
 
 - `exercise_favorites` table (unique per user and exercise).
@@ -41,7 +47,7 @@ applying it, `prisma migrate diff` reports no difference.
 
 | openGym feature | Reason |
 |---|---|
-| Flutter screens for the new endpoints | No Flutter SDK in this environment; nothing Dart was built or tested. Next step. |
+| Flutter screens for the rest of the new endpoints (summary, suggestion, plates, favourites, import) | Only the muscle page is in the app so far. The API already serves the rest. |
 | Rest timer, supersets, drop sets, pyramid sets, swipe-to-delete, card/list views | Workout UI, belongs to the app. The `type` field on sets already allows drop/warm-up/pyramid kinds. |
 | Plan share as file or PDF, print | App-side. |
 | Apple Health, Health Connect, Apple Watch, widgets, Live Activity, gym reminder | Native mobile features. |
