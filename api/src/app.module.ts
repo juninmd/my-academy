@@ -13,6 +13,9 @@ import { PreauthMiddleware } from './auth/firebase.auth.js';
 import { HealthModule } from './health/health.module.js';
 import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module.js';
 import { ProgressModule } from './progress/progress.module.js';
+import { PlatesModule } from './plates/plates.module.js';
+import { StarterPlansModule } from './starter-plans/starter-plans.module.js';
+import { ExportModule } from './export/export.module.js';
 import { TelegramModule } from './telegram/telegram.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
 import { GymsModule } from './gyms/gyms.module.js';
@@ -37,6 +40,9 @@ import { AccessModule } from './access/access.module.js';
     TelegramModule,
     ExerciseLogsModule,
     ProgressModule,
+    PlatesModule,
+    StarterPlansModule,
+    ExportModule,
     AssessmentsModule,
     GymsModule,
   ],

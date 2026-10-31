@@ -161,4 +161,42 @@ describe('ProgressService', () => {
       });
     });
   });
+
+  describe('suggestion', () => {
+    it('suggests from the latest sessions with defaults', async () => {
+      prisma.exerciseLog.findMany.mockResolvedValue([
+        { sets: [{ reps: 12, weight: 50, type: 'normal' }] },
+      ]);
+      expect(await service.suggestion('u1', 7)).toEqual({
+        exerciseId: 7,
+        strategy: 'double',
+        suggestion: expect.objectContaining({ weight: 52.5, reps: 8 }),
+      });
+    });
+
+    it('honours linear options and never lets max fall below min', async () => {
+      prisma.exerciseLog.findMany.mockResolvedValue([]);
+      const result = await service.suggestion('u1', 7, {
+        strategy: 'linear',
+        increment: 5,
+        maxReps: 2,
+      });
+      expect(result).toEqual({
+        exerciseId: 7,
+        strategy: 'linear',
+        suggestion: null,
+      });
+    });
+
+    it('accepts explicit rep range', async () => {
+      prisma.exerciseLog.findMany.mockResolvedValue([
+        { sets: [{ reps: 6, weight: 80, type: 'normal' }] },
+      ]);
+      const result = await service.suggestion('u1', 7, {
+        minReps: 4,
+        maxReps: 6,
+      });
+      expect(result.suggestion).toMatchObject({ weight: 82.5, reps: 4 });
+    });
+  });
 });

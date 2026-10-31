@@ -10,6 +10,7 @@ describe('ProgressController', () => {
     summary: vi.fn().mockResolvedValue('summary'),
     bodyWeight: vi.fn().mockResolvedValue('weight'),
     exerciseProgress: vi.fn().mockResolvedValue('exercise'),
+    suggestion: vi.fn().mockResolvedValue('suggestion'),
   };
   const access = { assertCanActFor: vi.fn() };
 
@@ -46,6 +47,19 @@ describe('ProgressController', () => {
       'exercise',
     );
     expect(service.exerciseProgress).toHaveBeenCalledWith('u1', 7);
+  });
+
+  it('returns a suggestion forwarding options', async () => {
+    expect(
+      await controller.suggestion(
+        7,
+        { userId: 'u1', strategy: 'linear' },
+        'actor',
+      ),
+    ).toBe('suggestion');
+    expect(service.suggestion).toHaveBeenCalledWith('u1', 7, {
+      strategy: 'linear',
+    });
   });
 
   it('blocks when access is denied', async () => {

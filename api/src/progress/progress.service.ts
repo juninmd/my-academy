@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service.js';
+import { suggestNext, type ProgressionOptions } from './progression.js';
 import {
   dayKey,
   estimateOneRepMax,
@@ -124,5 +125,26 @@ export class ProgressService {
       latest: latest?.weight ?? null,
       change: first && latest ? round(latest.weight - first.weight) : null,
     };
+  }
+
+  async suggestion(
+    userId: string,
+    exerciseId: number,
+    options: Partial<ProgressionOptions> = {},
+  ) {
+    const strategy = options.strategy ?? 'double';
+    const minReps = options.minReps ?? (strategy === 'linear' ? 5 : 8);
+    const maxReps = Math.max(options.maxReps ?? 12, minReps);
+    const logs = await this.prisma.exerciseLog.findMany({
+      where: { userId, exerciseId },
+      include: { sets: true },
+      orderBy: { date: 'desc' },
+      take: 10,
+    });
+    const suggestion = suggestNext(
+      logs.map((log) => log.sets),
+      { strategy, increment: options.increment ?? 2.5, minReps, maxReps },
+    );
+    return { exerciseId, strategy, suggestion };
   }
 }

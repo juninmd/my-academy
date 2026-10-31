@@ -1,6 +1,10 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ProgressQueryDto, SummaryQueryDto } from './dto/progress-query.dto.js';
+import {
+  ProgressQueryDto,
+  SuggestionQueryDto,
+  SummaryQueryDto,
+} from './dto/progress-query.dto.js';
 import { ProgressService } from './progress.service.js';
 import { AccessService } from '../access/access.service.js';
 import { CurrentUserId } from '../access/current-user.decorator.js';
@@ -39,5 +43,16 @@ export class ProgressController {
   ) {
     await this.accessService.assertCanActFor(actor, query.userId);
     return this.progressService.exerciseProgress(query.userId, exerciseId);
+  }
+
+  @Get('exercises/:exerciseId/suggestion')
+  async suggestion(
+    @Param('exerciseId', ParseIntPipe) exerciseId: number,
+    @Query() query: SuggestionQueryDto,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    await this.accessService.assertCanActFor(actor, query.userId);
+    const { userId, ...options } = query;
+    return this.progressService.suggestion(userId, exerciseId, options);
   }
 }
