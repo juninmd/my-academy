@@ -26,6 +26,15 @@ export class ProgressController {
     return this.progressService.summary(query.userId, query.days);
   }
 
+  @Get('muscles')
+  async muscles(
+    @Query() query: SummaryQueryDto,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    await this.accessService.assertCanActFor(actor, query.userId);
+    return this.progressService.muscles(query.userId, query.days);
+  }
+
   @Get('body-weight')
   async bodyWeight(
     @Query() query: ProgressQueryDto,
@@ -43,6 +52,16 @@ export class ProgressController {
   ) {
     await this.accessService.assertCanActFor(actor, query.userId);
     return this.progressService.exerciseProgress(query.userId, exerciseId);
+  }
+
+  @Get('exercises/:exerciseId/relative')
+  async relative(
+    @Param('exerciseId', ParseIntPipe) exerciseId: number,
+    @Query() query: ProgressQueryDto,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    await this.accessService.assertCanActFor(actor, query.userId);
+    return this.progressService.relativeStrength(query.userId, exerciseId);
   }
 
   @Get('exercises/:exerciseId/suggestion')

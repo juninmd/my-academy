@@ -84,4 +84,51 @@ describe('progression', () => {
       false,
     );
   });
+
+  describe('triple', () => {
+    const triple: ProgressionOptions = {
+      strategy: 'triple',
+      increment: 2.5,
+      minReps: 8,
+      maxReps: 12,
+      maxSets: 3,
+    };
+
+    it('adds a set when every set reaches the top reps', () => {
+      const result = suggestNext([[set(12, 50), set(12, 50), set(12, 50)]], {
+        ...triple,
+        maxSets: 5,
+      });
+      expect(result).toMatchObject({
+        weight: 50,
+        reps: 8,
+        sets: 4,
+        deload: false,
+      });
+      expect(result?.reason).toMatch(/add a set/);
+    });
+
+    it('adds load once the set cap is reached', () => {
+      const result = suggestNext([[set(12, 50), set(12, 50), set(12, 50)]], {
+        ...triple,
+        maxSets: 3,
+      });
+      expect(result).toMatchObject({ weight: 52.5, reps: 8, sets: 3 });
+      expect(result?.reason).toMatch(/restart at the bottom/);
+    });
+
+    it('defaults the set cap to five', () => {
+      const four = [set(12, 50), set(12, 50), set(12, 50), set(12, 50)];
+      const withoutCap = { ...triple, maxSets: undefined };
+      expect(suggestNext([four], withoutCap)).toMatchObject({ sets: 5 });
+    });
+
+    it('chases reps while the top is not reached', () => {
+      expect(suggestNext([[set(10, 50), set(10, 50)]], triple)).toMatchObject({
+        weight: 50,
+        reps: 11,
+        sets: 2,
+      });
+    });
+  });
 });

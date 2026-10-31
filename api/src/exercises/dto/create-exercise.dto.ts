@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsEnum } from 'class-validator';
+import {
+  ArrayUnique,
+  IsArray,
+  IsEnum,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { MUSCLES } from '../../muscles/muscles.js';
 import { ExerciseType } from '@prisma/client';
 
 export class CreateExerciseDto {
@@ -57,4 +66,17 @@ export class CreateExerciseDto {
   @IsOptional()
   @IsEnum(ExerciseType)
   readonly type?: ExerciseType;
+
+  @ApiProperty({
+    required: false,
+    enum: MUSCLES,
+    isArray: true,
+    description: 'Worked muscles; the first one is the primary muscle',
+    example: ['chest', 'triceps'],
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsIn(MUSCLES, { each: true })
+  readonly muscles?: string[];
 }

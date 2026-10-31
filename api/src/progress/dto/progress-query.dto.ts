@@ -29,10 +29,13 @@ export class SummaryQueryDto extends ProgressQueryDto {
 }
 
 export class SuggestionQueryDto extends ProgressQueryDto {
-  @ApiPropertyOptional({ enum: ['linear', 'double'], default: 'double' })
+  @ApiPropertyOptional({
+    enum: ['linear', 'double', 'triple'],
+    default: 'double',
+  })
   @IsOptional()
-  @IsIn(['linear', 'double'])
-  strategy?: 'linear' | 'double';
+  @IsIn(['linear', 'double', 'triple'])
+  strategy?: 'linear' | 'double' | 'triple';
 
   @ApiPropertyOptional({ default: 2.5 })
   @IsOptional()
@@ -53,4 +56,15 @@ export class SuggestionQueryDto extends ProgressQueryDto {
   @IsInt()
   @Min(1)
   maxReps?: number;
+
+  @ApiPropertyOptional({
+    default: 5,
+    description: 'Triple progression: sets cap',
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(10)
+  maxSets?: number;
 }

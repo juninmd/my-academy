@@ -8,8 +8,10 @@ describe('ProgressController', () => {
   let controller: ProgressController;
   const service = {
     summary: vi.fn().mockResolvedValue('summary'),
+    muscles: vi.fn().mockResolvedValue('muscles'),
     bodyWeight: vi.fn().mockResolvedValue('weight'),
     exerciseProgress: vi.fn().mockResolvedValue('exercise'),
+    relativeStrength: vi.fn().mockResolvedValue('relative'),
     suggestion: vi.fn().mockResolvedValue('suggestion'),
   };
   const access = { assertCanActFor: vi.fn() };
@@ -35,6 +37,11 @@ describe('ProgressController', () => {
     expect(service.summary).toHaveBeenCalledWith('u1', 30);
   });
 
+  it('returns muscles', async () => {
+    expect(await controller.muscles({ userId: 'u1' }, 'actor')).toBe('muscles');
+    expect(service.muscles).toHaveBeenCalledWith('u1', undefined);
+  });
+
   it('returns body weight', async () => {
     expect(await controller.bodyWeight({ userId: 'u1' }, 'actor')).toBe(
       'weight',
@@ -47,6 +54,13 @@ describe('ProgressController', () => {
       'exercise',
     );
     expect(service.exerciseProgress).toHaveBeenCalledWith('u1', 7);
+  });
+
+  it('returns relative strength', async () => {
+    expect(await controller.relative(7, { userId: 'u1' }, 'actor')).toBe(
+      'relative',
+    );
+    expect(service.relativeStrength).toHaveBeenCalledWith('u1', 7);
   });
 
   it('returns a suggestion forwarding options', async () => {

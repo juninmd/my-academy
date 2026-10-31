@@ -15,6 +15,8 @@ import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module.js';
 import { ProgressModule } from './progress/progress.module.js';
 import { PlatesModule } from './plates/plates.module.js';
 import { StarterPlansModule } from './starter-plans/starter-plans.module.js';
+import { FavoritesModule } from './favorites/favorites.module.js';
+import { ImportsModule } from './imports/imports.module.js';
 import { ExportModule } from './export/export.module.js';
 import { TelegramModule } from './telegram/telegram.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
@@ -43,6 +45,8 @@ import { AccessModule } from './access/access.module.js';
     PlatesModule,
     StarterPlansModule,
     ExportModule,
+    FavoritesModule,
+    ImportsModule,
     AssessmentsModule,
     GymsModule,
   ],

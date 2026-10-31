@@ -32,6 +32,8 @@ import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module.js';
 import { ProgressModule } from './progress/progress.module.js';
 import { PlatesModule } from './plates/plates.module.js';
 import { StarterPlansModule } from './starter-plans/starter-plans.module.js';
+import { FavoritesModule } from './favorites/favorites.module.js';
+import { ImportsModule } from './imports/imports.module.js';
 import { ExportModule } from './export/export.module.js';
 import { ExercisesModule } from './exercises/exercises.module.js';
 import { HealthModule } from './health/health.module.js';
@@ -89,6 +91,8 @@ describe('Structure Coverage', () => {
     expect(new PlatesModule()).toBeDefined();
     expect(new StarterPlansModule()).toBeDefined();
     expect(new ExportModule()).toBeDefined();
+    expect(new FavoritesModule()).toBeDefined();
+    expect(new ImportsModule()).toBeDefined();
     expect(new ExercisesModule()).toBeDefined();
     expect(new HealthModule()).toBeDefined();
     expect(new MethodsModule()).toBeDefined();

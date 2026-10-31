@@ -41,10 +41,13 @@ model Exercises {
   mistakes    String
   description String?
   type        ExerciseType @default(STRENGTH)
+  // Canonical muscle slugs worked by the exercise (see src/muscles/muscles.ts).
+  muscles     String[]     @default([])
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   workouts  Workouts[]
   exerciseLogs ExerciseLog[]
+  favorites    ExerciseFavorite[]
 
   @@map("exercises")
 }
@@ -81,6 +84,20 @@ model ExerciseLogSet {
 
   @@index([exerciseLogId])
   @@map("exercise_log_sets")
+}
+
+model ExerciseFavorite {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  exerciseId Int
+  createdAt  DateTime @default(now())
+
+  user     Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise Exercises @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, exerciseId])
+  @@index([exerciseId])
+  @@map("exercise_favorites")
 }
 
 model Methods {
@@ -157,6 +174,7 @@ model Users {
   subscriptions Subscription[]
   payments      Payment[]
   exerciseLogs  ExerciseLog[]
+  exerciseFavorites ExerciseFavorite[]
 
   @@map("users")
 }

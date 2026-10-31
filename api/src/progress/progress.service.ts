@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service.js';
-import { suggestNext, type ProgressionOptions } from './progression.js';
 import {
   dayKey,
   estimateOneRepMax,
@@ -9,9 +8,18 @@ import {
   weekStart,
   workingSets,
 } from './progress.math.js';
+import { suggestNext, type ProgressionOptions } from './progression.js';
+import {
+  balanceOf,
+  MUSCLES,
+  muscleWeights,
+  recoveryOf,
+} from '../muscles/muscles.js';
 
 const DEFAULT_DAYS = 90;
 const MAX_LOGS = 5000;
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 @Injectable()
 export class ProgressService {
@@ -62,7 +70,7 @@ export class ProgressService {
   }
 
   async summary(userId: string, days = DEFAULT_DAYS) {
-    const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+    const since = new Date(Date.now() - days * DAY_MS);
     const logs = await this.prisma.exerciseLog.findMany({
       where: { userId, date: { gte: since } },
       include: { sets: true },
@@ -107,6 +115,45 @@ export class ProgressService {
     };
   }
 
+  /** Weighted working sets per muscle, last hit and recovery, plus left/right balance. */
+  async muscles(userId: string, days = DEFAULT_DAYS) {
+    const now = Date.now();
+    const logs = await this.prisma.exerciseLog.findMany({
+      where: { userId, date: { gte: new Date(now - days * DAY_MS) } },
+      include: { sets: true, exercise: { select: { muscles: true } } },
+      orderBy: { date: 'asc' },
+      take: MAX_LOGS,
+    });
+
+    const sets = new Map<string, number>();
+    const lastHit = new Map<string, number>();
+    for (const log of logs) {
+      const count = workingSets(log.sets).length;
+      if (count === 0) continue;
+      for (const [muscle, weight] of muscleWeights(log.exercise.muscles)) {
+        sets.set(muscle, (sets.get(muscle) ?? 0) + weight * count);
+        lastHit.set(
+          muscle,
+          Math.max(lastHit.get(muscle) ?? 0, log.date.getTime()),
+        );
+      }
+    }
+
+    return {
+      days,
+      muscles: MUSCLES.map((muscle) => {
+        const last = lastHit.get(muscle) ?? null;
+        return {
+          muscle,
+          weightedSets: round(sets.get(muscle) ?? 0),
+          lastTrained: last === null ? null : dayKey(new Date(last)),
+          state: recoveryOf(last, now),
+        };
+      }),
+      balance: balanceOf(sets),
+    };
+  }
+
   async bodyWeight(userId: string) {
     const assessments = await this.prisma.assessment.findMany({
       where: { studentId: userId },
@@ -118,12 +165,69 @@ export class ProgressService {
       date: dayKey(a.date),
       weight: a.weight,
     }));
-    const first = points[0];
-    const latest = points[points.length - 1];
+    const first = assessments[0];
+    const last = assessments[assessments.length - 1];
+    const change = first && last ? round(last.weight - first.weight) : null;
+    const weeks =
+      first && last
+        ? (last.date.getTime() - first.date.getTime()) / WEEK_MS
+        : 0;
     return {
       points,
-      latest: latest?.weight ?? null,
-      change: first && latest ? round(latest.weight - first.weight) : null,
+      latest: last?.weight ?? null,
+      change,
+      weeklyRate: change !== null && weeks > 0 ? round(change / weeks) : null,
+    };
+  }
+
+  /** Best estimated 1RM per session divided by the nearest earlier body weight. */
+  async relativeStrength(userId: string, exerciseId: number) {
+    const [logs, assessments] = await Promise.all([
+      this.prisma.exerciseLog.findMany({
+        where: { userId, exerciseId },
+        include: { sets: true },
+        orderBy: { date: 'asc' },
+        take: MAX_LOGS,
+      }),
+      this.prisma.assessment.findMany({
+        where: { studentId: userId },
+        select: { date: true, weight: true },
+        orderBy: { date: 'asc' },
+        take: MAX_LOGS,
+      }),
+    ]);
+
+    const points: {
+      date: string;
+      estimatedOneRepMax: number;
+      bodyWeight: number;
+      ratio: number;
+    }[] = [];
+    for (const log of logs) {
+      const sets = workingSets(log.sets);
+      if (sets.length === 0) continue;
+      const bodyWeight = [...assessments]
+        .reverse()
+        .find((a) => a.date.getTime() <= log.date.getTime());
+      if (!bodyWeight || bodyWeight.weight <= 0) continue;
+      const oneRepMax = Math.max(
+        ...sets.map((s) => estimateOneRepMax(s.weight, s.reps)),
+      );
+      points.push({
+        date: dayKey(log.date),
+        estimatedOneRepMax: oneRepMax,
+        bodyWeight: bodyWeight.weight,
+        ratio: round(oneRepMax / bodyWeight.weight),
+      });
+    }
+
+    return {
+      exerciseId,
+      points,
+      best: points.reduce<(typeof points)[number] | null>(
+        (acc, p) => (!acc || p.ratio > acc.ratio ? p : acc),
+        null,
+      ),
     };
   }
 
@@ -143,7 +247,13 @@ export class ProgressService {
     });
     const suggestion = suggestNext(
       logs.map((log) => log.sets),
-      { strategy, increment: options.increment ?? 2.5, minReps, maxReps },
+      {
+        strategy,
+        increment: options.increment ?? 2.5,
+        minReps,
+        maxReps,
+        maxSets: options.maxSets,
+      },
     );
     return { exerciseId, strategy, suggestion };
   }

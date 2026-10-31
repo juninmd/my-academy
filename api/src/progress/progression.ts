@@ -1,25 +1,32 @@
 import { round, workingSets, type SetLike } from './progress.math.js';
 
-export type Strategy = 'linear' | 'double';
+/**
+ * linear: every set hits `minReps`, then add load.
+ * double: every set hits `maxReps`, then add load and restart at `minReps`.
+ * triple: reps first (to `maxReps`), then extra sets up to `maxSets`, then load.
+ */
+export type Strategy = 'linear' | 'double' | 'triple';
 
 export interface ProgressionOptions {
   strategy: Strategy;
   increment: number;
-  /** Linear: reps every set must reach. Double: bottom of the rep range. */
   minReps: number;
-  /** Double progression: top of the rep range. */
   maxReps: number;
+  /** Triple progression only. */
+  maxSets?: number;
 }
 
 export interface Suggestion {
   weight: number;
   reps: number;
+  sets: number;
   deload: boolean;
   reason: string;
 }
 
 const STALLS_BEFORE_DELOAD = 3;
 const DELOAD_FACTOR = 0.9;
+export const TRIPLE_DEFAULT_MAX_SETS = 5;
 
 export function roundTo(value: number, step: number): number {
   return round(Math.round(value / step) * step);
@@ -28,6 +35,7 @@ export function roundTo(value: number, step: number): number {
 interface Session {
   weight: number;
   reps: number[];
+  sets: number;
 }
 
 /** Reduces a session to its heaviest working weight and the reps done at it. */
@@ -38,13 +46,15 @@ function toSession(sets: SetLike[]): Session | null {
   return {
     weight,
     reps: working.filter((s) => s.weight === weight).map((s) => s.reps),
+    sets: working.length,
   };
 }
 
+const targetOf = (options: ProgressionOptions) =>
+  options.strategy === 'linear' ? options.minReps : options.maxReps;
+
 function succeeded(session: Session, options: ProgressionOptions): boolean {
-  const target =
-    options.strategy === 'linear' ? options.minReps : options.maxReps;
-  return Math.min(...session.reps) >= target;
+  return Math.min(...session.reps) >= targetOf(options);
 }
 
 /**
@@ -62,10 +72,22 @@ export function suggestNext(
   if (!last) return null;
 
   const { increment, minReps, maxReps, strategy } = options;
+  const maxSets = options.maxSets ?? TRIPLE_DEFAULT_MAX_SETS;
+
   if (succeeded(last, options)) {
+    if (strategy === 'triple' && last.sets < maxSets) {
+      return {
+        weight: last.weight,
+        reps: minReps,
+        sets: last.sets + 1,
+        deload: false,
+        reason: 'Top reps on every set: add a set at the same load.',
+      };
+    }
     return {
       weight: roundTo(last.weight + increment, increment),
       reps: minReps,
+      sets: last.sets,
       deload: false,
       reason:
         strategy === 'linear'
@@ -83,6 +105,7 @@ export function suggestNext(
     return {
       weight: roundTo(last.weight * DELOAD_FACTOR, increment),
       reps: minReps,
+      sets: last.sets,
       deload: true,
       reason: `Stalled ${stalls} sessions at ${last.weight}: deload 10%.`,
     };
@@ -95,6 +118,7 @@ export function suggestNext(
   return {
     weight: last.weight,
     reps,
+    sets: last.sets,
     deload: false,
     reason: 'Target missed: keep the load and chase the reps.',
   };
