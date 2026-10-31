@@ -45,6 +45,27 @@ export class ImportHevyDto {
   apiKey: string;
 }
 
+export class ImportBodyWeightDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty({
+    description:
+      'Apple Health export.xml text, or a CSV with a date and a weight column',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(25_000_000)
+  data: string;
+
+  @ApiPropertyOptional({ enum: ['kg', 'lb'], default: 'kg' })
+  @IsOptional()
+  @IsIn(['kg', 'lb'])
+  unit?: 'kg' | 'lb';
+}
+
 export class ImportJsonDto {
   @ApiProperty()
   @IsString()
@@ -89,5 +110,18 @@ export class ImportsController {
   ) {
     await this.accessService.assertCanActFor(actor, body.userId);
     return this.importsService.importHevy(body.userId, body.apiKey);
+  }
+
+  @Post('body-weight')
+  async bodyWeight(
+    @Body() body: ImportBodyWeightDto,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    await this.accessService.assertCanActFor(actor, body.userId);
+    return this.importsService.importBodyWeight(
+      body.userId,
+      body.data,
+      body.unit,
+    );
   }
 }

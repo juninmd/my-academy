@@ -213,3 +213,80 @@ describe('ImportsService.importHevy', () => {
     expect(fetchFn.mock.calls[0][1].headers['api-key']).toBe('key');
   });
 });
+
+describe('ImportsService.importBodyWeight', () => {
+  const prisma = {
+    bodyWeightEntry: { findMany: vi.fn() as Mock, createMany: vi.fn() as Mock },
+  };
+  let service: ImportsService;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    prisma.bodyWeightEntry.findMany.mockResolvedValue([]);
+    service = new ImportsService(prisma as never);
+  });
+
+  it('imports an Apple Health export and reports the format', async () => {
+    const xml =
+      '<HealthData><Record type="HKQuantityTypeIdentifierBodyMass" startDate="2026-10-01 07:00:00 +0000" value="80" unit="kg"/></HealthData>';
+    const result = await service.importBodyWeight('u1', xml);
+    expect(result).toEqual({
+      format: 'apple-health',
+      imported: 1,
+      skippedExisting: 0,
+      skippedRows: 0,
+    });
+    expect(prisma.bodyWeightEntry.createMany.mock.calls[0][0].data).toEqual([
+      { userId: 'u1', date: new Date('2026-10-01T00:00:00.000Z'), weight: 80 },
+    ]);
+  });
+
+  it('keeps the last reading of a day and skips days already logged', async () => {
+    prisma.bodyWeightEntry.findMany.mockResolvedValue([
+      { date: new Date('2026-10-01T00:00:00Z') },
+    ]);
+    const csv = 'date,weight\n2026-10-01,80\n2026-10-02,79\n2026-10-02,78.5\n';
+    const result = await service.importBodyWeight('u1', csv, 'kg');
+    expect(result).toEqual({
+      format: 'csv',
+      imported: 1,
+      skippedExisting: 1,
+      skippedRows: 0,
+    });
+    expect(prisma.bodyWeightEntry.createMany.mock.calls[0][0].data).toEqual([
+      {
+        userId: 'u1',
+        date: new Date('2026-10-02T00:00:00.000Z'),
+        weight: 78.5,
+      },
+    ]);
+  });
+
+  it('writes nothing when every day is already there or unreadable', async () => {
+    prisma.bodyWeightEntry.findMany.mockResolvedValue([
+      { date: new Date('2026-10-01T00:00:00Z') },
+    ]);
+    const result = await service.importBodyWeight(
+      'u1',
+      'date,weight\n2026-10-01,80\nbad,row\n',
+    );
+    expect(result).toEqual({
+      format: 'csv',
+      imported: 0,
+      skippedExisting: 1,
+      skippedRows: 1,
+    });
+    expect(prisma.bodyWeightEntry.createMany).not.toHaveBeenCalled();
+  });
+
+  it('does not query when there is nothing to import', async () => {
+    const result = await service.importBodyWeight('u1', 'nothing,here\n1,2\n');
+    expect(result).toEqual({
+      format: 'csv',
+      imported: 0,
+      skippedExisting: 0,
+      skippedRows: 1,
+    });
+    expect(prisma.bodyWeightEntry.findMany).not.toHaveBeenCalled();
+  });
+});

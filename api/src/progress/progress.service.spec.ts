@@ -12,12 +12,14 @@ describe('ProgressService', () => {
   let prisma: {
     exerciseLog: { findMany: Mock };
     assessment: { findMany: Mock };
+    bodyWeightEntry: { findMany: Mock };
   };
 
   beforeEach(async () => {
     prisma = {
       exerciseLog: { findMany: vi.fn() },
       assessment: { findMany: vi.fn() },
+      bodyWeightEntry: { findMany: vi.fn().mockResolvedValue([]) },
     };
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -217,6 +219,29 @@ describe('ProgressService', () => {
   });
 
   describe('bodyWeight', () => {
+    it('merges weigh-ins with assessments, weigh-ins winning on the same day', async () => {
+      prisma.assessment.findMany.mockResolvedValue([
+        { date: new Date('2026-01-01T00:00:00Z'), weight: 80 },
+        { date: new Date('2026-03-01T00:00:00Z'), weight: 79 },
+      ]);
+      prisma.bodyWeightEntry.findMany.mockResolvedValue([
+        { date: new Date('2026-03-01T00:00:00Z'), weight: 78.5 },
+        { date: new Date('2026-06-01T00:00:00Z'), weight: 76.5 },
+      ]);
+      expect(await service.bodyWeight('u1')).toMatchObject({
+        points: [
+          { date: '2026-01-01', weight: 80 },
+          { date: '2026-03-01', weight: 78.5 },
+          { date: '2026-06-01', weight: 76.5 },
+        ],
+        latest: 76.5,
+        change: -3.5,
+      });
+      expect(prisma.bodyWeightEntry.findMany.mock.calls[0][0].where).toEqual({
+        userId: 'u1',
+      });
+    });
+
     it('returns series, latest, change and weekly rate', async () => {
       prisma.assessment.findMany.mockResolvedValue([
         { date: new Date('2026-01-01T00:00:00Z'), weight: 80 },

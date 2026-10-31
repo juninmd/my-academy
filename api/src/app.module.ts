@@ -20,6 +20,8 @@ import { ImportsModule } from './imports/imports.module.js';
 import { ExportModule } from './export/export.module.js';
 import { CoachModule } from './coach/coach.module.js';
 import { RotationModule } from './rotation/rotation.module.js';
+import { BodyWeightModule } from './body-weight/body-weight.module.js';
+import { InvitesModule } from './invites/invites.module.js';
 import { TelegramModule } from './telegram/telegram.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
 import { GymsModule } from './gyms/gyms.module.js';
@@ -51,6 +53,8 @@ import { AccessModule } from './access/access.module.js';
     ImportsModule,
     CoachModule,
     RotationModule,
+    BodyWeightModule,
+    InvitesModule,
     AssessmentsModule,
     GymsModule,
   ],

@@ -11,6 +11,7 @@ import {
 } from './csv.js';
 import { fromExportJson } from './json.js';
 import { fetchHevyWorkouts, hevyToSets } from './hevy.js';
+import { parseAppleHealthWeights, parseWeightCsv } from './body-weight.js';
 
 export const MAX_IMPORT_ROWS = 20000;
 const MAX_REPORTED_NAMES = 50;
@@ -42,6 +43,57 @@ export class ImportsService {
     }
     const { sets, skippedRows } = toSets(body, map, unit);
     return this.importSets(userId, sets, skippedRows);
+  }
+
+  /**
+   * Body weight from an Apple Health export.xml (detected by its leading "<") or a CSV.
+   * One reading per day: days that already have a weigh-in are left alone.
+   */
+  async importBodyWeight(
+    userId: string,
+    text: string,
+    unit: WeightUnit = 'kg',
+  ) {
+    const isXml = text.trimStart().startsWith('<');
+    const { weighIns, skipped } = isXml
+      ? parseAppleHealthWeights(text)
+      : parseWeightCsv(text, unit);
+
+    const byDay = new Map(weighIns.map((w) => [w.day, w.weight]));
+    const days = [...byDay.keys()].sort();
+    let fresh: { day: string; weight: number }[] = [];
+    if (days.length > 0) {
+      const existing = await this.prisma.bodyWeightEntry.findMany({
+        where: {
+          userId,
+          date: {
+            gte: new Date(`${days[0]}T00:00:00.000Z`),
+            lte: new Date(`${days[days.length - 1]}T00:00:00.000Z`),
+          },
+        },
+        select: { date: true },
+      });
+      const have = new Set(existing.map((e) => dayKey(e.date)));
+      fresh = [...byDay]
+        .filter(([day]) => !have.has(day))
+        .map(([day, weight]) => ({ day, weight }));
+    }
+
+    if (fresh.length > 0) {
+      await this.prisma.bodyWeightEntry.createMany({
+        data: fresh.map((f) => ({
+          userId,
+          date: new Date(`${f.day}T00:00:00.000Z`),
+          weight: f.weight,
+        })),
+      });
+    }
+    return {
+      format: isXml ? 'apple-health' : 'csv',
+      imported: fresh.length,
+      skippedExisting: byDay.size - fresh.length,
+      skippedRows: skipped,
+    };
   }
 
   /** Re-imports a backup made by GET /export/json. */

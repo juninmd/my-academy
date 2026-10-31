@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Controller,
   Get,
   Post,
@@ -15,6 +16,7 @@ import { FindUserDto } from './dto/find-user.dto.js';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity.js';
 import { AccessService } from '../access/access.service.js';
+import { InvitesService } from '../invites/invites.service.js';
 import { CurrentUserId } from '../access/current-user.decorator.js';
 
 @ApiTags('Users')
@@ -23,6 +25,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly accessService: AccessService,
+    private readonly invitesService: InvitesService,
   ) {}
 
   @Post()
@@ -33,11 +36,21 @@ export class UsersController {
     type: User,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
-  create(
+  async create(
     @Body() createUserDto: CreateUserDto,
     @CurrentUserId() actor: string | undefined,
   ): Promise<User> {
     this.accessService.assertSelf(actor, createUserDto.id);
+    // REGISTRATION_INVITE_ONLY=true: a new account needs a code an admin handed out.
+    if (process.env.REGISTRATION_INVITE_ONLY === 'true') {
+      if (!createUserDto.inviteCode) {
+        throw new ForbiddenException('Registration needs an invite code');
+      }
+      await this.invitesService.redeem(
+        createUserDto.inviteCode,
+        createUserDto.id,
+      );
+    }
     return this.usersService.create(createUserDto);
   }
 

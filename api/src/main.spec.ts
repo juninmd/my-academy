@@ -2,6 +2,7 @@ import type { Mock, MockInstance } from 'vitest';
 import { NestFactory } from '@nestjs/core';
 
 const app = {
+  useBodyParser: vi.fn(),
   useGlobalPipes: vi.fn(),
   enableCors: vi.fn(),
   use: vi.fn(),
@@ -61,6 +62,11 @@ describe('Main', () => {
   it('boots with validation, /api prefix and open CORS by default', async () => {
     await runMain();
     await vi.waitFor(() => expect(app.listen).toHaveBeenCalledWith(9000));
+    expect(app.useBodyParser).toHaveBeenCalledWith('json', { limit: '25mb' });
+    expect(app.useBodyParser).toHaveBeenCalledWith('urlencoded', {
+      limit: '25mb',
+      extended: true,
+    });
     expect(app.setGlobalPrefix).toHaveBeenCalledWith('api', {
       exclude: ['docs', 'health'],
     });

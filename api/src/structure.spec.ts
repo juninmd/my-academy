@@ -37,6 +37,8 @@ import { ImportsModule } from './imports/imports.module.js';
 import { ExportModule } from './export/export.module.js';
 import { CoachModule } from './coach/coach.module.js';
 import { RotationModule } from './rotation/rotation.module.js';
+import { BodyWeightModule } from './body-weight/body-weight.module.js';
+import { InvitesModule } from './invites/invites.module.js';
 import { ExercisesModule } from './exercises/exercises.module.js';
 import { HealthModule } from './health/health.module.js';
 import { MethodsModule } from './methods/methods.module.js';
@@ -97,6 +99,8 @@ describe('Structure Coverage', () => {
     expect(new ImportsModule()).toBeDefined();
     expect(new CoachModule()).toBeDefined();
     expect(new RotationModule()).toBeDefined();
+    expect(new BodyWeightModule()).toBeDefined();
+    expect(new InvitesModule()).toBeDefined();
     expect(new ExercisesModule()).toBeDefined();
     expect(new HealthModule()).toBeDefined();
     expect(new MethodsModule()).toBeDefined();

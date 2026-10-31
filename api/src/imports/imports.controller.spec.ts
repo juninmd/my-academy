@@ -74,3 +74,26 @@ describe('ImportsController.hevy', () => {
     expect(service.importHevy).toHaveBeenCalledWith('u1', 'k');
   });
 });
+
+describe('ImportsController.bodyWeight', () => {
+  it('checks access then imports the text with its unit', async () => {
+    const service = { importBodyWeight: vi.fn().mockResolvedValue('weights') };
+    const access = { assertCanActFor: vi.fn() };
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [ImportsController],
+      providers: [
+        { provide: ImportsService, useValue: service },
+        { provide: AccessService, useValue: access },
+      ],
+    }).compile();
+    const controller = module.get(ImportsController);
+    expect(
+      await controller.bodyWeight(
+        { userId: 'u1', data: 'x', unit: 'lb' },
+        'actor',
+      ),
+    ).toBe('weights');
+    expect(access.assertCanActFor).toHaveBeenCalledWith('actor', 'u1');
+    expect(service.importBodyWeight).toHaveBeenCalledWith('u1', 'x', 'lb');
+  });
+});

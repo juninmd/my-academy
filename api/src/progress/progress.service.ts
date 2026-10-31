@@ -154,23 +154,35 @@ export class ProgressService {
     };
   }
 
+  /** Weigh-ins and assessment weights, one point per day (a weigh-in wins over an assessment). */
   async bodyWeight(userId: string) {
-    const assessments = await this.prisma.assessment.findMany({
-      where: { studentId: userId },
-      select: { date: true, weight: true },
-      orderBy: { date: 'asc' },
-      take: MAX_LOGS,
-    });
-    const points = assessments.map((a) => ({
-      date: dayKey(a.date),
-      weight: a.weight,
-    }));
-    const first = assessments[0];
-    const last = assessments[assessments.length - 1];
+    const [assessments, entries] = await Promise.all([
+      this.prisma.assessment.findMany({
+        where: { studentId: userId },
+        select: { date: true, weight: true },
+        orderBy: { date: 'asc' },
+        take: MAX_LOGS,
+      }),
+      this.prisma.bodyWeightEntry.findMany({
+        where: { userId },
+        select: { date: true, weight: true },
+        orderBy: { date: 'asc' },
+        take: MAX_LOGS,
+      }),
+    ]);
+    const byDay = new Map<string, number>();
+    for (const a of assessments) byDay.set(dayKey(a.date), a.weight);
+    for (const e of entries) byDay.set(dayKey(e.date), e.weight);
+    const points = [...byDay]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, weight]) => ({ date, weight }));
+
+    const first = points[0];
+    const last = points[points.length - 1];
     const change = first && last ? round(last.weight - first.weight) : null;
     const weeks =
       first && last
-        ? (last.date.getTime() - first.date.getTime()) / WEEK_MS
+        ? (Date.parse(last.date) - Date.parse(first.date)) / WEEK_MS
         : 0;
     return {
       points,

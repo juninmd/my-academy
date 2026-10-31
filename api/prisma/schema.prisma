@@ -100,6 +100,37 @@ model ExerciseFavorite {
   @@map("exercise_favorites")
 }
 
+/// One body-weight reading per user per calendar day.
+model BodyWeightEntry {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  date      DateTime @db.Date
+  weight    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@map("body_weight_entries")
+}
+
+/// Sign-up code an admin hands out when registration is invite-only.
+model Invite {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique
+  createdById String
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  usedAt      DateTime?
+  // Plain id, not a relation: the code is marked used before the account exists.
+  usedById    String?
+
+  createdBy Users @relation("inviteCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@map("invites")
+}
+
 model Methods {
   id          Int        @id @default(autoincrement())
   name        String
@@ -117,6 +148,8 @@ model Workouts {
   description      String
   workoutsGroupsId Int
   methodId         Int?
+  // Exercises sharing a label, in order, form one superset (e.g. "A").
+  supersetGroup    String?
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @updatedAt
   workoutSeries    WorkoutSeries[]
@@ -175,6 +208,8 @@ model Users {
   payments      Payment[]
   exerciseLogs  ExerciseLog[]
   exerciseFavorites ExerciseFavorite[]
+  bodyWeightEntries BodyWeightEntry[]
+  invitesCreated   Invite[]         @relation("inviteCreatedBy")
 
   @@map("users")
 }

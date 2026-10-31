@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateString,
+  IsIn,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -10,6 +11,15 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+
+/** normal, warmup, dropset, failure and restpause (rest-pause: short rests inside one set). */
+export const SET_TYPES = [
+  'normal',
+  'warmup',
+  'dropset',
+  'failure',
+  'restpause',
+] as const;
 
 export class CreateSetLogDto {
   @ApiProperty()
@@ -26,10 +36,10 @@ export class CreateSetLogDto {
   @IsInt()
   rpe?: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, enum: SET_TYPES })
   @IsOptional()
-  @IsString()
-  type?: string;
+  @IsIn(SET_TYPES)
+  type?: (typeof SET_TYPES)[number];
 }
 
 export class CreateExerciseLogDto {

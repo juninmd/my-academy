@@ -6,6 +6,7 @@ import {
   IsString,
   IsUrl,
   IsIn,
+  MaxLength,
 } from 'class-validator';
 import { Role } from '@prisma/client';
 
@@ -71,4 +72,13 @@ export class CreateUserDto {
   @IsOptional()
   @IsIn(SELF_ASSIGNABLE_ROLES)
   role?: Role;
+
+  @ApiProperty({
+    required: false,
+    description: 'Invite code; required when REGISTRATION_INVITE_ONLY=true',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  inviteCode?: string;
 }
