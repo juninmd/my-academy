@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/exceptions/failure.dart';
 import '../entities/import_result_entity.dart';
+import '../entities/weight_import_result_entity.dart';
 
 abstract class DataTransferRepository {
   /// Full backup as pretty-printed JSON text.
@@ -26,4 +27,11 @@ abstract class DataTransferRepository {
     String userId,
     String apiKey,
   );
+
+  /// Apple Health `export.xml` text or a CSV with a date and a weight column.
+  Future<Either<Failure, WeightImportResultEntity>> importBodyWeight(
+    String userId,
+    String data, {
+    String unit = 'kg',
+  });
 }

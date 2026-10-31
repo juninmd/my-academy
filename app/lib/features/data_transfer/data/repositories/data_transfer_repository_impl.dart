@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/network/api_client.dart';
 import '../../domain/entities/import_result_entity.dart';
+import '../../domain/entities/weight_import_result_entity.dart';
 import '../../domain/repositories/data_transfer_repository.dart';
 import '../models/import_result_dto.dart';
 
@@ -70,6 +71,30 @@ class DataTransferRepositoryImpl implements DataTransferRepository {
     try {
       final response = await _apiClient.post(path, data: body);
       return Right(ImportResultDto.fromJson(response as Map<String, dynamic>));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, WeightImportResultEntity>> importBodyWeight(
+    String userId,
+    String data, {
+    String unit = 'kg',
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        'imports/body-weight',
+        data: {'userId': userId, 'data': data, 'unit': unit},
+      ) as Map<String, dynamic>;
+      return Right(
+        WeightImportResultEntity(
+          format: response['format'] as String,
+          imported: (response['imported'] as num).toInt(),
+          skippedExisting: (response['skippedExisting'] as num).toInt(),
+          skippedRows: (response['skippedRows'] as num).toInt(),
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

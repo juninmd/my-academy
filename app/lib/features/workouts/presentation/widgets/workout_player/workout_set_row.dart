@@ -38,6 +38,8 @@ class WorkoutSetRow extends HookWidget {
         return Colors.purple.withValues(alpha: 0.1);
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.1);
+      case SetType.restpause:
+        return Colors.teal.withValues(alpha: 0.1);
       case SetType.normal:
         return Theme.of(context).cardTheme.color ??
             Theme.of(context).colorScheme.surface;
@@ -54,6 +56,8 @@ class WorkoutSetRow extends HookWidget {
         return Colors.purple.withValues(alpha: 0.3);
       case SetType.failure:
         return Colors.red.withValues(alpha: 0.3);
+      case SetType.restpause:
+        return Colors.teal.withValues(alpha: 0.3);
       case SetType.normal:
         return Theme.of(context).dividerColor.withValues(alpha: 0.1);
     }
@@ -67,6 +71,8 @@ class WorkoutSetRow extends HookWidget {
         return 'DROP SET';
       case SetType.failure:
         return 'FALHA';
+      case SetType.restpause:
+        return 'REST-PAUSE';
       case SetType.normal:
         return 'NORMAL';
     }
@@ -80,6 +86,8 @@ class WorkoutSetRow extends HookWidget {
         return Colors.purple;
       case SetType.failure:
         return Theme.of(context).colorScheme.error;
+      case SetType.restpause:
+        return Colors.teal;
       case SetType.normal:
         return Theme.of(context).colorScheme.primary;
     }
@@ -205,6 +213,18 @@ class WorkoutSetRow extends HookWidget {
                               style: TextStyle(
                                 color: _getSetTypeColor(
                                   SetType.failure,
+                                  context,
+                                ),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem<SetType>(
+                            value: SetType.restpause,
+                            child: Text(
+                              'Rest-pause',
+                              style: TextStyle(
+                                color: _getSetTypeColor(
+                                  SetType.restpause,
                                   context,
                                 ),
                               ),

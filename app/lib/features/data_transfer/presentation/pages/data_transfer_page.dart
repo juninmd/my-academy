@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../core/exceptions/failure.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../domain/entities/import_result_entity.dart';
+import '../../domain/entities/weight_import_result_entity.dart';
 import '../../domain/repositories/data_transfer_repository.dart';
 import '../providers/data_transfer_provider.dart';
 import '../widgets/hevy_key_field.dart';
@@ -92,6 +93,23 @@ class _DataTransferPageState extends ConsumerState<DataTransferPage> {
     _showResult(await _repository.importJson(userId, backup));
   });
 
+  Future<void> _importWeight() => _run((userId) async {
+    final file = await FilePicker.pickFile(
+      type: FileType.custom,
+      allowedExtensions: const ['xml', 'csv'],
+    );
+    if (file == null) return;
+    final text = utf8.decode(await file.readAsBytes());
+    final result = await _repository.importBodyWeight(userId, text);
+    result.fold(
+      (failure) => _show(failure.message),
+      (WeightImportResultEntity r) => _show(
+        'Peso: ${r.imported} dias importados (${r.format}). '
+        '${r.skippedExisting} já existiam. ${r.skippedRows} ignorados.',
+      ),
+    );
+  });
+
   Future<void> _importHevy(String apiKey) => _run((userId) async {
     _showResult(await _repository.importHevy(userId, apiKey));
   });
@@ -143,6 +161,11 @@ class _DataTransferPageState extends ConsumerState<DataTransferPage> {
             leading: const Icon(Icons.restore),
             title: const Text('Backup JSON'),
             onTap: _busy ? null : _importJson,
+          ),
+          ListTile(
+            leading: const Icon(Icons.monitor_weight),
+            title: const Text('Peso: Apple Health (export.xml) ou CSV'),
+            onTap: _busy ? null : _importWeight,
           ),
           HevyKeyField(enabled: !_busy, onSubmit: _importHevy),
           if (_busy) const LinearProgressIndicator(),

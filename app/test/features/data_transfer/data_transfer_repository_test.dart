@@ -29,6 +29,7 @@ class FakeDio {
 }
 
 void main() {
+  weightImportTests();
   test('exports the backup as indented JSON', () async {
     final fake = FakeDio((_) => {'userId': 'u1', 'exerciseLogs': []});
     final repo = DataTransferRepositoryImpl(
@@ -128,5 +129,32 @@ void main() {
       result.swap().getOrElse(() => throw StateError('')),
       isA<ServerFailure>(),
     );
+  });
+}
+
+void weightImportTests() {
+  test('sends the weight file and maps the result', () async {
+    final fake = FakeDio(
+      (_) => {
+        'format': 'apple-health',
+        'imported': 3,
+        'skippedExisting': 1,
+        'skippedRows': 0,
+      },
+    );
+    final repo = DataTransferRepositoryImpl(
+      ApiClient(baseUrl: 'http://api.test/', dio: fake.dio),
+    );
+    final result = await repo.importBodyWeight('u1', '<HealthData/>');
+    final entity = result.getOrElse(() => throw StateError('no result'));
+    expect(entity.format, 'apple-health');
+    expect(entity.imported, 3);
+    expect(entity.skippedExisting, 1);
+    expect(fake.seen.single.path, 'imports/body-weight');
+    expect(fake.seen.single.data, {
+      'userId': 'u1',
+      'data': '<HealthData/>',
+      'unit': 'kg',
+    });
   });
 }
