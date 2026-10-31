@@ -22,6 +22,7 @@ import '../../features/workouts/presentation/pages/workout_player_page.dart';
 import '../../features/workouts/presentation/pages/workout_history_page.dart';
 import '../../features/progress/presentation/pages/muscle_overview_page.dart';
 import '../../features/data_transfer/presentation/pages/data_transfer_page.dart';
+import '../../features/admin/presentation/pages/invites_page.dart';
 import '../../features/auth/domain/entities/user_role.dart';
 import '../../features/gym/presentation/pages/gym_page.dart';
 import '../../features/profile/presentation/pages/edit_profile_page.dart';
@@ -83,6 +84,10 @@ GoRouter router(Ref ref) {
       GoRoute(
         path: '/data',
         builder: (context, state) => const DataTransferPage(),
+      ),
+      GoRoute(
+        path: '/admin/invites',
+        builder: (context, state) => const InvitesPage(),
       ),
       GoRoute(
         path: '/exercise-details',

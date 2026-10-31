@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/exceptions/failure.dart';
@@ -168,6 +169,15 @@ class _DataTransferPageState extends ConsumerState<DataTransferPage> {
             onTap: _busy ? null : _importWeight,
           ),
           HevyKeyField(enabled: !_busy, onSubmit: _importHevy),
+          if (ref.watch(authProvider).value?.role == 'ADMIN') ...[
+            const SizedBox(height: 24),
+            Text('Administração', style: Theme.of(context).textTheme.titleLarge),
+            ListTile(
+              leading: const Icon(Icons.vpn_key),
+              title: const Text('Convites de cadastro'),
+              onTap: () => context.push('/admin/invites'),
+            ),
+          ],
           if (_busy) const LinearProgressIndicator(),
           if (_message != null) ...[
             const SizedBox(height: 16),
