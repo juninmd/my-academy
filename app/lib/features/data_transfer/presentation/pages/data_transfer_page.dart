@@ -9,9 +9,11 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/exceptions/failure.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
+import '../../../health_sync/health_sync_service.dart';
 import '../../domain/entities/import_result_entity.dart';
 import '../../domain/entities/weight_import_result_entity.dart';
 import '../../domain/repositories/data_transfer_repository.dart';
+import '../../../health_sync/presentation/providers/health_sync_provider.dart';
 import '../providers/data_transfer_provider.dart';
 import '../widgets/hevy_key_field.dart';
 
@@ -111,6 +113,31 @@ class _DataTransferPageState extends ConsumerState<DataTransferPage> {
     );
   });
 
+  Future<void> _syncHealth() => _run((userId) async {
+        final health = ref.read(healthSyncServiceProvider);
+        final granted = await health.requestWeightAccess();
+        if (!granted) {
+          _show('Permita o acesso a peso no Health Connect.');
+          return;
+        }
+        final weighIns = await health.readWeighIns();
+        if (weighIns.isEmpty) {
+          _show('Nenhum peso encontrado no Health Connect nos últimos 30 dias.');
+          return;
+        }
+        final result = await _repository.importBodyWeight(
+          userId,
+          buildWeightCsv(weighIns),
+        );
+        result.fold(
+          (failure) => _show(failure.message),
+          (r) => _show(
+            'Health Connect: ${r.imported} dias importados. '
+            '${r.skippedExisting} já existiam.',
+          ),
+        );
+      });
+
   Future<void> _importHevy(String apiKey) => _run((userId) async {
     _showResult(await _repository.importHevy(userId, apiKey));
   });
@@ -163,6 +190,12 @@ class _DataTransferPageState extends ConsumerState<DataTransferPage> {
             title: const Text('Backup JSON'),
             onTap: _busy ? null : _importJson,
           ),
+          if (HealthSyncService.isSupported)
+            ListTile(
+              leading: const Icon(Icons.favorite_outline),
+              title: const Text('Peso do Health Connect'),
+              onTap: _busy ? null : _syncHealth,
+            ),
           ListTile(
             leading: const Icon(Icons.monitor_weight),
             title: const Text('Peso: Apple Health (export.xml) ou CSV'),
