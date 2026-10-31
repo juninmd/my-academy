@@ -33,6 +33,11 @@ class AnalyticsPage extends HookConsumerWidget {
               icon: const Icon(Icons.accessibility_new),
               onPressed: () => context.push('/progress/muscles'),
             ),
+            IconButton(
+              tooltip: 'Dados',
+              icon: const Icon(Icons.import_export),
+              onPressed: () => context.push('/data'),
+            ),
           ],
           bottom: const TabBar(
             tabs: [
