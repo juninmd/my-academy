@@ -89,3 +89,4 @@ lerna-debug.log*
 prisma/prisma-client
 service-account.json
 opencode.json
+mcp/coverage/
