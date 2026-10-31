@@ -19,6 +19,7 @@ import { FavoritesModule } from './favorites/favorites.module.js';
 import { ImportsModule } from './imports/imports.module.js';
 import { ExportModule } from './export/export.module.js';
 import { CoachModule } from './coach/coach.module.js';
+import { RotationModule } from './rotation/rotation.module.js';
 import { TelegramModule } from './telegram/telegram.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
 import { GymsModule } from './gyms/gyms.module.js';
@@ -49,6 +50,7 @@ import { AccessModule } from './access/access.module.js';
     FavoritesModule,
     ImportsModule,
     CoachModule,
+    RotationModule,
     AssessmentsModule,
     GymsModule,
   ],
