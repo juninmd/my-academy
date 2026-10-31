@@ -35,6 +35,7 @@ import { StarterPlansModule } from './starter-plans/starter-plans.module.js';
 import { FavoritesModule } from './favorites/favorites.module.js';
 import { ImportsModule } from './imports/imports.module.js';
 import { ExportModule } from './export/export.module.js';
+import { CoachModule } from './coach/coach.module.js';
 import { ExercisesModule } from './exercises/exercises.module.js';
 import { HealthModule } from './health/health.module.js';
 import { MethodsModule } from './methods/methods.module.js';
@@ -93,6 +94,7 @@ describe('Structure Coverage', () => {
     expect(new ExportModule()).toBeDefined();
     expect(new FavoritesModule()).toBeDefined();
     expect(new ImportsModule()).toBeDefined();
+    expect(new CoachModule()).toBeDefined();
     expect(new ExercisesModule()).toBeDefined();
     expect(new HealthModule()).toBeDefined();
     expect(new MethodsModule()).toBeDefined();

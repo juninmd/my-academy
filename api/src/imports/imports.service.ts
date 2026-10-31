@@ -10,6 +10,7 @@ import {
   WeightUnit,
 } from './csv.js';
 import { fromExportJson } from './json.js';
+import { fetchHevyWorkouts, hevyToSets } from './hevy.js';
 
 export const MAX_IMPORT_ROWS = 20000;
 const MAX_REPORTED_NAMES = 50;
@@ -51,6 +52,17 @@ export class ImportsService {
         `Import at most ${MAX_IMPORT_ROWS} sets at once`,
       );
     }
+    return this.importSets(userId, sets, skippedRows);
+  }
+
+  /** Imports the workouts of a Hevy Pro account. The API key is not stored. */
+  async importHevy(
+    userId: string,
+    apiKey: string,
+    fetchFn?: Parameters<typeof fetchHevyWorkouts>[1],
+  ) {
+    const workouts = await fetchHevyWorkouts(apiKey, fetchFn);
+    const { sets, skippedRows } = hevyToSets(workouts);
     return this.importSets(userId, sets, skippedRows);
   }
 

@@ -179,3 +179,37 @@ describe('ImportsService.importJson', () => {
     ).rejects.toThrow(BadRequestException);
   });
 });
+
+describe('ImportsService.importHevy', () => {
+  it('fetches the workouts, then saves them through the shared path', async () => {
+    const prisma = {
+      exercises: {
+        findMany: vi.fn().mockResolvedValue([{ id: 1, name: 'Bench Press' }]),
+      },
+      exerciseLog: { findMany: vi.fn().mockResolvedValue([]), create: vi.fn() },
+    };
+    const service = new ImportsService(prisma as never);
+    const fetchFn = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        page: 1,
+        page_count: 1,
+        workouts: [
+          {
+            start_time: '2026-10-01T10:00:00Z',
+            exercises: [
+              { title: 'bench press', sets: [{ reps: 5, weight_kg: 100 }] },
+            ],
+          },
+        ],
+      }),
+    });
+
+    const result = await service.importHevy('u1', 'key', fetchFn);
+
+    expect(result).toMatchObject({ imported: { logs: 1, sets: 1 } });
+    expect(prisma.exerciseLog.create).toHaveBeenCalledTimes(1);
+    expect(fetchFn.mock.calls[0][1].headers['api-key']).toBe('key');
+  });
+});

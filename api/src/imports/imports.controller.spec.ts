@@ -54,3 +54,23 @@ describe('ImportsController.json', () => {
     expect(service.importJson).toHaveBeenCalledWith('u1', { x: 1 });
   });
 });
+
+describe('ImportsController.hevy', () => {
+  it('checks access then imports with the key', async () => {
+    const service = { importHevy: vi.fn().mockResolvedValue('hevy') };
+    const access = { assertCanActFor: vi.fn() };
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [ImportsController],
+      providers: [
+        { provide: ImportsService, useValue: service },
+        { provide: AccessService, useValue: access },
+      ],
+    }).compile();
+    const controller = module.get(ImportsController);
+    expect(await controller.hevy({ userId: 'u1', apiKey: 'k' }, 'actor')).toBe(
+      'hevy',
+    );
+    expect(access.assertCanActFor).toHaveBeenCalledWith('actor', 'u1');
+    expect(service.importHevy).toHaveBeenCalledWith('u1', 'k');
+  });
+});

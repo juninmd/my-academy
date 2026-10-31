@@ -30,6 +30,21 @@ export class ImportCsvDto {
   unit?: 'kg' | 'lb';
 }
 
+export class ImportHevyDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @ApiProperty({
+    description: 'Hevy Pro API key; used for this request only, never stored',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(200)
+  apiKey: string;
+}
+
 export class ImportJsonDto {
   @ApiProperty()
   @IsString()
@@ -65,5 +80,14 @@ export class ImportsController {
   ) {
     await this.accessService.assertCanActFor(actor, body.userId);
     return this.importsService.importJson(body.userId, body.data);
+  }
+
+  @Post('hevy')
+  async hevy(
+    @Body() body: ImportHevyDto,
+    @CurrentUserId() actor: string | undefined,
+  ) {
+    await this.accessService.assertCanActFor(actor, body.userId);
+    return this.importsService.importHevy(body.userId, body.apiKey);
   }
 }
