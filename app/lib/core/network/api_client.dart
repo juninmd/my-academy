@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../utils/logger.dart';
 import '../exceptions/failure.dart';
 
+/// Core connector ensuring perfect binding between the API and app.
 class ApiClient {
   ApiClient({required String baseUrl, String? authToken, Dio? dio}) {
     _dio =
