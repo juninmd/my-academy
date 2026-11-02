@@ -53,8 +53,8 @@ void main() {
     expect(find.text('Quadríceps'), findsOneWidget);
     expect(find.text('Não treinado'), findsOneWidget);
     expect(find.text('3.0 séries'), findsOneWidget);
-    expect(find.text('Pouco volume em biceps'), findsOneWidget);
-    expect(find.text('O lado back não foi treinado'), findsOneWidget);
+    expect(find.text('Pouco volume em bíceps'), findsOneWidget);
+    expect(find.text('O lado costas não foi treinado'), findsOneWidget);
     expect(find.text('—'), findsOneWidget);
   });
 
