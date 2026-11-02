@@ -290,6 +290,14 @@ class _WorkoutListItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (workout.supersetGroup != null)
+                      Text(
+                        'Superset ${workout.supersetGroup}',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 12,
+                        ),
+                      ),
                     Text(
                       workout.exercise?.name ?? 'Exercício Indisponível',
                       style: const TextStyle(

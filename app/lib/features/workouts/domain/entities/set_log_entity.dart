@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-enum SetType { normal, warmup, dropset, failure }
+/// Names match the API's set types (`restpause` is rest-pause).
+enum SetType { normal, warmup, dropset, failure, restpause }
 
 class SetLogEntity extends Equatable {
   const SetLogEntity({

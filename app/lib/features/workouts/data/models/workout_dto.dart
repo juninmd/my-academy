@@ -10,6 +10,7 @@ class WorkoutDto {
     this.description,
     this.exercise,
     this.series = const [],
+    this.supersetGroup,
   });
 
   final int? id;
@@ -18,6 +19,7 @@ class WorkoutDto {
   final String? description;
   final ExerciseDto? exercise;
   final List<WorkoutSeriesDto> series;
+  final String? supersetGroup;
 
   factory WorkoutDto.fromJson(Map<String, dynamic> json) {
     return WorkoutDto(
@@ -25,6 +27,7 @@ class WorkoutDto {
       exerciseId: json['exerciseId'] as int,
       methodId: json['methodId'] as int?,
       description: json['description'] as String?,
+      supersetGroup: json['supersetGroup'] as String?,
       exercise:
           json['exercise'] != null
               ? ExerciseDto.fromJson(json['exercise'] as Map<String, dynamic>)
@@ -44,6 +47,7 @@ class WorkoutDto {
       'exerciseId': exerciseId,
       if (methodId != null) 'methodId': methodId,
       if (description != null) 'description': description,
+      if (supersetGroup != null) 'supersetGroup': supersetGroup,
       if (exercise != null) 'exercise': exercise!.toJson(),
       if (series.isNotEmpty)
         'workoutSeries': series.map((s) => s.toJson()).toList(),
@@ -59,6 +63,7 @@ class WorkoutDto {
       exercise: exercise?.toEntity(),
       series: series.map((s) => s.toEntity()).toList(),
       isFinished: false,
+      supersetGroup: supersetGroup,
     );
   }
 
@@ -68,6 +73,7 @@ class WorkoutDto {
       exerciseId: entity.exerciseId,
       methodId: entity.methodId,
       description: entity.description,
+      supersetGroup: entity.supersetGroup,
       exercise:
           entity.exercise != null
               ? ExerciseDto.fromEntity(entity.exercise!)

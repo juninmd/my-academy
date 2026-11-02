@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { Pool } from 'pg'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { EXERCISE_MEDIA, exerciseImage } from './exercise-media.js'
+import { SEED_MUSCLES } from './seed-muscles.js'
 
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) {
@@ -362,6 +363,10 @@ async function main() {
     }
   });
 
+  // Worked muscles, primary first (feeds /progress/muscles).
+  for (const [name, muscles] of Object.entries(SEED_MUSCLES)) {
+    await prisma.exercises.updateMany({ where: { name }, data: { muscles } });
+  }
 }
 main()
   .then(async () => {

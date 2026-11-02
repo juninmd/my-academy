@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../../progress/presentation/widgets/suggestion_card.dart';
+
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -60,6 +63,7 @@ class ExerciseDetailsPage extends HookConsumerWidget {
           ),
 
           // Personal Records Section
+          SliverToBoxAdapter(child: SuggestionCard(exerciseId: exercise.id)),
           SliverToBoxAdapter(
             child: logsAsync.when(
               data: (logs) {
@@ -114,11 +118,10 @@ class ExerciseDetailsPage extends HookConsumerWidget {
                               ),
                             ],
                             selected: {chartMetric.value},
-                            onSelectionChanged: (
-                              Set<ChartMetric> newSelection,
-                            ) {
-                              chartMetric.value = newSelection.first;
-                            },
+                            onSelectionChanged:
+                                (Set<ChartMetric> newSelection) {
+                                  chartMetric.value = newSelection.first;
+                                },
                             style: const ButtonStyle(
                               visualDensity: VisualDensity.compact,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -211,16 +214,12 @@ class ExerciseDetailsPage extends HookConsumerWidget {
                 }, childCount: sortedLogs.length),
               );
             },
-            loading:
-                () => const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-            error:
-                (err, stack) => SliverFillRemaining(
-                  child: Center(
-                    child: Text('Erro ao carregar histórico: $err'),
-                  ),
-                ),
+            loading: () => const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            ),
+            error: (err, stack) => SliverFillRemaining(
+              child: Center(child: Text('Erro ao carregar histórico: $err')),
+            ),
           ),
           const SliverPadding(padding: EdgeInsets.only(bottom: 80)),
         ],
@@ -278,10 +277,8 @@ class _InfoSection extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.bold, color: color),
                 ),
               ],
             ),
@@ -302,9 +299,8 @@ class _InfoSection extends StatelessWidget {
                 ),
                 child: Text(
                   item,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(height: 1.4),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(height: 1.4),
                 ),
               ),
             ),
@@ -356,9 +352,8 @@ class _LogCard extends StatelessWidget {
           tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           title: Text(
             dateFormat.format(log.date),
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 8.0),
