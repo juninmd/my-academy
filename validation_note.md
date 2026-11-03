@@ -34,3 +34,5 @@ Stack: `docker compose up -d --build` (Postgres 16, Redis 7, API on Bun 1.4 / Ne
 
 ### Cleanup
 - Removed stale validation artifacts: `api/coverage_output.txt`, `api/e2e_output.txt`, `api/homologation_results.txt`, `app/analysis.txt`.
+### Known CI Limitation (2026-11-03)
+- The GitHub Actions CI pipelines (including the gitleaks security scan) are currently failing on `master` due to a GitHub billing/spending limit on the repository owner's account ("recent account payments have failed"). This is a hard infrastructure constraint, not a code regression. The security logic in `.github/workflows/security.yml` must remain intact, and this issue will naturally resolve once billing is addressed.

@@ -1,3 +1,4 @@
+# Note: This workflow may fail if the repository is out of GitHub Actions minutes (billing limit).
 name: Security Scan
 
 on:
