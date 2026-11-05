@@ -34,3 +34,5 @@ Stack: `docker compose up -d --build` (Postgres 16, Redis 7, API on Bun 1.4 / Ne
 
 ### Cleanup
 - Removed stale validation artifacts: `api/coverage_output.txt`, `api/e2e_output.txt`, `api/homologation_results.txt`, `app/analysis.txt`.
+### CI Notice (2026-11-05)
+- **Blocked**: GitHub Actions failing again due to account billing/spending limit ("recent account payments have failed"). Not a code issue. Security workflows (Gitleaks) remain intentionally untouched as per project policy.
