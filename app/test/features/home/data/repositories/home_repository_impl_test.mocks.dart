@@ -42,20 +42,18 @@ class MockHomeRemoteDataSource extends _i1.Mock
   @override
   _i4.Future<_i2.WorkoutSummaryEntity> getWorkoutSummary() =>
       (super.noSuchMethod(
+        Invocation.method(#getWorkoutSummary, []),
+        returnValue: _i4.Future<_i2.WorkoutSummaryEntity>.value(
+          _FakeWorkoutSummaryEntity_0(
+            this,
             Invocation.method(#getWorkoutSummary, []),
-            returnValue: _i4.Future<_i2.WorkoutSummaryEntity>.value(
-              _FakeWorkoutSummaryEntity_0(
-                this,
-                Invocation.method(#getWorkoutSummary, []),
-              ),
-            ),
-            returnValueForMissingStub:
-                _i4.Future<_i2.WorkoutSummaryEntity>.value(
-                  _FakeWorkoutSummaryEntity_0(
-                    this,
-                    Invocation.method(#getWorkoutSummary, []),
-                  ),
-                ),
-          )
-          as _i4.Future<_i2.WorkoutSummaryEntity>);
+          ),
+        ),
+        returnValueForMissingStub: _i4.Future<_i2.WorkoutSummaryEntity>.value(
+          _FakeWorkoutSummaryEntity_0(
+            this,
+            Invocation.method(#getWorkoutSummary, []),
+          ),
+        ),
+      ) as _i4.Future<_i2.WorkoutSummaryEntity>);
 }

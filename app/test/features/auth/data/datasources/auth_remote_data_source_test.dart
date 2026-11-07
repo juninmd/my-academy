@@ -141,7 +141,7 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<dynamic> get(
+  Future<T> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
@@ -150,9 +150,9 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<dynamic> post(
+  Future<T> post<T>(
     String path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
@@ -162,13 +162,13 @@ class MockApiClientManual implements ApiClient {
       'name': 'Test User',
       'avatarUrl': 'url',
       'role': 'USER',
-    };
+    } as T;
   }
 
   @override
-  Future<dynamic> put(
+  Future<T> put<T>(
     String path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
@@ -176,9 +176,9 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<dynamic> patch(
+  Future<T> patch<T>(
     String path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
@@ -186,9 +186,9 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<dynamic> delete(
+  Future<T> delete<T>(
     String path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
