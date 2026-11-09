@@ -46,73 +46,93 @@ class MockAuthRepository extends _i1.Mock implements _i3.AuthRepository {
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>> signInWithGoogle() =>
       (super.noSuchMethod(
-        Invocation.method(#signInWithGoogle, []),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.UserEntity>(
-            this,
             Invocation.method(#signInWithGoogle, []),
-          ),
-        ),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>);
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.UserEntity>(
+                    this,
+                    Invocation.method(#signInWithGoogle, []),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>> signInWithEmail(
     String? email,
     String? password,
-  ) => (super.noSuchMethod(
-    Invocation.method(#signInWithEmail, [email, password]),
-    returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
-      _FakeEither_0<_i5.Failure, _i6.UserEntity>(
-        this,
-        Invocation.method(#signInWithEmail, [email, password]),
-      ),
-    ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>);
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#signInWithEmail, [email, password]),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.UserEntity>(
+                    this,
+                    Invocation.method(#signInWithEmail, [email, password]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>> signUpWithEmail(
     String? email,
     String? password,
     String? role,
-  ) => (super.noSuchMethod(
-    Invocation.method(#signUpWithEmail, [email, password, role]),
-    returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
-      _FakeEither_0<_i5.Failure, _i6.UserEntity>(
-        this,
-        Invocation.method(#signUpWithEmail, [email, password, role]),
-      ),
-    ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>);
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#signUpWithEmail, [email, password, role]),
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.UserEntity>(
+                    this,
+                    Invocation.method(#signUpWithEmail, [
+                      email,
+                      password,
+                      role,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity>>);
 
   @override
-  _i4.Future<_i2.Either<_i5.Failure, void>> signOut() => (super.noSuchMethod(
-    Invocation.method(#signOut, []),
-    returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
-      _FakeEither_0<_i5.Failure, void>(this, Invocation.method(#signOut, [])),
-    ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+  _i4.Future<_i2.Either<_i5.Failure, void>> signOut() =>
+      (super.noSuchMethod(
+            Invocation.method(#signOut, []),
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+              _FakeEither_0<_i5.Failure, void>(
+                this,
+                Invocation.method(#signOut, []),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, void>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity?>> getCurrentUser() =>
       (super.noSuchMethod(
-        Invocation.method(#getCurrentUser, []),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity?>>.value(
-          _FakeEither_0<_i5.Failure, _i6.UserEntity?>(
-            this,
             Invocation.method(#getCurrentUser, []),
-          ),
-        ),
-      ) as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity?>>);
+            returnValue:
+                _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity?>>.value(
+                  _FakeEither_0<_i5.Failure, _i6.UserEntity?>(
+                    this,
+                    Invocation.method(#getCurrentUser, []),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.UserEntity?>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, void>> updateDisplayName(String? name) =>
       (super.noSuchMethod(
-        Invocation.method(#updateDisplayName, [name]),
-        returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
-          _FakeEither_0<_i5.Failure, void>(
-            this,
             Invocation.method(#updateDisplayName, [name]),
-          ),
-        ),
-      ) as _i4.Future<_i2.Either<_i5.Failure, void>>);
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, void>>.value(
+              _FakeEither_0<_i5.Failure, void>(
+                this,
+                Invocation.method(#updateDisplayName, [name]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, void>>);
 }

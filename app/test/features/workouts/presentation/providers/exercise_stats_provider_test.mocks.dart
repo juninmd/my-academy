@@ -47,214 +47,254 @@ class _FakeEither_0<L, R> extends _i1.SmartFake implements _i2.Either<L, R> {
 class MockWorkoutRepository extends _i1.Mock implements _i3.WorkoutRepository {
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>>
-  getWorkoutGroups(String? userId) => (super.noSuchMethod(
-    Invocation.method(#getWorkoutGroups, [userId]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i6.WorkoutGroupEntity>>(
-            this,
+  getWorkoutGroups(String? userId) =>
+      (super.noSuchMethod(
             Invocation.method(#getWorkoutGroups, [userId]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i6.WorkoutGroupEntity>>(
-            this,
-            Invocation.method(#getWorkoutGroups, [userId]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i6.WorkoutGroupEntity>>(
+                this,
+                Invocation.method(#getWorkoutGroups, [userId]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i6.WorkoutGroupEntity>>(
+                this,
+                Invocation.method(#getWorkoutGroups, [userId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i6.WorkoutGroupEntity>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>> getWorkoutGroup(
     String? userId,
     int? groupId,
-  ) => (super.noSuchMethod(
-    Invocation.method(#getWorkoutGroup, [userId, groupId]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
-            this,
+  ) =>
+      (super.noSuchMethod(
             Invocation.method(#getWorkoutGroup, [userId, groupId]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
-            this,
-            Invocation.method(#getWorkoutGroup, [userId, groupId]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
+                this,
+                Invocation.method(#getWorkoutGroup, [userId, groupId]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
+                this,
+                Invocation.method(#getWorkoutGroup, [userId, groupId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>>
-  getExercises() => (super.noSuchMethod(
-    Invocation.method(#getExercises, []),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i7.ExerciseEntity>>(
-            this,
+  getExercises() =>
+      (super.noSuchMethod(
             Invocation.method(#getExercises, []),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i7.ExerciseEntity>>(
-            this,
-            Invocation.method(#getExercises, []),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i7.ExerciseEntity>>(
+                this,
+                Invocation.method(#getExercises, []),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i7.ExerciseEntity>>(
+                this,
+                Invocation.method(#getExercises, []),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i7.ExerciseEntity>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>
-  getExerciseLogs(String? userId, int? exerciseId) => (super.noSuchMethod(
-    Invocation.method(#getExerciseLogs, [userId, exerciseId]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
-            this,
+  getExerciseLogs(String? userId, int? exerciseId) =>
+      (super.noSuchMethod(
             Invocation.method(#getExerciseLogs, [userId, exerciseId]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
-            this,
-            Invocation.method(#getExerciseLogs, [userId, exerciseId]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
+                this,
+                Invocation.method(#getExerciseLogs, [userId, exerciseId]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
+                this,
+                Invocation.method(#getExerciseLogs, [userId, exerciseId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i8.ExerciseLogEntity>> saveExerciseLog(
     _i8.ExerciseLogEntity? log,
-  ) => (super.noSuchMethod(
-    Invocation.method(#saveExerciseLog, [log]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, _i8.ExerciseLogEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i8.ExerciseLogEntity>(
-            this,
+  ) =>
+      (super.noSuchMethod(
             Invocation.method(#saveExerciseLog, [log]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, _i8.ExerciseLogEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i8.ExerciseLogEntity>(
-            this,
-            Invocation.method(#saveExerciseLog, [log]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i8.ExerciseLogEntity>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, _i8.ExerciseLogEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i8.ExerciseLogEntity>(
+                this,
+                Invocation.method(#saveExerciseLog, [log]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, _i8.ExerciseLogEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i8.ExerciseLogEntity>(
+                this,
+                Invocation.method(#saveExerciseLog, [log]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i8.ExerciseLogEntity>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>
-  getAllExerciseLogs(String? userId) => (super.noSuchMethod(
-    Invocation.method(#getAllExerciseLogs, [userId]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
-            this,
+  getAllExerciseLogs(String? userId) =>
+      (super.noSuchMethod(
             Invocation.method(#getAllExerciseLogs, [userId]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>.value(
-          _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
-            this,
-            Invocation.method(#getAllExerciseLogs, [userId]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
+                this,
+                Invocation.method(#getAllExerciseLogs, [userId]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>
+            >.value(
+              _FakeEither_0<_i5.Failure, List<_i8.ExerciseLogEntity>>(
+                this,
+                Invocation.method(#getAllExerciseLogs, [userId]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, List<_i8.ExerciseLogEntity>>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>
-  createWorkoutGroup(_i6.WorkoutGroupEntity? group) => (super.noSuchMethod(
-    Invocation.method(#createWorkoutGroup, [group]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
-            this,
+  createWorkoutGroup(_i6.WorkoutGroupEntity? group) =>
+      (super.noSuchMethod(
             Invocation.method(#createWorkoutGroup, [group]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
-            this,
-            Invocation.method(#createWorkoutGroup, [group]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
+                this,
+                Invocation.method(#createWorkoutGroup, [group]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
+                this,
+                Invocation.method(#createWorkoutGroup, [group]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>
-  updateWorkoutGroup(_i6.WorkoutGroupEntity? group) => (super.noSuchMethod(
-    Invocation.method(#updateWorkoutGroup, [group]),
-    returnValue:
-        _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
-            this,
+  updateWorkoutGroup(_i6.WorkoutGroupEntity? group) =>
+      (super.noSuchMethod(
             Invocation.method(#updateWorkoutGroup, [group]),
-          ),
-        ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>.value(
-          _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
-            this,
-            Invocation.method(#updateWorkoutGroup, [group]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>);
+            returnValue: _i4.Future<
+              _i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
+                this,
+                Invocation.method(#updateWorkoutGroup, [group]),
+              ),
+            ),
+            returnValueForMissingStub: _i4.Future<
+              _i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>
+            >.value(
+              _FakeEither_0<_i5.Failure, _i6.WorkoutGroupEntity>(
+                this,
+                Invocation.method(#updateWorkoutGroup, [group]),
+              ),
+            ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i6.WorkoutGroupEntity>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> deleteWorkoutGroup(
     int? groupId,
-  ) => (super.noSuchMethod(
-    Invocation.method(#deleteWorkoutGroup, [groupId]),
-    returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
-      _FakeEither_0<_i5.Failure, _i2.Unit>(
-        this,
-        Invocation.method(#deleteWorkoutGroup, [groupId]),
-      ),
-    ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
-          _FakeEither_0<_i5.Failure, _i2.Unit>(
-            this,
+  ) =>
+      (super.noSuchMethod(
             Invocation.method(#deleteWorkoutGroup, [groupId]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+              _FakeEither_0<_i5.Failure, _i2.Unit>(
+                this,
+                Invocation.method(#deleteWorkoutGroup, [groupId]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+                  _FakeEither_0<_i5.Failure, _i2.Unit>(
+                    this,
+                    Invocation.method(#deleteWorkoutGroup, [groupId]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
 
   @override
   _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>> saveWorkoutSession(
     int? workoutGroupId,
     DateTime? date,
     Map<int, _i9.ExerciseSessionLog>? sessionLogs,
-  ) => (super.noSuchMethod(
-    Invocation.method(#saveWorkoutSession, [workoutGroupId, date, sessionLogs]),
-    returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
-      _FakeEither_0<_i5.Failure, _i2.Unit>(
-        this,
-        Invocation.method(#saveWorkoutSession, [
-          workoutGroupId,
-          date,
-          sessionLogs,
-        ]),
-      ),
-    ),
-    returnValueForMissingStub:
-        _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
-          _FakeEither_0<_i5.Failure, _i2.Unit>(
-            this,
+  ) =>
+      (super.noSuchMethod(
             Invocation.method(#saveWorkoutSession, [
               workoutGroupId,
               date,
               sessionLogs,
             ]),
-          ),
-        ),
-  ) as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
+            returnValue: _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+              _FakeEither_0<_i5.Failure, _i2.Unit>(
+                this,
+                Invocation.method(#saveWorkoutSession, [
+                  workoutGroupId,
+                  date,
+                  sessionLogs,
+                ]),
+              ),
+            ),
+            returnValueForMissingStub:
+                _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>.value(
+                  _FakeEither_0<_i5.Failure, _i2.Unit>(
+                    this,
+                    Invocation.method(#saveWorkoutSession, [
+                      workoutGroupId,
+                      date,
+                      sessionLogs,
+                    ]),
+                  ),
+                ),
+          )
+          as _i4.Future<_i2.Either<_i5.Failure, _i2.Unit>>);
 }

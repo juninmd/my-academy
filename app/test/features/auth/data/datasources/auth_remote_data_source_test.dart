@@ -52,13 +52,15 @@ void main() {
       final mockUserCredential = MockUserCredential(mockUser);
 
       when(mockGoogleSignIn.initialize()).thenAnswer((_) async {});
-      when(mockGoogleSignIn.authenticate())
-          .thenAnswer((_) async => mockGoogleAccount);
+      when(
+        mockGoogleSignIn.authenticate(),
+      ).thenAnswer((_) async => mockGoogleAccount);
       when(mockGoogleAccount.authentication).thenReturn(mockGoogleAuth);
       when(mockGoogleAuth.idToken).thenReturn('test_id_token');
 
-      when(mockFirebaseAuth.signInWithCredential(any))
-          .thenAnswer((_) async => mockUserCredential);
+      when(
+        mockFirebaseAuth.signInWithCredential(any),
+      ).thenAnswer((_) async => mockUserCredential);
       when(mockFirebaseAuth.currentUser).thenReturn(mockUser);
 
       when(mockUser.uid).thenReturn('123');
@@ -139,7 +141,7 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<T> get<T>(
+  Future<dynamic> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
@@ -148,9 +150,9 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<T> post<T>(
+  Future<dynamic> post(
     String path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
@@ -160,13 +162,13 @@ class MockApiClientManual implements ApiClient {
       'name': 'Test User',
       'avatarUrl': 'url',
       'role': 'USER',
-    } as T;
+    };
   }
 
   @override
-  Future<T> put<T>(
+  Future<dynamic> put(
     String path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
@@ -174,9 +176,9 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<T> patch<T>(
+  Future<dynamic> patch(
     String path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
@@ -184,9 +186,9 @@ class MockApiClientManual implements ApiClient {
   }
 
   @override
-  Future<T> delete<T>(
+  Future<dynamic> delete(
     String path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {

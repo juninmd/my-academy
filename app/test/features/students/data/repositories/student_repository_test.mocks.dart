@@ -4,12 +4,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
-import 'dart:async' as _i2;
+import 'dart:async' as _i3;
 
 import 'package:dio/dio.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i5;
-import 'package:my_academy/core/network/api_client.dart' as _i3;
+import 'package:my_academy/core/network/api_client.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,15 +26,10 @@ import 'package:my_academy/core/network/api_client.dart' as _i3;
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeFuture_0<T1> extends _i1.SmartFake implements _i2.Future<T1> {
-  _FakeFuture_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
 /// A class which mocks [ApiClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockApiClient extends _i1.Mock implements _i3.ApiClient {
+class MockApiClient extends _i1.Mock implements _i2.ApiClient {
   MockApiClient() {
     _i1.throwOnMissingStub(this);
   }
@@ -53,54 +47,29 @@ class MockApiClient extends _i1.Mock implements _i3.ApiClient {
   );
 
   @override
-  _i2.Future<T> get<T>(
+  _i3.Future<dynamic> get(
     String? path, {
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) => (super.noSuchMethod(
-    Invocation.method(
-      #get,
-      [path],
-      {#queryParameters: queryParameters, #options: options},
-    ),
-    returnValue:
-        _i5.ifNotNull(
-          _i5.dummyValueOrNull<T>(
-            this,
+  }) =>
+      (super.noSuchMethod(
             Invocation.method(
               #get,
               [path],
               {#queryParameters: queryParameters, #options: options},
             ),
-          ),
-          (T v) => _i2.Future<T>.value(v),
-        ) ??
-        _FakeFuture_0<T>(
-          this,
-          Invocation.method(
-            #get,
-            [path],
-            {#queryParameters: queryParameters, #options: options},
-          ),
-        ),
-  ) as _i2.Future<T>);
+            returnValue: _i3.Future<dynamic>.value(),
+          )
+          as _i3.Future<dynamic>);
 
   @override
-  _i2.Future<T> post<T>(
+  _i3.Future<dynamic> post(
     String? path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) => (super.noSuchMethod(
-    Invocation.method(
-      #post,
-      [path],
-      {#data: data, #queryParameters: queryParameters, #options: options},
-    ),
-    returnValue:
-        _i5.ifNotNull(
-          _i5.dummyValueOrNull<T>(
-            this,
+  }) =>
+      (super.noSuchMethod(
             Invocation.method(
               #post,
               [path],
@@ -110,35 +79,18 @@ class MockApiClient extends _i1.Mock implements _i3.ApiClient {
                 #options: options,
               },
             ),
-          ),
-          (T v) => _i2.Future<T>.value(v),
-        ) ??
-        _FakeFuture_0<T>(
-          this,
-          Invocation.method(
-            #post,
-            [path],
-            {#data: data, #queryParameters: queryParameters, #options: options},
-          ),
-        ),
-  ) as _i2.Future<T>);
+            returnValue: _i3.Future<dynamic>.value(),
+          )
+          as _i3.Future<dynamic>);
 
   @override
-  _i2.Future<T> put<T>(
+  _i3.Future<dynamic> put(
     String? path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) => (super.noSuchMethod(
-    Invocation.method(
-      #put,
-      [path],
-      {#data: data, #queryParameters: queryParameters, #options: options},
-    ),
-    returnValue:
-        _i5.ifNotNull(
-          _i5.dummyValueOrNull<T>(
-            this,
+  }) =>
+      (super.noSuchMethod(
             Invocation.method(
               #put,
               [path],
@@ -148,35 +100,18 @@ class MockApiClient extends _i1.Mock implements _i3.ApiClient {
                 #options: options,
               },
             ),
-          ),
-          (T v) => _i2.Future<T>.value(v),
-        ) ??
-        _FakeFuture_0<T>(
-          this,
-          Invocation.method(
-            #put,
-            [path],
-            {#data: data, #queryParameters: queryParameters, #options: options},
-          ),
-        ),
-  ) as _i2.Future<T>);
+            returnValue: _i3.Future<dynamic>.value(),
+          )
+          as _i3.Future<dynamic>);
 
   @override
-  _i2.Future<T> patch<T>(
+  _i3.Future<dynamic> patch(
     String? path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) => (super.noSuchMethod(
-    Invocation.method(
-      #patch,
-      [path],
-      {#data: data, #queryParameters: queryParameters, #options: options},
-    ),
-    returnValue:
-        _i5.ifNotNull(
-          _i5.dummyValueOrNull<T>(
-            this,
+  }) =>
+      (super.noSuchMethod(
             Invocation.method(
               #patch,
               [path],
@@ -186,35 +121,18 @@ class MockApiClient extends _i1.Mock implements _i3.ApiClient {
                 #options: options,
               },
             ),
-          ),
-          (T v) => _i2.Future<T>.value(v),
-        ) ??
-        _FakeFuture_0<T>(
-          this,
-          Invocation.method(
-            #patch,
-            [path],
-            {#data: data, #queryParameters: queryParameters, #options: options},
-          ),
-        ),
-  ) as _i2.Future<T>);
+            returnValue: _i3.Future<dynamic>.value(),
+          )
+          as _i3.Future<dynamic>);
 
   @override
-  _i2.Future<T> delete<T>(
+  _i3.Future<dynamic> delete(
     String? path, {
-    Object? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) => (super.noSuchMethod(
-    Invocation.method(
-      #delete,
-      [path],
-      {#data: data, #queryParameters: queryParameters, #options: options},
-    ),
-    returnValue:
-        _i5.ifNotNull(
-          _i5.dummyValueOrNull<T>(
-            this,
+  }) =>
+      (super.noSuchMethod(
             Invocation.method(
               #delete,
               [path],
@@ -224,16 +142,7 @@ class MockApiClient extends _i1.Mock implements _i3.ApiClient {
                 #options: options,
               },
             ),
-          ),
-          (T v) => _i2.Future<T>.value(v),
-        ) ??
-        _FakeFuture_0<T>(
-          this,
-          Invocation.method(
-            #delete,
-            [path],
-            {#data: data, #queryParameters: queryParameters, #options: options},
-          ),
-        ),
-  ) as _i2.Future<T>);
+            returnValue: _i3.Future<dynamic>.value(),
+          )
+          as _i3.Future<dynamic>);
 }

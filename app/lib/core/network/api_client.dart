@@ -54,94 +54,94 @@ class ApiClient {
     _dio.options.headers.remove('Authorization');
   }
 
-  Future<T> get<T>(
+  Future<dynamic> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
     try {
-      final response = await _dio.get<T>(
+      final response = await _dio.get(
         path,
         queryParameters: queryParameters,
         options: options,
       );
-      return response.data as T;
+      return response.data;
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<T> post<T>(
+  Future<dynamic> post(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
     try {
-      final response = await _dio.post<T>(
+      final response = await _dio.post(
         options: options,
         path,
         data: data,
         queryParameters: queryParameters,
       );
-      return response.data as T;
+      return response.data;
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<T> put<T>(
+  Future<dynamic> put(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
     try {
-      final response = await _dio.put<T>(
+      final response = await _dio.put(
         options: options,
         path,
         data: data,
         queryParameters: queryParameters,
       );
-      return response.data as T;
+      return response.data;
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<T> patch<T>(
+  Future<dynamic> patch(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
     try {
-      final response = await _dio.patch<T>(
+      final response = await _dio.patch(
         options: options,
         path,
         data: data,
         queryParameters: queryParameters,
       );
-      return response.data as T;
+      return response.data;
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  Future<T> delete<T>(
+  Future<dynamic> delete(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
     try {
-      final response = await _dio.delete<T>(
+      final response = await _dio.delete(
         options: options,
         path,
         data: data,
         queryParameters: queryParameters,
       );
-      return response.data as T;
+      return response.data;
     } on DioException catch (e) {
       throw _handleDioError(e);
     }
