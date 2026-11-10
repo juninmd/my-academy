@@ -89,71 +89,57 @@ class _FakeDiagnosticsNode_5 extends _i1.SmartFake
 class MockStatefulNavigationShell extends _i1.Mock
     implements _i2.StatefulNavigationShell {
   @override
-  _i2.ShellRouteContext get shellRouteContext =>
-      (super.noSuchMethod(
-            Invocation.getter(#shellRouteContext),
-            returnValue: _FakeShellRouteContext_0(
-              this,
-              Invocation.getter(#shellRouteContext),
-            ),
-            returnValueForMissingStub: _FakeShellRouteContext_0(
-              this,
-              Invocation.getter(#shellRouteContext),
-            ),
-          )
-          as _i2.ShellRouteContext);
+  _i2.ShellRouteContext get shellRouteContext => (super.noSuchMethod(
+    Invocation.getter(#shellRouteContext),
+    returnValue: _FakeShellRouteContext_0(
+      this,
+      Invocation.getter(#shellRouteContext),
+    ),
+    returnValueForMissingStub: _FakeShellRouteContext_0(
+      this,
+      Invocation.getter(#shellRouteContext),
+    ),
+  ) as _i2.ShellRouteContext);
 
   @override
   _i2.ShellNavigationContainerBuilder get containerBuilder =>
       (super.noSuchMethod(
-            Invocation.getter(#containerBuilder),
-            returnValue:
-                (
-                  _i3.BuildContext context,
-                  _i2.StatefulNavigationShell navigationShell,
-                  List<_i3.Widget> children,
-                ) => _FakeWidget_1(this, Invocation.getter(#containerBuilder)),
-            returnValueForMissingStub:
-                (
-                  _i3.BuildContext context,
-                  _i2.StatefulNavigationShell navigationShell,
-                  List<_i3.Widget> children,
-                ) => _FakeWidget_1(this, Invocation.getter(#containerBuilder)),
-          )
-          as _i2.ShellNavigationContainerBuilder);
+        Invocation.getter(#containerBuilder),
+        returnValue: (
+          _i3.BuildContext context,
+          _i2.StatefulNavigationShell navigationShell,
+          List<_i3.Widget> children,
+        ) => _FakeWidget_1(this, Invocation.getter(#containerBuilder)),
+        returnValueForMissingStub: (
+          _i3.BuildContext context,
+          _i2.StatefulNavigationShell navigationShell,
+          List<_i3.Widget> children,
+        ) => _FakeWidget_1(this, Invocation.getter(#containerBuilder)),
+      ) as _i2.ShellNavigationContainerBuilder);
 
   @override
-  int get currentIndex =>
-      (super.noSuchMethod(
-            Invocation.getter(#currentIndex),
-            returnValue: 0,
-            returnValueForMissingStub: 0,
-          )
-          as int);
+  int get currentIndex => (super.noSuchMethod(
+    Invocation.getter(#currentIndex),
+    returnValue: 0,
+    returnValueForMissingStub: 0,
+  ) as int);
 
   @override
-  _i2.StatefulShellRoute get route =>
-      (super.noSuchMethod(
-            Invocation.getter(#route),
-            returnValue: _FakeStatefulShellRoute_2(
-              this,
-              Invocation.getter(#route),
-            ),
-            returnValueForMissingStub: _FakeStatefulShellRoute_2(
-              this,
-              Invocation.getter(#route),
-            ),
-          )
-          as _i2.StatefulShellRoute);
+  _i2.StatefulShellRoute get route => (super.noSuchMethod(
+    Invocation.getter(#route),
+    returnValue: _FakeStatefulShellRoute_2(this, Invocation.getter(#route)),
+    returnValueForMissingStub: _FakeStatefulShellRoute_2(
+      this,
+      Invocation.getter(#route),
+    ),
+  ) as _i2.StatefulShellRoute);
 
   @override
-  List<_i2.StatefulShellBranch> get debugLoadedBranches =>
-      (super.noSuchMethod(
-            Invocation.getter(#debugLoadedBranches),
-            returnValue: <_i2.StatefulShellBranch>[],
-            returnValueForMissingStub: <_i2.StatefulShellBranch>[],
-          )
-          as List<_i2.StatefulShellBranch>);
+  List<_i2.StatefulShellBranch> get debugLoadedBranches => (super.noSuchMethod(
+    Invocation.getter(#debugLoadedBranches),
+    returnValue: <_i2.StatefulShellBranch>[],
+    returnValueForMissingStub: <_i2.StatefulShellBranch>[],
+  ) as List<_i2.StatefulShellBranch>);
 
   @override
   void goBranch(int? index, {bool? initialLocation = false}) =>
@@ -167,49 +153,43 @@ class MockStatefulNavigationShell extends _i1.Mock
       );
 
   @override
-  _i3.State<_i3.StatefulWidget> createState() =>
-      (super.noSuchMethod(
-            Invocation.method(#createState, []),
-            returnValue: _FakeState_3<_i3.StatefulWidget>(
-              this,
-              Invocation.method(#createState, []),
-            ),
-            returnValueForMissingStub: _FakeState_3<_i3.StatefulWidget>(
-              this,
-              Invocation.method(#createState, []),
-            ),
-          )
-          as _i3.State<_i3.StatefulWidget>);
+  _i3.State<_i3.StatefulWidget> createState() => (super.noSuchMethod(
+    Invocation.method(#createState, []),
+    returnValue: _FakeState_3<_i3.StatefulWidget>(
+      this,
+      Invocation.method(#createState, []),
+    ),
+    returnValueForMissingStub: _FakeState_3<_i3.StatefulWidget>(
+      this,
+      Invocation.method(#createState, []),
+    ),
+  ) as _i3.State<_i3.StatefulWidget>);
 
   @override
-  _i3.StatefulElement createElement() =>
-      (super.noSuchMethod(
-            Invocation.method(#createElement, []),
-            returnValue: _FakeStatefulElement_4(
-              this,
-              Invocation.method(#createElement, []),
-            ),
-            returnValueForMissingStub: _FakeStatefulElement_4(
-              this,
-              Invocation.method(#createElement, []),
-            ),
-          )
-          as _i3.StatefulElement);
+  _i3.StatefulElement createElement() => (super.noSuchMethod(
+    Invocation.method(#createElement, []),
+    returnValue: _FakeStatefulElement_4(
+      this,
+      Invocation.method(#createElement, []),
+    ),
+    returnValueForMissingStub: _FakeStatefulElement_4(
+      this,
+      Invocation.method(#createElement, []),
+    ),
+  ) as _i3.StatefulElement);
 
   @override
-  String toStringShort() =>
-      (super.noSuchMethod(
-            Invocation.method(#toStringShort, []),
-            returnValue: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#toStringShort, []),
-            ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#toStringShort, []),
-            ),
-          )
-          as String);
+  String toStringShort() => (super.noSuchMethod(
+    Invocation.method(#toStringShort, []),
+    returnValue: _i5.dummyValue<String>(
+      this,
+      Invocation.method(#toStringShort, []),
+    ),
+    returnValueForMissingStub: _i5.dummyValue<String>(
+      this,
+      Invocation.method(#toStringShort, []),
+    ),
+  ) as String);
 
   @override
   void debugFillProperties(_i4.DiagnosticPropertiesBuilder? properties) =>
@@ -222,28 +202,26 @@ class MockStatefulNavigationShell extends _i1.Mock
   String toStringShallow({
     String? joiner = ', ',
     _i4.DiagnosticLevel? minLevel = _i4.DiagnosticLevel.debug,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#toStringShallow, [], {
-              #joiner: joiner,
-              #minLevel: minLevel,
-            }),
-            returnValue: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#toStringShallow, [], {
-                #joiner: joiner,
-                #minLevel: minLevel,
-              }),
-            ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#toStringShallow, [], {
-                #joiner: joiner,
-                #minLevel: minLevel,
-              }),
-            ),
-          )
-          as String);
+  }) => (super.noSuchMethod(
+    Invocation.method(#toStringShallow, [], {
+      #joiner: joiner,
+      #minLevel: minLevel,
+    }),
+    returnValue: _i5.dummyValue<String>(
+      this,
+      Invocation.method(#toStringShallow, [], {
+        #joiner: joiner,
+        #minLevel: minLevel,
+      }),
+    ),
+    returnValueForMissingStub: _i5.dummyValue<String>(
+      this,
+      Invocation.method(#toStringShallow, [], {
+        #joiner: joiner,
+        #minLevel: minLevel,
+      }),
+    ),
+  ) as String);
 
   @override
   String toStringDeep({
@@ -251,70 +229,55 @@ class MockStatefulNavigationShell extends _i1.Mock
     String? prefixOtherLines,
     _i4.DiagnosticLevel? minLevel = _i4.DiagnosticLevel.debug,
     int? wrapWidth = 65,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#toStringDeep, [], {
-              #prefixLineOne: prefixLineOne,
-              #prefixOtherLines: prefixOtherLines,
-              #minLevel: minLevel,
-              #wrapWidth: wrapWidth,
-            }),
-            returnValue: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#toStringDeep, [], {
-                #prefixLineOne: prefixLineOne,
-                #prefixOtherLines: prefixOtherLines,
-                #minLevel: minLevel,
-                #wrapWidth: wrapWidth,
-              }),
-            ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#toStringDeep, [], {
-                #prefixLineOne: prefixLineOne,
-                #prefixOtherLines: prefixOtherLines,
-                #minLevel: minLevel,
-                #wrapWidth: wrapWidth,
-              }),
-            ),
-          )
-          as String);
+  }) => (super.noSuchMethod(
+    Invocation.method(#toStringDeep, [], {
+      #prefixLineOne: prefixLineOne,
+      #prefixOtherLines: prefixOtherLines,
+      #minLevel: minLevel,
+      #wrapWidth: wrapWidth,
+    }),
+    returnValue: _i5.dummyValue<String>(
+      this,
+      Invocation.method(#toStringDeep, [], {
+        #prefixLineOne: prefixLineOne,
+        #prefixOtherLines: prefixOtherLines,
+        #minLevel: minLevel,
+        #wrapWidth: wrapWidth,
+      }),
+    ),
+    returnValueForMissingStub: _i5.dummyValue<String>(
+      this,
+      Invocation.method(#toStringDeep, [], {
+        #prefixLineOne: prefixLineOne,
+        #prefixOtherLines: prefixOtherLines,
+        #minLevel: minLevel,
+        #wrapWidth: wrapWidth,
+      }),
+    ),
+  ) as String);
 
   @override
   _i4.DiagnosticsNode toDiagnosticsNode({
     String? name,
     _i4.DiagnosticsTreeStyle? style,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#toDiagnosticsNode, [], {
-              #name: name,
-              #style: style,
-            }),
-            returnValue: _FakeDiagnosticsNode_5(
-              this,
-              Invocation.method(#toDiagnosticsNode, [], {
-                #name: name,
-                #style: style,
-              }),
-            ),
-            returnValueForMissingStub: _FakeDiagnosticsNode_5(
-              this,
-              Invocation.method(#toDiagnosticsNode, [], {
-                #name: name,
-                #style: style,
-              }),
-            ),
-          )
-          as _i4.DiagnosticsNode);
+  }) => (super.noSuchMethod(
+    Invocation.method(#toDiagnosticsNode, [], {#name: name, #style: style}),
+    returnValue: _FakeDiagnosticsNode_5(
+      this,
+      Invocation.method(#toDiagnosticsNode, [], {#name: name, #style: style}),
+    ),
+    returnValueForMissingStub: _FakeDiagnosticsNode_5(
+      this,
+      Invocation.method(#toDiagnosticsNode, [], {#name: name, #style: style}),
+    ),
+  ) as _i4.DiagnosticsNode);
 
   @override
-  List<_i4.DiagnosticsNode> debugDescribeChildren() =>
-      (super.noSuchMethod(
-            Invocation.method(#debugDescribeChildren, []),
-            returnValue: <_i4.DiagnosticsNode>[],
-            returnValueForMissingStub: <_i4.DiagnosticsNode>[],
-          )
-          as List<_i4.DiagnosticsNode>);
+  List<_i4.DiagnosticsNode> debugDescribeChildren() => (super.noSuchMethod(
+    Invocation.method(#debugDescribeChildren, []),
+    returnValue: <_i4.DiagnosticsNode>[],
+    returnValueForMissingStub: <_i4.DiagnosticsNode>[],
+  ) as List<_i4.DiagnosticsNode>);
 
   @override
   String toString({_i4.DiagnosticLevel? minLevel = _i4.DiagnosticLevel.info}) =>
