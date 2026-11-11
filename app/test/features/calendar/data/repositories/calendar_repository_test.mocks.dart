@@ -47,103 +47,77 @@ class MockApiClient extends _i1.Mock implements _i2.ApiClient {
     String? path, {
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #get,
-              [path],
-              {#queryParameters: queryParameters, #options: options},
-            ),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
-          )
-          as _i3.Future<dynamic>);
+  }) => (super.noSuchMethod(
+    Invocation.method(
+      #get,
+      [path],
+      {#queryParameters: queryParameters, #options: options},
+    ),
+    returnValue: _i3.Future<dynamic>.value(),
+    returnValueForMissingStub: _i3.Future<dynamic>.value(),
+  ) as _i3.Future<dynamic>);
 
   @override
   _i3.Future<dynamic> post(
     String? path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #post,
-              [path],
-              {
-                #data: data,
-                #queryParameters: queryParameters,
-                #options: options,
-              },
-            ),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
-          )
-          as _i3.Future<dynamic>);
+  }) => (super.noSuchMethod(
+    Invocation.method(
+      #post,
+      [path],
+      {#data: data, #queryParameters: queryParameters, #options: options},
+    ),
+    returnValue: _i3.Future<dynamic>.value(),
+    returnValueForMissingStub: _i3.Future<dynamic>.value(),
+  ) as _i3.Future<dynamic>);
 
   @override
   _i3.Future<dynamic> put(
     String? path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #put,
-              [path],
-              {
-                #data: data,
-                #queryParameters: queryParameters,
-                #options: options,
-              },
-            ),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
-          )
-          as _i3.Future<dynamic>);
+  }) => (super.noSuchMethod(
+    Invocation.method(
+      #put,
+      [path],
+      {#data: data, #queryParameters: queryParameters, #options: options},
+    ),
+    returnValue: _i3.Future<dynamic>.value(),
+    returnValueForMissingStub: _i3.Future<dynamic>.value(),
+  ) as _i3.Future<dynamic>);
 
   @override
   _i3.Future<dynamic> patch(
     String? path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #patch,
-              [path],
-              {
-                #data: data,
-                #queryParameters: queryParameters,
-                #options: options,
-              },
-            ),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
-          )
-          as _i3.Future<dynamic>);
+  }) => (super.noSuchMethod(
+    Invocation.method(
+      #patch,
+      [path],
+      {#data: data, #queryParameters: queryParameters, #options: options},
+    ),
+    returnValue: _i3.Future<dynamic>.value(),
+    returnValueForMissingStub: _i3.Future<dynamic>.value(),
+  ) as _i3.Future<dynamic>);
 
   @override
   _i3.Future<dynamic> delete(
     String? path, {
-    dynamic data,
+    Object? data,
     Map<String, dynamic>? queryParameters,
     _i4.Options? options,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #delete,
-              [path],
-              {
-                #data: data,
-                #queryParameters: queryParameters,
-                #options: options,
-              },
-            ),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
-          )
-          as _i3.Future<dynamic>);
+  }) => (super.noSuchMethod(
+    Invocation.method(
+      #delete,
+      [path],
+      {#data: data, #queryParameters: queryParameters, #options: options},
+    ),
+    returnValue: _i3.Future<dynamic>.value(),
+    returnValueForMissingStub: _i3.Future<dynamic>.value(),
+  ) as _i3.Future<dynamic>);
 }
