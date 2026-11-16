@@ -15,7 +15,7 @@ export class ExercisesService {
   ) {}
 
   async create(createExerciseDto: CreateExerciseDto): Promise<Exercise> {
-    const { name, image, tips, mistakes, type } = createExerciseDto;
+    const { name, image, tips, mistakes, type, muscles } = createExerciseDto;
 
     const result = await this.prismaService.exercises.create({
       data: {
@@ -24,6 +24,7 @@ export class ExercisesService {
         tips,
         mistakes,
         type,
+        muscles,
       },
     });
     await this.cache.del(EXERCISES_CACHE_KEY);
@@ -49,7 +50,7 @@ export class ExercisesService {
   async update(id: number, updateDto: UpdateExerciseDto): Promise<Exercise> {
     await this.findOne(id);
 
-    const { name, image, tips, mistakes, type } = updateDto;
+    const { name, image, tips, mistakes, type, muscles } = updateDto;
 
     const result = await this.prismaService.exercises.update({
       where: { id },
@@ -59,6 +60,7 @@ export class ExercisesService {
         tips,
         mistakes,
         type,
+        muscles,
       },
     });
     await this.cache.del(EXERCISES_CACHE_KEY);

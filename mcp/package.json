@@ -1,0 +1,28 @@
+{
+  "name": "my-academy-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for My Academy: lets an assistant read a student's progress, muscle recovery, body weight, plate loading and coach advice from the API.",
+  "license": "UNLICENSED",
+  "main": "src/index.js",
+  "bin": {
+    "my-academy-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.12",
+    "vitest": "^4.1.12"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

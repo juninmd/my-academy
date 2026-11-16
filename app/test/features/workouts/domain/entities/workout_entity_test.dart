@@ -27,7 +27,7 @@ void main() {
       expect(workout.exercise, exercise);
       expect(workout.series, series);
       expect(workout.isFinished, true);
-      expect(workout.props, [1, 10, 2, 'Do it well', exercise, series, true]);
+      expect(workout.props, [1, 10, 2, 'Do it well', exercise, series, true, null]);
     });
   });
 }

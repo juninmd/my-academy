@@ -8,10 +8,22 @@ import {
   IsArray,
   IsInt,
   IsPositive,
+  MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateWorkoutDto {
+  @ApiProperty({
+    required: false,
+    example: 'A',
+    description:
+      'Superset label: consecutive exercises with the same label are done back to back',
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(10)
+  supersetGroup?: string;
+
   @ApiProperty({
     example: 1,
     description: 'The ID of the exercise',

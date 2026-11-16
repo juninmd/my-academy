@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { ForbiddenException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller.js';
@@ -6,9 +7,11 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { User } from './entities/user.entity.js';
 import { AccessService } from '../access/access.service.js';
+import { InvitesService } from '../invites/invites.service.js';
 
 describe('UsersController', () => {
   let controller: UsersController;
+  let module_invites: () => { redeem: Mock };
   let service: UsersService;
   let accessService: AccessService;
 
@@ -36,12 +39,17 @@ describe('UsersController', () => {
           provide: AccessService,
           useValue: mockAccessService,
         },
+        {
+          provide: InvitesService,
+          useValue: { redeem: vi.fn() },
+        },
       ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
     service = module.get<UsersService>(UsersService);
     accessService = module.get<AccessService>(AccessService);
+    module_invites = () => module.get(InvitesService) as never;
   });
 
   afterEach(() => {
@@ -50,6 +58,49 @@ describe('UsersController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('invite-only registration', () => {
+    const body = {
+      id: 'u9',
+      name: 'New',
+      email: 'new@example.com',
+      photoUrl: '',
+    } as unknown as CreateUserDto;
+
+    afterEach(() => {
+      delete process.env.REGISTRATION_INVITE_ONLY;
+    });
+
+    it('redeems the code before creating the account', async () => {
+      process.env.REGISTRATION_INVITE_ONLY = 'true';
+      const invites = module_invites();
+      const created = { id: 'u9' } as User;
+      mockUsersService.create.mockResolvedValue(created);
+
+      const result = await controller.create(
+        { ...body, inviteCode: 'abc' } as CreateUserDto,
+        'u9',
+      );
+
+      expect(invites.redeem).toHaveBeenCalledWith('abc', 'u9');
+      expect(mockUsersService.create).toHaveBeenCalled();
+      expect(result).toBe(created);
+    });
+
+    it('refuses registration without a code', async () => {
+      process.env.REGISTRATION_INVITE_ONLY = 'true';
+      await expect(controller.create(body, 'u9')).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(mockUsersService.create).not.toHaveBeenCalled();
+    });
+
+    it('ignores codes when registration is open', async () => {
+      mockUsersService.create.mockResolvedValue({ id: 'u9' });
+      await controller.create(body, 'u9');
+      expect(module_invites().redeem).not.toHaveBeenCalled();
+    });
   });
 
   describe('create', () => {
@@ -84,7 +135,7 @@ describe('UsersController', () => {
         throw new ForbiddenException('Access denied');
       });
 
-      expect(() => controller.create(createDto, '2')).toThrow(
+      await expect(controller.create(createDto, '2')).rejects.toThrow(
         ForbiddenException,
       );
       expect(service.create).not.toHaveBeenCalled();

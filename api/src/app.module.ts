@@ -12,6 +12,16 @@ import { WorkoutsSessionsModule } from './workouts-sessions/workouts-sessions.mo
 import { PreauthMiddleware } from './auth/firebase.auth.js';
 import { HealthModule } from './health/health.module.js';
 import { ExerciseLogsModule } from './exercise-logs/exercise-logs.module.js';
+import { ProgressModule } from './progress/progress.module.js';
+import { PlatesModule } from './plates/plates.module.js';
+import { StarterPlansModule } from './starter-plans/starter-plans.module.js';
+import { FavoritesModule } from './favorites/favorites.module.js';
+import { ImportsModule } from './imports/imports.module.js';
+import { ExportModule } from './export/export.module.js';
+import { CoachModule } from './coach/coach.module.js';
+import { RotationModule } from './rotation/rotation.module.js';
+import { BodyWeightModule } from './body-weight/body-weight.module.js';
+import { InvitesModule } from './invites/invites.module.js';
 import { TelegramModule } from './telegram/telegram.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
 import { GymsModule } from './gyms/gyms.module.js';
@@ -35,6 +45,16 @@ import { AccessModule } from './access/access.module.js';
     HealthModule,
     TelegramModule,
     ExerciseLogsModule,
+    ProgressModule,
+    PlatesModule,
+    StarterPlansModule,
+    ExportModule,
+    FavoritesModule,
+    ImportsModule,
+    CoachModule,
+    RotationModule,
+    BodyWeightModule,
+    InvitesModule,
     AssessmentsModule,
     GymsModule,
   ],

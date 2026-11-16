@@ -138,6 +138,7 @@ export class WorkoutsGroupsService {
       exerciseId: workout.exerciseId,
       description: workout.description || '',
       methodId: workout.methodId,
+      supersetGroup: workout.supersetGroup ?? null,
       workoutSeries: {
         create: workout.workoutSeries?.map((series) => ({
           repetitions: series.repetitions,

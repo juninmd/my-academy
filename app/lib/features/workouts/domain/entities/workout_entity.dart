@@ -11,6 +11,7 @@ class WorkoutEntity extends Equatable {
     this.exercise,
     this.series = const [],
     this.isFinished = false,
+    this.supersetGroup,
   });
   final int? id;
   final int exerciseId;
@@ -19,6 +20,8 @@ class WorkoutEntity extends Equatable {
   final ExerciseEntity? exercise;
   final List<WorkoutSeriesEntity> series;
   final bool isFinished;
+  /// Exercises with the same label are one superset.
+  final String? supersetGroup;
 
   @override
   List<Object?> get props => [
@@ -29,6 +32,7 @@ class WorkoutEntity extends Equatable {
     exercise,
     series,
     isFinished,
+    supersetGroup,
   ];
 
   WorkoutEntity copyWith({
