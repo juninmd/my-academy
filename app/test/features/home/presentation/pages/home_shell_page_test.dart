@@ -7,6 +7,8 @@ import 'package:mockito/mockito.dart';
 import 'package:my_academy/features/auth/domain/entities/user_entity.dart';
 import 'package:my_academy/features/auth/presentation/providers/auth_provider.dart';
 import 'package:my_academy/features/home/presentation/pages/home_shell_page.dart';
+import 'package:my_academy/features/home/presentation/widgets/pulse_action_sheet.dart';
+import 'package:my_academy/features/home/presentation/widgets/pulse_nav_bar.dart';
 
 @GenerateNiceMocks([MockSpec<StatefulNavigationShell>()])
 import 'home_shell_page_test.mocks.dart';
@@ -50,18 +52,45 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('student on a phone gets a bottom bar with training tabs', (
+  testWidgets('student on a phone gets the Pulse bar with training tabs', (
     tester,
   ) async {
     await pumpShell(tester, 'STUDENT', const Size(400, 800));
 
-    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(PulseNavBar), findsOneWidget);
     expect(find.byType(NavigationRail), findsNothing);
+    expect(find.text('Hoje'), findsOneWidget);
     expect(find.text('Progresso'), findsOneWidget);
+    expect(find.text('Calendário'), findsNothing);
     expect(find.text('Academia'), findsNothing);
 
     await tester.tap(find.text('Treinos'));
     verify(shell.goBranch(1, initialLocation: false));
+
+    await tester.tap(find.text('Hoje'));
+    verify(shell.goBranch(0, initialLocation: true));
+  });
+
+  testWidgets('the Pulse button opens every quick action', (tester) async {
+    await pumpShell(tester, 'STUDENT', const Size(400, 900));
+
+    await tester.tap(find.byTooltip('Ações rápidas'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PulseActionSheet), findsOneWidget);
+    for (final action in pulseActions) {
+      expect(find.text(action.label), findsOneWidget);
+    }
+  });
+
+  testWidgets('owner phone bar has the gym, workouts and profile', (
+    tester,
+  ) async {
+    await pumpShell(tester, 'OWNER', const Size(400, 800));
+
+    expect(find.text('Academia'), findsOneWidget);
+    expect(find.text('Você'), findsOneWidget);
+    expect(find.text('Hoje'), findsNothing);
   });
 
   testWidgets('gym owner on desktop gets an extended rail led by the gym', (
@@ -71,7 +100,8 @@ void main() {
 
     final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
     expect(rail.extended, isTrue);
-    expect(find.byType(NavigationBar), findsNothing);
+    expect(find.byType(PulseNavBar), findsNothing);
+    expect(find.byType(PulseButton), findsOneWidget);
     expect(find.text('Academia'), findsOneWidget);
     expect(find.text('Progresso'), findsNothing);
   });
