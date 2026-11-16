@@ -8,6 +8,7 @@ import '../../data/repositories/student_repository.dart';
 import '../../domain/entities/student_entity.dart';
 import 'student_details_page.dart';
 import '../../../../core/widgets/user_avatar.dart';
+import '../../../../core/widgets/pulse/pulse_entrance.dart';
 
 class StudentsPage extends ConsumerWidget {
   const StudentsPage({super.key});
@@ -74,7 +75,7 @@ class StudentsPage extends ConsumerWidget {
               return _StudentListTile(
                 student: student,
                 onTap: () => _navigateToDetails(context, student),
-              );
+              ).pulseIn(index.clamp(0, 12));
             },
           );
         },
