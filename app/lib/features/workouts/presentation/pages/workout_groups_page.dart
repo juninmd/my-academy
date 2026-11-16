@@ -6,6 +6,7 @@ import '../../../../core/widgets/common_empty_state.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/workout_provider.dart';
 import '../widgets/workout_group_card.dart';
+import '../../../../core/widgets/pulse/pulse_entrance.dart';
 
 class WorkoutGroupsPage extends ConsumerWidget {
   const WorkoutGroupsPage({super.key});
@@ -62,7 +63,7 @@ class WorkoutGroupsPage extends ConsumerWidget {
                 onTap: () {
                   context.go('/workouts/${group.id}');
                 },
-              );
+              ).pulseIn(index.clamp(0, 12));
             },
           );
         },
