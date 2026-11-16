@@ -81,7 +81,7 @@ void main() {
     expect(find.text('3 dias'), findsOneWidget); // Streak
 
     // Verify Tools Section (Renamed to Acesso Rápido)
-    expect(find.text('Acesso Rápido'), findsOneWidget);
+    expect(find.text('ACESSO RÁPIDO'), findsOneWidget);
 
     // Verify "Treino Rápido" card is shown instead of "Descanso Merecido"
     expect(find.text('Treino Rápido'), findsWidgets);

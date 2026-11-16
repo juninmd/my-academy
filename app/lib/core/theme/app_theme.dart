@@ -2,289 +2,145 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'component_themes.dart';
+import 'pulse_tokens.dart';
 
+/// Tema PULSE: cockpit escuro, tátil e cinético (com modo claro AA).
 class AppTheme {
-  // Premium Color Palette (Shared)
-  static const Color primaryColor = Color(0xFF6200EA); // Deep Purple A700
-  static const Color primaryVariant = Color(0xFF3700B3);
-  static const Color secondaryColor = Color(0xFF00E5FF); // Cyan A400
-  static const Color errorColor = Color(0xFFCF6679);
+  // Aliases mantidos para quem já consome as cores da marca.
+  static const Color primaryColor = PulseColors.volt;
+  static const Color primaryVariant = PulseColors.voltDeep;
+  static const Color secondaryColor = PulseColors.ember;
+  static const Color errorColor = Color(0xFFFF6B6B);
   static const Color errorColorLight = Color(0xFFB3261E);
-  // Roxo mais claro no escuro: contraste adequado sobre fundos escuros.
-  static const Color primaryOnDark = Color(0xFF7C4DFF);
+  static const Color primaryOnDark = PulseColors.volt;
+  static const Color backgroundDark = PulseColors.void_;
+  static const Color surfaceDark = PulseColors.carbon;
+  static const Color surfaceVariantDark = PulseColors.graphite;
+  static const Color backgroundLight = PulseColors.paper;
+  static const Color surfaceLight = PulseColors.paperRaised;
+  static const Color surfaceVariantLight = PulseColors.paperSunken;
 
-  // Dark Palette
-  static const Color backgroundDark = Color(0xFF121212);
-  static const Color surfaceDark = Color(0xFF1E1E1E);
-  static const Color surfaceVariantDark = Color(0xFF2C2C2C);
-  static const Color onPrimaryDark = Colors.white;
-  static const Color onSecondaryDark = Colors.black;
-  static const Color onBackgroundDark = Colors.white;
-  static const Color onSurfaceDark = Colors.white;
+  static const ColorScheme darkScheme = ColorScheme(
+    brightness: Brightness.dark,
+    primary: PulseColors.volt,
+    onPrimary: PulseColors.void_,
+    primaryContainer: Color(0xFF2A3510),
+    onPrimaryContainer: PulseColors.volt,
+    secondary: PulseColors.ember,
+    onSecondary: PulseColors.void_,
+    secondaryContainer: Color(0xFF3A1A0E),
+    onSecondaryContainer: PulseColors.ember,
+    tertiary: PulseColors.chalk,
+    onTertiary: PulseColors.void_,
+    error: errorColor,
+    onError: PulseColors.void_,
+    surface: PulseColors.carbon,
+    onSurface: PulseColors.chalk,
+    onSurfaceVariant: PulseColors.mist,
+    surfaceContainerLowest: PulseColors.void_,
+    surfaceContainerLow: Color(0xFF101013),
+    surfaceContainer: PulseColors.carbon,
+    surfaceContainerHigh: Color(0xFF1C1C22),
+    surfaceContainerHighest: PulseColors.graphite,
+    outline: PulseColors.steel,
+    outlineVariant: PulseColors.graphite,
+    inverseSurface: PulseColors.chalk,
+    onInverseSurface: PulseColors.void_,
+    inversePrimary: PulseColors.voltDeep,
+  );
 
-  // Light Palette
-  static const Color backgroundLight = Color(0xFFF5F5F7); // iOS-like Light Grey
-  static const Color surfaceLight = Colors.white;
-  static const Color surfaceVariantLight = Color(0xFFEEEEF0);
-  static const Color onPrimaryLight = Colors.white;
-  static const Color onSecondaryLight = Colors.black;
-  static const Color onBackgroundLight = Colors.black87;
-  static const Color onSurfaceLight = Colors.black87;
+  static const ColorScheme lightScheme = ColorScheme(
+    brightness: Brightness.light,
+    primary: PulseColors.voltDeep,
+    onPrimary: Colors.white,
+    primaryContainer: PulseColors.volt,
+    onPrimaryContainer: PulseColors.ink,
+    secondary: PulseColors.emberDeep,
+    onSecondary: Colors.white,
+    secondaryContainer: Color(0xFFFFE1D3),
+    onSecondaryContainer: Color(0xFF7C2D12),
+    tertiary: PulseColors.ink,
+    onTertiary: Colors.white,
+    error: errorColorLight,
+    onError: Colors.white,
+    surface: PulseColors.paperRaised,
+    onSurface: PulseColors.ink,
+    onSurfaceVariant: PulseColors.inkMuted,
+    surfaceContainerLowest: Colors.white,
+    surfaceContainerLow: Color(0xFFF9F9FA),
+    surfaceContainer: Color(0xFFF1F1F3),
+    surfaceContainerHigh: Color(0xFFECECEF),
+    surfaceContainerHighest: PulseColors.paperSunken,
+    outline: Color(0xFFC4C4CC),
+    outlineVariant: Color(0xFFE0E0E4),
+    inverseSurface: PulseColors.ink,
+    onInverseSurface: PulseColors.chalk,
+    inversePrimary: PulseColors.volt,
+  );
 
-  static ThemeData get darkPremiumTheme {
-    final baseTextTheme = GoogleFonts.outfitTextTheme(
-      ThemeData.dark().textTheme,
-    );
+  static ThemeData get darkPremiumTheme =>
+      _build(darkScheme, PulseColors.void_);
 
+  static ThemeData get lightPremiumTheme =>
+      _build(lightScheme, PulseColors.paper);
+
+  static ThemeData _build(ColorScheme scheme, Color background) {
+    final base = scheme.brightness == Brightness.dark
+        ? ThemeData.dark().textTheme
+        : ThemeData.light().textTheme;
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: const ColorScheme(
-        brightness: Brightness.dark,
-        primary: primaryOnDark,
-        onPrimary: onPrimaryDark,
-        primaryContainer: primaryVariant,
-        onPrimaryContainer: onPrimaryDark,
-        secondary: secondaryColor,
-        onSecondary: onSecondaryDark,
-        secondaryContainer: secondaryColor,
-        onSecondaryContainer: onSecondaryDark,
-        error: errorColor,
-        onError: Colors.black,
-        surface: surfaceDark,
-        onSurface: onSurfaceDark,
-        surfaceContainerHighest: surfaceVariantDark,
-      ),
-      scaffoldBackgroundColor: backgroundDark,
-
-      textTheme: _buildTextTheme(baseTextTheme, onBackgroundDark),
-      appBarTheme: _buildAppBarTheme(backgroundDark, onBackgroundDark),
-      cardTheme: _buildCardTheme(
-        surfaceDark,
-        Colors.white.withValues(alpha: 0.08),
-      ),
-      elevatedButtonTheme: _buildElevatedButtonTheme(
-        primaryOnDark,
-        onPrimaryDark,
-      ),
-      outlinedButtonTheme: _buildOutlinedButtonTheme(secondaryColor),
-      textButtonTheme: _buildTextButtonTheme(secondaryColor),
-      inputDecorationTheme: _buildInputDecorationTheme(
-        surfaceVariantDark,
-        onBackgroundDark,
-        Colors.white.withValues(alpha: 0.1),
-      ),
-      bottomNavigationBarTheme: _buildBottomNavTheme(
-        surfaceDark,
-        onBackgroundDark,
+      brightness: scheme.brightness,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: background,
+      canvasColor: background,
+      textTheme: buildTextTheme(base, scheme),
+      appBarTheme: AppBarTheme(
+        backgroundColor: background,
+        foregroundColor: scheme.onSurface,
+        elevation: 0,
+        centerTitle: false,
+        scrolledUnderElevation: 0,
+        titleTextStyle: GoogleFonts.spaceGrotesk(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.4,
+          color: scheme.onSurface,
+        ),
       ),
     ).withAppComponents();
   }
 
-  static ThemeData get lightPremiumTheme {
-    final baseTextTheme = GoogleFonts.outfitTextTheme(
-      ThemeData.light().textTheme,
-    );
+  /// Inter para texto; Space Grotesk para números e títulos.
+  static TextTheme buildTextTheme(TextTheme base, ColorScheme scheme) {
+    final body = GoogleFonts.interTextTheme(base)
+        .apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+    TextStyle? display(TextStyle? s, double tracking, FontWeight w) => s == null
+        ? null
+        : GoogleFonts.spaceGrotesk(
+            textStyle: s,
+            fontWeight: w,
+            letterSpacing: tracking,
+          );
 
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: const ColorScheme(
-        brightness: Brightness.light,
-        primary: primaryColor,
-        onPrimary: onPrimaryLight,
-        primaryContainer: primaryVariant,
-        onPrimaryContainer: onPrimaryLight,
-        secondary: secondaryColor,
-        onSecondary: onSecondaryLight,
-        secondaryContainer: secondaryColor,
-        onSecondaryContainer: onSecondaryLight,
-        error: errorColorLight,
-        onError: Colors.white,
-        surface: surfaceLight,
-        onSurface: onSurfaceLight,
-        surfaceContainerHighest: surfaceVariantLight,
-      ),
-      scaffoldBackgroundColor: backgroundLight,
-
-      textTheme: _buildTextTheme(baseTextTheme, onBackgroundLight),
-      appBarTheme: _buildAppBarTheme(backgroundLight, onBackgroundLight),
-      cardTheme: _buildCardTheme(
-        surfaceLight,
-        Colors.black.withValues(alpha: 0.05),
-      ),
-      elevatedButtonTheme: _buildElevatedButtonTheme(
-        primaryColor,
-        onPrimaryLight,
-      ),
-      outlinedButtonTheme: _buildOutlinedButtonTheme(
-        primaryColor,
-      ), // Use Primary for outlined in light mode for better contrast? Or keep secondary
-      textButtonTheme: _buildTextButtonTheme(primaryColor),
-      inputDecorationTheme: _buildInputDecorationTheme(
-        surfaceVariantLight,
-        onBackgroundLight,
-        Colors.black.withValues(alpha: 0.1),
-      ),
-      bottomNavigationBarTheme: _buildBottomNavTheme(
-        surfaceLight,
-        onBackgroundLight,
-      ),
-    ).withAppComponents();
-  }
-
-  // Helper methods to reduce duplication
-
-  static TextTheme _buildTextTheme(TextTheme base, Color color) {
-    return base.copyWith(
-      displayLarge: base.displayLarge?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: color,
-        letterSpacing: -1.5,
-      ),
-      displayMedium: base.displayMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: color,
-        letterSpacing: -0.5,
-      ),
-      headlineMedium: base.headlineMedium?.copyWith(
-        fontWeight: FontWeight.w600,
-        color: color,
-      ),
-      titleLarge: base.titleLarge?.copyWith(
-        fontWeight: FontWeight.w600,
-        color: color,
-      ),
-      bodyLarge: base.bodyLarge?.copyWith(
-        color: color.withValues(alpha: 0.87),
-        fontSize: 16,
+    return body.copyWith(
+      displayLarge: display(body.displayLarge, -2.5, FontWeight.w700),
+      displayMedium: display(body.displayMedium, -2, FontWeight.w700),
+      displaySmall: display(body.displaySmall, -1.5, FontWeight.w700),
+      headlineLarge: display(body.headlineLarge, -1, FontWeight.w700),
+      headlineMedium: display(body.headlineMedium, -0.8, FontWeight.w700),
+      headlineSmall: display(body.headlineSmall, -0.5, FontWeight.w700),
+      titleLarge: display(body.titleLarge, -0.3, FontWeight.w700),
+      titleMedium: body.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+      bodyLarge: body.bodyLarge?.copyWith(height: 1.5),
+      bodyMedium: body.bodyMedium?.copyWith(
         height: 1.5,
+        color: scheme.onSurfaceVariant,
       ),
-      bodyMedium: base.bodyMedium?.copyWith(
-        color: color.withValues(alpha: 0.60),
-        fontSize: 14,
-        height: 1.5,
-      ),
-    );
-  }
-
-  static AppBarTheme _buildAppBarTheme(Color bgColor, Color fgColor) {
-    return AppBarTheme(
-      backgroundColor: bgColor,
-      elevation: 0,
-      centerTitle: true,
-      scrolledUnderElevation: 0,
-      titleTextStyle: GoogleFonts.outfit(
-        fontSize: 20,
+      labelSmall: body.labelSmall?.copyWith(
+        letterSpacing: 1.2,
         fontWeight: FontWeight.w600,
-        color: fgColor,
       ),
-      iconTheme: IconThemeData(color: fgColor),
-    );
-  }
-
-  static CardThemeData _buildCardTheme(Color color, Color borderColor) {
-    return CardThemeData(
-      color: color,
-      elevation: 0,
-      shadowColor: Colors.black.withValues(alpha: 0.05),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: borderColor, width: 1),
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-    );
-  }
-
-  static ElevatedButtonThemeData _buildElevatedButtonTheme(
-    Color bgColor,
-    Color fgColor,
-  ) {
-    return ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: bgColor,
-        foregroundColor: fgColor,
-        elevation: 2,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: GoogleFonts.outfit(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-
-  static OutlinedButtonThemeData _buildOutlinedButtonTheme(Color color) {
-    return OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: color,
-        side: BorderSide(color: color, width: 2),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: GoogleFonts.outfit(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  static TextButtonThemeData _buildTextButtonTheme(Color color) {
-    return TextButtonThemeData(
-      style: TextButton.styleFrom(
-        foregroundColor: color,
-        textStyle: GoogleFonts.outfit(
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-      ),
-    );
-  }
-
-  static InputDecorationTheme _buildInputDecorationTheme(
-    Color fillColor,
-    Color textColor,
-    Color borderColor,
-  ) {
-    return InputDecorationTheme(
-      filled: true,
-      fillColor: fillColor,
-      contentPadding: const EdgeInsets.all(20),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: borderColor),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: primaryColor, width: 2),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: errorColor, width: 1),
-      ),
-      labelStyle: TextStyle(color: textColor.withValues(alpha: 0.6)),
-      hintStyle: TextStyle(color: textColor.withValues(alpha: 0.4)),
-      prefixIconColor: textColor.withValues(alpha: 0.6),
-      suffixIconColor: textColor.withValues(alpha: 0.6),
-    );
-  }
-
-  static BottomNavigationBarThemeData _buildBottomNavTheme(
-    Color bgColor,
-    Color unselectedColor,
-  ) {
-    return BottomNavigationBarThemeData(
-      backgroundColor: bgColor.withValues(alpha: 0.9),
-      selectedItemColor: secondaryColor,
-      unselectedItemColor: unselectedColor.withValues(alpha: 0.4),
-      type: BottomNavigationBarType.fixed,
-      elevation: 0,
     );
   }
 }
