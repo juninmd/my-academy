@@ -118,8 +118,10 @@ class WeeklyProgressCard extends ConsumerWidget {
                                 size: 20,
                               ),
                               const SizedBox(width: 8),
-                              Text(
+                              Flexible(
+                                child: Text(
                                 'Meta Semanal',
+                                overflow: TextOverflow.ellipsis,
                                 style: Theme.of(
                                   context,
                                 ).textTheme.titleMedium?.copyWith(
@@ -129,6 +131,7 @@ class WeeklyProgressCard extends ConsumerWidget {
                                       ).colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.bold,
                                 ),
+                              ),
                               ),
                             ],
                           ),

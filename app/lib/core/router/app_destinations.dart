@@ -22,9 +22,9 @@ class AppDestination {
 }
 
 const _home = AppDestination(
-  'Início',
-  Icons.dashboard_outlined,
-  Icons.dashboard,
+  'Hoje',
+  Icons.home_outlined,
+  Icons.home_rounded,
   Branch.home,
 );
 const _workouts = AppDestination(
@@ -41,12 +41,12 @@ const _calendar = AppDestination(
 );
 const _analytics = AppDestination(
   'Progresso',
-  Icons.bar_chart_outlined,
-  Icons.bar_chart,
+  Icons.insights_outlined,
+  Icons.insights,
   Branch.analytics,
 );
 const _profile = AppDestination(
-  'Perfil',
+  'Você',
   Icons.person_outline,
   Icons.person,
   Branch.profile,
@@ -67,6 +67,13 @@ const _gym = AppDestination(
 List<AppDestination> destinationsFor(UserRole role) => switch (role) {
   UserRole.student => const [_home, _workouts, _calendar, _analytics, _profile],
   UserRole.personal => const [_home, _students, _workouts, _calendar, _profile],
+  UserRole.owner => const [_gym, _workouts, _profile],
+};
+
+/// Abas da barra inferior no celular; o restante fica no botão Pulse.
+List<AppDestination> barDestinationsFor(UserRole role) => switch (role) {
+  UserRole.student => const [_home, _workouts, _analytics, _profile],
+  UserRole.personal => const [_home, _students, _workouts, _profile],
   UserRole.owner => const [_gym, _workouts, _profile],
 };
 
