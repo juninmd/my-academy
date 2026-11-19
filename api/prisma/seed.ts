@@ -312,54 +312,57 @@ async function main() {
     data: { image: exerciseImage('Supino com halteres') },
   });
 
+  // Real owner identity comes from env, never from this public file.
+  const ownerId = process.env.SEED_OWNER_UID || 'seed-owner';
+  const ownerEmail = process.env.SEED_OWNER_EMAIL || 'admin@example.com';
   await prisma.users.upsert({
-    where: { email: 'jr_acn@hotmail.com' },
+    where: { email: ownerEmail },
     update: {},
     create: {
-      id: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
-      email: 'jr_acn@hotmail.com',
-      name: 'Antonio',
+      id: ownerId,
+      email: ownerEmail,
+      name: process.env.SEED_OWNER_NAME || 'Admin',
       photoUrl: ''
     }
   });
 
   await prisma.workoutsGroups.upsert({
-    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Peitos' } },
+    where: { userId_name: { userId: ownerId, name: 'Peitos' } },
     update: {},
     create: {
       image: exerciseImage('Supino com halteres'),
       name: 'Peitos',
-      userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
+      userId: ownerId,
     }
   });
 
   await prisma.workoutsGroups.upsert({
-    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Pernas' } },
+    where: { userId_name: { userId: ownerId, name: 'Pernas' } },
     update: {},
     create: {
       image: exerciseImage('Supino com halteres'),
       name: 'Pernas',
-      userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
+      userId: ownerId,
     }
   });
 
   await prisma.workoutsGroups.upsert({
-    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Ombros' } },
+    where: { userId_name: { userId: ownerId, name: 'Ombros' } },
     update: {},
     create: {
       image: exerciseImage('Supino com halteres'),
       name: 'Ombros',
-      userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
+      userId: ownerId,
     }
   });
 
   await prisma.workoutsGroups.upsert({
-    where: { userId_name: { userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2', name: 'Costas' } },
+    where: { userId_name: { userId: ownerId, name: 'Costas' } },
     update: {},
     create: {
       image: exerciseImage('Supino com halteres'),
       name: 'Costas',
-      userId: 'db6i035Vjtb77a7cBDnXQVPd3oL2',
+      userId: ownerId,
     }
   });
 

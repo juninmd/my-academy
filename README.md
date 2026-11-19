@@ -129,7 +129,7 @@ Direct API calls use `Authorization: Bearer mock-token:<uid>`, where the uid is 
 | API e2e (real DB) | `bun run test:e2e:db` | Persona journeys against Docker Postgres + Redis |
 | App | `cd app && flutter analyze && flutter test` | Lints + widget/unit tests |
 
-Tests run with at most 2 workers so they don't overload the machine.
+Tests run with at most 2 workers so they don't overload the machine. The API gates (typecheck, lint, unit with coverage, mocked e2e, build) also run on every PR in [`ci.yml`](.github/workflows/ci.yml).
 
 ## 📚 More docs
 
