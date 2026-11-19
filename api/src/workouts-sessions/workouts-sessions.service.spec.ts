@@ -12,32 +12,34 @@ describe('WorkoutsSessionsService', () => {
   let telegramService: TelegramService;
 
   beforeEach(async () => {
+    const prismaMock: Record<string, unknown> = {
+      users: {
+        findFirstOrThrow: vi.fn(),
+      },
+      workoutsGroups: {
+        findFirstOrThrow: vi.fn(),
+        findMany: vi.fn(),
+      },
+      workoutSessions: {
+        create: vi.fn(),
+        findMany: vi.fn(),
+        findFirst: vi.fn(),
+        findUnique: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+      },
+      personals: {
+        findMany: vi.fn(),
+        findFirst: vi.fn(),
+      },
+    };
+    prismaMock.$transaction = vi.fn((cb) => cb(prismaMock));
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         WorkoutsSessionsService,
         {
           provide: PrismaService,
-          useValue: {
-            users: {
-              findFirstOrThrow: vi.fn(),
-            },
-            workoutsGroups: {
-              findFirstOrThrow: vi.fn(),
-              findMany: vi.fn(),
-            },
-            workoutSessions: {
-              create: vi.fn(),
-              findMany: vi.fn(),
-              findFirst: vi.fn(),
-              findUnique: vi.fn(),
-              update: vi.fn(),
-              delete: vi.fn(),
-            },
-            personals: {
-              findMany: vi.fn(),
-              findFirst: vi.fn(),
-            },
-          },
+          useValue: prismaMock,
         },
         {
           provide: TelegramService,
@@ -371,6 +373,30 @@ describe('WorkoutsSessionsService', () => {
       (prisma.exerciseLog as any) = {
         create: vi.fn(),
       };
+    });
+
+    it('should not leave a session nor notify telegram when a log fails', async () => {
+      const userId = 'user1';
+      const createDto: CreateWorkoutsSessionsDto = {
+        date: new Date(),
+        workoutGroupId: 1,
+        workouts: [{ exerciseId: 10 }],
+      };
+      (prisma.users.findFirstOrThrow as Mock).mockResolvedValue({
+        id: userId,
+        telegramId: '123',
+      });
+      (prisma.workoutsGroups.findFirstOrThrow as Mock).mockResolvedValue({
+        id: 1,
+        name: 'Legs',
+      });
+      (prisma.workoutSessions.create as Mock).mockResolvedValue({ id: 100 });
+      (prisma.exerciseLog.create as Mock).mockRejectedValue(new Error('db'));
+
+      await expect(service.create(createDto, userId)).rejects.toThrow('db');
+
+      expect(prisma.$transaction).toHaveBeenCalledTimes(1);
+      expect(telegramService.postChannelMessage).not.toHaveBeenCalled();
     });
 
     it('should create session and exercise logs with sets', async () => {
