@@ -18,60 +18,69 @@ export class WorkoutsSessionsService {
     const user = await this.prismaService.users.findFirstOrThrow({
       where: { id: userId },
     });
-    if (user.telegramId) {
+    const workoutGroup = user.telegramId
+      ? await this.prismaService.workoutsGroups.findFirstOrThrow({
+          where: { id: createworkoutsDto.workoutGroupId },
+        })
+      : null;
+
+    // Session and exercise logs commit together: a failed log must not leave a half-saved session.
+    const session = await this.prismaService.$transaction(async (tx) => {
+      const created = await tx.workoutSessions.create({
+        data: {
+          date: createworkoutsDto.date,
+          workoutGroupId: createworkoutsDto.workoutGroupId,
+        },
+      });
+
+      if (
+        createworkoutsDto.workouts &&
+        Array.isArray(createworkoutsDto.workouts)
+      ) {
+        for (const workout of createworkoutsDto.workouts) {
+          if (!workout.exerciseId) continue;
+
+          await tx.exerciseLog.create({
+            data: {
+              userId: userId,
+              exerciseId: workout.exerciseId,
+              date: createworkoutsDto.date,
+              notes: workout.notes || '',
+              sets: {
+                create:
+                  workout.sets?.map((set: any) => ({
+                    reps: set.reps,
+                    weight: set.weight,
+                    rpe: set.rpe || null,
+                    type: set.type || 'normal',
+                  })) || [],
+              },
+            },
+          });
+        }
+      }
+      return created;
+    });
+
+    // Notify only after the data is saved, so the channel never announces a workout that was not stored.
+    if (user.telegramId && workoutGroup) {
       const date = new Date();
       const dateText = `${date.getUTCDate().toString().padStart(2, '0')}/${(
         date.getUTCMonth() + 1
       )
         .toString()
         .padStart(2, '0')}/${date.getUTCFullYear()}`;
-      const workoutGroup =
-        await this.prismaService.workoutsGroups.findFirstOrThrow({
-          where: { id: createworkoutsDto.workoutGroupId },
-        });
-      const message = `${dateText} - ${workoutGroup.name}`;
       this.telegramService
-        .postChannelMessage(message, user.telegramId)
+        .postChannelMessage(
+          `${dateText} - ${workoutGroup.name}`,
+          user.telegramId,
+        )
         .catch((err) => {
           this.logger.error(
             `Failed to send telegram message for user ${userId}`,
             err,
           );
         });
-    }
-
-    const session = await this.prismaService.workoutSessions.create({
-      data: {
-        date: createworkoutsDto.date,
-        workoutGroupId: createworkoutsDto.workoutGroupId,
-      },
-    });
-
-    if (
-      createworkoutsDto.workouts &&
-      Array.isArray(createworkoutsDto.workouts)
-    ) {
-      for (const workout of createworkoutsDto.workouts) {
-        if (!workout.exerciseId) continue;
-
-        await this.prismaService.exerciseLog.create({
-          data: {
-            userId: userId,
-            exerciseId: workout.exerciseId,
-            date: createworkoutsDto.date,
-            notes: workout.notes || '',
-            sets: {
-              create:
-                workout.sets?.map((set: any) => ({
-                  reps: set.reps,
-                  weight: set.weight,
-                  rpe: set.rpe || null,
-                  type: set.type || 'normal',
-                })) || [],
-            },
-          },
-        });
-      }
     }
 
     return session;
