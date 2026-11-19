@@ -2,7 +2,7 @@
 # Formato: commit:arquivo:regra:linha (fingerprint exato; segredo novo no mesmo
 # arquivo continua sendo detectado). Nao usar path allowlist para isso.
 
-72400dda180aba025b3f911ec4d6e9f030499f12:docker-compose.yml:juninmd-db-uri-credentials:42
+72400dda180aba025b3f911ec4d6e9f030499f12:docker-compose.yml:juninmd-hardcoded-password:8
 66bf1e2bf0585376b07e8a7a565002b416ae7152:app/android/app/google-services.json:gcp-api-key:31
 7d5529175f5cbcde907afc34548da19a100b72ea:lib/firebase_options.dart:gcp-api-key:53
 7d5529175f5cbcde907afc34548da19a100b72ea:lib/firebase_options.dart:gcp-api-key:63
