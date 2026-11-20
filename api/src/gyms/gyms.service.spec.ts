@@ -90,6 +90,12 @@ describe('GymsService', () => {
     expect(prisma.payment.aggregate.mock.calls[0][0].where.date).toEqual({
       gte: new Date(2026, 8, 1),
     });
+    // A membership past its end date is no longer an active member.
+    expect(prisma.subscription.count.mock.calls[0][0].where).toEqual({
+      gymId: 1,
+      status: 'ACTIVE',
+      OR: [{ endDate: null }, { endDate: { gt: new Date(2026, 8, 18) } }],
+    });
   });
 
   it('reports zero revenue when nothing was paid', async () => {

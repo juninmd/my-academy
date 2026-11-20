@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PaymentStatus, SubscriptionStatus } from '@prisma/client';
+import { PaymentStatus } from '@prisma/client';
 import { PrismaService } from '../prisma.service.js';
 import {
   CreateGymDto,
@@ -8,6 +8,7 @@ import {
   UpdateGymDto,
   UpdatePlanDto,
 } from './dto/gym.dto.js';
+import { activeOn } from './gym-members.service.js';
 
 @Injectable()
 export class GymsService {
@@ -64,7 +65,7 @@ export class GymsService {
     const [activeMembers, pendingPayments, overduePayments, revenue] =
       await this.prismaService.$transaction([
         this.prismaService.subscription.count({
-          where: { gymId, status: SubscriptionStatus.ACTIVE },
+          where: { gymId, ...activeOn(now) },
         }),
         this.prismaService.payment.count({
           where: { ...bySubscriptionGym, status: PaymentStatus.PENDING },
