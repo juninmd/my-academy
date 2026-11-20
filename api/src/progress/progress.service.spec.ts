@@ -338,6 +338,36 @@ describe('ProgressService', () => {
       expect(result.best).toEqual(result.points[1]);
     });
 
+    it('uses logged weigh-ins, which win over an assessment on the same day', async () => {
+      prisma.assessment.findMany.mockResolvedValue([
+        { date: new Date('2026-01-01T00:00:00Z'), weight: 90 },
+      ]);
+      prisma.bodyWeightEntry.findMany.mockResolvedValue([
+        { date: new Date('2026-01-01T07:00:00Z'), weight: 80 },
+        { date: new Date('2026-03-01T07:00:00Z'), weight: 100 },
+      ]);
+      prisma.exerciseLog.findMany.mockResolvedValue([
+        {
+          date: new Date('2026-02-01T10:00:00Z'),
+          sets: [{ reps: 1, weight: 120, type: 'normal' }],
+        },
+        {
+          date: new Date('2026-03-02T10:00:00Z'),
+          sets: [{ reps: 1, weight: 120, type: 'normal' }],
+        },
+      ]);
+
+      const result = await service.relativeStrength('u1', 7);
+
+      expect(result.points.map((p) => [p.bodyWeight, p.ratio])).toEqual([
+        [80, 1.5],
+        [100, 1.2],
+      ]);
+      expect(prisma.bodyWeightEntry.findMany.mock.calls[0][0].where).toEqual({
+        userId: 'u1',
+      });
+    });
+
     it('returns no points or best without history', async () => {
       prisma.assessment.findMany.mockResolvedValue([]);
       prisma.exerciseLog.findMany.mockResolvedValue([]);
