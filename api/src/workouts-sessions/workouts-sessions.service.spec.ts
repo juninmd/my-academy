@@ -329,6 +329,53 @@ describe('WorkoutsSessionsService', () => {
       // Streak maintained.
       expect(result.counter).toBe(1);
     });
+
+    // Session dates are @db.Date, so they arrive as midnight UTC.
+    const streakOn = (now: string, days: string[]) => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date(now));
+      (prisma.workoutSessions.findMany as Mock).mockResolvedValue(
+        days.map((day) => ({ date: new Date(`${day}T00:00:00Z`) })),
+      );
+      return service.findSummary(userId).then((r) => r.counter);
+    };
+
+    it('keeps yesterday streak alive later in the day', async () => {
+      expect(
+        await streakOn('2023-10-19T16:00:00Z', ['2023-10-17', '2023-10-18']),
+      ).toBe(2);
+    });
+
+    it('counts the current streak, not the best one in history', async () => {
+      const oldRun = ['2023-10-02', '2023-10-03', '2023-10-04', '2023-10-05'];
+      expect(
+        await streakOn('2023-10-19T09:00:00Z', [
+          ...oldRun,
+          '2023-10-17',
+          '2023-10-18',
+        ]),
+      ).toBe(2);
+    });
+
+    it('counts the first session after a gap', async () => {
+      expect(
+        await streakOn('2023-10-21T09:00:00Z', [
+          '2023-10-16',
+          '2023-10-19',
+          '2023-10-20',
+        ]),
+      ).toBe(2);
+    });
+
+    it('does not count two sessions on the same day twice', async () => {
+      expect(
+        await streakOn('2023-10-20T18:00:00Z', [
+          '2023-10-19',
+          '2023-10-20',
+          '2023-10-20',
+        ]),
+      ).toBe(2);
+    });
   });
 
   describe('CRUD operations', () => {
