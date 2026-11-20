@@ -156,26 +156,7 @@ export class ProgressService {
 
   /** Weigh-ins and assessment weights, one point per day (a weigh-in wins over an assessment). */
   async bodyWeight(userId: string) {
-    const [assessments, entries] = await Promise.all([
-      this.prisma.assessment.findMany({
-        where: { studentId: userId },
-        select: { date: true, weight: true },
-        orderBy: { date: 'asc' },
-        take: MAX_LOGS,
-      }),
-      this.prisma.bodyWeightEntry.findMany({
-        where: { userId },
-        select: { date: true, weight: true },
-        orderBy: { date: 'asc' },
-        take: MAX_LOGS,
-      }),
-    ]);
-    const byDay = new Map<string, number>();
-    for (const a of assessments) byDay.set(dayKey(a.date), a.weight);
-    for (const e of entries) byDay.set(dayKey(e.date), e.weight);
-    const points = [...byDay]
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, weight]) => ({ date, weight }));
+    const points = await this.weightByDay(userId);
 
     const first = points[0];
     const last = points[points.length - 1];
@@ -194,19 +175,14 @@ export class ProgressService {
 
   /** Best estimated 1RM per session divided by the nearest earlier body weight. */
   async relativeStrength(userId: string, exerciseId: number) {
-    const [logs, assessments] = await Promise.all([
+    const [logs, weights] = await Promise.all([
       this.prisma.exerciseLog.findMany({
         where: { userId, exerciseId },
         include: { sets: true },
         orderBy: { date: 'asc' },
         take: MAX_LOGS,
       }),
-      this.prisma.assessment.findMany({
-        where: { studentId: userId },
-        select: { date: true, weight: true },
-        orderBy: { date: 'asc' },
-        take: MAX_LOGS,
-      }),
+      this.weightByDay(userId),
     ]);
 
     const points: {
@@ -215,18 +191,18 @@ export class ProgressService {
       bodyWeight: number;
       ratio: number;
     }[] = [];
+    let next = 0;
     for (const log of logs) {
+      const date = dayKey(log.date);
+      while (next < weights.length && weights[next].date <= date) next++;
+      const bodyWeight = weights[next - 1];
       const sets = workingSets(log.sets);
-      if (sets.length === 0) continue;
-      const bodyWeight = [...assessments]
-        .reverse()
-        .find((a) => a.date.getTime() <= log.date.getTime());
-      if (!bodyWeight || bodyWeight.weight <= 0) continue;
+      if (sets.length === 0 || !bodyWeight || bodyWeight.weight <= 0) continue;
       const oneRepMax = Math.max(
         ...sets.map((s) => estimateOneRepMax(s.weight, s.reps)),
       );
       points.push({
-        date: dayKey(log.date),
+        date,
         estimatedOneRepMax: oneRepMax,
         bodyWeight: bodyWeight.weight,
         ratio: round(oneRepMax / bodyWeight.weight),
@@ -268,5 +244,28 @@ export class ProgressService {
       },
     );
     return { exerciseId, strategy, suggestion };
+  }
+
+  private async weightByDay(userId: string) {
+    const [assessments, entries] = await Promise.all([
+      this.prisma.assessment.findMany({
+        where: { studentId: userId },
+        select: { date: true, weight: true },
+        orderBy: { date: 'asc' },
+        take: MAX_LOGS,
+      }),
+      this.prisma.bodyWeightEntry.findMany({
+        where: { userId },
+        select: { date: true, weight: true },
+        orderBy: { date: 'asc' },
+        take: MAX_LOGS,
+      }),
+    ]);
+    const byDay = new Map<string, number>();
+    for (const a of assessments) byDay.set(dayKey(a.date), a.weight);
+    for (const e of entries) byDay.set(dayKey(e.date), e.weight);
+    return [...byDay]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, weight]) => ({ date, weight }));
   }
 }
