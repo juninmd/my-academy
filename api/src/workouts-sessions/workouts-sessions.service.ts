@@ -5,6 +5,8 @@ import { PrismaService } from '../prisma.service.js';
 import { WorkoutSessions } from '@prisma/client';
 import { TelegramService } from '../telegram/telegram.service.js';
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 @Injectable()
 export class WorkoutsSessionsService {
   private readonly logger = new Logger(WorkoutsSessionsService.name);
@@ -192,61 +194,25 @@ export class WorkoutsSessionsService {
     };
   }
 
+  /** Current run of training days ending today or on the last training day; Sundays never break it. */
   calculateSequence(sequences: WorkoutSessions[], currentDate: Date): number {
-    if (sequences.length === 0) {
-      return 0;
+    const utcDay = (date: Date) => Math.floor(date.getTime() / DAY_MS);
+    const isSunday = (day: number) => (day + 4) % 7 === 0;
+    const follows = (prev: number, next: number) =>
+      next - prev === 1 || (next - prev === 2 && isSunday(prev + 1));
+
+    const days = [...new Set(sequences.map((s) => utcDay(s.date)))]
+      .filter((day) => !isSunday(day))
+      .sort((a, b) => a - b);
+    const today = utcDay(currentDate);
+    let i = days.length - 1;
+    if (i < 0 || (days[i] !== today && !follows(days[i], today))) return 0;
+
+    let count = 1;
+    while (i > 0 && follows(days[i - 1], days[i])) {
+      count++;
+      i--;
     }
-
-    let count = 0;
-    let currentSequence = 0;
-
-    for (let i = 0; i < sequences.length; i++) {
-      const sequence = sequences[i].date;
-      const currentDayOfWeek = sequence.getUTCDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
-
-      if (currentDayOfWeek !== 0) {
-        // Ignorar registros de Domingo
-        if (i === 0) {
-          currentSequence++;
-        } else {
-          const previousDate = sequences[i - 1].date;
-          const diffTime = Math.abs(
-            sequence.getTime() - previousDate.getTime(),
-          );
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-          const canIncrement =
-            (previousDate.getUTCDay() === 6 && sequence.getUTCDay() === 1) ||
-            diffDays === 1;
-
-          if (canIncrement) {
-            currentSequence++;
-          } else {
-            if (diffDays > 1) {
-              currentSequence = 0; // Reinicia a sequência se houver uma lacuna (excluindo os Domingos)
-            } else {
-              currentSequence = 1; // Inicia uma nova sequência se for o mesmo dia
-            }
-          }
-        }
-
-        if (currentSequence > count) {
-          count = currentSequence;
-        }
-      }
-    }
-
-    const lastDate = sequences[sequences.length - 1].date;
-    const diffTime = Math.abs(currentDate.getTime() - lastDate.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const canIncrement =
-      (lastDate.getUTCDay() === 6 && currentDate.getUTCDay() === 1) ||
-      diffDays === 1;
-
-    if (!canIncrement) {
-      count = 0; // Reinicia a sequência se houver uma lacuna (excluindo os Domingos)
-    }
-
     return count;
   }
 
