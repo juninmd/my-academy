@@ -31,6 +31,12 @@ export const addMonths = (date: Date, months: number): Date => {
   return result;
 };
 
+/** Nothing flips a membership to EXPIRED when its plan ends, so "active" also means not past its end date. */
+export const activeOn = (now: Date) => ({
+  status: SubscriptionStatus.ACTIVE,
+  OR: [{ endDate: null }, { endDate: { gt: now } }],
+});
+
 @Injectable()
 export class GymMembersService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -44,22 +50,38 @@ export class GymMembersService {
     if (!plan) throw new BadRequestException('Plano não pertence à academia');
 
     const active = await this.prismaService.subscription.findFirst({
-      where: { gymId, userId: user.id, status: SubscriptionStatus.ACTIVE },
+      where: { gymId, userId: user.id, ...activeOn(now) },
       select: { id: true },
     });
     if (active) throw new ConflictException('Aluno já possui matrícula ativa');
 
-    return this.prismaService.subscription.create({
-      data: {
-        gymId,
-        userId: user.id,
-        planId: plan.id,
-        startDate: now,
-        endDate: addMonths(now, plan.durationMonths),
-        payments: { create: { userId: user.id, amount: plan.price } },
-      },
-      include: { user: { select: memberSelect }, plan: true, payments: true },
-    });
+    const [, created] = await this.prismaService.$transaction([
+      this.prismaService.subscription.updateMany({
+        where: {
+          gymId,
+          userId: user.id,
+          status: SubscriptionStatus.ACTIVE,
+          endDate: { lte: now },
+        },
+        data: { status: SubscriptionStatus.EXPIRED },
+      }),
+      this.prismaService.subscription.create({
+        data: {
+          gymId,
+          userId: user.id,
+          planId: plan.id,
+          startDate: now,
+          endDate: addMonths(now, plan.durationMonths),
+          payments: { create: { userId: user.id, amount: plan.price } },
+        },
+        include: {
+          user: { select: memberSelect },
+          plan: true,
+          payments: true,
+        },
+      }),
+    ]);
+    return created;
   }
 
   async findSubscriptions(gymId: number, q: FindSubscriptionsDto) {
