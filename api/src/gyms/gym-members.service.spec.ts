@@ -3,7 +3,11 @@ import {
   ConflictException,
   NotFoundException,
 } from '@nestjs/common';
-import { addMonths, GymMembersService } from './gym-members.service.js';
+import {
+  activeOn,
+  addMonths,
+  GymMembersService,
+} from './gym-members.service.js';
 
 describe('GymMembersService', () => {
   const prisma = {
@@ -14,8 +18,10 @@ describe('GymMembersService', () => {
       create: vi.fn(),
       findMany: vi.fn(),
       update: vi.fn(),
+      updateMany: vi.fn(),
     },
     payment: { findFirst: vi.fn(), findMany: vi.fn(), update: vi.fn() },
+    $transaction: vi.fn((ops: unknown[]) => Promise.all(ops)),
   };
   const service = new GymMembersService(prisma as any);
   const now = new Date(2026, 0, 31);
@@ -70,6 +76,41 @@ describe('GymMembersService', () => {
         endDate: new Date(2026, 3, 30),
         payments: { create: { userId: 'u', amount: 119.9 } },
       });
+    });
+
+    it('lets a student renew once the plan ended, closing the lapsed membership', async () => {
+      prisma.users.findUnique.mockResolvedValue({ id: 'u' });
+      prisma.plan.findFirst.mockResolvedValue({
+        id: 2,
+        price: 119.9,
+        durationMonths: 1,
+      });
+      prisma.subscription.findFirst.mockResolvedValue(null);
+
+      await service.subscribe(1, dto, now);
+
+      expect(prisma.subscription.findFirst.mock.calls[0][0].where).toEqual({
+        gymId: 1,
+        userId: 'u',
+        ...activeOn(now),
+      });
+      expect(prisma.subscription.updateMany).toHaveBeenCalledWith({
+        where: {
+          gymId: 1,
+          userId: 'u',
+          status: 'ACTIVE',
+          endDate: { lte: now },
+        },
+        data: { status: 'EXPIRED' },
+      });
+      expect(prisma.subscription.create).toHaveBeenCalled();
+    });
+  });
+
+  it('treats a membership as active only until its end date', () => {
+    expect(activeOn(now)).toEqual({
+      status: 'ACTIVE',
+      OR: [{ endDate: null }, { endDate: { gt: now } }],
     });
   });
 
