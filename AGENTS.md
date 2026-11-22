@@ -1,32 +1,58 @@
-# 🧠 AGENTS.md - My Academy Intelligence System
+# AGENTS.md
 
-## 👤 AI Personas
+My Academy: gym management platform. NestJS API (`api/`) and Flutter app (`app/`), plus an MCP server (`mcp/`). Details in `CLAUDE.md`; this file is the short contract for agents.
 
-### 1. Jules-Architect (System Architect)
-- **Role**: Designing the overall Flutter architecture and API orchestration.
-- **Focus**: Scalability, Clean Architecture, and process integrity.
-- **Vibe**: Direct, analytical, and strategic.
+## Stack
 
-### 2. Spark-Flutter (UI/UX Expert)
-- **Role**: Crafting the visual identity and responsive widgets.
-- **Focus**: Aesthetics, micro-interactions, and accessibility.
-- **Vibe**: Creative, detail-oriented, and "widget-obsessed".
+- API: NestJS 12, TypeScript, Bun, Prisma on PostgreSQL, Redis cache, Firebase auth
+- App: Flutter (Dart >= 3.13), Riverpod, GoRouter, Dio; web deployed to Netlify
+- MCP: Node, Vitest, Bun lockfile
 
-### 3. Bolt-Orchestrator (DevOps & Testing)
-- **Role**: Managing CI/CD pipelines and integration tests.
-- **Focus**: Netlify deployment, build automation, and E2E reliability.
-- **Vibe**: Fast, technical, and "CI/CD-first".
+## Commands
 
-## 📜 Development Rules (Antigravity)
+```bash
+# API (run in api/)
+bun install --frozen-lockfile
+bun run prisma:generate        # after any schema.prisma change
+bun run typecheck
+bunx eslint "{src,test}/**/*.ts"   # CI form; `bun run lint` adds --fix
+bun run test:cov               # Vitest, 100% coverage gate
+bun run test:e2e
+bun run build
 
-1. **Size Limit**: **Max 150 lines per widget/file**. Refactor if logic grows too large.
-2. **Clean Code**: Prioritize composition over inheritance for UI components.
-3. **Strict Typing**: No dynamic types unless strictly necessary.
-4. **Validation**: All changes require a successful run of `flutter test`.
+# Local stack (repo root): Postgres :5433, Redis :6380, API :9000
+docker compose up -d --build
+curl -fsS http://localhost:9000/health
 
-## 🤝 Interaction Protocol
-- Follow the **Plan -> Act -> Validate** cycle for new features.
-- The `GEMINI.md` file serves as the core instruction set for the AI.
+# App (run in app/)
+flutter pub get
+flutter analyze
+flutter test
+dart run build_runner build --delete-conflicting-outputs   # after @riverpod / json annotations
+flutter build web
+
+# MCP (run in mcp/)
+bun run test:cov
+```
+
+## Structure
+
+- `api/src/<domain>/` - one NestJS module per domain (exercises, progress, gyms, ...)
+- `api/prisma/` - `schema.prisma`, migrations, seeds
+- `app/lib/features/<feature>/` - `data/`, `domain/`, `presentation/` (Clean Architecture)
+- `app/lib/core/` - network (`ApiClient`), router, exceptions, theme, widgets, utils
+- `docs/` - project docs and screenshots; `BUSINESS_RULES.md` for domain rules
+- `mcp/` - MCP server package with its own tests
+
+## Conventions
+
+- Max 150 lines per file or widget; refactor when it grows.
+- Composition over inheritance for UI components.
+- No `dynamic` unless strictly necessary. Use `dartz` `Either` in domain and data layers.
+- Every new API code path needs tests; the 100% coverage gate is enforced in CI.
+- Workflow: Plan -> Act -> Validate. `flutter test` must pass before any change is done.
+- Personas used as review lenses: architect (scalability, clean architecture), UI/UX (accessibility, widget quality), DevOps (CI and E2E reliability).
+- `GEMINI.md` files are the instruction set for AI tools; keep them consistent with this file.
 
 <!-- base-actions-main-policy -->
 ## GitHub Actions — padrão obrigatório (@main)
@@ -39,3 +65,10 @@
 - PRs cujos checks não iniciam por billing/spending limit são mesclados pelo bot central
   `juninmd/base-actions/.github/workflows/auto-merge-billing-blocked.yml`.
   Para impedir o merge automático de um PR, aplique a label `do-not-merge`.
+
+## Gotchas
+
+- Package manager is Bun (`api/bun.lock`, CI uses `--frozen-lockfile`). `api/GEMINI.md` says pnpm; that is stale. Do not add a pnpm or npm lockfile.
+- Env vars (names only, values stay out of git): `FIREBASE_ENABLED`, `AUTH_MOC_ENABLED`, `AUTH_MOC_JSON`, `REDIS_URL`, `TELEGRAM_TOKEN`, `SA_*`. `NODE_ENV=production` refuses to boot with mock auth.
+- Local dev uses mock auth: `Authorization: Bearer mock-token:<uid>` with the homologation personas from `api/prisma/seed-homologation.ts`.
+- Generated files: `app/**/*.g.dart` is tracked. Regenerate with build_runner; never hand-edit.
